@@ -22,8 +22,8 @@ y también en algunos módulos de [Empiria Extensions](https://github.com/Ontica
 
 El *backend* del **Sistema de administración de las operaciones** se conforma de los siguientes módulos:
 
-1.  **Inventory** 
-    Administración de inventarios y activos fijos.
+1.  **Inventory**  
+    Administración de inventarios y activos fijos.  
 
 
 ## Licencia

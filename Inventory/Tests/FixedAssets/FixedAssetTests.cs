@@ -11,6 +11,7 @@
 using Xunit;
 
 using Empiria.Inventory.FixedAssets;
+using Empiria.Inventory.FixedAssets.Data;
 
 namespace Empiria.Tests.Inventory.FixedAssets {
 
@@ -33,6 +34,14 @@ namespace Empiria.Tests.Inventory.FixedAssets {
       var sut = FixedAsset.Empty;
 
       Assert.NotNull(sut);
+    }
+
+    [Fact]
+    public void Should_Search_Fixed_Assets() {
+      var sut = FixedAssetsData.GetFixedAssets(string.Empty, string.Empty);
+
+      Assert.NotNull(sut);
+      Assert.NotEmpty(sut);
     }
 
     #endregion Facts

@@ -9,8 +9,8 @@
     <FileVersion>8.0.0.0</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/Ontica/Empiria.Operations.Management/blob/master/Assets/Tests/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Ontica/Empiria.Operations.Management/tree/master/Assets/Tests</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Ontica/Empiria.Operations.Management/blob/master/Inventory/Tests/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Ontica/Empiria.Operations.Management/tree/master/Inventory/Tests</PackageProjectUrl>
     <PackageIconUrl>http://www.ontica.org/logo.ontica.png</PackageIconUrl>
     <PackageTags>
       inventarios, administracion del activo fijo, depreciación, resguardos, almacenes, valuación, proveedores, productos,

@@ -18,7 +18,7 @@ namespace Empiria.Inventory.FixedAssets.Data {
     #region Methods
 
     static internal FixedList<FixedAsset> GetFixedAssets(string filter, string sortBy) {
-      var sql = "SELECT * FROM FMS_FIXED_ASSETS";
+      var sql = "SELECT * FROM OMS_FIXED_ASSETS";
 
       if (!string.IsNullOrWhiteSpace(filter)) {
         sql += $" WHERE {filter}";
