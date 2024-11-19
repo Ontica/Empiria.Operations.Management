@@ -52,7 +52,7 @@ namespace Empiria.Inventory.FixedAssets {
     }
 
 
-    [DataField("OMS_TXN_OBJECT_ID")]
+    [DataField("OMS_TXN_ENTRY_OBJECT_ID")]
     public FixedAsset FixedAsset {
       get;
       private set;

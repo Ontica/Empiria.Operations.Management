@@ -34,7 +34,7 @@ namespace Empiria.Inventory.FixedAssets.WebApi {
 
 
     [HttpGet]
-    [Route("v2/fixed-assets/locations/{locationUID:guid}/children")]
+    [Route("v2/fixed-assets/locations/{locationUID}/children")]
     public CollectionModel GetFixedAssetLocationsList([FromUri] string locationUID) {
 
       using (var usecases = FixedAssetLocationUseCases.UseCaseInteractor()) {

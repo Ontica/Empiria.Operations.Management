@@ -49,7 +49,7 @@ namespace Empiria.Inventory.FixedAssets.WebApi {
 
     [HttpPost]
     [Route("v2/fixed-assets/transactions/search")]
-    public CollectionModel SearchFixedAssetTransactions([FromUri] FixedAssetTransactionQuery query) {
+    public CollectionModel SearchFixedAssetTransactions([FromBody] FixedAssetTransactionQuery query) {
 
       using (var usecases = FixedAssetTransactionUseCases.UseCaseInteractor()) {
         FixedList<FixedAssetTransactionDescriptorDto> transactions = usecases.SearchFixedAssetTransactions(query);
