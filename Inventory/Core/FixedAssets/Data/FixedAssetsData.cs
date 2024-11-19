@@ -37,6 +37,21 @@ namespace Empiria.Inventory.FixedAssets.Data {
     }
 
 
+    static internal FixedList<FixedAssetTransaction> GetTransactions(FixedAsset fixedAsset) {
+      var sql = "SELECT * FROM OMS_TRANSACTIONS " +
+         $"WHERE OMS_TXN_ID IN " +
+            $"(SELECT OMS_TXN_ENTRY_TXN_ID FROM OMS_TRANSACTION_ENTRIES " +
+              $"WHERE OMS_TXN_ENTRY_OBJECT_ID = {fixedAsset.Id} " +
+              $"AND OMS_TXN_ENTRY_STATUS <> 'X') " +
+         $"AND OMS_TXN_STATUS <> 'X' " +
+         $"ORDER BY OMS_TXN_NUMBER";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<FixedAssetTransaction>(op);
+    }
+
+
     static internal List<FixedAssetTransactionEntry> GetTransactionEntries(FixedAssetTransaction transaction) {
       var sql = "SELECT * FROM OMS_TRANSACTION_ENTRIES " +
          $"WHERE OMS_TXN_ENTRY_TXN_ID = {transaction.Id} AND " +

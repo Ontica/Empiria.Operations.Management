@@ -13,6 +13,8 @@ using Empiria.History.Services;
 
 using Empiria.StateEnums;
 
+using Empiria.Inventory.FixedAssets.Data;
+
 namespace Empiria.Inventory.FixedAssets.Adapters {
 
   /// <summary>Provides data mapping services for FixedAsset instances.</summary>
@@ -21,7 +23,7 @@ namespace Empiria.Inventory.FixedAssets.Adapters {
     static internal FixedAssetHolderDto Map(FixedAsset fixedAsset) {
       return new FixedAssetHolderDto {
         FixedAsset = MapFixedAsset(fixedAsset),
-        Transactions = new FixedList<NamedEntityDto>(),
+        Transactions = FixedAssetTransactionMapper.Map(FixedAssetsData.GetTransactions(fixedAsset)),
         Documents = DocumentServices.GetEntityDocuments(fixedAsset),
         History = HistoryServices.GetEntityHistory(fixedAsset),
         Actions = MapActions()

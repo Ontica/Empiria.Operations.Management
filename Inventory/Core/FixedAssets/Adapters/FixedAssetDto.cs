@@ -21,7 +21,7 @@ namespace Empiria.Inventory.FixedAssets.Adapters {
       get; internal set;
     }
 
-    public FixedList<NamedEntityDto> Transactions {
+    public FixedList<FixedAssetTransactionDescriptorDto> Transactions {
       get; internal set;
     }
 
