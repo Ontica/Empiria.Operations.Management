@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Locations;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
@@ -32,6 +33,8 @@ namespace Empiria.Inventory.FixedAssets.Adapters {
       string inventoryNoFilter = BuildInventoryNoFilter(query.InventoryNo);
 
       string fixedAssetTypeFilter = BuildFixedAssetTypeFilter(query.FixedAssetTypeUID);
+
+      string locationFilter = BuildLocationFilter(query.LocationUID);
 
       string keywordsFilter = BuildKeywordsFilter(query.Keywords);
 
@@ -98,6 +101,21 @@ namespace Empiria.Inventory.FixedAssets.Adapters {
       }
 
       return SearchExpression.ParseAndLike("FXD_ASST_KEYWORDS", keywords);
+    }
+
+
+    static private string BuildLocationFilter(string locationUID) {
+      if (string.IsNullOrWhiteSpace(locationUID)) {
+        return string.Empty;
+      }
+
+      var location = Location.Parse(locationUID);
+
+      FixedList<Location> locations = location.GetAllChildren();
+
+      var locationIds = locations.Select(x => x.Id).ToFixedList().ToArray();
+
+      return SearchExpression.ParseInSet("FXD_ASST_LOCATION_ID", locationIds);
     }
 
 

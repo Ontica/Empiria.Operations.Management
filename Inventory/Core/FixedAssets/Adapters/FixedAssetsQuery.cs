@@ -30,6 +30,11 @@ namespace Empiria.Inventory.FixedAssets.Adapters {
     } = string.Empty;
 
 
+    public string LocationUID {
+      get; set;
+    } = string.Empty;
+
+
     public string Keywords {
       get; set;
     } = string.Empty;
