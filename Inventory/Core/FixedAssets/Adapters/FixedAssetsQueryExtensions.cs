@@ -34,7 +34,7 @@ namespace Empiria.Inventory.FixedAssets.Adapters {
 
       string fixedAssetTypeFilter = BuildFixedAssetTypeFilter(query.FixedAssetTypeUID);
 
-      string locationFilter = BuildLocationFilter(query.LocationUID);
+      string locationFilter = BuildLocationFilter(query);
 
       string keywordsFilter = BuildKeywordsFilter(query.Keywords);
 
@@ -104,14 +104,26 @@ namespace Empiria.Inventory.FixedAssets.Adapters {
     }
 
 
-    static private string BuildLocationFilter(string locationUID) {
-      if (string.IsNullOrWhiteSpace(locationUID)) {
+    static private string BuildLocationFilter(FixedAssetsQuery query) {
+      if (string.IsNullOrWhiteSpace(query.BuildingUID)) {
         return string.Empty;
       }
 
-      var location = Location.Parse(locationUID);
+      Location location;
 
-      FixedList<Location> locations = location.GetAllChildren();
+      if (query.PlaceUID.Length != 0) {
+        location = Location.Parse(query.PlaceUID);
+
+        return $"FXD_ASST_LOCATION_ID = {location.Id}";
+      }
+
+      if (query.FloorUID.Length != 0) {
+        location = Location.Parse(query.FloorUID);
+      } else {
+        location = Location.Parse(query.BuildingUID);
+      }
+
+      FixedList<Location> locations = location.GetLeafChildren();
 
       var locationIds = locations.Select(x => x.Id).ToFixedList().ToArray();
 

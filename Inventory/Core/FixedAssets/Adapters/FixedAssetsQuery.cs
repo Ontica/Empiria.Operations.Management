@@ -30,7 +30,17 @@ namespace Empiria.Inventory.FixedAssets.Adapters {
     } = string.Empty;
 
 
-    public string LocationUID {
+    public string BuildingUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string FloorUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string PlaceUID {
       get; set;
     } = string.Empty;
 
