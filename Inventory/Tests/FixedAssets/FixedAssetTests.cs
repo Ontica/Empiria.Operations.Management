@@ -21,7 +21,7 @@ namespace Empiria.Tests.Inventory.FixedAssets {
     #region Facts
 
     [Fact]
-    public void Should_Read_All_Fixed_Assets() {
+    public void Should_Get_All_Fixed_Assets() {
       var sut = BaseObject.GetList<FixedAsset>();
 
       Assert.NotNull(sut);
@@ -30,11 +30,24 @@ namespace Empiria.Tests.Inventory.FixedAssets {
 
 
     [Fact]
-    public void Should_Read_Empty_FixedAsset() {
+    public void Should_Parse_All_Fixed_Assets() {
+      var fixedAssets = BaseObject.GetFullList<FixedAsset>();
+
+      foreach (FixedAsset sut in fixedAssets) {
+        Assert.NotNull(sut.Building);
+        Assert.NotNull(sut.Floor);
+        Assert.NotNull(sut.Place);
+      }
+    }
+
+
+    [Fact]
+    public void Should_Parse_Empty_FixedAsset() {
       var sut = FixedAsset.Empty;
 
       Assert.NotNull(sut);
     }
+
 
     [Fact]
     public void Should_Search_Fixed_Assets() {

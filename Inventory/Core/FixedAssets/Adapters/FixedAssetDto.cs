@@ -88,7 +88,19 @@ namespace Empiria.Inventory.FixedAssets.Adapters {
       get; internal set;
     }
 
-    public string Location {
+    public NamedEntityDto Building {
+      get; internal set;
+    }
+
+    public NamedEntityDto Floor {
+      get; internal set;
+    }
+
+    public NamedEntityDto Place {
+      get; internal set;
+    }
+
+    public string LocationName {
       get; internal set;
     }
 
@@ -139,7 +151,7 @@ namespace Empiria.Inventory.FixedAssets.Adapters {
       get; internal set;
     }
 
-    public string Location {
+    public string LocationName {
       get; internal set;
     }
 

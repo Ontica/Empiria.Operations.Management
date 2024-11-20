@@ -11,9 +11,10 @@
 using System;
 
 using Empiria.Json;
+using Empiria.Locations;
 using Empiria.Parties;
-using Empiria.StateEnums;
 using Empiria.Products;
+using Empiria.StateEnums;
 
 namespace Empiria.Inventory.FixedAssets {
 
@@ -138,9 +139,30 @@ namespace Empiria.Inventory.FixedAssets {
     }
 
 
-    [DataField("FXD_ASST_LOCATION")]
-    public string Location {
+    [DataField("FXD_ASST_LOCATION_ID")]
+    public Location Location {
       get; private set;
+    }
+
+
+    public Location Building {
+      get {
+        return Location.SeekTree(LocationType.Building);
+      }
+    }
+
+
+    public Location Floor {
+      get {
+        return Location.SeekTree(LocationType.Floor);
+      }
+    }
+
+
+    public Location Place {
+      get {
+        return Location.SeekTree(LocationType.Place);
+      }
     }
 
 
@@ -196,7 +218,7 @@ namespace Empiria.Inventory.FixedAssets {
       get {
         return EmpiriaString.BuildKeywords(InventoryNo, Name, Description, Label,
                                            Brand, Model, Year.ToString(), FixedAssetType.Name,
-                                           _identificators, _tags, this.Condition, this.Location,
+                                           _identificators, _tags, this.Condition, this.Location.FullName,
                                            this.CustodianOrgUnit.Keywords, this.CustodianPerson.Keywords);
       }
     }
