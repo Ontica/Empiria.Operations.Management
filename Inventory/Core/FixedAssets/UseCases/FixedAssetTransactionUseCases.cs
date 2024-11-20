@@ -10,6 +10,12 @@
 
 using Empiria.Services;
 
+using Empiria.Parties;
+using Empiria.StateEnums;
+
+using Empiria.Inventory.FixedAssets.Adapters;
+using Empiria.Inventory.FixedAssets.Data;
+
 namespace Empiria.Inventory.FixedAssets.UseCases {
 
   /// <summary>Use cases for fixed assets transactions.</summary>
@@ -29,10 +35,39 @@ namespace Empiria.Inventory.FixedAssets.UseCases {
 
     #region Use cases
 
+    public FixedAssetTransactionHolderDto GetFixedAssetTransaction(string transactionUID) {
+      Assertion.Require(transactionUID, nameof(transactionUID));
+
+      var transaction = FixedAssetTransaction.Parse(transactionUID);
+
+      return FixedAssetTransactionMapper.Map(transaction);
+    }
+
+
     public FixedList<NamedEntityDto> GetFixedAssetTransactionTypes() {
       var transactionTypes = FixedAssetTransactionType.GetList();
 
       return transactionTypes.MapToNamedEntityList();
+    }
+
+
+    public FixedList<FixedAssetTransactionDescriptorDto> SearchFixedAssetTransactions(FixedAssetTransactionQuery query) {
+      Assertion.Require(query, nameof(query));
+
+      string filter = query.MapToFilterString();
+
+      string sort = query.MapToSortString();
+
+      FixedList<FixedAssetTransaction> transactions = FixedAssetsData.SearchTransactions(filter, sort);
+
+      return FixedAssetTransactionMapper.Map(transactions);
+    }
+
+
+    public FixedList<NamedEntityDto> SearchFixedAssetTransactionsParties(TransactionPartiesQuery query) {
+      var persons = BaseObject.GetList<Person>();
+
+      return persons.MapToNamedEntityList();
     }
 
     #endregion Use cases
