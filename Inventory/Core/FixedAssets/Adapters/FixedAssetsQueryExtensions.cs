@@ -43,6 +43,7 @@ namespace Empiria.Inventory.FixedAssets.Adapters {
 
       filter.AppendAnd(statusFilter);
       filter.AppendAnd(inventoryNoFilter);
+      filter.AppendAnd(locationFilter);
       filter.AppendAnd(fixedAssetTypeFilter);
       filter.AppendAnd(keywordsFilter);
 
@@ -123,7 +124,7 @@ namespace Empiria.Inventory.FixedAssets.Adapters {
         location = Location.Parse(query.BuildingUID);
       }
 
-      FixedList<Location> locations = location.GetLeafChildren();
+      FixedList<Location> locations = location.GetAllChildren();
 
       var locationIds = locations.Select(x => x.Id).ToFixedList().ToArray();
 
