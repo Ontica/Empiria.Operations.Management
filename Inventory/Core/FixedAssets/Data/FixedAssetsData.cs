@@ -8,6 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
+using System.Collections.Generic;
 using Empiria.Data;
 
 namespace Empiria.Inventory.FixedAssets.Data {
@@ -32,6 +34,32 @@ namespace Empiria.Inventory.FixedAssets.Data {
 
       return DataReader.GetFixedList<FixedAsset>(dataOperation);
 
+    }
+
+
+    static internal List<FixedAssetTransactionEntry> GetTransactionEntries(FixedAssetTransaction transaction) {
+      var sql = "SELECT * FROM OMS_TRANSACTION_ENTRIES " +
+         $"WHERE OMS_TXN_ENTRY_TXN_ID = {transaction.Id} AND " +
+               $"OMS_TXN_ENTRY_STATUS <> 'X' " +
+         $"ORDER BY OMS_TXN_ENTRY_ID";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetList<FixedAssetTransactionEntry>(op);
+    }
+
+
+    static internal FixedList<FixedAssetTransaction> SearchTransactions(string filter, string sort) {
+      Assertion.Require(filter, nameof(filter));
+      Assertion.Require(sort, nameof(sort));
+
+      var sql = "SELECT * FROM OMS_TRANSACTIONS " +
+               $"WHERE {filter} " +
+               $"ORDER BY {sort}";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<FixedAssetTransaction>(op);
     }
 
     #endregion Methods
