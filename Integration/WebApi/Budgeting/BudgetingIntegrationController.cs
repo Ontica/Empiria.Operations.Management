@@ -1,8 +1,8 @@
-﻿/* Empiria Financial *****************************************************************************************
+﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
-*  Module   : Budget Explorer                              Component : Web Api                               *
-*  Assembly : Empiria.Budgeting.WebApi.dll                 Pattern   : Web Api Controller                    *
-*  Type     : BudgetingIntegrationController               License   : Please read LICENSE.txt file          *
+*  Module   : Operations-Budgeting Integration              Component : Web Api Layer                        *
+*  Assembly : Empiria.Operations.Integration.WebApi.dll     Pattern   : Web Api Controller                   *
+*  Type     : BudgetingIntegrationController                License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Web api used to integrate organization's operations with the budgeting system.                 *
 *                                                                                                            *
@@ -12,13 +12,12 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
-
 using Empiria.Budgeting.Transactions.Adapters;
 
-using Empiria.Budgeting.Integration.Adapters;
-using Empiria.Budgeting.Integration.UseCases;
+using Empiria.Operations.Integration.Adapters;
+using Empiria.Operations.Integration.UseCases;
 
-namespace Empiria.Budgeting.Integration.WebApi {
+namespace Empiria.Operations.Integration.WebApi {
 
   /// <summary>Web API used to retrieve and edit budget transactions.</summary>
   public class BudgetingIntegrationController : WebApiController {
@@ -52,4 +51,4 @@ namespace Empiria.Budgeting.Integration.WebApi {
 
   }  // class BudgetingIntegrationController
 
-}  // namespace namespace Empiria.Budgeting.Integration.WebApi
+}  // namespace Empiria.Operations.Integration.WebApi

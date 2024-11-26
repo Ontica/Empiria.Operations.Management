@@ -1,7 +1,7 @@
-﻿/* Empiria Financial *****************************************************************************************
+﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
-*  Module   : Budgeting Integration                         Component : Use cases Layer                      *
-*  Assembly : Empiria.OperationsManagement.UseCases.dll     Pattern   : Use case interactor class            *
+*  Module   : Operations-Budgeting Integration              Component : Use cases Layer                      *
+*  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Use case interactor class            *
 *  Type     : BudgetingIntegrationUseCases                  License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Use cases used to integrate organization's operations with the budgeting system.               *
@@ -12,9 +12,9 @@ using Empiria.Services;
 
 using Empiria.Budgeting.Transactions.Adapters;
 
-using Empiria.Budgeting.Integration.Adapters;
+using Empiria.Operations.Integration.Adapters;
 
-namespace Empiria.Budgeting.Integration.UseCases {
+namespace Empiria.Operations.Integration.UseCases {
 
   /// <summary>Use cases used to integrate organization's operations with the budgeting system.</summary>
   public class BudgetingIntegrationUseCases : UseCase {
@@ -50,4 +50,4 @@ namespace Empiria.Budgeting.Integration.UseCases {
 
   }  // class BudgetingIntegrationUseCases
 
-}  // namespace Empiria.Budgeting.Integration.UseCases
+}  // namespace Empiria.Operations.Integration.UseCases

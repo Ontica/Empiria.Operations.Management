@@ -1,14 +1,14 @@
 ﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
-*  Module   : Budgeting Integration                         Component : Adapters Layer                       *
-*  Assembly : Empiria.OperationsManagement.UseCases.dll     Pattern   : Input Fields DTO                     *
+*  Module   : Operations-Budgeting Integration              Component : Adapters Layer                       *
+*  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Input Fields DTO                     *
 *  Type     : BudgetOperationFields                         License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Input fields DTO used to invoke a budgeting operation.                                         *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-namespace Empiria.Budgeting.Integration.Adapters {
+namespace Empiria.Operations.Integration.Adapters {
 
   /// <summary>Input fields DTO used to invoke a budgeting operation.</summary>
   public class BudgetOperationFields {
@@ -25,4 +25,4 @@ namespace Empiria.Budgeting.Integration.Adapters {
 
   } // class BudgetOperationFields
 
-}  // namespace Empiria.Budgeting.Integration.Adapters
+}  // namespace Empiria.Operations.Integration.Adapters
