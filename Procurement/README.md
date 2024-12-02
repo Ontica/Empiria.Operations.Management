@@ -1,4 +1,8 @@
-﻿# Sistema de Administración de las Operaciones
+﻿# Sistema de adquisiciones y suministro
+
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/cade4cc73a5d49b29dc27932724f07bc)](https://app.codacy.com/gh/Ontica/Empiria.Payments/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+&nbsp; &nbsp;
+[![Maintainability](https://api.codeclimate.com/v1/badges/5da29b2284da2f5f848e/maintainability)](https://codeclimate.com/github/Ontica/Empiria.Payments/maintainability)
 
 Este producto de software está siendo desarrollado a la medida para el Banco Nacional de Obras y Servicios Públicos, S.N.C (BANOBRAS).
 
@@ -6,7 +10,7 @@ Este producto de software está siendo desarrollado a la medida para el Banco Na
 es financiar obras para la creación de servicios públicos. Por el tamaño de su cartera de crédito directo,
 es el cuarto Banco más grande del sistema bancario mexicano y el primero de la Banca de Desarrollo de nuestro país.
 
-Este repositorio contiene los módulos del *backend* del **Sistema de administración de las operaciones**.
+Este repositorio contiene los módulos del *backend* del **Sistema de adquisiciones y suministro**.
 
 Todos los módulos están escritos en C# 7.0 y utilizan .NET Framework versión 4.8.  
 Los módulos pueden ser compilados utilizando Visual Studio 2022 Community Edition.
@@ -15,25 +19,15 @@ El acceso a los servicios que ofrece el *backend* se realiza mediante llamadas a
 mismos que están basados en ASP .NET.
 
 Al igual que otros productos Empiria, este *backend* se apoya en [Empiria Framework](https://github.com/Ontica/Empiria.Core),
-y también en algunos módulos de [Empiria Extensions](https://github.com/Ontica/Empiria.Extensions) y de
-[Empiria Central](https://github.com/Ontica/Empiria.Central).
+y también en algunos módulos de [Empiria Extensions](https://github.com/Ontica/Empiria.Extensions).
+
 
 ## Contenido
 
-El *backend* del **Sistema de administración de las operaciones** se conforma de los siguientes módulos:
-
+El *backend* del **Sistema de adquisiciones y suministro** se conforma de los siguientes módulos:
 
 1.  **Contracts**  
-    Administración de contratos de sumninistro de bienes y servicios.  
-
-2.  **Integration**  
-    Componentes de integración con el sistema de administración financiera.  
-
-3.  **Inventory**  
-    Administración de inventarios y activos fijos.  
-
-4.  **Orders**  
-    Administración de pedidos y requisiciones.  
+    Componentes para la administración de contratos de suministro de bienes y servicios.  
 
 ## Licencia
 
@@ -57,5 +51,5 @@ e internacionales de derechos de autor.
 
 ## Copyright
 
-Copyright © 2002-2025. La Vía Óntica SC, Ontica LLC y autores.
+Copyright © 2024-2025. La Vía Óntica SC, Ontica LLC y autores.
 Todos los derechos reservados.
