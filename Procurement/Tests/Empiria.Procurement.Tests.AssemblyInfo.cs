@@ -1,10 +1,10 @@
-﻿/* Empiria Financial *****************************************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  System   : Contracts Management                         Module  : Core Types and Services Tests           *
-*  Assembly : Empiria.Contracts.Core.Tests.dll             Pattern : Assembly Attributes File                *
+*  System   : Procurement Management                       Module  : Tests suite                             *
+*  Assembly : Empiria.Procurement.Tests.dll                Pattern : Assembly Attributes File                *
 *                                                          License : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Tests suite for Empiria contracts management's core types, use cases and services.             *
+*  Summary  : Tests suite for Empiria Procurement Management's core types, use cases and services.           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;

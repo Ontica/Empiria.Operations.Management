@@ -1,6 +1,6 @@
-﻿# Empiria Contracts Management Tests
+﻿# Empiria Procurement Management Tests
 
-Tests suite for Empiria contracts management's core types, use cases and services.
+Tests suite for Empiria Procurement Management's core types, use cases and services.
 
 ## Licencia
 
@@ -24,5 +24,5 @@ e internacionales de derechos de autor.
 
 ## Copyright
 
-Copyright © 2024-2025. La Vía Óntica SC, Ontica LLC y autores.
+Copyright © 2002-2025. La Vía Óntica SC, Ontica LLC y autores.
 Todos los derechos reservados.

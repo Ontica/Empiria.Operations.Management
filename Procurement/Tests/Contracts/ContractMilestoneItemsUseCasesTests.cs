@@ -1,7 +1,7 @@
-﻿/* Empiria Financial *****************************************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  Module   : Contracts milestone items Management       Component : Test cases                              *
-*  Assembly : Empiria.Contracts.Core.Tests.dll           Pattern   : Use cases tests                         *
+*  Module   : Contracts Management                       Component : Test cases                              *
+*  Assembly : Empiria.Procurement.Tests.dll              Pattern   : Use cases tests                         *
 *  Type     : ContractMilestoneItemsUseCasesTests        License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Test cases for retrieving milestones items.                                                    *
@@ -10,10 +10,10 @@
 
 using Xunit;
 
-using Empiria.Contracts.Adapters;
-using Empiria.Contracts.UseCases;
+using Empiria.Procurement.Contracts.Adapters;
+using Empiria.Procurement.Contracts.UseCases;
 
-namespace Empiria.Tests.Contracts {
+namespace Empiria.Tests.Procurement.Contracts {
 
   /// <summary>Test cases contract milestone items.</summary>
   public class ContractMilestoneItemUseCasesTests {
@@ -97,4 +97,4 @@ namespace Empiria.Tests.Contracts {
 
   } // class ContractMilestoneItemUseCasesTests
 
-} // namespace Empiria.Tests.Contracts
+} // namespace Empiria.Tests.Procurement.Contracts

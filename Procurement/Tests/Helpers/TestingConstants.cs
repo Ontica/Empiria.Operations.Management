@@ -1,16 +1,16 @@
-﻿/* Empiria Financial *****************************************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  Module   : Contract milestone Management              Component : Tests Helpers                           *
-*  Assembly : Empiria.Contracts.Core.Tests.dll           Pattern   : Testing constants                       *
+*  Module   : Procurement Management                     Component : Tests Helpers                           *
+*  Assembly : Empiria.Procurement.Tests.dll              Pattern   : Testing constants                       *
 *  Type     : TestingConstants                           License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Provides testing constants for Contract milestone  management Core module.                     *
+*  Summary  : Provides testing constants for Empiria Procurement Management modules.                         *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-namespace Empiria.Tests.Contracts {
+namespace Empiria.Tests.Procurement {
 
-  /// <summary>Provides testing constants for Contract Milestones Management Core module.</summary>
+  /// <summary>Provides testing constants for Empiria Procurement Management modules.</summary>
   static public class TestingConstants {
 
     static internal string CONTRACT_UID = "d13fccb0-a5d0-419e-9204-777f57b6959d";
@@ -59,4 +59,4 @@ namespace Empiria.Tests.Contracts {
 
   }  // class TestingConstants
 
-}  // namespace Empiria.Tests.Contracts
+}  // namespace Empiria.Tests.Procurement

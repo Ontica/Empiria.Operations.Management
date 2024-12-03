@@ -1,32 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Company>Ontica</Company>
-    <Product>Empiria Contracts Management</Product>
+    <Product>Empiria Procurement Management</Product>
     <Description>
-      Tests suite for Empiria contracts management's core types, use cases and services.
+      Tests suite for Empiria Procurement Management's core types, use cases and services.
     </Description>
-    <Copyright>(c) 2024-2025. La Vía Óntica SC, Ontica LLC y de los autores. Todos los derechos reservados.</Copyright>
-    <Version>1.0</Version>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <Copyright>(c) 2002-2025. La Vía Óntica SC, Ontica LLC y de los autores. Todos los derechos reservados.</Copyright>
+    <Version>8.0</Version>
+    <AssemblyVersion>8.0.0</AssemblyVersion>
+    <FileVersion>8.0.0.0</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/Ontica/Empiria.Financial.Management/blob/master/Contracts/Core.Tests/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Ontica/Empiria.Financial.Management/tree/master/Contracts/Core.Tests</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Ontica/Empiria.Operations.Management/blob/master/Procurement/Tests/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Ontica/Empiria.Operations.Management/tree/master/Procurement/Tests</PackageProjectUrl>
     <PackageIconUrl>http://www.ontica.org/logo.ontica.png</PackageIconUrl>
     <PackageTags>
       administracion de contratos, licitaciones, compras, proveeduria, servicios, productos, pruebas unitarias, unit tests,
-      Banca de desarrollo, BANOBRAS, México
+      admnistración púbica, gobierno electrónico, Banca de desarrollo, BANOBRAS, México
     </PackageTags>
-    <RepositoryUrl>https://github.com/Ontica/Empiria.Financial.Management</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Ontica/Empiria.Operations.Management</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Authors>Ontica</Authors>
     <TargetFramework>net48</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <NeutralLanguage></NeutralLanguage>
     <Configurations>Debug;Release;Multisolutions</Configurations>
-    <AssemblyName>Empiria.Contracts.Core.Tests</AssemblyName>
-    <RootNamespace>Empiria.Tests.Contracts</RootNamespace>
+    <AssemblyName>Empiria.Procurement.Tests</AssemblyName>
+    <RootNamespace>Empiria.Tests.Procurement</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' Or '$(Configuration)|$(Platform)' == 'Multisolutions|AnyCPU' ">
@@ -74,16 +74,17 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
     <PackageReference Include="Empiria.Tests" Version="1.0.0" />
-    <PackageReference Include="Empiria.Contracts.Core" Version="1.0.0" />
+    <PackageReference Include="Empiria.Billing.Core" Version="2.0.0" />
+    <PackageReference Include="Empiria.Budgeting.Core" Version="2.0.0" />
+    <PackageReference Include="Empiria.Payments.Core" Version="1.0.0" />
+    <PackageReference Include="Empiria.Procurement.Core" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Multisolutions' ">
     <ProjectReference Include="..\..\..\extensions\Tests\Empiria.Tests.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\financial.management\Billing\Core\Empiria.Billing.Core.csproj" />
     <ProjectReference Include="..\..\..\financial.management\Budgeting\Core\Empiria.Budgeting.Core.csproj" />
     <ProjectReference Include="..\..\..\financial.management\Payments\Core\Empiria.Payments.Core.csproj" />
-    <ProjectReference Include="..\Contracts\Empiria.Contracts.csproj" />
+    <ProjectReference Include="..\Core\Empiria.Procurement.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="empiria.config.json">

@@ -1,7 +1,7 @@
-﻿/* Empiria Financial *****************************************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  Module   : Contractn milestones Management            Component : Test cases                              *
-*  Assembly : Empiria.Contracts.Core.Tests.dll           Pattern   : Unit Tests                              *
+*  Module   : Contracts Management                       Component : Test cases                              *
+*  Assembly : Empiria.Procurement.Tests.dll              Pattern   : Unit Tests                              *
 *  Type     : ContractMilestoneTests                     License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Unit tests for ContractMilestone type.                                                         *
@@ -9,9 +9,9 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using Xunit;
 
-using Empiria.Contracts;
+using Empiria.Procurement.Contracts;
 
-namespace Empiria.Tests.Contracts {
+namespace Empiria.Tests.Procurement.Contracts {
 
   /// <summary>Unit tests for ContractMilestone type.</summary>
   public class ContractMilestoneTests {
@@ -40,4 +40,4 @@ namespace Empiria.Tests.Contracts {
 
   }  // class ContractMilestoneTests
 
-}  // namespace Empiria.Tests.Contracts
+}  // namespace Empiria.Tests.Procurement.Contracts
