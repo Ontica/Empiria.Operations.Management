@@ -1,7 +1,7 @@
-﻿/* Empiria Financial *****************************************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Contracts Management                         Component : Web Api                               *
-*  Assembly : Empiria.Contracts.WebApi.dll                 Pattern   : Web api Controller                    *
+*  Assembly : Empiria.Procurement.WebApi.dll               Pattern   : Web api Controller                    *
 *  Type     : ContractsController                          License   : Please read LICENSE.txt file          *
 *                                                                                                            *
 *  Summary  : Web API used to retrive and update contracts.                                                  *
@@ -12,10 +12,10 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
-using Empiria.Contracts.Adapters;
-using Empiria.Contracts.UseCases;
+using Empiria.Procurement.Contracts.Adapters;
+using Empiria.Procurement.Contracts.UseCases;
 
-namespace Empiria.Contracts.WebApi {
+namespace Empiria.Procurement.Contracts.WebApi {
 
   /// <summary>Web API used to retrive and update contracts</summary>
   public class ContractsController : WebApiController {
@@ -136,4 +136,4 @@ namespace Empiria.Contracts.WebApi {
 
   }  // class ContractsController
 
-}  // namespace Empiria.Contracts.WebApi
+}  // namespace Empiria.Procurement.Contracts.WebApi

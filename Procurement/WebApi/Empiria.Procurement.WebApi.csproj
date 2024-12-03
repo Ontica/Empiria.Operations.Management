@@ -1,32 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Company>Ontica</Company>
-    <Product>Empiria Contracts Management</Product>
+    <Product>Empiria Procurement Management</Product>
     <Description>
-      Web api used to interact with the contracts management's backend.
+      Web api used to interact with Empiria Procurement Management's backend.
     </Description>
     <Copyright>(c) 2024-2025. La Vía Óntica SC, Ontica LLC y de los autores. Todos los derechos reservados.</Copyright>
-    <Version>1.0</Version>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <Version>8.0</Version>
+    <AssemblyVersion>8.0.0</AssemblyVersion>
+    <FileVersion>8.0.0.0</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/Ontica/Empiria.Financial.Management/blob/master/Contracts/WebApi/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Ontica/Empiria.Financial.Management/tree/master/WebApi</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Ontica/Empiria.Operations.Management/blob/master/Procurement/WebApi/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Ontica/Empiria.Operations.Management/tree/master/Procurement/WebApi</PackageProjectUrl>
     <PackageIconUrl>http://www.ontica.org/logo.ontica.png</PackageIconUrl>
     <PackageTags>
       administracion de contratos, licitaciones, compras, proveeduria, servicios, productos, web api, sercicios web, web services,
-      Banca de desarrollo, BANOBRAS, México
+      admnistración púbica, gobierno electrónico, Banca de desarrollo, BANOBRAS, México
     </PackageTags>
-    <RepositoryUrl>https://github.com/Ontica/Empiria.Payments</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Ontica/Empiria.Operations.Management</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Authors>Ontica</Authors>
     <TargetFramework>net48</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <NeutralLanguage></NeutralLanguage>
     <Configurations>Debug;Release;Multisolutions</Configurations>
-    <AssemblyName>Empiria.Contracts.WebApi</AssemblyName>
-    <RootNamespace>Empiria.Contracts.WebApi</RootNamespace>
+    <AssemblyName>Empiria.Procurement.WebApi</AssemblyName>
+    <RootNamespace>Empiria.Procurement.WebApi</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' Or '$(Configuration)|$(Platform)' == 'Multisolutions|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
@@ -59,17 +59,15 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contracts\Empiria.Contracts.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
     <PackageReference Include="Empiria.WebApi" Version="2.0.0" />
-    <PackageReference Include="Empiria.Contracts.Core" Version="1.0.0" />
+    <PackageReference Include="Empiria.Procurement.Core" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Multisolutions' ">
     <ProjectReference Include="..\..\..\extensions\WebApi\Empiria.WebApi.csproj" />
+    <ProjectReference Include="..\Core\Empiria.Procurement.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="empiria.config.json">

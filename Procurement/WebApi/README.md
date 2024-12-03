@@ -1,6 +1,6 @@
-﻿# Empiria Contracts Management Web Api
+﻿# Empiria Procurement Management Web Api
 
-Web api used to interact with the contracts management's backend.
+Web api used to interact with Empiria Procurement Management's backend.
 
 ## Licencia
 
@@ -24,5 +24,5 @@ e internacionales de derechos de autor.
 
 ## Copyright
 
-Copyright © 2024-2025. La Vía Óntica SC, Ontica LLC y autores.
+Copyright © 2002-2025. La Vía Óntica SC, Ontica LLC y autores.
 Todos los derechos reservados.

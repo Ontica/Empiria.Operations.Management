@@ -1,8 +1,8 @@
 ﻿{
-  "appName": "Empiria Payments Management System Core Tests",
+  "appName": "Empiria Procurment Management Tests",
   "description": "Domain types, classes and services tests environment settings",
-  "version": "1.0",
-  "date": "2024-03-08",
+  "version": "8.0",
+  "date": "2024-10-23",
   "settings": [
     {
       "type": "",

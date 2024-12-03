@@ -1,8 +1,8 @@
-﻿/* Empiria Financial *****************************************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Contracts Management                         Component : Web Api                               *
-*  Assembly : Empiria.Contracts.WebApi.dll                 Pattern   : Web api Controller                    *
-*  Type     : MilestoneController                          License   : Please read LICENSE.txt file          *
+*  Assembly : Empiria.Procurement.WebApi.dll               Pattern   : Web api Controller                    *
+*  Type     : ContractMilestonesController                 License   : Please read LICENSE.txt file          *
 *                                                                                                            *
 *  Summary  : Web API used to retrive and update milestone and milestone items.                              *
 *                                                                                                            *
@@ -11,13 +11,13 @@
 using System.Web.Http;
 
 using Empiria.WebApi;
-using Empiria.Contracts.Adapters;
-using Empiria.Contracts.UseCases;
+using Empiria.Procurement.Contracts.Adapters;
+using Empiria.Procurement.Contracts.UseCases;
 
-namespace Empiria.Contracts.WebApi {
+namespace Empiria.Procurement.Contracts.WebApi {
 
   /// <summary>Web API used to retrive and update milestone and milestone items</summary>
-  public class ContractsMilestoneController : WebApiController {
+  public class ContractMilestonesController : WebApiController {
 
     #region Query web apis
 
@@ -137,6 +137,6 @@ namespace Empiria.Contracts.WebApi {
 
     #endregion Command web apis
 
-  }  // class MilestoneController
+  }  // class ContractMilestonesController
 
-}  // namespace Empiria.Contracts.WebApi
+}  // namespace Empiria.Procurement.Contracts.WebApi

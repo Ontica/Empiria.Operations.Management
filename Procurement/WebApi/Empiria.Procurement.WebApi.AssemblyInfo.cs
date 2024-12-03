@@ -1,10 +1,10 @@
-﻿/* Empiria Financial *****************************************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  System   : Contracts Management                         Module  : Contracts Web Api                       *
-*  Assembly : Empiria.Contracts.WebApi.dll                 Pattern : Assembly Attributes File                *
+*  System   : Procurement Management                       Module  : Web Api Layer                           *
+*  Assembly : Empiria.Procurement.WebApi.dll               Pattern : Assembly Attributes File                *
 *                                                          License : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Web api used to interact with the contracts management's backend.1                             *
+*  Summary  : Web api used to interact with Empiria Procurement Management's backend.                        *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 using System;
