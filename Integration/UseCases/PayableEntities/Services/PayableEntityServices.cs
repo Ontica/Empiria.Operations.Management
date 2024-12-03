@@ -11,7 +11,7 @@
 using Empiria.Services;
 
 using Empiria.Payments.Payables.Adapters;
-using Empiria.Contracts;
+using Empiria.Procurement.Contracts;
 
 namespace Empiria.Payments.Payables.Services {
 
