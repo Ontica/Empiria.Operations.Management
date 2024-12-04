@@ -22,7 +22,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
     #region Query web apis
 
     [HttpGet]
-    [Route("v2/contracts/milestones/{milestoneUID:guid}")]
+    [Route("v8/procurement/contracts/milestones/{milestoneUID:guid}")]
     public SingleObjectModel GetMilestone([FromUri] string milestoneUID) {
 
       using (var usecases = ContractMilestoneUseCases.UseCaseInteractor()) {
@@ -34,7 +34,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpGet]
-    [Route("v2/contracts/milestones/{milestoneUID:guid}/items")]
+    [Route("v8/procurement/contracts/milestones/{milestoneUID:guid}/items")]
     public CollectionModel GetContractMilestoneItems([FromUri] string milestoneUID) {
 
       using (var usecases = ContractMilestoneUseCases.UseCaseInteractor()) {
@@ -49,7 +49,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
     #region Command web apis
 
     [HttpPost]
-    [Route("v2/contracts/milestones")]
+    [Route("v8/procurement/contracts/milestones")]
     public SingleObjectModel CreateMilestone([FromBody] ContractMilestoneFields fields) {
 
       base.RequireBody(fields);
@@ -63,7 +63,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpPost]
-    [Route("v2/contracts/milestones/{milestoneUID:guid}/items")]
+    [Route("v8/procurement/contracts/milestones/{milestoneUID:guid}/items")]
     public SingleObjectModel CreateContractItems([FromUri] string milestoneUID,
                                                  [FromBody] ContractMilestoneItemFields fields) {
 
@@ -78,7 +78,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpDelete]
-    [Route("v2/contracts/milestones/{milestoneUID:guid}")]
+    [Route("v8/procurement/contracts/milestones/{milestoneUID:guid}")]
     public NoDataModel DeleteContractMilestone([FromUri] string milestoneUID) {
 
       base.RequireResource(milestoneUID, nameof(milestoneUID));
@@ -91,7 +91,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
     }
 
     [HttpDelete]
-    [Route("v2/contracts/milestones/{milestoneUID:guid}/items/{milestoneItemUID:guid}")]
+    [Route("v8/procurement/contracts/milestones/{milestoneUID:guid}/items/{milestoneItemUID:guid}")]
     public NoDataModel DeleteContractItems([FromUri] string milestoneUID,
                                            [FromUri] string milestoneItemUID) {
 
@@ -106,7 +106,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpPut]
-    [Route("v2/contracts/milestone-items/{milestoneItemUID:guid}")]
+    [Route("v8/procurement/contracts/milestone-items/{milestoneItemUID:guid}")]
     public SingleObjectModel UpdateContractItem([FromUri] string milestoneItemUID,
                                         [FromBody] ContractMilestoneItemFields fields) {
 
@@ -121,7 +121,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpPut]
-    [Route("v2/contracts/milestone/{milestoneUID:guid}")]
+    [Route("v8/procurement/contracts/milestone/{milestoneUID:guid}")]
     public SingleObjectModel UpdateContractItem([FromUri] string milestoneUID,
                                                 [FromBody] ContractMilestoneFields fields) {
 
@@ -133,7 +133,6 @@ namespace Empiria.Procurement.Contracts.WebApi {
         return new SingleObjectModel(base.Request, milestone);
       }
     }
-
 
     #endregion Command web apis
 

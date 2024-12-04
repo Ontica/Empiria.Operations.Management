@@ -23,7 +23,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
     #region Query web apis
 
     [HttpGet]
-    [Route("v2/contracts/{contractUID:guid}")]
+    [Route("v8/procurement/contracts/{contractUID:guid}")]
     public SingleObjectModel GetContract([FromUri] string contractUID) {
 
       using (var usecases = ContractUseCases.UseCaseInteractor()) {
@@ -35,7 +35,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpGet]
-    [Route("v2/contracts/contract-types")]
+    [Route("v8/procurement/contracts/contract-types")]
     public CollectionModel GetContractTypes() {
 
       using (var usecases = ContractUseCases.UseCaseInteractor()) {
@@ -47,7 +47,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpPost]
-    [Route("v2/contracts/search")]
+    [Route("v8/procurement/contracts/search")]
     public CollectionModel SearchContracts([FromBody] ContractQuery query) {
 
       base.RequireBody(query);
@@ -61,7 +61,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpGet]
-    [Route("v2/contracts/contract-items/{contractUID:guid}")]
+    [Route("v8/procurement/contracts/contract-items/{contractUID:guid}")]
     public CollectionModel GetContractItems([FromUri] string contractUID) {
 
       using (var usecases = ContractUseCases.UseCaseInteractor()) {
@@ -76,7 +76,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
     #region Command web apis
 
     [HttpPost]
-    [Route("v2/contracts")]
+    [Route("v8/procurement/contracts")]
     public SingleObjectModel CreateContract([FromBody] ContractFields fields) {
 
       base.RequireBody(fields);
@@ -90,9 +90,9 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpPost]
-    [Route("v2/contracts/add-contract-items/{contractUID:guid}")]
+    [Route("v8/procurement/contracts/add-contract-items/{contractUID:guid}")]
     public SingleObjectModel CreateContractItems([FromUri] string contractUID,
-                                              [FromBody] ContractItemFields fields) {
+                                                 [FromBody] ContractItemFields fields) {
 
       base.RequireBody(fields);
 
@@ -105,7 +105,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpDelete]
-    [Route("v2/contracts/contract-items/{contractItemUID:guid}")]
+    [Route("v8/procurement/contracts/contract-items/{contractItemUID:guid}")]
     public NoDataModel DeleteContractItems([FromUri] string contractItemUID) {
 
       base.RequireResource(contractItemUID, nameof(contractItemUID));
@@ -119,7 +119,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpPut]
-    [Route("v2/contracts/contract-items/{contractItemUID:guid}")]
+    [Route("v8/procurement/contracts/contract-items/{contractItemUID:guid}")]
     public SingleObjectModel UpdateContractItem([FromUri] string contractItemUID,
                                                 [FromBody] ContractItemFields fields) {
 

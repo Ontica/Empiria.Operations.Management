@@ -15,11 +15,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
   /// <summary>Input fields DTO used for update contracts information.</summary>
   public class ContractFields {
 
-    public string UID {
-      get; set;
-    } = string.Empty;
-
-
     public string ContractTypeUID {
       get; set;
     } = string.Empty;
@@ -40,7 +35,12 @@ namespace Empiria.Procurement.Contracts.Adapters {
     } = string.Empty;
 
 
-    public string CurrencyUID {
+    public string BudgetTypeUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string ManagedByOrgUnitUID {
       get; set;
     } = string.Empty;
 
@@ -60,50 +60,14 @@ namespace Empiria.Procurement.Contracts.Adapters {
     } = ExecutionServer.DateMinValue;
 
 
-    public string ManagedByOrgUnitUID {
-      get; set;
-    }
-
-
-    public string BudgetTypeUID {
-      get; set;
-    } = string.Empty;
-
-
     public string SupplierUID {
       get; set;
     } = string.Empty;
 
 
-    public string ParentUID {
+    public string CurrencyUID {
       get; set;
     } = string.Empty;
-
-
-    public string ExtData {
-      get; set;
-    } = string.Empty;
-
-
-    public string KeyWords {
-      get; set;
-    } = string.Empty;
-
-
-    public string PostedByUID {
-      get; set;
-    } = string.Empty;
-
-
-    public string PostingTime {
-      get; set;
-    }
-
-
-    public string Status {
-      get; set;
-    } = string.Empty;
-
 
     public decimal Total {
       get; set;

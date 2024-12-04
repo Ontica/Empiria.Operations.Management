@@ -55,7 +55,6 @@ namespace Empiria.Tests.Procurement.Contracts {
         ManagedByOrgUnitUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
         BudgetTypeUID = TestingConstants.CONTRACT_BUDGET_TYPE_UID,
         SupplierUID = TestingConstants.SUPPLIER_UID,
-        ParentUID = "Empty",
         Total = 237762005.00M,
       };
 
@@ -82,7 +81,6 @@ namespace Empiria.Tests.Procurement.Contracts {
         ManagedByOrgUnitUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
         BudgetTypeUID = TestingConstants.CONTRACT_BUDGET_TYPE_UID,
         SupplierUID = TestingConstants.SUPPLIER_UID,
-        ParentUID = "Empty",
         Total = 9300402.32M,
       };
 

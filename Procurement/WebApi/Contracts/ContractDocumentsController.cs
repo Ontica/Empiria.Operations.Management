@@ -24,7 +24,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
     #region Command web apis
 
     [HttpDelete]
-    [Route("v2/contracts/{contractUID:guid}/documents/{documentUID:guid}")]
+    [Route("v8/procurement/contracts/{contractUID:guid}/documents/{documentUID:guid}")]
     public NoDataModel RemoveContractDocument([FromUri] string contractUID,
                                               [FromUri] string documentUID) {
 
@@ -38,7 +38,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpPost]
-    [Route("v2/contracts/{contractUID:guid}/documents")]
+    [Route("v8/procurement/contracts/{contractUID:guid}/documents")]
     public SingleObjectModel StoreContractDocument([FromUri] string contractUID) {
 
       var contract = Contract.Parse(contractUID);
@@ -54,7 +54,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpPut, HttpPatch]
-    [Route("v2/contracts/{contractUID:guid}/documents/{documentUID:guid}")]
+    [Route("v8/procurement/contracts/{contractUID:guid}/documents/{documentUID:guid}")]
     public SingleObjectModel UpdateContractDocument([FromUri] string contractUID,
                                                     [FromUri] string documentUID,
                                                     [FromBody] DocumentFields fields) {
