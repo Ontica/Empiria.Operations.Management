@@ -22,6 +22,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
     static internal ContractItemDto Map(ContractItem contractItem) {
       return new ContractItemDto {
         UID = contractItem.UID,
+        ContractItemType = contractItem.ContractItemType.MapToNamedEntity(),
         Contract = contractItem.Contract.MapToNamedEntity(),
         Supplier = contractItem.Supplier.MapToNamedEntity(),
         Product = contractItem.Product.MapToNamedEntity(),

@@ -1,7 +1,7 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Contracts Management                       Component : Domain Layer                            *
-*  Assembly : Empiria.Procurement.Core.dll               Pattern   : Information Holder                      *
+*  Assembly : Empiria.Procurement.Core.dll               Pattern   : Partitioned Type                        *
 *  Type     : Contract                                   License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Represents a contract.                                                                         *
@@ -254,7 +254,7 @@ namespace Empiria.Procurement.Contracts {
     internal ContractItem AddItem(ContractItemFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      var contractItem = new ContractItem(this, fields);
+      var contractItem = new ContractItem(ContractItemType.Payable, this, fields);
 
       _items.Value.Add(contractItem);
 

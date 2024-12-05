@@ -1,7 +1,7 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Contracts Management                       Component : Domain Layer                            *
-*  Assembly : Empiria.Procurement.Core.dll               Pattern   : Information Holder                      *
+*  Assembly : Empiria.Procurement.Core.dll               Pattern   : Partitioned Type                        *
 *  Type     : ContractItem                               License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Represents a contract item.                                                                    *
@@ -11,28 +11,31 @@
 using System;
 
 using Empiria.Json;
+using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.Products;
 using Empiria.StateEnums;
+using Empiria.Time;
 
 using Empiria.Budgeting;
 using Empiria.Projects;
 
 using Empiria.Procurement.Contracts.Data;
-using Empiria.Time;
 
 namespace Empiria.Procurement.Contracts {
 
   /// <summary>Represents a contract item.</summary>
+  [PartitionedType(typeof(ContractItemType))]
   public class ContractItem : BaseObject, INamedEntity {
 
     #region Constructors and parsers
 
-    private ContractItem() {
+    private ContractItem(ContractItemType contractItemType) : base (contractItemType) {
       // Required by Empiria Framework.
     }
 
-    public ContractItem(Contract contract, ContractItemFields fields) {
+    public ContractItem(ContractItemType contractItemType,
+                        Contract contract, ContractItemFields fields) : this(contractItemType) {
       Assertion.Require(contract, nameof(contract));
       Assertion.Require(fields, nameof(fields));
 
@@ -50,6 +53,14 @@ namespace Empiria.Procurement.Contracts {
     #endregion Constructors and parsers
 
     #region Properties
+
+
+    public ContractItemType ContractItemType {
+      get {
+        return (ContractItemType) base.GetEmpiriaType();
+      }
+    }
+
 
     [DataField("CONTRACT_ITEM_CONTRACT_ID")]
     public Contract Contract {
@@ -172,7 +183,6 @@ namespace Empiria.Procurement.Contracts {
     #region Methods
 
     internal void Delete() {
-
       this.Status = EntityStatus.Deleted;
     }
 

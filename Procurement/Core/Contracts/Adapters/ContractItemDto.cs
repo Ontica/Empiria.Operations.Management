@@ -21,6 +21,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
+    public NamedEntityDto ContractItemType {
+      get; internal set;
+    }
+
     public NamedEntityDto Contract {
       get; internal set;
     }
