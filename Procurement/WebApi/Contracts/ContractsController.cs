@@ -59,18 +59,6 @@ namespace Empiria.Procurement.Contracts.WebApi {
       }
     }
 
-
-    [HttpGet]
-    [Route("v8/procurement/contracts/contract-items/{contractUID:guid}")]
-    public CollectionModel GetContractItems([FromUri] string contractUID) {
-
-      using (var usecases = ContractUseCases.UseCaseInteractor()) {
-        FixedList<ContractItemDto> contractItems = usecases.GetContractItems(contractUID);
-
-        return new CollectionModel(base.Request, contractItems);
-      }
-    }
-
     #endregion Query web apis
 
     #region Command web apis
@@ -89,46 +77,29 @@ namespace Empiria.Procurement.Contracts.WebApi {
     }
 
 
-    [HttpPost]
-    [Route("v8/procurement/contracts/add-contract-items/{contractUID:guid}")]
-    public SingleObjectModel CreateContractItems([FromUri] string contractUID,
-                                                 [FromBody] ContractItemFields fields) {
-
-      base.RequireBody(fields);
-
-      using (var usecases = ContractItemUseCases.UseCaseInteractor()) {
-        ContractItemDto contractItem = usecases.CreateContractItem(contractUID, fields);
-
-        return new SingleObjectModel(base.Request, contractItem);
-      }
-    }
-
-
     [HttpDelete]
-    [Route("v8/procurement/contracts/contract-items/{contractItemUID:guid}")]
-    public NoDataModel DeleteContractItems([FromUri] string contractItemUID) {
+    [Route("v8/procurement/contracts/{contractUID:guid}")]
+    public NoDataModel DeleteContract([FromUri] string contractUID) {
 
-      base.RequireResource(contractItemUID, nameof(contractItemUID));
+      using (var usecases = ContractUseCases.UseCaseInteractor()) {
+        _ = usecases.DeleteContract(contractUID);
 
-      using (var usecases = ContractItemUseCases.UseCaseInteractor()) {
-        usecases.DeleteContractItem(contractItemUID);
-
-        return new NoDataModel(this.Request);
+        return new NoDataModel(base.Request);
       }
     }
 
 
-    [HttpPut]
-    [Route("v8/procurement/contracts/contract-items/{contractItemUID:guid}")]
-    public SingleObjectModel UpdateContractItem([FromUri] string contractItemUID,
-                                                [FromBody] ContractItemFields fields) {
+    [HttpPut, HttpPatch]
+    [Route("v8/procurement/contracts/{contractUID:guid}")]
+    public SingleObjectModel UpdateContract([FromUri] string contractUID,
+                                            [FromBody] ContractFields fields) {
 
       base.RequireBody(fields);
 
-      using (var usecases = ContractItemUseCases.UseCaseInteractor()) {
-        ContractItemDto contractItem = usecases.UpdateContractItem(contractItemUID, fields);
+      using (var usecases = ContractUseCases.UseCaseInteractor()) {
+        ContractHolderDto contract = usecases.UpdateContract(contractUID, fields);
 
-        return new SingleObjectModel(base.Request, contractItem);
+        return new SingleObjectModel(base.Request, contract);
       }
     }
 
