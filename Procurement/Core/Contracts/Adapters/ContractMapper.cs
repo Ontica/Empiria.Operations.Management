@@ -25,7 +25,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         Milestones = ContractMilestoneMapper.Map(contract.GetMilestones()),
         Documents = DocumentServices.GetEntityDocuments(contract),
         History = HistoryServices.GetEntityHistory(contract),
-        Actions = MapActions()
+        Actions = MapActions(contract)
       };
     }
 
@@ -57,9 +57,13 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     #region Helpers
 
-    static private BaseActions MapActions() {
-      return new BaseActions {
-        CanEditDocuments = true
+    static private ContractActions MapActions(Contract contract) {
+      return new ContractActions {
+        CanActivate = contract.CanActivate(),
+        CanDelete = contract.CanDelete(),
+        CanSuspend = contract.CanSuspend(),
+        CanUpdate = contract.Status == EntityStatus.Pending,
+        CanEditDocuments = true,
       };
     }
 
@@ -67,19 +71,19 @@ namespace Empiria.Procurement.Contracts.Adapters {
     static private ContractDescriptor MapToDescriptor(Contract contract) {
       return new ContractDescriptor {
         UID = contract.UID,
+        ContractType = contract.ContractType.Name,
         ContractNo = contract.ContractNo,
         Name = contract.Name,
         Description = contract.Description,
-        SignDate = contract.SignDate,
-        Supplier = contract.Supplier.Name,
-        BudgetType = contract.BudgetType.DisplayName,
         ManagedByOrgUnit = contract.ManagedByOrgUnit.FullName,
-        ContractType = contract.ContractType.Name,
-        Currency = contract.Currency.Name,
-        ToDate = contract.ToDate,
+        Supplier = contract.Supplier.Name,
         FromDate = contract.FromDate,
-        StatusName = contract.Status.GetName(),
+        ToDate = contract.ToDate,
+        SignDate = contract.SignDate,
+        BudgetType = contract.BudgetType.DisplayName,
+        Currency = contract.Currency.Name,
         Total = contract.Total,
+        StatusName = contract.Status.GetName()
       };
     }
 

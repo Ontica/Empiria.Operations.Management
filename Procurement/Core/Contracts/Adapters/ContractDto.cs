@@ -37,11 +37,30 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public BaseActions Actions {
+    public ContractActions Actions {
       get; internal set;
     }
 
   }  // class ContractHolderDto
+
+
+
+  public class ContractActions : BaseActions {
+
+    public bool CanActivate {
+      get; internal set;
+    }
+
+    public bool CanRequestBudget {
+      get; internal set;
+    }
+
+    public bool CanSuspend {
+      get; internal set;
+    }
+
+  } // class ContractActions
+
 
 
   /// <summary>Data transfer object used to return contracts information.</summary>
