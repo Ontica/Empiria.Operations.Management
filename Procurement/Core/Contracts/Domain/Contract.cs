@@ -15,6 +15,7 @@ using Empiria.Json;
 using Empiria.Parties;
 using Empiria.StateEnums;
 using Empiria.Financial;
+
 using Empiria.Budgeting;
 
 using Empiria.Procurement.Contracts.Adapters;
@@ -195,8 +196,7 @@ namespace Empiria.Procurement.Contracts {
 
 
     internal void Delete() {
-
-      Assertion.Require(this.Status == EntityStatus.Active || this.Status == EntityStatus.Suspended,
+      Assertion.Require(this.Status == EntityStatus.Pending,
                   $"No se puede eliminar un contrato que está en estado {this.Status.GetName()}.");
 
       this.Status = EntityStatus.Deleted;
@@ -236,28 +236,53 @@ namespace Empiria.Procurement.Contracts {
 
     #region Helpers
 
-    internal void Load(ContractFields fields) {
-      this.ContractType = ContractType.Parse(fields.ContractTypeUID);
-      this.ContractNo = fields.ContractNo;
-      this.Name = fields.Name;
-      this.Description = fields.Description;
-      this.Currency = Currency.Parse(fields.CurrencyUID);
-      this.FromDate = fields.FromDate;
-      this.ToDate = fields.ToDate;
-      this.SignDate = fields.SignDate;
-      this.ManagedByOrgUnit = OrganizationalUnit.Parse(fields.ManagedByOrgUnitUID);
-      this.Supplier = Party.Parse(fields.SupplierUID);
-      this.BudgetType = BudgetType.Parse(fields.BudgetTypeUID);
-      this.Total = fields.Total;
-      ExtData = new JsonObject();
+    internal ContractItem AddItem(ContractItemFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      var contractItem = new ContractItem(this, fields);
+
+      _items.Value.Add(contractItem);
+
+      return contractItem;
     }
 
 
-    internal void AddItem(ContractItem contractItem) {
-      Assertion.Require(contractItem, nameof(contractItem));
-      Assertion.Require(contractItem.Contract.Equals(this), "Wrong ContractItem.Contract instance");
+    internal bool CanActivate() {
+      if (Status == EntityStatus.Active) {
+        return false;
+      }
+      if (Status == EntityStatus.Suspended) {
+        return true;
+      }
+      if (ContractNo.Length != 0 && !Supplier.IsEmptyInstance &&
+          FromDate != ExecutionServer.DateMaxValue &&
+          ToDate != ExecutionServer.DateMaxValue &&
+          SignDate != ExecutionServer.DateMaxValue) {
+        return true;
+      }
+      return false;
+    }
 
-      _items.Value.Add(contractItem);
+    internal bool CanDelete() {
+      if (Status == EntityStatus.Pending) {
+        return true;
+      }
+      return false;
+    }
+
+    internal bool CanSuspend() {
+      if (Status == EntityStatus.Active) {
+        return true;
+      }
+      return false;
+    }
+
+    internal ContractItem GetItem(string contractItemUID) {
+      ContractItem contractItem = _items.Value.Find(x => x.UID == contractItemUID);
+
+      Assertion.Require(contractItem, $"Contract item {contractItemUID} not found.");
+
+      return contractItem;
     }
 
 
@@ -271,34 +296,49 @@ namespace Empiria.Procurement.Contracts {
     }
 
     internal ContractItem RemoveItem(string contractItemUID) {
-      Assertion.Require("contractItemUID", nameof(contractItemUID));
+      Assertion.Require(contractItemUID, nameof(contractItemUID));
 
-      var contractItem = ContractItem.Parse(contractItemUID);
-
-      _items.Value.Remove(contractItem);
+      ContractItem contractItem = GetItem(contractItemUID);
 
       contractItem.Delete();
 
-      return contractItem;
-    }
-
-
-    internal ContractItem UpdateItem(string contractItemUID, ContractItemFields fields) {
-      Assertion.Require("contractItemUID", nameof(contractItemUID));
-
-      var contractItem = ContractItem.Parse(contractItemUID);
-
       _items.Value.Remove(contractItem);
 
-      contractItem.Load(fields);
-
-      _items.Value.Add(contractItem);
-
-      contractItem.Load(fields);
-
       return contractItem;
     }
 
+
+    internal void Update(ContractFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      ContractType = PatchField(fields.ContractTypeUID, ContractType);
+      ContractNo = EmpiriaString.Clean(fields.ContractNo);
+      Name = PatchCleanField(fields.Name, Name);
+      Description = EmpiriaString.Clean(fields.Description);
+      ManagedByOrgUnit = PatchField(fields.ManagedByOrgUnitUID, ManagedByOrgUnit);
+      Supplier = fields.SupplierUID.Length != 0 ? Party.Parse(fields.SupplierUID) : Party.Empty;
+      FromDate = fields.FromDate;
+      ToDate = fields.ToDate;
+      SignDate = fields.SignDate;
+      BudgetType = BudgetType.Parse(fields.BudgetTypeUID);
+      Currency = PatchField(fields.CurrencyUID, Currency);
+      Total = fields.Total;
+    }
+
+
+    internal ContractItem UpdateItem(ContractItem contractItem, ContractItemFields fields) {
+      Assertion.Require(contractItem, nameof(contractItem));
+      Assertion.Require(contractItem.Contract.Equals(this), "Wrong ContractItem.Contract instance.");
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      contractItem.Update(fields);
+
+      return contractItem;
+    }
 
     #endregion Helpers
 

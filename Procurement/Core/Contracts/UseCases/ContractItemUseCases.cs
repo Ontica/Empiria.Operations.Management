@@ -31,34 +31,19 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
     #region Use cases
 
-    public ContractItemDto CreateContractItem(string ContractUID, ContractItemFields fields) {
-
-      Assertion.Require(ContractUID, nameof(ContractUID));
+    public ContractItemDto AddContractItem(string contractUID, ContractItemFields fields) {
+      Assertion.Require(contractUID, nameof(contractUID));
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();
 
-      var contract = Contract.Parse(ContractUID);
+      var contract = Contract.Parse(contractUID);
 
-      var contractItem = new ContractItem(fields);
-
-      contract.AddItem(contractItem);
+      ContractItem contractItem = contract.AddItem(fields);
 
       contractItem.Save();
 
       return ContractItemMapper.Map(contractItem);
-    }
-
-
-    public void DeleteContractItem(string ContractItemUID) {
-
-      Assertion.Require(ContractItemUID, nameof(ContractItemUID));
-
-      var contractItem = ContractItem.Parse(ContractItemUID);
-
-      contractItem.Delete();
-
-      contractItem.Save();
     }
 
 
@@ -72,16 +57,34 @@ namespace Empiria.Procurement.Contracts.UseCases {
     }
 
 
-    public ContractItemDto UpdateContractItem(string ContractItemUID,
-                                              ContractItemFields fields) {
+    public ContractItemDto RemoveContractItem(string contractUID, string contractItemUID) {
+      Assertion.Require(contractUID, nameof(contractUID));
+      Assertion.Require(contractItemUID, nameof(contractItemUID));
 
+      var contract = Contract.Parse(contractUID);
+
+      ContractItem contractItem = contract.RemoveItem(contractItemUID);
+
+      contractItem.Save();
+
+      return ContractItemMapper.Map(contractItem);
+    }
+
+
+    public ContractItemDto UpdateContractItem(string contractUID,
+                                              string contractItemUID,
+                                              ContractItemFields fields) {
+      Assertion.Require(contractUID, nameof(contractUID));
+      Assertion.Require(contractItemUID, nameof(contractItemUID));
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();
 
-      var contractItem = ContractItem.Parse(ContractItemUID);
+      var contract = Contract.Parse(contractUID);
 
-      contractItem.Load(fields);
+      ContractItem contractItem = contract.GetItem(contractItemUID);
+
+      contract.UpdateItem(contractItem, fields);
 
       contractItem.Save();
 

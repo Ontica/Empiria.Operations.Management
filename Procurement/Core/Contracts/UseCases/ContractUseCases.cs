@@ -39,9 +39,20 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       var contract = new Contract();
 
-      contract.Load(fields);
+      contract.Update(fields);
 
-      contract.SetDates(fields.SignDate, contract.FromDate, fields.ToDate);
+      contract.Save();
+
+      return ContractMapper.Map(contract);
+    }
+
+
+    public ContractHolderDto DeleteContract(string contractUID) {
+      Assertion.Require(contractUID, nameof(contractUID));
+
+      var contract = Contract.Parse(contractUID);
+
+      contract.Delete();
 
       contract.Save();
 
@@ -58,17 +69,6 @@ namespace Empiria.Procurement.Contracts.UseCases {
     }
 
 
-    public FixedList<ContractItemDto> GetContractItems(string contractUID) {
-      Assertion.Require(contractUID, nameof(contractUID));
-
-      var contract = Contract.Parse(contractUID);
-
-      FixedList<ContractItem> items = contract.GetItems();
-
-      return ContractItemMapper.Map(items);
-    }
-
-
     public FixedList<NamedEntityDto> GetContractTypes() {
       var contractTypes = ContractType.GetList();
 
@@ -82,29 +82,26 @@ namespace Empiria.Procurement.Contracts.UseCases {
       string condition = query.MapToFilterString();
       string orderBy = query.MapToSortString();
 
-      FixedList<Contract> contracts = ContractData.getContracts(condition, orderBy);
+      FixedList<Contract> contracts = ContractData.GetContracts(condition, orderBy);
 
       return ContractMapper.MapToDescriptor(contracts);
     }
 
 
     public ContractHolderDto UpdateContract(string ContractUID,
-                                      ContractFields fields) {
+                                            ContractFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();
 
       var contract = Contract.Parse(ContractUID);
 
-      contract.Load(fields);
-
-      contract.SetDates(fields.SignDate, contract.FromDate, fields.ToDate);
+      contract.Update(fields);
 
       contract.Save();
 
       return ContractMapper.Map(contract);
     }
-
 
     #endregion Use cases
 

@@ -13,11 +13,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
   /// <summary>DTO fields structure used for update contracts item information.</summary>
   public class ContractItemFields {
 
-    public string ContractUID {
-      get; set;
-    } = string.Empty;
-
-
     public string ProductUID {
       get; set;
     } = string.Empty;
@@ -74,7 +69,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
 
     internal void EnsureValid() {
-      Assertion.Require(ContractUID, "Se requiere el número de contrato.");
       Assertion.Require(ProductUID, "Se requiere del número de producto.");
       Assertion.Require(Description, "Necesito el nombre del contrato.");
       Assertion.Require(UnitMeasureUID, "Necesito la unidad de medida.");

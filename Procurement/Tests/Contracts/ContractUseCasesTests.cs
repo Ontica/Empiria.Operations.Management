@@ -98,8 +98,6 @@ namespace Empiria.Tests.Procurement.Contracts {
     public void Should_Create_A_Contract_Item() {
 
       var fields = new ContractItemFields {
-
-        ContractUID = TestingConstants.CONTRACT_UID,
         ProductUID = TestingConstants.CONTRACT_ITEM_PRODUCT_UID,
         Description = "Prueba contract items  2000",
         UnitMeasureUID = TestingConstants.CONTRACT_ITEM_UNIT_UID,
@@ -111,7 +109,7 @@ namespace Empiria.Tests.Procurement.Contracts {
         PaymentPeriodicityUID = TestingConstants.CONTRACT_ITEM_PYM_PER_UID
       };
 
-      ContractItemDto sut = _itemusecases.CreateContractItem(TestingConstants.CONTRACT_UID, fields);
+      ContractItemDto sut = _itemusecases.AddContractItem(TestingConstants.CONTRACT_UID, fields);
 
       Assert.NotNull(sut);
       Assert.NotNull(sut.UID);
@@ -138,18 +136,9 @@ namespace Empiria.Tests.Procurement.Contracts {
 
 
     [Fact]
-    public void Should_Read_A_Contract_Items() {
-
-      FixedList<ContractItemDto> sut = _usecases.GetContractItems(TestingConstants.CONTRACT_UID);
-
-      Assert.NotNull(sut);
-    }
-
-
-    [Fact]
     public void Should_Remove_A_Contract_Item() {
 
-      _itemusecases.DeleteContractItem(TestingConstants.CONTRACT_ITEM_UID);
+      _itemusecases.RemoveContractItem(TestingConstants.CONTRACT_UID, TestingConstants.CONTRACT_ITEM_UID);
 
     }
 
@@ -158,8 +147,6 @@ namespace Empiria.Tests.Procurement.Contracts {
     public void Should_Update_A_Contract_Item() {
 
       var fields = new ContractItemFields {
-
-        ContractUID = TestingConstants.CONTRACT_UID,
         ProductUID = TestingConstants.CONTRACT_ITEM_PRODUCT_UID,
         Description = "Prueba contract item modificar en test",
         UnitMeasureUID = TestingConstants.CONTRACT_ITEM_UNIT_UID,
@@ -171,7 +158,9 @@ namespace Empiria.Tests.Procurement.Contracts {
         PaymentPeriodicityUID = TestingConstants.CONTRACT_ITEM_PYM_PER_UID
       };
 
-      ContractItemDto sut = _itemusecases.UpdateContractItem(TestingConstants.CONTRACT_ITEM_UID, fields);
+      ContractItemDto sut = _itemusecases.UpdateContractItem(TestingConstants.CONTRACT_UID,
+                                                             TestingConstants.CONTRACT_ITEM_UID,
+                                                             fields);
 
       Assert.NotNull(sut);
       Assert.NotNull(sut.UID);

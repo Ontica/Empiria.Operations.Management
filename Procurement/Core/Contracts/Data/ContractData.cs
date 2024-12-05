@@ -17,7 +17,7 @@ namespace Empiria.Procurement.Contracts.Data {
 
     #region Methods
 
-    static internal FixedList<Contract> getContracts(string filter, string sortBy) {
+    static internal FixedList<Contract> GetContracts(string filter, string sortBy) {
       var sql = "select * from fms_contracts ";
 
       if (!string.IsNullOrWhiteSpace(filter)) {
@@ -31,8 +31,8 @@ namespace Empiria.Procurement.Contracts.Data {
       var dataOperation = DataOperation.Parse(sql);
 
       return DataReader.GetFixedList<Contract>(dataOperation);
-
     }
+
 
     static internal void WriteContract(Contract o, string extensionData) {
       var op = DataOperation.Parse("write_Contract",

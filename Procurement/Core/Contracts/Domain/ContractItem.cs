@@ -33,12 +33,14 @@ namespace Empiria.Procurement.Contracts {
       // Required by Empiria Framework.
     }
 
-    public ContractItem(ContractItemFields fields) {
+    public ContractItem(Contract contract, ContractItemFields fields) {
+      Assertion.Require(contract, nameof(contract));
       Assertion.Require(fields, nameof(fields));
 
-      Load(fields);
-    }
+      Contract = contract;
 
+      Update(fields);
+    }
 
     static internal ContractItem Parse(string contractItemUID) {
       return BaseObject.ParseKey<ContractItem>(contractItemUID);
@@ -67,6 +69,7 @@ namespace Empiria.Procurement.Contracts {
       get; private set;
     }
 
+
     [DataField("CONTRACT_ITEM_PRODUCT_ID")]
     public Product Product {
       get; private set;
@@ -82,6 +85,7 @@ namespace Empiria.Procurement.Contracts {
       }
     }
 
+
     [DataField("CONTRACT_ITEM_DESCRIPTION")]
     public string Description {
       get; private set;
@@ -92,6 +96,7 @@ namespace Empiria.Procurement.Contracts {
     public ProductUnit UnitMeasure {
       get; private set;
     }
+
 
     [DataField("CONTRACT_ITEM_FROM_QTY", ConvertFrom = typeof(decimal))]
     public decimal FromQuantity {
@@ -202,16 +207,20 @@ namespace Empiria.Procurement.Contracts {
 
     #region Helpers
 
-    internal void Load(ContractItemFields fields) {
-      this.Product = Product.Parse(fields.ProductUID);
-      this.Description = fields.Description;
-      this.UnitMeasure = ProductUnit.Parse(fields.UnitMeasureUID);
+    internal void Update(ContractItemFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      this.Product = PatchField(fields.ProductUID, Product);
+      this.Description = PatchCleanField(fields.Description, Description);
+      this.UnitMeasure = PatchField(fields.UnitMeasureUID, UnitMeasure);
       this.FromQuantity = fields.FromQuantity;
       this.ToQuantity = fields.ToQuantity;
       this.UnitPrice = fields.UnitPrice;
-      this.PaymentsPeriodicity = Periodicity.Parse(fields.PaymentPeriodicityUID);
-      this.BudgetAccount = BudgetAccount.Parse(fields.BudgetAccountUID);
-      this.Project = Project.Parse(fields.ProjectUID);
+      this.PaymentsPeriodicity = PatchField(fields.PaymentPeriodicityUID, PaymentsPeriodicity);
+      this.BudgetAccount = PatchField(fields.BudgetAccountUID, BudgetAccount);
+      this.Project = PatchField(fields.ProjectUID, Project);
     }
 
     #endregion Helpers
