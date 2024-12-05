@@ -37,15 +37,15 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto Unit {
+    public NamedEntityDto ProductUnit {
       get; internal set;
     }
 
-    public decimal FromQuantity {
+    public decimal MinQuantity {
       get; internal set;
     }
 
-    public decimal ToQuantity {
+    public decimal MaxQuantity {
       get; internal set;
     }
 
@@ -57,11 +57,11 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto Periodicity {
+    public NamedEntityDto BudgetAccount {
       get; internal set;
     }
 
-    public NamedEntityDto BudgetAccount {
+    public NamedEntityDto PeriodicityType {
       get; internal set;
     }
 

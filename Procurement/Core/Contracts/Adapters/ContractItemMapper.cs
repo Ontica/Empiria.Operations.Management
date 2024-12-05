@@ -26,15 +26,14 @@ namespace Empiria.Procurement.Contracts.Adapters {
         Supplier = contractItem.Supplier.MapToNamedEntity(),
         Product = contractItem.Product.MapToNamedEntity(),
         Description = contractItem.Description,
-        Unit = contractItem.UnitMeasure.MapToNamedEntity(),
-        FromQuantity = contractItem.FromQuantity,
-        ToQuantity = contractItem.ToQuantity,
+        ProductUnit = contractItem.ProductUnit.MapToNamedEntity(),
+        MinQuantity = contractItem.MinQuantity,
+        MaxQuantity = contractItem.MaxQuantity,
         UnitPrice = contractItem.UnitPrice,
         Project = contractItem.Project.MapToNamedEntity(),
-        Periodicity = contractItem.PaymentsPeriodicity.MapToNamedEntity(),
-        BudgetAccount = contractItem.BudgetAccount.MapToNamedEntity()
+        BudgetAccount = contractItem.BudgetAccount.MapToNamedEntity(),
+        PeriodicityType = contractItem.PeriodicityType.MapToNamedEntity(),
       };
-
     }
 
   }  // class ContractItemMapper

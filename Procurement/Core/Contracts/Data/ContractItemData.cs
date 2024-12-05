@@ -15,26 +15,28 @@ using Empiria.Data;
 namespace Empiria.Procurement.Contracts.Data {
 
   /// <summary>Provides data read and write methods for contract item instances.</summary>
-  static public class ContractItemData {
+  static internal class ContractItemData {
 
     static internal List<ContractItem> GetContractItems(Contract contract) {
       Assertion.Require(contract, nameof(contract));
 
-      var sql = "select * from fms_contract_items " +
-                $"WHERE contract_id = {contract.Id} AND contract_item_status <> 'X'";
+      var sql = "SELECT * FROM OMS_CONTRACT_ITEMS " +
+                $"WHERE CONTRACT_ITEM_CONTRACT_ID = {contract.Id} AND " +
+                $"CONTRACT_ITEM_STATUS <> 'X'";
 
       var op = DataOperation.Parse(sql);
 
       return DataReader.GetList<ContractItem>(op);
     }
 
-    static public void WriteContractItem(ContractItem o, string extensionData) {
-      var op = DataOperation.Parse("write_Contract_Item",
+
+    static internal void WriteContractItem(ContractItem o, string extensionData) {
+      var op = DataOperation.Parse("write_OMS_Contract_Item",
                      o.Id, o.UID, o.Contract.Id, o.Product.Id, o.Description,
-                     o.UnitMeasure.Id, o.FromQuantity, o.ToQuantity,
-                     o.UnitPrice, o.Project.Id, o.PaymentsPeriodicity.Id,
+                     o.ProductUnit.Id, o.MinQuantity, o.MaxQuantity,
+                     o.UnitPrice, o.Project.Id, o.PeriodicityRule,
                      o.BudgetAccount.Id, extensionData, o.Keywords,
-                     o.LastUpdatedBy.Id, o.PostingTime, (char) o.Status);
+                     o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }

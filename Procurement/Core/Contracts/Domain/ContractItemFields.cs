@@ -13,6 +13,11 @@ namespace Empiria.Procurement.Contracts {
   /// <summary>DTO fields structure used for update contracts item information.</summary>
   public class ContractItemFields {
 
+    public string ContractItemTypeUID {
+      get; set;
+    } = string.Empty;
+
+
     public string ProductUID {
       get; set;
     } = string.Empty;
@@ -23,19 +28,9 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
-    public string UnitMeasureUID {
+    public string ProductUnitUID {
       get; set;
     } = string.Empty;
-
-
-    public decimal FromQuantity {
-      get; set;
-    }
-
-
-    public decimal ToQuantity {
-      get; set;
-    }
 
 
     public decimal UnitPrice {
@@ -43,14 +38,14 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    public string ProjectUID {
+    public decimal MinQuantity {
       get; set;
-    } = string.Empty;
+    }
 
 
-    public string PaymentPeriodicityUID {
+    public decimal MaxQuantity {
       get; set;
-    } = string.Empty;
+    }
 
 
     public string BudgetAccountUID {
@@ -58,24 +53,29 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
-    public string DocumentTypeUID {
+    public string ProjectUID {
       get; set;
     } = string.Empty;
 
 
-    public decimal Total {
+    public string SupplierUID {
       get; set;
-    }
+    } = string.Empty;
+
+
+    public string PeriodicityTypeUID {
+      get; set;
+    } = string.Empty;
 
 
     internal void EnsureValid() {
-      Assertion.Require(ProductUID, "Se requiere del número de producto.");
-      Assertion.Require(Description, "Necesito el nombre del contrato.");
-      Assertion.Require(UnitMeasureUID, "Necesito la unidad de medida.");
+      Assertion.Require(ProductUID, "Necesito se proporcione el producto.");
+      Assertion.Require(ProductUnitUID, "Necesito la unidad de medida del producto.");
       Assertion.Require(UnitPrice > 0, "Necesito el precio unitario.");
-      Assertion.Require(FromQuantity > 0, "Necesito la cantidad de medida inicial.");
-      Assertion.Require(ToQuantity > 0, "Necesito la cantidad de medida final.");
-
+      Assertion.Require(MinQuantity > 0, "Necesito se proporcione la cantidad mínima.");
+      Assertion.Require(MaxQuantity > 0, "Necesito se proporcione la cantidad máxima.");
+      Assertion.Require(MinQuantity <= MaxQuantity,
+                       "La cantidad máxima no puede ser menor a la cantidad mínima.");
     }
 
   }  // class ContractItemFields

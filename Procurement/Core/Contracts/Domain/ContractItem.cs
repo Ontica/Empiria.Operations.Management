@@ -14,12 +14,12 @@ using Empiria.Json;
 using Empiria.Parties;
 using Empiria.Products;
 using Empiria.StateEnums;
-using Empiria.Time;
 
 using Empiria.Budgeting;
 using Empiria.Projects;
 
 using Empiria.Procurement.Contracts.Data;
+using Empiria.Time;
 
 namespace Empiria.Procurement.Contracts {
 
@@ -41,30 +41,18 @@ namespace Empiria.Procurement.Contracts {
       Update(fields);
     }
 
-    static internal ContractItem Parse(string contractItemUID) {
-      return BaseObject.ParseKey<ContractItem>(contractItemUID);
-    }
+    static internal ContractItem Parse(string contractItemUID) => ParseKey<ContractItem>(contractItemUID);
 
+    static internal ContractItem Parse(int id) => ParseId<ContractItem>(id);
 
-    static internal ContractItem Parse(int id) {
-      return BaseObject.ParseId<ContractItem>(id);
-    }
-
-
-    static public ContractItem Empty => BaseObject.ParseEmpty<ContractItem>();
+    static public ContractItem Empty => ParseEmpty<ContractItem>();
 
     #endregion Constructors and parsers
 
     #region Properties
 
-    [DataField("CONTRACT_ID")]
+    [DataField("CONTRACT_ITEM_CONTRACT_ID")]
     public Contract Contract {
-      get; private set;
-    }
-
-
-    [DataField("CONTRACT_ITEM_SUPPLIER_ID")]
-    public Party Supplier {
       get; private set;
     }
 
@@ -73,6 +61,7 @@ namespace Empiria.Procurement.Contracts {
     public Product Product {
       get; private set;
     }
+
 
     public string Name {
       get {
@@ -91,35 +80,26 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    [DataField("CONTRACT_ITEM_UNIT_ID")]
-    public ProductUnit UnitMeasure {
+    [DataField("CONTRACT_ITEM_PRODUCT_UNIT_ID")]
+    public ProductUnit ProductUnit {
       get; private set;
     }
 
 
-    [DataField("CONTRACT_ITEM_FROM_QTY", ConvertFrom = typeof(decimal))]
-    public decimal FromQuantity {
-      get; private set;
-    }
-
-    [DataField("CONTRACT_ITEM_TO_QTY", ConvertFrom = typeof(decimal))]
-    public decimal ToQuantity {
-      get; private set;
-    }
-
-    [DataField("CONTRACT_ITEM_UNIT_PRICE", ConvertFrom = typeof(decimal))]
+    [DataField("CONTRACT_ITEM_UNIT_PRICE")]
     public decimal UnitPrice {
       get; private set;
     }
 
-    [DataField("CONTRACT_ITEM_PROJECT_ID")]
-    public Project Project {
+
+    [DataField("CONTRACT_ITEM_MIN_QTY")]
+    public decimal MinQuantity {
       get; private set;
     }
 
 
-    [DataField("CONTRACT_ITEM_PERIODICITY_ID")]
-    public Periodicity PaymentsPeriodicity {
+    [DataField("CONTRACT_ITEM_MAX_QTY")]
+    public decimal MaxQuantity {
       get; private set;
     }
 
@@ -130,6 +110,33 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
+    [DataField("CONTRACT_ITEM_PROJECT_ID")]
+    public Project Project {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_ITEM_SUPPLIER_ID")]
+    public Party Supplier {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_ITEM_PERIODICITY_RULE")]
+    public JsonObject PeriodicityRule {
+      get; private set;
+    }
+
+
+    public Periodicity PeriodicityType {
+      get {
+        return PeriodicityRule.Get("periodicityType", Periodicity.Empty);
+      }
+      set {
+        PeriodicityRule.SetIfValue("periodicityType", value);
+      }
+    }
+
     [DataField("CONTRACT_ITEM_EXT_DATA")]
     private JsonObject ExtData {
       get; set;
@@ -139,26 +146,6 @@ namespace Empiria.Procurement.Contracts {
     public string Keywords {
       get {
         return EmpiriaString.BuildKeywords(this.Description);
-      }
-    }
-
-
-    internal Party LastUpdatedBy {
-      get {
-        return ExtData.Get("lastUpdatedBy", Party.Empty);
-      }
-      set {
-        ExtData.Set("lastUpdatedBy", value.Id);
-      }
-    }
-
-
-    internal DateTime LastUpdatedTime {
-      get {
-        return ExtData.Get<DateTime>("lastUpdatedTime", this.PostingTime);
-      }
-      set {
-        ExtData.Set("lastUpdatedTime", value);
       }
     }
 
@@ -196,9 +183,6 @@ namespace Empiria.Procurement.Contracts {
         this.PostingTime = DateTime.Now;
       }
 
-      LastUpdatedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
-      LastUpdatedTime = DateTime.Now;
-
       ContractItemData.WriteContractItem(this, this.ExtData.ToString());
     }
 
@@ -213,13 +197,14 @@ namespace Empiria.Procurement.Contracts {
 
       this.Product = PatchField(fields.ProductUID, Product);
       this.Description = PatchCleanField(fields.Description, Description);
-      this.UnitMeasure = PatchField(fields.UnitMeasureUID, UnitMeasure);
-      this.FromQuantity = fields.FromQuantity;
-      this.ToQuantity = fields.ToQuantity;
+      this.ProductUnit = PatchField(fields.ProductUnitUID, ProductUnit);
+      this.MinQuantity = fields.MinQuantity;
+      this.MaxQuantity = fields.MaxQuantity;
       this.UnitPrice = fields.UnitPrice;
-      this.PaymentsPeriodicity = PatchField(fields.PaymentPeriodicityUID, PaymentsPeriodicity);
+      this.Supplier = PatchField(fields.SupplierUID, Contract.Supplier);
       this.BudgetAccount = PatchField(fields.BudgetAccountUID, BudgetAccount);
       this.Project = PatchField(fields.ProjectUID, Project);
+      this.PeriodicityType = PatchField(fields.PeriodicityTypeUID, PeriodicityType);
     }
 
     #endregion Helpers
