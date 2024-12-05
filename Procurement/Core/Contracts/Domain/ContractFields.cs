@@ -1,6 +1,6 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  Module   : Contracts Management                       Component : Adapters Layer                          *
+*  Module   : Contracts Management                       Component : Domain Layer                            *
 *  Assembly : Empiria.Procurement.Core.dll               Pattern   : Fields DTO                              *
 *  Type     : ContractFields                             License   : Please read LICENSE.txt file            *
 *                                                                                                            *
@@ -10,7 +10,7 @@
 
 using System;
 
-namespace Empiria.Procurement.Contracts.Adapters {
+namespace Empiria.Procurement.Contracts {
 
   /// <summary>Input fields DTO used for update contracts information.</summary>
   public class ContractFields {
@@ -78,20 +78,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
       Assertion.Require(ContractTypeUID, "Necesito el tipo de contrato.");
       Assertion.Require(Name, "Necesito el nombre del contrato.");
       Assertion.Require(CurrencyUID, "Necesito la moneda del contrato.");
-      Assertion.Require(Total, "Necesito el importe del contrato.");
+      Assertion.Require(Total > 0, "Necesito el importe del contrato.");
       Assertion.Require(BudgetTypeUID, "Necesito tipo de presupuesto del contrato.");
-      //Assertion.Require(SupplierUID, "Necesito el proveedor del contrato.");
-      //Assertion.Require(FromDate != ExecutionServer.DateMinValue,
-      //                  "Necesito la fecha del inicio del contrato");
-      //Assertion.Require(ToDate != ExecutionServer.DateMinValue,
-      //                  "Necesito la fecha del finalización del contrato");
-      //Assertion.Require(FromDate <= ToDate,
-      //                  "La fecha de finalización del contrato no puede ser " +
-      //                  "anterior a la fecha de inicio.");
-      //Assertion.Require(SignDate != ExecutionServer.DateMinValue,
-      //                  "Necesito la fecha del firma del contrato");
     }
 
   }  // class ContractFields
 
-}  // namespace Empiria.Procurement.Contracts.Adapters
+}  // namespace Empiria.Procurement.Contracts

@@ -1,7 +1,7 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Contracts Management                       Component : Domain Layer                            *
-*  Assembly : Empiria.Procurement.Core.dll               Pattern   : Infomation Holder                       *
+*  Assembly : Empiria.Procurement.Core.dll               Pattern   : Information Holder                      *
 *  Type     : ContractMilestone                          License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Represents a contract milestone.                                                               *

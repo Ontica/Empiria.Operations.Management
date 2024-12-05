@@ -11,6 +11,7 @@ using System;
 
 using Xunit;
 
+using Empiria.Procurement.Contracts;
 using Empiria.Procurement.Contracts.Adapters;
 using Empiria.Procurement.Contracts.UseCases;
 

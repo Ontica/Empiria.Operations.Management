@@ -1,6 +1,6 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  Module   : Contracts Management                       Component : Adapters Layer                          *
+*  Module   : Contracts Management                       Component : Domain Layer                            *
 *  Assembly : Empiria.Procurement.Core.dll               Pattern   : Fields DTO                              *
 *  Type     : ContractItemFields                         License   : Please read LICENSE.txt file            *
 *                                                                                                            *
@@ -8,7 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-namespace Empiria.Procurement.Contracts.Adapters {
+namespace Empiria.Procurement.Contracts {
 
   /// <summary>DTO fields structure used for update contracts item information.</summary>
   public class ContractItemFields {
@@ -80,4 +80,4 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
   }  // class ContractItemFields
 
-}  // namespace Empiria.Procurement.Contracts.Adapters
+}  // namespace Empiria.Procurement.Contracts

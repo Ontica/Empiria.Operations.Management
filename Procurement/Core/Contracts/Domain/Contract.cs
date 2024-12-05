@@ -18,7 +18,6 @@ using Empiria.Financial;
 
 using Empiria.Budgeting;
 
-using Empiria.Procurement.Contracts.Adapters;
 using Empiria.Procurement.Contracts.Data;
 
 namespace Empiria.Procurement.Contracts {
