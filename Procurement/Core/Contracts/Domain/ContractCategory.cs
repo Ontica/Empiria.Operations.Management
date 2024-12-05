@@ -2,35 +2,35 @@
 *                                                                                                            *
 *  Module   : Contracts Management                       Component : Domain Layer                            *
 *  Assembly : Empiria.Procurement.Core.dll               Pattern   : Information Holder                      *
-*  Type     : ContractType                               License   : Please read LICENSE.txt file            *
+*  Type     : ContractCategory                           License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Describes a contract type.                                                                     *
+*  Summary  : Describes a contract category.                                                                 *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 namespace Empiria.Procurement.Contracts {
 
-  /// <summary>Describes a contract type.</summary>
-  public class ContractType : GeneralObject {
+  /// <summary>Describes a contract category.</summary>
+  public class ContractCategory : GeneralObject {
 
     #region Constructors and parsers
 
-    static internal ContractType Parse(int id) {
-      return ParseId<ContractType>(id);
+    static internal ContractCategory Parse(int id) {
+      return ParseId<ContractCategory>(id);
     }
 
-    static internal ContractType Parse(string uid) {
-      return ParseKey<ContractType>(uid);
+    static internal ContractCategory Parse(string uid) {
+      return ParseKey<ContractCategory>(uid);
     }
 
-    static internal FixedList<ContractType> GetList() {
-      return GetList<ContractType>().ToFixedList();
+    static internal FixedList<ContractCategory> GetList() {
+      return GetList<ContractCategory>().ToFixedList();
     }
 
-    static internal ContractType Empty => ParseEmpty<ContractType>();
+    static internal ContractCategory Empty => ParseEmpty<ContractCategory>();
 
     #endregion Constructors and parsers
 
-  }  // class ContractType
+  }  // class ContractCategory
 
 }  // namespace Empiria.Procurement.Contracts

@@ -20,7 +20,8 @@ namespace Empiria.Procurement.Contracts.Adapters {
     } = string.Empty;
 
 
-    public string ContractTypeUID {
+    [Newtonsoft.Json.JsonProperty(PropertyName = "ContractTypeUID")]
+    public string ContractCategoryUID {
       get; set;
     } = string.Empty;
 
@@ -39,7 +40,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; set;
     } = string.Empty;
 
-    
+
     public string ManagedByOrgUnitUID {
       get; set;
     } = string.Empty;
@@ -51,7 +52,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
 
     public string OrderBy {
-      get; set; 
+      get; set;
     } = string.Empty;
 
   }  // class ContractQuery

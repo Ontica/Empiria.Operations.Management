@@ -33,7 +33,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
     static internal ContractDto MapContract(Contract contract) {
       return new ContractDto {
         UID = contract.UID,
-        ContractType = contract.ContractType.MapToNamedEntity(),
+        ContractCategory = contract.ContractCategory.MapToNamedEntity(),
         ContractNo = contract.ContractNo,
         Name = contract.Name,
         Description = contract.Description,
@@ -71,7 +71,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
     static private ContractDescriptor MapToDescriptor(Contract contract) {
       return new ContractDescriptor {
         UID = contract.UID,
-        ContractType = contract.ContractType.Name,
+        ContractCategory = contract.ContractCategory.Name,
         ContractNo = contract.ContractNo,
         Name = contract.Name,
         Description = contract.Description,

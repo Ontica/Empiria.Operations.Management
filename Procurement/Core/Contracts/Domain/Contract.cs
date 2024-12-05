@@ -56,8 +56,8 @@ namespace Empiria.Procurement.Contracts {
 
     #region Properties
 
-    [DataField("CONTRACT_TYPE_ID")]
-    public ContractType ContractType {
+    [DataField("CONTRACT_CATEGORY_ID")]
+    public ContractCategory ContractCategory {
       get; private set;
     }
 
@@ -180,7 +180,6 @@ namespace Empiria.Procurement.Contracts {
     public decimal Total {
       get; private set;
     }
-
 
     #endregion Properties
 
@@ -312,7 +311,7 @@ namespace Empiria.Procurement.Contracts {
 
       fields.EnsureValid();
 
-      ContractType = PatchField(fields.ContractTypeUID, ContractType);
+      ContractCategory = PatchField(fields.ContractCategoryUID, ContractCategory);
       ContractNo = EmpiriaString.Clean(fields.ContractNo);
       Name = PatchCleanField(fields.Name, Name);
       Description = EmpiriaString.Clean(fields.Description);

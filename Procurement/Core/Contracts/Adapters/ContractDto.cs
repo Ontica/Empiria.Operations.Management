@@ -70,7 +70,8 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto ContractType {
+    [Newtonsoft.Json.JsonProperty(PropertyName = "ContractType")]
+    public NamedEntityDto ContractCategory {
       get; internal set;
     }
 
@@ -133,7 +134,8 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public string ContractType {
+    [Newtonsoft.Json.JsonProperty(PropertyName = "ContractType")]
+    public string ContractCategory {
       get; internal set;
     }
 

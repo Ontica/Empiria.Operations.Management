@@ -69,8 +69,8 @@ namespace Empiria.Procurement.Contracts.UseCases {
     }
 
 
-    public FixedList<NamedEntityDto> GetContractTypes() {
-      var contractTypes = ContractType.GetList();
+    public FixedList<NamedEntityDto> GetContractCategories() {
+      var contractTypes = ContractCategory.GetList();
 
       return contractTypes.MapToNamedEntityList();
     }

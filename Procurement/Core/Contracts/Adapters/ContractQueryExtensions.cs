@@ -29,7 +29,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
       string contractNoFilter = BuildContractNoFilter(query.ContractNo);
 
-      string contractTypeFilter = BuildContractTypeFilter(query.ContractTypeUID);
+      string categoryFilter = BuildContractCategoryFilter(query.ContractCategoryUID);
 
       string keywordFilter = BuildkeywordFilter(query.Keywords);
 
@@ -43,7 +43,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
       filter.AppendAnd(contractNoFilter);
 
-      filter.AppendAnd(contractTypeFilter);
+      filter.AppendAnd(categoryFilter);
 
       filter.AppendAnd(keywordFilter);
 
@@ -108,14 +108,14 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
 
-    private static string BuildContractTypeFilter(string contratTypeUID) {
-      if (contratTypeUID == string.Empty) {
+    private static string BuildContractCategoryFilter(string categoryUID) {
+      if (categoryUID == string.Empty) {
         return string.Empty;
       }
 
-      var contractType = ContractType.Parse(contratTypeUID);
+      var category = ContractCategory.Parse(categoryUID);
 
-      return $"CONTRACT_TYPE_ID = '{contractType.Id}'";
+      return $"CONTRACT_CATEGORY_ID = '{category.Id}'";
     }
 
 

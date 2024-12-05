@@ -15,7 +15,8 @@ namespace Empiria.Procurement.Contracts {
   /// <summary>Input fields DTO used for update contracts information.</summary>
   public class ContractFields {
 
-    public string ContractTypeUID {
+    [Newtonsoft.Json.JsonProperty(PropertyName = "ContractTypeUID")]
+    public string ContractCategoryUID {
       get; set;
     } = string.Empty;
 
@@ -69,17 +70,18 @@ namespace Empiria.Procurement.Contracts {
       get; set;
     } = string.Empty;
 
+
     public decimal Total {
       get; set;
     } = 0.00m;
 
 
     internal void EnsureValid() {
-      Assertion.Require(ContractTypeUID, "Necesito el tipo de contrato.");
+      Assertion.Require(ContractCategoryUID, "Necesito la clasificación o categoría del contrato.");
       Assertion.Require(Name, "Necesito el nombre del contrato.");
       Assertion.Require(CurrencyUID, "Necesito la moneda del contrato.");
       Assertion.Require(Total > 0, "Necesito el importe del contrato.");
-      Assertion.Require(BudgetTypeUID, "Necesito tipo de presupuesto del contrato.");
+      Assertion.Require(BudgetTypeUID, "Necesito el tipo de presupuesto del contrato.");
     }
 
   }  // class ContractFields

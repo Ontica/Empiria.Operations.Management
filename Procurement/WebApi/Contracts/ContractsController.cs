@@ -35,13 +35,14 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
 
     [HttpGet]
-    [Route("v8/procurement/contracts/contract-types")]
-    public CollectionModel GetContractTypes() {
+    [Route("v8/procurement/contracts/contract-types")]    // ToDo: Remove
+    [Route("v8/procurement/contracts/categories")]
+    public CollectionModel GetContractCategories() {
 
       using (var usecases = ContractUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> contractTypes = usecases.GetContractTypes();
+        FixedList<NamedEntityDto> categories = usecases.GetContractCategories();
 
-        return new CollectionModel(base.Request, contractTypes);
+        return new CollectionModel(base.Request, categories);
       }
     }
 
