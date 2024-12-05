@@ -37,7 +37,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       fields.EnsureValid();
 
-      var contract = new Contract();
+      var contract = new Contract(ContractType.Procurement);
 
       contract.Update(fields);
 

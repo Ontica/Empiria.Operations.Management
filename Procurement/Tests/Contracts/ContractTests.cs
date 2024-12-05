@@ -19,10 +19,32 @@ namespace Empiria.Tests.Procurement.Contracts {
     #region Facts
 
     [Fact]
-    public void Should_Read_The_Empty_Contract() {
+    public void Should_Read_All_Contracts() {
+      var contracts = BaseObject.GetFullList<Contract>();
+
+      foreach (var sut in contracts) {
+        Assert.NotNull(sut);
+        Assert.NotNull(sut.ContractCategory);
+        Assert.NotNull(sut.ManagedByOrgUnit);
+        Assert.NotNull(sut.Supplier);
+        Assert.NotNull(sut.Parent);
+        Assert.NotNull(sut.GetItems());
+
+      }
+
+    }
+
+    [Fact]
+    public void Should_Read_Empty_Contract() {
       var sut = Contract.Empty;
 
       Assert.NotNull(sut);
+      Assert.NotNull(sut.ContractCategory);
+      Assert.NotNull(sut.ManagedByOrgUnit);
+      Assert.NotNull(sut.Supplier);
+      Assert.NotNull(sut.Parent);
+      Assert.NotNull(sut.GetItems());
+
     }
 
     #endregion Facts

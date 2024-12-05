@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 
 using Empiria.Json;
+using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.StateEnums;
 using Empiria.Financial;
@@ -23,6 +24,7 @@ using Empiria.Procurement.Contracts.Data;
 namespace Empiria.Procurement.Contracts {
 
   /// <summary>Represents a contract.</summary>
+  [PartitionedType(typeof(ContractType))]
   public class Contract : BaseObject, INamedEntity {
 
     #region Fields
@@ -33,7 +35,7 @@ namespace Empiria.Procurement.Contracts {
 
     #region Constructors and parsers
 
-    public Contract() {
+    public Contract(ContractType contractType) : base(contractType) {
       // Required by Empiria Framework.
     }
 
@@ -55,6 +57,14 @@ namespace Empiria.Procurement.Contracts {
     #endregion Constructors and parsers
 
     #region Properties
+
+
+    public ContractType ContractType {
+      get {
+        return (ContractType) base.GetEmpiriaType();
+      }
+    }
+
 
     [DataField("CONTRACT_CATEGORY_ID")]
     public ContractCategory ContractCategory {
@@ -104,6 +114,12 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
+    [DataField("CONTRACT_TOTAL")]
+    public decimal Total {
+      get; private set;
+    }
+
+
     [DataField("CONTRACT_MGMT_ORG_UNIT_ID")]
     public OrganizationalUnit ManagedByOrgUnit {
       get; private set;
@@ -112,6 +128,12 @@ namespace Empiria.Procurement.Contracts {
 
     [DataField("CONTRACT_BUDGET_TYPE_ID")]
     public BudgetType BudgetType {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_CUSTOMER_ID")]
+    public Party Customer {
       get; private set;
     }
 
@@ -173,11 +195,6 @@ namespace Empiria.Procurement.Contracts {
 
     [DataField("CONTRACT_STATUS", Default = EntityStatus.Pending)]
     public EntityStatus Status {
-      get; private set;
-    }
-
-    [DataField("CONTRACT_TOTAL", ConvertFrom = typeof(decimal))]
-    public decimal Total {
       get; private set;
     }
 
@@ -316,6 +333,7 @@ namespace Empiria.Procurement.Contracts {
       Name = PatchCleanField(fields.Name, Name);
       Description = EmpiriaString.Clean(fields.Description);
       ManagedByOrgUnit = PatchField(fields.ManagedByOrgUnitUID, ManagedByOrgUnit);
+      Customer = fields.CustomerUID.Length != 0 ? Party.Parse(fields.CustomerUID) : Party.Primary;
       Supplier = fields.SupplierUID.Length != 0 ? Party.Parse(fields.SupplierUID) : Party.Empty;
       FromDate = fields.FromDate;
       ToDate = fields.ToDate;

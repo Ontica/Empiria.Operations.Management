@@ -61,6 +61,11 @@ namespace Empiria.Procurement.Contracts {
     } = ExecutionServer.DateMaxValue;
 
 
+    public string CustomerUID {
+      get; set;
+    } = string.Empty;
+
+
     public string SupplierUID {
       get; set;
     } = string.Empty;
