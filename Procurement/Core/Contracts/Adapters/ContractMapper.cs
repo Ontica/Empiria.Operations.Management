@@ -38,7 +38,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
         Name = contract.Name,
         Description = contract.Description,
         Supplier = contract.Supplier.MapToNamedEntity(),
+        SuppliersGroup = contract.Supplier is Parties.Group group ?
+                                group.Members.MapToNamedEntityList() : new FixedList<NamedEntityDto>(),
         ManagedByOrgUnit = contract.ManagedByOrgUnit.MapToNamedEntity(),
+        IsForMultipleOrgUnits = contract.IsForMultipleOrgUnits,
         BudgetType = contract.BudgetType.MapToNamedEntity(),
         FromDate = contract.FromDate,
         ToDate = contract.ToDate,

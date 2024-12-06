@@ -46,6 +46,11 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
+    public bool IsForMultipleOrgUnits {
+      get; set;
+    } = false;
+
+
     public DateTime FromDate {
       get; set;
     } = ExecutionServer.DateMaxValue;

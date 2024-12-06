@@ -91,7 +91,16 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
+    public FixedList<NamedEntityDto> SuppliersGroup {
+      get; internal set;
+    }
+
+
     public NamedEntityDto ManagedByOrgUnit {
+      get; internal set;
+    }
+
+    public bool IsForMultipleOrgUnits {
       get; internal set;
     }
 
@@ -122,7 +131,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
     public NamedEntityDto Status {
       get; internal set;
     }
-
 
   }  // class ContractDto
 

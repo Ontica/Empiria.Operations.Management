@@ -126,6 +126,15 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
+    public bool IsForMultipleOrgUnits {
+      get {
+        return ExtData.Get("isForMultipleOrgUnits", false);
+      }
+      set {
+        ExtData.SetIf("isForMultipleOrgUnits", value, true);
+      }
+    }
+
     [DataField("CONTRACT_BUDGET_TYPE_ID")]
     public BudgetType BudgetType {
       get; private set;
@@ -333,6 +342,7 @@ namespace Empiria.Procurement.Contracts {
       Name = PatchCleanField(fields.Name, Name);
       Description = EmpiriaString.Clean(fields.Description);
       ManagedByOrgUnit = PatchField(fields.ManagedByOrgUnitUID, ManagedByOrgUnit);
+      IsForMultipleOrgUnits = fields.IsForMultipleOrgUnits;
       Customer = fields.CustomerUID.Length != 0 ? Party.Parse(fields.CustomerUID) : Party.Primary;
       Supplier = fields.SupplierUID.Length != 0 ? Party.Parse(fields.SupplierUID) : Party.Empty;
       FromDate = fields.FromDate;
