@@ -29,10 +29,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto Supplier {
-      get; internal set;
-    }
-
     public NamedEntityDto Product {
       get; internal set;
     }
@@ -57,11 +53,19 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto Project {
+    public NamedEntityDto RequesterOrgUnit {
       get; internal set;
     }
 
     public NamedEntityDto BudgetAccount {
+      get; internal set;
+    }
+
+    public NamedEntityDto Project {
+      get; internal set;
+    }
+
+    public NamedEntityDto Supplier {
       get; internal set;
     }
 

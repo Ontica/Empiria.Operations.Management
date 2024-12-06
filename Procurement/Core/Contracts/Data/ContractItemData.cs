@@ -34,7 +34,8 @@ namespace Empiria.Procurement.Contracts.Data {
       var op = DataOperation.Parse("write_OMS_Contract_Item",
                   o.Id, o.UID, o.ContractItemType.Id, o.Contract.Id,
                   o.Product.Id, o.Description, o.ProductUnit.Id,
-                  o.UnitPrice, o.MinQuantity, o.MaxQuantity,
+                  o.MinQuantity, o.MaxQuantity, o.UnitPrice,
+                  o.RequisitionItemId, o.RequesterOrgUnit.Id,
                   o.BudgetAccount.Id, o.Project.Id, o.Supplier.Id,
                   o.PeriodicityRule.ToString(), extensionData, o.Keywords,
                   o.PostedBy.Id, o.PostingTime, (char) o.Status);

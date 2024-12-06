@@ -47,6 +47,15 @@ namespace Empiria.Procurement.Contracts {
       get; set;
     }
 
+    public string RequisitionItemUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string RequesterOrgUnitUID {
+      get; set;
+    } = string.Empty;
+
 
     public string BudgetAccountUID {
       get; set;

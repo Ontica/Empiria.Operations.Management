@@ -97,12 +97,6 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    [DataField("CONTRACT_ITEM_UNIT_PRICE")]
-    public decimal UnitPrice {
-      get; private set;
-    }
-
-
     [DataField("CONTRACT_ITEM_MIN_QTY")]
     public decimal MinQuantity {
       get; private set;
@@ -111,6 +105,22 @@ namespace Empiria.Procurement.Contracts {
 
     [DataField("CONTRACT_ITEM_MAX_QTY")]
     public decimal MaxQuantity {
+      get; private set;
+    }
+
+    [DataField("CONTRACT_ITEM_UNIT_PRICE")]
+    public decimal UnitPrice {
+      get; private set;
+    }
+
+    [DataField("CONTRACT_ITEM_REQUISITION_ITEM_ID")]
+    public int RequisitionItemId {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_ITEM_REQUESTER_ORG_UNIT_ID")]
+    public OrganizationalUnit RequesterOrgUnit {
       get; private set;
     }
 
@@ -134,7 +144,7 @@ namespace Empiria.Procurement.Contracts {
 
 
     [DataField("CONTRACT_ITEM_PERIODICITY_RULE")]
-    public JsonObject PeriodicityRule {
+    internal JsonObject PeriodicityRule {
       get; private set;
     }
 
@@ -211,9 +221,11 @@ namespace Empiria.Procurement.Contracts {
       this.MinQuantity = fields.MinQuantity;
       this.MaxQuantity = fields.MaxQuantity;
       this.UnitPrice = fields.UnitPrice;
-      this.Supplier = PatchField(fields.SupplierUID, Contract.Supplier);
+      this.RequisitionItemId = -1;
+      this.RequesterOrgUnit = PatchField(fields.RequesterOrgUnitUID, Contract.ManagedByOrgUnit);
       this.BudgetAccount = PatchField(fields.BudgetAccountUID, BudgetAccount);
-      this.Project = PatchField(fields.ProjectUID, Project);
+      this.Project = PatchField(fields.ProjectUID, Project.Empty);
+      this.Supplier = PatchField(fields.SupplierUID, Contract.Supplier);
       this.PeriodicityType = PatchField(fields.PeriodicityTypeUID, PeriodicityType);
     }
 
