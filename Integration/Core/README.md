@@ -1,6 +1,6 @@
-﻿# Empiria Integrated Operations Management Use Cases Module.
+﻿# Empiria Integrated Operations Management Core Module.
 
-Use cases and services for Empiria Integrated Operations Management.
+Core domain types and use cases and services for Empiria Integrated Operations Management.
 
 ## Licencia
 

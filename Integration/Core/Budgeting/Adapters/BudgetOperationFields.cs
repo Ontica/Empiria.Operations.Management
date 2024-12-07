@@ -25,4 +25,16 @@ namespace Empiria.Operations.Integration.Adapters {
 
   } // class BudgetOperationFields
 
+
+
+  /// <summary>Extension methods for BudgetOperationFields type.</summary>
+  static public class BudgetOperationFieldsExtensions {
+
+    static internal void EnsureValid(this BudgetOperationFields fields) {
+      Assertion.Require(fields.BaseObjectTypeUID, nameof(fields.BaseObjectTypeUID));
+      Assertion.Require(fields.BaseObjectUID, nameof(fields.BaseObjectUID));
+    }
+
+  }  // class BudgetOperationFieldsExtensions
+
 }  // namespace Empiria.Operations.Integration.Adapters

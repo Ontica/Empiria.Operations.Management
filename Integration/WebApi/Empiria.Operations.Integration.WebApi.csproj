@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\extensions\WebApi\Empiria.WebApi.csproj" />
-    <ProjectReference Include="..\UseCases\Empiria.Operations.Integration.UseCases.csproj" />
+    <ProjectReference Include="..\Core\Empiria.Operations.Integration.Core.csproj" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
     <PackageReference Include="Empiria.WebApi" Version="2.0.0" />

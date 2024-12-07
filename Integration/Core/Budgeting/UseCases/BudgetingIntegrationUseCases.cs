@@ -10,6 +10,10 @@
 
 using Empiria.Services;
 
+using Empiria.Financial;
+using Empiria.Procurement.Contracts;
+
+using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 
 using Empiria.Operations.Integration.Adapters;
@@ -36,9 +40,22 @@ namespace Empiria.Operations.Integration.UseCases {
     public BudgetTransactionDescriptorDto RequestBudget(BudgetOperationFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      return new BudgetTransactionDescriptorDto();
-    }
+      fields.EnsureValid();
 
+      var bo = BaseObject.Parse(fields.BaseObjectTypeUID, fields.BaseObjectUID);
+
+      BudgetTransaction transaction;
+
+      if (bo is Contract contract) {
+        transaction = RequestContractBudget(contract);
+      } else if (bo is IPayableEntity payableEntity) {
+        transaction = RequestPayableEntityBudget(payableEntity);
+      } else {
+        throw Assertion.EnsureNoReachThisCode($"Unhandled object type {fields.BaseObjectTypeUID}.");
+      }
+
+      return BudgetTransactionMapper.MapToDescriptor(transaction);
+    }
 
     public BudgetValidationResultDto ValidateBudget(BudgetOperationFields fields) {
       Assertion.Require(fields, nameof(fields));
@@ -47,6 +64,18 @@ namespace Empiria.Operations.Integration.UseCases {
     }
 
     #endregion Use cases
+
+    #region Helpers
+
+    private BudgetTransaction RequestContractBudget(Contract contract) {
+      throw Assertion.EnsureNoReachThisCode();
+    }
+
+    private BudgetTransaction RequestPayableEntityBudget(IPayableEntity payableEntity) {
+      throw Assertion.EnsureNoReachThisCode();
+    }
+
+    #endregion Helpers
 
   }  // class BudgetingIntegrationUseCases
 
