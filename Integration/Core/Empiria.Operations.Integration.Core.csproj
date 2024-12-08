@@ -25,7 +25,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <NeutralLanguage></NeutralLanguage>
     <Configurations>Debug;Release;Multisolutions</Configurations>
-    <AssemblyName>Empiria.Operations.Integration.UseCases</AssemblyName>
+    <AssemblyName>Empiria.Operations.Integration.Core</AssemblyName>
     <RootNamespace>Empiria.Operations.Integration</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>

@@ -17,17 +17,61 @@ using Empiria.Operations.Integration.Budgeting.UseCases;
 
 namespace Empiria.Operations.Integration.Budgeting.WebApi {
 
-  /// <summary>Web API used to retrieve and edit budget transactions.</summary>
+  /// <summary>Web api used to integrate budget accounts and budget segments with products.</summary>
   public class BudgetProductController : WebApiController {
 
     #region Web Apis
 
     [HttpPost]
-    [Route("v2/budgeting/budget-accounts-for-product")]
-    public CollectionModel SearchBudgetAccountsForProduct([FromBody] BudgetAccountsForProductQuery query) {
+    [Route("v2/budgeting/products/{productUID:guid}/budget-segments")]
+    public SingleObjectModel AddProductBudgetSegment([FromUri] string productUID,
+                                                     [FromBody] NamedEntityFields fields) {
 
       using (var usecases = BudgetProductUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> budgetAccounts = usecases.SearchBudgetAccountsForProduct(query);
+        ProductBudgetSegmentDto segment = usecases.AddProductBudgetSegment(productUID, fields);
+
+        return new SingleObjectModel(base.Request, segment);
+      }
+    }
+
+
+    [HttpGet]
+    [Route("v2/budgeting/products/{productUID:guid}/budget-segments")]
+    public CollectionModel GetProductBudgetSegments([FromUri] string productUID) {
+
+      using (var usecases = BudgetProductUseCases.UseCaseInteractor()) {
+        FixedList<ProductBudgetSegmentDto> segments = usecases.GetProductBudgetSegments(productUID);
+
+        return new CollectionModel(base.Request, segments);
+      }
+    }
+
+
+    [HttpDelete]
+    [Route("v2/budgeting/products/{productUID:guid}/budget-segments/{budgetSegmentProductLinkUID:guid}")]
+    public NoDataModel RemoveProductBudgetSegment([FromUri] string productUID,
+                                                  [FromUri] string budgetSegmentProductLinkUID) {
+
+      using (var usecases = BudgetProductUseCases.UseCaseInteractor()) {
+        _ = usecases.RemoveProductBudgetSegment(productUID, budgetSegmentProductLinkUID);
+
+        return new NoDataModel(base.Request);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v2/budgeting/products/{productUID:guid}/budget-accounts")]
+    public CollectionModel SearchBudgetAccountsForProduct([FromUri] string productUID,
+                                                          [FromBody] BudgetAccountsForProductQuery query) {
+
+      Assertion.Require(query.ProductUID.Length == 0 || query.ProductUID == productUID,
+                        "ProductUID mismatch.");
+
+      query.ProductUID = productUID;
+
+      using (var usecases = BudgetProductUseCases.UseCaseInteractor()) {
+        FixedList<NamedEntityDto> budgetAccounts = usecases.SearchProductBudgetAccounts(query);
 
         return new CollectionModel(base.Request, budgetAccounts);
       }
