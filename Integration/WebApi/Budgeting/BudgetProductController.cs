@@ -60,6 +60,20 @@ namespace Empiria.Operations.Integration.Budgeting.WebApi {
     }
 
 
+    [HttpGet]
+    [Route("v2/budgeting/products/{productUID:guid}/budget-segments/available")]
+    public CollectionModel SearchAvailableProductBudgetSegments([FromUri] string productUID,
+                                                                [FromUri] string budgetTypeUID,
+                                                                [FromUri] string keywords = "") {
+
+      using (var usecases = BudgetProductUseCases.UseCaseInteractor()) {
+        FixedList<NamedEntityDto> segments = usecases.SearchAvailableProductBudgetSegments(productUID, budgetTypeUID, keywords);
+
+        return new CollectionModel(base.Request, segments);
+      }
+    }
+
+
     [HttpPost]
     [Route("v2/budgeting/products/{productUID:guid}/budget-accounts")]
     public CollectionModel SearchBudgetAccountsForProduct([FromUri] string productUID,

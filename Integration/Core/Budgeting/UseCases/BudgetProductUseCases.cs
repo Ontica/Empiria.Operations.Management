@@ -16,6 +16,8 @@ using Empiria.Products;
 using Empiria.Budgeting;
 
 using Empiria.Operations.Integration.Budgeting.Adapters;
+using System;
+using Empiria.Collections;
 
 namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
@@ -78,6 +80,27 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
       link.Save();
 
       return ProductBudgetSegmentMapper.Map(link);
+    }
+
+
+    public FixedList<NamedEntityDto> SearchAvailableProductBudgetSegments(string productUID,
+                                                                          string budgetTypeUID,
+                                                                          string keywords) {
+      Assertion.Require(productUID, nameof(productUID));
+      Assertion.Require(budgetTypeUID, nameof(budgetTypeUID));
+      keywords = keywords ?? string.Empty;
+
+      var product = Product.Parse(productUID);
+      var budgetType = BudgetType.Parse(budgetTypeUID);
+
+      BudgetAccountSegmentType segmentType = budgetType.ProductProcurementSegmentType;
+
+      FixedList<BudgetAccountSegment> segments = segmentType.SearchInstances(keywords);
+
+      var current = BudgetAccountSegmentLink.GetBudgetAccountSegmentsForProduct(product);
+
+      return segments.Remove(current)
+                     .MapToNamedEntityList();
     }
 
 
