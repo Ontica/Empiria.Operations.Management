@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Module   : Operations-Budgeting Integration              Component : Web Api Layer                        *
 *  Assembly : Empiria.Operations.Integration.WebApi.dll     Pattern   : Web Api Controller                   *
-*  Type     : BudgetingIntegrationController                License   : Please read LICENSE.txt file         *
+*  Type     : BudgetingProcurementController                License   : Please read LICENSE.txt file         *
 *                                                                                                            *
-*  Summary  : Web api used to integrate organization's operations with the budgeting system.                 *
+*  Summary  : Web API used to retrieve and generate budget procurement transactions.                         *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -14,13 +14,13 @@ using Empiria.WebApi;
 
 using Empiria.Budgeting.Transactions.Adapters;
 
-using Empiria.Operations.Integration.Adapters;
-using Empiria.Operations.Integration.UseCases;
+using Empiria.Operations.Integration.Budgeting.Adapters;
+using Empiria.Operations.Integration.Budgeting.UseCases;
 
-namespace Empiria.Operations.Integration.WebApi {
+namespace Empiria.Operations.Integration.Budgeting.WebApi {
 
-  /// <summary>Web API used to retrieve and edit budget transactions.</summary>
-  public class BudgetingIntegrationController : WebApiController {
+  /// <summary>Web API used to retrieve and generate budget procurement transactions.</summary>
+  public class BudgetingProcurementController : WebApiController {
 
     #region Web Apis
 
@@ -28,7 +28,7 @@ namespace Empiria.Operations.Integration.WebApi {
     [Route("v2/budgeting/execute-operation/request")]
     public SingleObjectModel RequestBudget([FromBody] BudgetOperationFields fields) {
 
-      using (var usecases = BudgetingIntegrationUseCases.UseCaseInteractor()) {
+      using (var usecases = BudgetingProcurementUseCases.UseCaseInteractor()) {
         BudgetTransactionDescriptorDto transaction = usecases.RequestBudget(fields);
 
         return new SingleObjectModel(base.Request, transaction);
@@ -40,7 +40,7 @@ namespace Empiria.Operations.Integration.WebApi {
     [Route("v2/budgeting/execute-operation/validate")]
     public SingleObjectModel ValidateBudget([FromBody] BudgetOperationFields fields) {
 
-      using (var usecases = BudgetingIntegrationUseCases.UseCaseInteractor()) {
+      using (var usecases = BudgetingProcurementUseCases.UseCaseInteractor()) {
         BudgetValidationResultDto validationResult = usecases.ValidateBudget(fields);
 
         return new SingleObjectModel(base.Request, validationResult);
@@ -51,4 +51,4 @@ namespace Empiria.Operations.Integration.WebApi {
 
   }  // class BudgetingIntegrationController
 
-}  // namespace Empiria.Operations.Integration.WebApi
+}  // namespace Empiria.Operations.Integration.Budgeting.WebApi

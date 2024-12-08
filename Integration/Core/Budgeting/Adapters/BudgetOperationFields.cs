@@ -8,7 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-namespace Empiria.Operations.Integration.Adapters {
+namespace Empiria.Operations.Integration.Budgeting.Adapters {
 
   /// <summary>Input fields DTO used to invoke a budgeting operation.</summary>
   public class BudgetOperationFields {
@@ -37,4 +37,4 @@ namespace Empiria.Operations.Integration.Adapters {
 
   }  // class BudgetOperationFieldsExtensions
 
-}  // namespace Empiria.Operations.Integration.Adapters
+}  // namespace Empiria.Operations.Integration.Budgeting.Adapters

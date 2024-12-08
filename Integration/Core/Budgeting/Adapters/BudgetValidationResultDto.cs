@@ -8,7 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-namespace Empiria.Operations.Integration.Adapters {
+namespace Empiria.Operations.Integration.Budgeting.Adapters {
 
   /// <summary>Output DTO that holds the result about a budget validation operation.</summary>
   public class BudgetValidationResultDto {
@@ -18,4 +18,4 @@ namespace Empiria.Operations.Integration.Adapters {
     }
   } // class BudgetValidationResultDto
 
-}  // namespace Empiria.Operations.Integration.Adapters
+}  // namespace Empiria.Operations.Integration.Budgeting.Adapters

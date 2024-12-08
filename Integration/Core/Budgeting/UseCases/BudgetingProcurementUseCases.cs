@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Module   : Operations-Budgeting Integration              Component : Use cases Layer                      *
 *  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Use case interactor class            *
-*  Type     : BudgetingIntegrationUseCases                  License   : Please read LICENSE.txt file         *
+*  Type     : BudgetingProcurementUseCases                  License   : Please read LICENSE.txt file         *
 *                                                                                                            *
-*  Summary  : Use cases used to integrate organization's operations with the budgeting system.               *
+*  Summary  : Use cases used to integrate organization's procurement operations with the budgeting system.   *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -16,21 +16,22 @@ using Empiria.Procurement.Contracts;
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 
-using Empiria.Operations.Integration.Adapters;
+using Empiria.Operations.Integration.Budgeting.Adapters;
 
-namespace Empiria.Operations.Integration.UseCases {
+namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
-  /// <summary>Use cases used to integrate organization's operations with the budgeting system.</summary>
-  public class BudgetingIntegrationUseCases : UseCase {
+  /// <summary>Use cases used to integrate organization's procurement operations
+  /// with the budgeting system.</summary>
+  public class BudgetingProcurementUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected BudgetingIntegrationUseCases() {
+    protected BudgetingProcurementUseCases() {
       // no-op
     }
 
-    static public BudgetingIntegrationUseCases UseCaseInteractor() {
-      return CreateInstance<BudgetingIntegrationUseCases>();
+    static public BudgetingProcurementUseCases UseCaseInteractor() {
+      return CreateInstance<BudgetingProcurementUseCases>();
     }
 
     #endregion Constructors and parsers
@@ -57,6 +58,7 @@ namespace Empiria.Operations.Integration.UseCases {
       return BudgetTransactionMapper.MapToDescriptor(transaction);
     }
 
+
     public BudgetValidationResultDto ValidateBudget(BudgetOperationFields fields) {
       Assertion.Require(fields, nameof(fields));
 
@@ -77,6 +79,6 @@ namespace Empiria.Operations.Integration.UseCases {
 
     #endregion Helpers
 
-  }  // class BudgetingIntegrationUseCases
+  }  // class BudgetingProcurementUseCases
 
-}  // namespace Empiria.Operations.Integration.UseCases
+}  // namespace Empiria.Operations.Integration.Budgeting.UseCases
