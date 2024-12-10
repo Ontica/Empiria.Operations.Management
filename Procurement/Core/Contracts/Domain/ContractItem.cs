@@ -152,10 +152,10 @@ namespace Empiria.Procurement.Contracts {
 
     public Periodicity PeriodicityType {
       get {
-        return PeriodicityRule.Get("periodicityType", Periodicity.Empty);
+        return PeriodicityRule.Get("periodicityTypeId", Periodicity.Empty);
       }
       private set {
-        PeriodicityRule.SetIfValue("periodicityType", value);
+        PeriodicityRule.SetIf("periodicityTypeId", value.Id, !Periodicity.Empty.Equals(value));
       }
     }
 
