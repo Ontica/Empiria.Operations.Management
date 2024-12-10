@@ -54,7 +54,6 @@ namespace Empiria.Procurement.Contracts {
 
     #region Properties
 
-
     public ContractItemType ContractItemType {
       get {
         return (ContractItemType) base.GetEmpiriaType();
@@ -108,10 +107,12 @@ namespace Empiria.Procurement.Contracts {
       get; private set;
     }
 
+
     [DataField("CONTRACT_ITEM_UNIT_PRICE")]
     public decimal UnitPrice {
       get; private set;
     }
+
 
     [DataField("CONTRACT_ITEM_REQUISITION_ITEM_ID")]
     public int RequisitionItemId {
@@ -153,10 +154,11 @@ namespace Empiria.Procurement.Contracts {
       get {
         return PeriodicityRule.Get("periodicityType", Periodicity.Empty);
       }
-      set {
+      private set {
         PeriodicityRule.SetIfValue("periodicityType", value);
       }
     }
+
 
     [DataField("CONTRACT_ITEM_EXT_DATA")]
     private JsonObject ExtData {
@@ -166,7 +168,9 @@ namespace Empiria.Procurement.Contracts {
 
     public string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(this.Description);
+        return EmpiriaString.BuildKeywords(this.Description, this.Product.Keywords,
+                                           this.Contract.Keywords, this.BudgetAccount.Keywords,
+                                           this.Project.Keywords);
       }
     }
 
@@ -194,6 +198,8 @@ namespace Empiria.Procurement.Contracts {
 
     internal void Delete() {
       this.Status = EntityStatus.Deleted;
+
+      MarkAsDirty();
     }
 
 
@@ -203,12 +209,20 @@ namespace Empiria.Procurement.Contracts {
         this.PostingTime = DateTime.Now;
       }
 
-      ContractItemData.WriteContractItem(this, this.ExtData.ToString());
+      if (IsDirty) {
+        ContractItemData.WriteContractItem(this, this.ExtData.ToString());
+      }
     }
 
-    #endregion Methods
 
-    #region Helpers
+    internal void SetSupplier(Party supplier) {
+      Assertion.Require(supplier, nameof(supplier));
+
+      this.Supplier = supplier;
+
+      MarkAsDirty();
+    }
+
 
     internal void Update(ContractItemFields fields) {
       Assertion.Require(fields, nameof(fields));
@@ -227,9 +241,11 @@ namespace Empiria.Procurement.Contracts {
       this.Project = PatchField(fields.ProjectUID, Project.Empty);
       this.Supplier = PatchField(fields.SupplierUID, Contract.Supplier);
       this.PeriodicityType = PatchField(fields.PeriodicityTypeUID, PeriodicityType);
+
+      MarkAsDirty();
     }
 
-    #endregion Helpers
+    #endregion Methods
 
   }  // class ContractItem
 

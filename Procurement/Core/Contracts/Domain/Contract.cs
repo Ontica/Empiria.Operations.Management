@@ -58,7 +58,6 @@ namespace Empiria.Procurement.Contracts {
 
     #region Properties
 
-
     public ContractType ContractType {
       get {
         return (ContractType) base.GetEmpiriaType();
@@ -134,6 +133,7 @@ namespace Empiria.Procurement.Contracts {
         ExtData.SetIf("isForMultipleOrgUnits", value, true);
       }
     }
+
 
     [DataField("CONTRACT_BUDGET_TYPE_ID")]
     public BudgetType BudgetType {
@@ -234,6 +234,10 @@ namespace Empiria.Procurement.Contracts {
       }
 
       ContractData.WriteContract(this, this.ExtData.ToString());
+
+      foreach (ContractItem item in GetItems()) {
+        item.Save();
+      }
     }
 
 
@@ -256,9 +260,6 @@ namespace Empiria.Procurement.Contracts {
       this.Status = EntityStatus.Suspended;
     }
 
-    #endregion Methods
-
-    #region Helpers
 
     internal ContractItem AddItem(ContractItemFields fields) {
       Assertion.Require(fields, nameof(fields));
@@ -287,6 +288,7 @@ namespace Empiria.Procurement.Contracts {
       return false;
     }
 
+
     internal bool CanDelete() {
       if (Status == EntityStatus.Pending) {
         return true;
@@ -294,12 +296,14 @@ namespace Empiria.Procurement.Contracts {
       return false;
     }
 
+
     internal bool CanSuspend() {
       if (Status == EntityStatus.Active) {
         return true;
       }
       return false;
     }
+
 
     internal ContractItem GetItem(string contractItemUID) {
       ContractItem contractItem = _items.Value.Find(x => x.UID == contractItemUID);
@@ -337,6 +341,9 @@ namespace Empiria.Procurement.Contracts {
 
       fields.EnsureValid();
 
+      Party lastSupplier = Supplier;
+      bool lastIsForMultipleOrgUnits = IsForMultipleOrgUnits;
+
       ContractCategory = PatchField(fields.ContractCategoryUID, ContractCategory);
       ContractNo = EmpiriaString.Clean(fields.ContractNo);
       Name = PatchCleanField(fields.Name, Name);
@@ -351,8 +358,11 @@ namespace Empiria.Procurement.Contracts {
       BudgetType = BudgetType.Parse(fields.BudgetTypeUID);
       Currency = PatchField(fields.CurrencyUID, Currency);
       Total = fields.Total;
-    }
 
+      if (Supplier.Distinct(lastSupplier)) {
+        UpdateSupplierForAllItems();
+      }
+    }
 
     internal ContractItem UpdateItem(ContractItem contractItem, ContractItemFields fields) {
       Assertion.Require(contractItem, nameof(contractItem));
@@ -364,6 +374,16 @@ namespace Empiria.Procurement.Contracts {
       contractItem.Update(fields);
 
       return contractItem;
+    }
+
+    #endregion Methods
+
+    #region Helpers
+
+    private void UpdateSupplierForAllItems() {
+      foreach (ContractItem item in GetItems()) {
+        item.SetSupplier(Supplier);
+      }
     }
 
     #endregion Helpers
