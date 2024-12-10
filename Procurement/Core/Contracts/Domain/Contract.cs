@@ -20,6 +20,7 @@ using Empiria.Financial;
 using Empiria.Budgeting;
 
 using Empiria.Procurement.Contracts.Data;
+using System.Diagnostics.Contracts;
 
 namespace Empiria.Procurement.Contracts {
 
@@ -290,10 +291,15 @@ namespace Empiria.Procurement.Contracts {
 
 
     internal bool CanDelete() {
-      if (Status == EntityStatus.Pending) {
+      if (CanUpdate()) {
         return true;
       }
       return false;
+    }
+
+
+    internal bool CanRequestBudget() {
+      return CanUpdate();
     }
 
 
@@ -302,6 +308,11 @@ namespace Empiria.Procurement.Contracts {
         return true;
       }
       return false;
+    }
+
+
+    internal bool CanUpdate() {
+      return (Status == EntityStatus.Pending);
     }
 
 

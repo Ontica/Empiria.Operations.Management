@@ -64,9 +64,11 @@ namespace Empiria.Procurement.Contracts.Adapters {
       return new ContractActions {
         CanActivate = contract.CanActivate(),
         CanDelete = contract.CanDelete(),
+        CanEditItems = contract.CanUpdate(),
+        CanEditDocuments = contract.CanUpdate(),
+        CanRequestBudget = contract.CanRequestBudget(),
         CanSuspend = contract.CanSuspend(),
-        CanUpdate = contract.Status == EntityStatus.Pending,
-        CanEditDocuments = true,
+        CanUpdate = contract.Status == EntityStatus.Pending
       };
     }
 

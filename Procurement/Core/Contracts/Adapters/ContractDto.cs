@@ -51,6 +51,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
+    public bool CanEditItems {
+      get; internal set;
+    }
+
     public bool CanRequestBudget {
       get; internal set;
     }
