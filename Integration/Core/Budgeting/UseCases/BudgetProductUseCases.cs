@@ -115,6 +115,10 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       var segments = BudgetAccountSegmentLink.GetBudgetAccountSegmentsForProduct(product);
 
+      if (segments.Count == 0) {
+        return new FixedList<NamedEntityDto>();
+      }
+
       var searcher = new BudgetAccountSearcher(budgetType);
 
       FixedList<BudgetAccount> accounts = searcher.Search(orgUnit, segments);
