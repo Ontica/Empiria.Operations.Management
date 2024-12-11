@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System.Collections.Generic;
+
 using Empiria.Financial;
 
 namespace Empiria.Orders {
@@ -34,13 +35,6 @@ namespace Empiria.Orders {
         return base.GetEmpiriaType();
       }
     }
-
-    string IPayableEntity.Name {
-      get {
-        return ((INamedEntity) this).Name;
-      }
-    }
-
 
     string IPayableEntity.EntityNo {
       get {

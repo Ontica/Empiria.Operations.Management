@@ -20,13 +20,12 @@ using Empiria.Financial;
 using Empiria.Budgeting;
 
 using Empiria.Procurement.Contracts.Data;
-using System.Diagnostics.Contracts;
 
 namespace Empiria.Procurement.Contracts {
 
   /// <summary>Represents a contract.</summary>
   [PartitionedType(typeof(ContractType))]
-  public class Contract : BaseObject, INamedEntity {
+  public class Contract : BaseObject, IPayableEntity {
 
     #region Fields
 
@@ -209,6 +208,37 @@ namespace Empiria.Procurement.Contracts {
     }
 
     #endregion Properties
+
+    #region IPayableEntity implementation
+
+    INamedEntity IPayableEntity.Type {
+      get {
+        return this.ContractType;
+      }
+    }
+
+
+    string IPayableEntity.EntityNo {
+      get {
+        return this.ContractNo;
+      }
+    }
+
+
+    INamedEntity IPayableEntity.PayTo {
+      get {
+        return this.Supplier;
+      }
+    }
+
+
+    IEnumerable<IPayableEntityItem> IPayableEntity.Items {
+      get {
+        return this.GetItems();
+      }
+    }
+
+    #endregion IPayableEntity implementation
 
     #region Methods
 

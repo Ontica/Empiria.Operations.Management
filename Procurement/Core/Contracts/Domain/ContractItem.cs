@@ -10,6 +10,7 @@
 
 using System;
 
+using Empiria.Financial;
 using Empiria.Json;
 using Empiria.Ontology;
 using Empiria.Parties;
@@ -22,15 +23,16 @@ using Empiria.Projects;
 
 using Empiria.Procurement.Contracts.Data;
 
+
 namespace Empiria.Procurement.Contracts {
 
   /// <summary>Represents a contract item.</summary>
   [PartitionedType(typeof(ContractItemType))]
-  public class ContractItem : BaseObject, INamedEntity {
+  public class ContractItem : BaseObject, IPayableEntityItem, INamedEntity {
 
     #region Constructors and parsers
 
-    private ContractItem(ContractItemType contractItemType) : base (contractItemType) {
+    private ContractItem(ContractItemType contractItemType) : base(contractItemType) {
       // Required by Empiria Framework.
     }
 
@@ -192,7 +194,48 @@ namespace Empiria.Procurement.Contracts {
       get; private set;
     } = EntityStatus.Pending;
 
+
+    public decimal Total {
+      get {
+        return MaxQuantity * UnitPrice;
+      }
+    }
+
     #endregion Properties
+
+    #region IPayableEntityItem implementation
+
+    decimal IPayableEntityItem.Quantity {
+      get {
+        return MaxQuantity;
+      }
+    }
+
+    INamedEntity IPayableEntityItem.Unit {
+      get {
+        return ProductUnit;
+      }
+    }
+
+    INamedEntity IPayableEntityItem.Currency {
+      get {
+        return this.Contract.Currency;
+      }
+    }
+
+    INamedEntity IPayableEntityItem.Product {
+      get {
+        return Product;
+      }
+    }
+
+    INamedEntity IPayableEntityItem.BudgetAccount {
+      get {
+        return BudgetAccount;
+      }
+    }
+
+    #endregion IPayableEntityItem implementation
 
     #region Methods
 
