@@ -24,9 +24,21 @@ namespace Empiria.Operations.Integration.Budgeting.WebApi {
 
     #region Web Apis
 
+    [HttpGet]
+    [Route("v2/budgeting/procurement/requests")]
+    public CollectionModel GetBudgetRequests([FromBody] BudgetRequestFields fields) {
+
+      using (var usecases = BudgetingProcurementUseCases.UseCaseInteractor()) {
+        FixedList<BudgetTransactionDescriptorDto> requests = usecases.GetBudgetRequests(fields);
+
+        return new CollectionModel(base.Request, requests);
+      }
+    }
+
+
     [HttpPost]
-    [Route("v2/budgeting/execute-operation/request")]
-    public SingleObjectModel RequestBudget([FromBody] BudgetOperationFields fields) {
+    [Route("v2/budgeting/procurement/requests")]
+    public SingleObjectModel RequestBudget([FromBody] BudgetRequestFields fields) {
 
       using (var usecases = BudgetingProcurementUseCases.UseCaseInteractor()) {
         BudgetTransactionDescriptorDto transaction = usecases.RequestBudget(fields);
@@ -37,8 +49,8 @@ namespace Empiria.Operations.Integration.Budgeting.WebApi {
 
 
     [HttpPost]
-    [Route("v2/budgeting/execute-operation/validate")]
-    public SingleObjectModel ValidateBudget([FromBody] BudgetOperationFields fields) {
+    [Route("v2/budgeting/procurement/validate-budget")]
+    public SingleObjectModel ValidateBudget([FromBody] BudgetRequestFields fields) {
 
       using (var usecases = BudgetingProcurementUseCases.UseCaseInteractor()) {
         BudgetValidationResultDto validationResult = usecases.ValidateBudget(fields);
@@ -49,6 +61,6 @@ namespace Empiria.Operations.Integration.Budgeting.WebApi {
 
     #endregion Web Apis
 
-  }  // class BudgetingIntegrationController
+  }  // class BudgetingProcurementController
 
 }  // namespace Empiria.Operations.Integration.Budgeting.WebApi

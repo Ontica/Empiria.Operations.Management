@@ -38,7 +38,12 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
     #region Use cases
 
-    public BudgetTransactionDescriptorDto RequestBudget(BudgetOperationFields fields) {
+    public FixedList<BudgetTransactionDescriptorDto> GetBudgetRequests(BudgetRequestFields fields) {
+      return new FixedList<BudgetTransactionDescriptorDto>();
+    }
+
+
+    public BudgetTransactionDescriptorDto RequestBudget(BudgetRequestFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();
@@ -59,7 +64,7 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
     }
 
 
-    public BudgetValidationResultDto ValidateBudget(BudgetOperationFields fields) {
+    public BudgetValidationResultDto ValidateBudget(BudgetRequestFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       return new BudgetValidationResultDto();
@@ -72,6 +77,7 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
     private BudgetTransaction RequestContractBudget(Contract contract) {
       throw Assertion.EnsureNoReachThisCode();
     }
+
 
     private BudgetTransaction RequestPayableEntityBudget(IPayableEntity payableEntity) {
       throw Assertion.EnsureNoReachThisCode();
