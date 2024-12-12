@@ -8,13 +8,16 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
+
 using Empiria.Services;
 
 using Empiria.Financial;
-using Empiria.Procurement.Contracts;
+using Empiria.Parties;
 
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
+using Empiria.Budgeting.Transactions.UseCases;
 
 using Empiria.Operations.Integration.Budgeting.Adapters;
 
@@ -48,17 +51,12 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       fields.EnsureValid();
 
-      var bo = BaseObject.Parse(fields.BaseObjectTypeUID, fields.BaseObjectUID);
+      var payableEntity = (IPayableEntity) BaseObject.Parse(fields.BaseObjectTypeUID,
+                                                            fields.BaseObjectUID);
 
-      BudgetTransaction transaction;
+      BudgetTransaction transaction = InvokeBudgetTransactionService(payableEntity,
+                                                                     BudgetTransactionType.ApartarGastoCorriente);
 
-      if (bo is Contract contract) {
-        transaction = RequestContractBudget(contract);
-      } else if (bo is IPayableEntity payableEntity) {
-        transaction = RequestPayableEntityBudget(payableEntity);
-      } else {
-        throw Assertion.EnsureNoReachThisCode($"Unhandled object type {fields.BaseObjectTypeUID}.");
-      }
 
       return BudgetTransactionMapper.MapToDescriptor(transaction);
     }
@@ -74,13 +72,32 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
     #region Helpers
 
-    private BudgetTransaction RequestContractBudget(Contract contract) {
-      throw Assertion.EnsureNoReachThisCode();
+    static private BudgetTransaction InvokeBudgetTransactionService(IPayableEntity payableEntity,
+                                                                    BudgetTransactionType budgetTransactionType) {
+
+      BudgetTransactionFields fields = TransformToBudgetTransactionFields(payableEntity,
+                                                                          budgetTransactionType);
+
+      using (var usecases = BudgetTransactionEditionUseCases.UseCaseInteractor()) {
+        return usecases.CreateTransaction(payableEntity, fields);
+      }
     }
 
 
-    private BudgetTransaction RequestPayableEntityBudget(IPayableEntity payableEntity) {
-      throw Assertion.EnsureNoReachThisCode();
+    static private BudgetTransactionFields TransformToBudgetTransactionFields(IPayableEntity payableEntity,
+                                                                              BudgetTransactionType transactionType) {
+
+      var SISTEMA_DE_ADQUISICIONES = OperationSource.Parse(10);
+
+      return new BudgetTransactionFields {
+        TransactionTypeUID = transactionType.UID,
+        BaseBudgetUID = "f3163d06-10b7-4fe1-8c44-9f10604a6c6b",
+        OperationSourceUID = SISTEMA_DE_ADQUISICIONES.UID,
+        Description = payableEntity.Description,
+        BasePartyUID = "f7ca6769-b771-4371-9ee2-a7710bf4291f",
+        RequestedByUID = Party.ParseWithContact(ExecutionServer.CurrentContact).UID,
+        ApplicationDate = DateTime.Today
+      };
     }
 
     #endregion Helpers
