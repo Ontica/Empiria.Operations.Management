@@ -1,6 +1,6 @@
 ﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
-*  Module   : Operations-Budgeting Integration              Component : Adapters Layer                       *
+*  Module   : Products-Budgeting Integration                Component : Adapters Layer                       *
 *  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Mapper                               *
 *  Type     : ProductBudgetSegmentMapper                    License   : Please read LICENSE.txt file         *
 *                                                                                                            *
@@ -11,7 +11,7 @@
 using Empiria.Budgeting;
 using Empiria.Products;
 
-namespace Empiria.Operations.Integration.Budgeting.Adapters {
+namespace Empiria.Operations.Integration.Products.Adapters {
 
   /// <summary>Maps product budget segments to ProductBudgetSegmentDto instances.</summary>
   internal class ProductBudgetSegmentMapper {
@@ -34,4 +34,4 @@ namespace Empiria.Operations.Integration.Budgeting.Adapters {
 
   }  // class ProductBudgetSegmentMapper
 
-}  // namespace Empiria.Operations.Integration.Budgeting.Adapters
+}  // namespace Empiria.Operations.Integration.Products.Adapters

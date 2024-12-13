@@ -1,13 +1,14 @@
 ﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
-*  Module   : Operations-Budgeting Integration              Component : Use cases Layer                      *
+*  Module   : Products-Budgeting Integration                Component : Use cases Layer                      *
 *  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Use case interactor class            *
-*  Type     : BudgetProductUseCases                         License   : Please read LICENSE.txt file         *
+*  Type     : ProductBudgetUseCases                         License   : Please read LICENSE.txt file         *
 *                                                                                                            *
-*  Summary  : Use cases used to integrate budget accounts and budget segments with products.                 *
+*  Summary  : Use cases used to integrate products with budget segments and retrieve their budget accounts.  *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria;
 using Empiria.Services;
 
 using Empiria.Parties;
@@ -16,22 +17,22 @@ using Empiria.Products;
 using Empiria.Budgeting;
 
 using Empiria.Operations.Integration.Budgeting.Adapters;
-using System;
-using Empiria.Collections;
+using Empiria.Operations.Integration.Products.Adapters;
 
-namespace Empiria.Operations.Integration.Budgeting.UseCases {
+namespace Empiria.Operations.Integration.Products.UseCases {
 
-  /// <summary>Use cases used to integrate budget accounts and budget segments with products.</summary>
-  public class BudgetProductUseCases : UseCase {
+  /// <summary>Use cases used to integrate products with budget segments and
+  /// retrieve their budget accounts.</summary>
+  public class ProductBudgetUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected BudgetProductUseCases() {
+    protected ProductBudgetUseCases() {
       // no-op
     }
 
-    static public BudgetProductUseCases UseCaseInteractor() {
-      return CreateInstance<BudgetProductUseCases>();
+    static public ProductBudgetUseCases UseCaseInteractor() {
+      return CreateInstance<ProductBudgetUseCases>();
     }
 
     #endregion Constructors and parsers
@@ -128,6 +129,6 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
     #endregion Use cases
 
-  }  // class BudgetProductUseCases
+  }  // class ProductBudgetUseCases
 
-}  // namespace Empiria.Operations.Integration.Budgeting.UseCases
+}  // namespace Empiria.Operations.Integration.Products.UseCases

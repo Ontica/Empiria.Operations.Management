@@ -1,10 +1,10 @@
 ﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
-*  Module   : Operations-Budgeting Integration              Component : Web Api Layer                        *
+*  Module   : Products-Budgeting Integration                Component : Web Api Layer                        *
 *  Assembly : Empiria.Operations.Integration.WebApi.dll     Pattern   : Web Api Controller                   *
-*  Type     : BudgetProductController                       License   : Please read LICENSE.txt file         *
+*  Type     : ProductBudgetController                       License   : Please read LICENSE.txt file         *
 *                                                                                                            *
-*  Summary  : Web api used to integrate budget accounts and budget segments with products.                   *
+*  Summary  : Web api for integrate products with their budget segments and retrieve their budget accounts.  *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -13,69 +13,74 @@ using System.Web.Http;
 using Empiria.WebApi;
 
 using Empiria.Operations.Integration.Budgeting.Adapters;
-using Empiria.Operations.Integration.Budgeting.UseCases;
+using Empiria.Operations.Integration.Products.Adapters;
 
-namespace Empiria.Operations.Integration.Budgeting.WebApi {
+using Empiria.Operations.Integration.Products.UseCases;
 
-  /// <summary>Web api used to integrate budget accounts and budget segments with products.</summary>
-  public class BudgetProductController : WebApiController {
+namespace Empiria.Operations.Integration.Products.WebApi {
+
+  /// <summary>Web api for integrate products with their budget segments
+  /// and retrieve their budget accounts.</summary>
+  public class ProductBudgetController : WebApiController {
 
     #region Web Apis
 
     [HttpPost]
-    [Route("v2/budgeting/products/{productUID:guid}/budget-segments")]
+    [Route("v8/product-management/products/{productUID:guid}/budget-segments")]
     public SingleObjectModel AddProductBudgetSegment([FromUri] string productUID,
                                                      [FromBody] NamedEntityFields fields) {
 
-      using (var usecases = BudgetProductUseCases.UseCaseInteractor()) {
+      using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
         ProductBudgetSegmentDto segment = usecases.AddProductBudgetSegment(productUID, fields);
 
-        return new SingleObjectModel(base.Request, segment);
+        return new SingleObjectModel(Request, segment);
       }
     }
 
 
     [HttpGet]
-    [Route("v2/budgeting/products/{productUID:guid}/budget-segments")]
+    [Route("v8/product-management/products/{productUID:guid}/budget-segments")]
     public CollectionModel GetProductBudgetSegments([FromUri] string productUID) {
 
-      using (var usecases = BudgetProductUseCases.UseCaseInteractor()) {
+      using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
         FixedList<ProductBudgetSegmentDto> segments = usecases.GetProductBudgetSegments(productUID);
 
-        return new CollectionModel(base.Request, segments);
+        return new CollectionModel(Request, segments);
       }
     }
 
 
     [HttpDelete]
-    [Route("v2/budgeting/products/{productUID:guid}/budget-segments/{budgetSegmentProductLinkUID:guid}")]
+    [Route("v8/product-management/products/{productUID:guid}/budget-segments/{budgetSegmentProductLinkUID:guid}")]
     public NoDataModel RemoveProductBudgetSegment([FromUri] string productUID,
                                                   [FromUri] string budgetSegmentProductLinkUID) {
 
-      using (var usecases = BudgetProductUseCases.UseCaseInteractor()) {
+      using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
         _ = usecases.RemoveProductBudgetSegment(productUID, budgetSegmentProductLinkUID);
 
-        return new NoDataModel(base.Request);
+        return new NoDataModel(Request);
       }
     }
 
 
     [HttpGet]
-    [Route("v2/budgeting/products/{productUID:guid}/budget-segments/available")]
+    [Route("v8/product-management/products/{productUID:guid}/budget-segments/available")]
     public CollectionModel SearchAvailableProductBudgetSegments([FromUri] string productUID,
                                                                 [FromUri] string budgetTypeUID,
                                                                 [FromUri] string keywords = "") {
 
-      using (var usecases = BudgetProductUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> segments = usecases.SearchAvailableProductBudgetSegments(productUID, budgetTypeUID, keywords);
+      using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
+        FixedList<NamedEntityDto> segments = usecases.SearchAvailableProductBudgetSegments(productUID,
+                                                                                           budgetTypeUID,
+                                                                                           keywords);
 
-        return new CollectionModel(base.Request, segments);
+        return new CollectionModel(Request, segments);
       }
     }
 
 
     [HttpPost]
-    [Route("v2/budgeting/products/{productUID:guid}/budget-accounts")]
+    [Route("v8/product-management/products/{productUID:guid}/budget-accounts")]
     public CollectionModel SearchBudgetAccountsForProduct([FromUri] string productUID,
                                                           [FromBody] BudgetAccountsForProductQuery query) {
 
@@ -84,15 +89,15 @@ namespace Empiria.Operations.Integration.Budgeting.WebApi {
 
       query.ProductUID = productUID;
 
-      using (var usecases = BudgetProductUseCases.UseCaseInteractor()) {
+      using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
         FixedList<NamedEntityDto> budgetAccounts = usecases.SearchProductBudgetAccounts(query);
 
-        return new CollectionModel(base.Request, budgetAccounts);
+        return new CollectionModel(Request, budgetAccounts);
       }
     }
 
     #endregion Web Apis
 
-  }  // class BudgetProductController
+  }  // class ProductBudgetController
 
-}  // namespace Empiria.Operations.Integration.WebApi
+}  // namespace Empiria.Operations.Integration.Products.WebApi

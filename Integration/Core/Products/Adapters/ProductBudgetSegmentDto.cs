@@ -1,6 +1,6 @@
 ﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
-*  Module   : Operations-Budgeting Integration              Component : Adapters Layer                       *
+*  Module   : Products-Budgeting Integration                Component : Adapters Layer                       *
 *  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Output DTO                           *
 *  Type     : ProductBudgetSegmentDto                       License   : Please read LICENSE.txt file         *
 *                                                                                                            *
@@ -8,7 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-namespace Empiria.Operations.Integration.Budgeting.Adapters {
+namespace Empiria.Operations.Integration.Products.Adapters {
 
   /// <summary>Output DTO with a link between a product and a budget segment.</summary>
   public class ProductBudgetSegmentDto {
@@ -35,4 +35,4 @@ namespace Empiria.Operations.Integration.Budgeting.Adapters {
 
   }  // class ProductBudgetSegmentDto
 
-}  // namespace Empiria.Operations.Integration.Budgeting.Adapters
+}  // namespace Empiria.Operations.Integration.Products.Adapters
