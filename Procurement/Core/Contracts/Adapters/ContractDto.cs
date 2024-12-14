@@ -13,6 +13,8 @@ using System;
 using Empiria.Documents.Services.Adapters;
 using Empiria.History.Services.Adapters;
 
+using Empiria.Budgeting.Transactions.Adapters;
+
 namespace Empiria.Procurement.Contracts.Adapters {
 
   public class ContractHolderDto {
@@ -24,6 +26,12 @@ namespace Empiria.Procurement.Contracts.Adapters {
     public FixedList<ContractItemDto> Items {
       get; internal set;
     }
+
+
+    public FixedList<BudgetTransactionDescriptorDto> BudgetTransactions {
+      get; internal set;
+    }
+
 
     public FixedList<ContractMilestoneDto> Milestones {
       get; internal set;

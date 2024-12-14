@@ -13,6 +13,9 @@ using Empiria.History.Services;
 
 using Empiria.StateEnums;
 
+using Empiria.Budgeting.Transactions;
+using Empiria.Budgeting.Transactions.Adapters;
+
 namespace Empiria.Procurement.Contracts.Adapters {
 
   /// <summary>Provides data mapping services for Contract instances.</summary>
@@ -22,6 +25,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
       return new ContractHolderDto {
         Contract = MapContract(contract),
         Items = ContractItemMapper.Map(contract.GetItems()),
+        BudgetTransactions = MapBudgetTransactions(contract),
         Milestones = ContractMilestoneMapper.Map(contract.GetMilestones()),
         Documents = DocumentServices.GetEntityDocuments(contract),
         History = HistoryServices.GetEntityHistory(contract),
@@ -70,6 +74,13 @@ namespace Empiria.Procurement.Contracts.Adapters {
         CanSuspend = contract.CanSuspend(),
         CanUpdate = contract.Status == EntityStatus.Pending
       };
+    }
+
+
+    static private FixedList<BudgetTransactionDescriptorDto> MapBudgetTransactions(Contract contract) {
+      FixedList<BudgetTransaction> transactions = BudgetTransaction.GetFor(contract);
+
+      return BudgetTransactionMapper.MapToDescriptor(transactions);
     }
 
 
