@@ -28,7 +28,7 @@ namespace Empiria.Operations.Integration.Products.WebApi {
     [HttpPost]
     [Route("v8/product-management/products/{productUID:guid}/budget-segments")]
     public SingleObjectModel AddProductBudgetSegment([FromUri] string productUID,
-                                                     [FromBody] NamedEntityFields fields) {
+                                                     [FromBody] ProductBudgetSegmentFields fields) {
 
       using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
         ProductBudgetSegmentDto segment = usecases.AddProductBudgetSegment(productUID, fields);
