@@ -30,6 +30,8 @@ namespace Empiria.Operations.Integration.Products.WebApi {
     public SingleObjectModel AddProductBudgetSegment([FromUri] string productUID,
                                                      [FromBody] ProductBudgetSegmentFields fields) {
 
+      base.RequireBody(fields);
+
       using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
         ProductBudgetSegmentDto segment = usecases.AddProductBudgetSegment(productUID, fields);
 
@@ -63,17 +65,15 @@ namespace Empiria.Operations.Integration.Products.WebApi {
     }
 
 
-    [HttpGet]
+    [HttpPost]
     //[Route("v8/product-management/products/{productUID:guid}/budget-segments/available")]
     [Route("v8/product-management/budget-segments/available")]
-    public CollectionModel SearchAvailableProductBudgetSegments([FromUri] string productUID,
-                                                                [FromUri] string budgetTypeUID,
-                                                                [FromUri] string keywords = "") {
+    public CollectionModel SearchAvailableProductBudgetSegments([FromBody] ProductBudgetSegmentsQuery query) {
+
+      base.RequireBody(query);
 
       using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> segments = usecases.SearchAvailableProductBudgetSegments(productUID,
-                                                                                           budgetTypeUID,
-                                                                                           keywords);
+        FixedList<NamedEntityDto> segments = usecases.SearchAvailableProductBudgetSegments(query);
 
         return new CollectionModel(Request, segments);
       }
@@ -84,6 +84,8 @@ namespace Empiria.Operations.Integration.Products.WebApi {
     [Route("v8/product-management/products/{productUID:guid}/budget-accounts")]
     public CollectionModel SearchBudgetAccountsForProduct([FromUri] string productUID,
                                                           [FromBody] BudgetAccountsForProductQuery query) {
+
+      base.RequireBody(query);
 
       Assertion.Require(query.ProductUID.Length == 0 || query.ProductUID == productUID,
                         "ProductUID mismatch.");

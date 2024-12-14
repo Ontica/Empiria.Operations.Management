@@ -85,19 +85,17 @@ namespace Empiria.Operations.Integration.Products.UseCases {
     }
 
 
-    public FixedList<NamedEntityDto> SearchAvailableProductBudgetSegments(string productUID,
-                                                                          string budgetTypeUID,
-                                                                          string keywords) {
-      Assertion.Require(productUID, nameof(productUID));
-      Assertion.Require(budgetTypeUID, nameof(budgetTypeUID));
-      keywords = keywords ?? string.Empty;
+    public FixedList<NamedEntityDto> SearchAvailableProductBudgetSegments(ProductBudgetSegmentsQuery query) {
+      Assertion.Require(query, nameof(query));
 
-      var product = Product.Parse(productUID);
-      var budgetType = BudgetType.Parse(budgetTypeUID);
+      query.EnsureValid();
+
+      var product = Product.Parse(query.ProductUID);
+      var budgetType = BudgetType.Parse(query.BudgetTypeUID);
 
       BudgetAccountSegmentType segmentType = budgetType.ProductProcurementSegmentType;
 
-      FixedList<BudgetAccountSegment> segments = segmentType.SearchInstances(keywords);
+      FixedList<BudgetAccountSegment> segments = segmentType.SearchInstances(query.Keywords);
 
       var current = BudgetAccountSegmentLink.GetBudgetAccountSegmentsForProduct(product);
 
