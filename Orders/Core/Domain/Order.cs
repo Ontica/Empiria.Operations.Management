@@ -17,6 +17,10 @@ using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
+using Empiria.Budgeting;
+using Empiria.Financial;
+using Empiria.Projects;
+
 using Empiria.Orders.Data;
 
 namespace Empiria.Orders {
@@ -32,6 +36,10 @@ namespace Empiria.Orders {
     #endregion Fields
 
     #region Constructors and parsers
+
+    protected Order(OrderType orderType) : base(orderType) {
+      // Required by Empiria Framework for all partitioned types.
+    }
 
     static public Order Parse(int id) => ParseId<Order>(id);
 
@@ -62,6 +70,12 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_NO")]
     public string OrderNo {
+      get; protected set;
+    }
+
+
+    [DataField("ORDER_DESCRIPTION")]
+    public string Description {
       get; private set;
     }
 
@@ -72,9 +86,28 @@ namespace Empiria.Orders {
       }
     }
 
+    [DataField("ORDER_IDENTIFICATORS")]
+    private string _identificators = string.Empty;
 
-    [DataField("ORDER_DESCRIPTION")]
-    public string Description {
+    public FixedList<string> Identificators {
+      get {
+        return _identificators.Split(' ').ToFixedList();
+      }
+    }
+
+
+    [DataField("ORDER_TAGS")]
+    private string _tags = string.Empty;
+
+    public FixedList<string> Tags {
+      get {
+        return _tags.Split(' ').ToFixedList();
+      }
+    }
+
+
+    [DataField("ORDER_RESPONSIBLE_ID")]
+    public Party Responsible {
       get; private set;
     }
 
@@ -91,6 +124,54 @@ namespace Empiria.Orders {
     }
 
 
+    [DataField("ORDER_BUDGET_ID")]
+    public Budget Budget {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_REQUESTED_BY_ID")]
+    public Party RequestedBy {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_REQUISITION_ID")]
+    public int RequisitionId {
+      get; private set;
+    } = -1;
+
+
+    [DataField("ORDER_CONTRACT_ID")]
+    protected internal int ContractId {
+      get; set;
+    } = -1;
+
+
+    [DataField("ORDER_PROJECT_ID")]
+    public Project Project {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_CURRENCY_ID")]
+    public Currency Currency {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_SOURCE_ID")]
+    public OperationSource Source {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_PRIORITY", Default = Priority.Normal)]
+    public Priority Priority {
+      get; private set;
+    }
+
+
     [DataField("ORDER_EXT_DATA")]
     protected JsonObject ExtData {
       get; private set;
@@ -99,7 +180,9 @@ namespace Empiria.Orders {
 
     public virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(OrderNo, Beneficiary.Name, Provider.Name, Description);
+        return EmpiriaString.BuildKeywords(OrderNo, Description, Beneficiary.Keywords,
+                                           Provider.Keywords, Project.Keywords,
+                                           Responsible.Keywords);
       }
     }
 
@@ -135,7 +218,7 @@ namespace Empiria.Orders {
 
     internal protected virtual void AddItem(OrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
-      Assertion.Require(orderItem.Order.Equals(this), "Wrong OrderItem.Order instance");
+      Assertion.Require(orderItem.Order.Equals(this), "OrderItem.Order instance mismatch.");
 
       _items.Value.Add(orderItem);
     }
