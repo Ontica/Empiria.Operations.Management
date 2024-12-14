@@ -4,7 +4,7 @@
 *  Assembly : Empiria.Procurement.Core.dll               Pattern   : Data service                            *
 *  Type     : ContractOrdersData                         License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Provides data read and write methods for contract supply orders.                               *
+*  Summary  : Provides data read and write methods for contract's supply orders.                             *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -12,18 +12,19 @@ using Empiria.Data;
 
 namespace Empiria.Procurement.Contracts.Data {
 
-  /// <summary>Provides data read and write methods for contract supply orders.</summary>
+  /// <summary>Provides data read and write methods for contract's supply orders.</summary>
   static internal class ContractOrdersData {
 
     #region Methods
 
-    static internal void WriteContractOrder(ContractOrder o, string extensionData) {
-      var op = DataOperation.Parse("write_OMS_Order",
-                     o.Id, o.UID, o.OrderType.Id, o.OrderNo, o.Description,
-                     o.Contract.Id, extensionData,
-                     o.Keywords, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+    static internal FixedList<ContractOrder> GetContractOrders(Contract contract) {
+      var sql = "SELECT * FROM OMS_ORDERS " +
+                $"WHERE ORDER_CONTRACT_ID = {contract.Id} AND " +
+                 "ORDER_STATUS <> 'X'";
 
-      DataWriter.Execute(op);
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<ContractOrder>(op);
     }
 
     #endregion Methods

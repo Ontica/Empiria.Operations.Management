@@ -36,6 +36,8 @@ namespace Empiria.Orders {
 
     static public OrderType Empty => Parse("ObjectTypeInfo.Order");
 
+    static public OrderType ContractOrder => Parse("ObjectTypeInfo.Order.PayableOrder.ContractOrder");
+
     #endregion Constructors and parsers
 
   } // class OrderType

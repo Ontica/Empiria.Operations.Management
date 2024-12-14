@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System.Collections.Generic;
+using System.Linq;
 
 using Empiria.Financial;
 
@@ -19,12 +20,15 @@ namespace Empiria.Orders {
 
     #region Constructors and parsers
 
+    protected PayableOrder(OrderType orderType) : base(orderType) {
+      // Required by Empiria Framework for all partitioned types.
+    }
+
     static public new PayableOrder Parse(int id) => ParseId<PayableOrder>(id);
 
     static public new PayableOrder Parse(string uid) => ParseKey<PayableOrder>(uid);
 
     static public new PayableOrder Empty => ParseEmpty<PayableOrder>();
-
 
     #endregion Constructors and parsers
 
@@ -65,7 +69,10 @@ namespace Empiria.Orders {
       base.AddItem(orderItem);
     }
 
-
+    public decimal GetTotal() {
+      return base.GetItems<PayableOrderItem>()
+                  .Sum(x => x.Total);
+    }
 
     internal protected virtual void RemoveItem(PayableOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));

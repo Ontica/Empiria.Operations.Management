@@ -4,34 +4,42 @@
 *  Assembly : Empiria.Procurement.Core.dll               Pattern   : Information Holder                      *
 *  Type     : ContractOrder                              License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Represents a contract supply order.                                                            *
+*  Summary  : Represents a contract's supply order.                                                          *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System.Linq;
-
-using Empiria.StateEnums;
-
 using Empiria.Orders;
 
-using Empiria.Procurement.Contracts.Data;
 using Empiria.Procurement.Contracts.Adapters;
+using Empiria.Procurement.Contracts.Data;
 
 namespace Empiria.Procurement.Contracts {
 
-  /// <summary>Represents a contract supply order.</summary>
+  /// <summary>Represents a contract's supply order.</summary>
   public class ContractOrder : PayableOrder {
 
     #region Constructors and parsers
+
+    protected ContractOrder(OrderType powertype) : base(powertype) {
+      // Required by Empiria Framework for all partitioned types.
+    }
+
+    internal ContractOrder(Contract contract) : base(OrderType.ContractOrder) {
+      Assertion.Require(contract, nameof(contract));
+      Assertion.Require(!contract.IsEmptyInstance, nameof(contract));
+
+      Contract = contract;
+      OrderNo = EmpiriaString.BuildRandomString(16);
+    }
 
     static internal new ContractOrder Parse(int id) => ParseId<ContractOrder>(id);
 
     static internal new ContractOrder Parse(string uid) => ParseKey<ContractOrder>(uid);
 
     static internal FixedList<ContractOrder> GetListFor(Contract contract) {
-      return BaseObject.GetFullList<ContractOrder>()
-                       .ToFixedList()
-                       .FindAll(x => x.Contract.Equals(contract) && x.Status != EntityStatus.Deleted);
+      Assertion.Require(contract, nameof(contract));
+
+      return ContractOrdersData.GetContractOrders(contract);
     }
 
     static internal new ContractOrder Empty => ParseEmpty<ContractOrder>();
@@ -40,9 +48,13 @@ namespace Empiria.Procurement.Contracts {
 
     #region Properties
 
-    [DataField("ORDER_CONTRACT_ID")]
     public Contract Contract {
-      get; private set;
+      get {
+        return Contract.Parse(base.ContractId);
+      }
+      private set {
+        base.ContractId = value.Id;
+      }
     }
 
 
@@ -60,22 +72,6 @@ namespace Empiria.Procurement.Contracts {
       Assertion.Require(contractOrderItem, nameof(contractOrderItem));
 
       base.AddItem(contractOrderItem);
-    }
-
-
-    internal decimal GetTotal() {
-      return base.GetItems<ContractOrderItem>()
-                 .Sum(x => x.Total);
-    }
-
-
-    internal void Load(ContractOrderFields fields) {
-      this.Contract = Contract.Parse(fields.ContractUID);
-    }
-
-
-    protected override void OnSave() {
-      ContractOrdersData.WriteContractOrder(this, this.ExtData.ToString());
     }
 
 
