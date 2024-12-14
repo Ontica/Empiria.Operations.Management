@@ -38,6 +38,10 @@ namespace Empiria.Operations.Integration.Products.Adapters {
       get; internal set;
     }
 
+    public bool CanEditBudgetData {
+      get; internal set;
+    }
+
     public bool CanSuspend {
       get; internal set;
     }

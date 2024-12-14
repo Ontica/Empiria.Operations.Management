@@ -64,7 +64,8 @@ namespace Empiria.Operations.Integration.Products.WebApi {
 
 
     [HttpGet]
-    [Route("v8/product-management/products/{productUID:guid}/budget-segments/available")]
+    //[Route("v8/product-management/products/{productUID:guid}/budget-segments/available")]
+    [Route("v8/product-management/budget-segments/available")]
     public CollectionModel SearchAvailableProductBudgetSegments([FromUri] string productUID,
                                                                 [FromUri] string budgetTypeUID,
                                                                 [FromUri] string keywords = "") {

@@ -30,6 +30,7 @@ namespace Empiria.Operations.Integration.Products.Adapters {
     static private ProductActions MapActions() {
       return new ProductActions {
         CanDelete = true,
+        CanEditBudgetData = true,
         CanUpdate = true
       };
     }
