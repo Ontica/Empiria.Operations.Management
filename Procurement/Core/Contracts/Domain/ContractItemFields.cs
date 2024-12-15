@@ -18,12 +18,12 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
-    public string ProductUID {
+    public string Description {
       get; set;
     } = string.Empty;
 
 
-    public string Description {
+    public string ProductUID {
       get; set;
     } = string.Empty;
 
@@ -33,19 +33,22 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
-    public decimal UnitPrice {
-      get; set;
-    }
-
-
     public decimal MinQuantity {
       get; set;
     }
 
-
     public decimal MaxQuantity {
       get; set;
     }
+
+    public decimal UnitPrice {
+      get; set;
+    }
+
+    public string CurrencyUID {
+      get; internal set;
+    } = string.Empty;
+
 
     public string RequisitionItemUID {
       get; set;

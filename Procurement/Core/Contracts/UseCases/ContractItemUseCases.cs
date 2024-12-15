@@ -41,7 +41,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       ContractItem contractItem = contract.AddItem(fields);
 
-      contractItem.Save();
+      contract.Save();
 
       return ContractItemMapper.Map(contractItem);
     }
@@ -65,6 +65,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       ContractItem contractItem = contract.RemoveItem(contractItemUID);
 
+      contract.Save();
       contractItem.Save();
 
       return ContractItemMapper.Map(contractItem);
@@ -86,7 +87,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       contract.UpdateItem(contractItem, fields);
 
-      contractItem.Save();
+      contract.Save();
 
       return ContractItemMapper.Map(contractItem);
     }

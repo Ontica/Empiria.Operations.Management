@@ -10,6 +10,7 @@
 
 using System;
 
+using Empiria.Commands;
 using Empiria.Financial;
 using Empiria.Json;
 using Empiria.Ontology;
@@ -23,12 +24,11 @@ using Empiria.Projects;
 
 using Empiria.Procurement.Contracts.Data;
 
-
 namespace Empiria.Procurement.Contracts {
 
   /// <summary>Represents a contract item.</summary>
   [PartitionedType(typeof(ContractItemType))]
-  public class ContractItem : BaseObject, IPayableEntityItem, INamedEntity {
+  public class ContractItem : BaseObject, IPayableEntityItem, IPositionable, INamedEntity {
 
     #region Constructors and parsers
 
@@ -69,8 +69,8 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    [DataField("CONTRACT_ITEM_PRODUCT_ID")]
-    public Product Product {
+    [DataField("CONTRACT_ITEM_DESCRIPTION")]
+    public string Description {
       get; private set;
     }
 
@@ -86,8 +86,8 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    [DataField("CONTRACT_ITEM_DESCRIPTION")]
-    public string Description {
+    [DataField("CONTRACT_ITEM_PRODUCT_ID")]
+    public Product Product {
       get; private set;
     }
 
@@ -112,6 +112,12 @@ namespace Empiria.Procurement.Contracts {
 
     [DataField("CONTRACT_ITEM_UNIT_PRICE")]
     public decimal UnitPrice {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_ITEM_CURRENCY_ID")]
+    public Currency Currency {
       get; private set;
     }
 
@@ -168,6 +174,12 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
+    [DataField("CONTRACT_ITEM_POSITION")]
+    public int Position {
+      get; private set;
+    }
+
+
     public string Keywords {
       get {
         return EmpiriaString.BuildKeywords(this.Description, this.Product.Keywords,
@@ -219,7 +231,7 @@ namespace Empiria.Procurement.Contracts {
 
     INamedEntity IPayableEntityItem.Currency {
       get {
-        return this.Contract.Currency;
+        return this.Currency;
       }
     }
 
@@ -241,10 +253,16 @@ namespace Empiria.Procurement.Contracts {
 
     internal void Delete() {
       this.Status = EntityStatus.Deleted;
+      this.Position = -1;
 
       MarkAsDirty();
     }
 
+    internal void SetPosition(int newPosition) {
+      this.Position = newPosition;
+
+      MarkAsDirty();
+    }
 
     protected override void OnSave() {
       if (base.IsNew) {
@@ -272,12 +290,13 @@ namespace Empiria.Procurement.Contracts {
 
       fields.EnsureValid();
 
-      this.Product = PatchField(fields.ProductUID, Product);
       this.Description = PatchCleanField(fields.Description, Description);
+      this.Product = PatchField(fields.ProductUID, Product);
       this.ProductUnit = PatchField(fields.ProductUnitUID, ProductUnit);
       this.MinQuantity = fields.MinQuantity;
       this.MaxQuantity = fields.MaxQuantity;
       this.UnitPrice = fields.UnitPrice;
+      this.Currency = PatchField(fields.CurrencyUID, Contract.Currency);
       this.RequisitionItemId = -1;
       this.RequesterOrgUnit = PatchField(fields.RequesterOrgUnitUID, Contract.ManagedByOrgUnit);
       this.BudgetAccount = PatchField(fields.BudgetAccountUID, BudgetAccount);

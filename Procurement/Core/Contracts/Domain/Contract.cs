@@ -299,6 +299,8 @@ namespace Empiria.Procurement.Contracts {
 
       _items.Value.Add(contractItem);
 
+      contractItem.SetPosition(_items.Value.Count - 1);
+
       return contractItem;
     }
 
@@ -369,9 +371,15 @@ namespace Empiria.Procurement.Contracts {
 
       ContractItem contractItem = GetItem(contractItemUID);
 
+      int removedItemPosition = contractItem.Position;
+
       contractItem.Delete();
 
       _items.Value.Remove(contractItem);
+
+      for(int index = removedItemPosition; index < _items.Value.Count; index++) {
+        _items.Value[index].SetPosition(index);
+      }
 
       return contractItem;
     }
