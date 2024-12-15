@@ -81,16 +81,10 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
-    public decimal Total {
-      get; set;
-    } = 0.00m;
-
-
     internal void EnsureValid() {
       Assertion.Require(ContractCategoryUID, "Necesito la clasificación o categoría del contrato.");
       Assertion.Require(Name, "Necesito el nombre del contrato.");
       Assertion.Require(CurrencyUID, "Necesito la moneda del contrato.");
-      Assertion.Require(Total > 0, "Necesito el importe del contrato.");
       Assertion.Require(BudgetTypeUID, "Necesito el tipo de presupuesto del contrato.");
     }
 

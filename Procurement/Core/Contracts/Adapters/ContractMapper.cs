@@ -51,7 +51,9 @@ namespace Empiria.Procurement.Contracts.Adapters {
         ToDate = contract.ToDate,
         SignDate = contract.SignDate,
         Currency = contract.Currency.MapToNamedEntity(),
-        Total = contract.Total,
+        MinTotal = contract.MinTotal,
+        MaxTotal = contract.MaxTotal,
+        Total = contract.MaxTotal,
         Status = contract.Status.MapToDto()
       };
     }
@@ -98,7 +100,9 @@ namespace Empiria.Procurement.Contracts.Adapters {
         SignDate = contract.SignDate,
         BudgetType = contract.BudgetType.DisplayName,
         Currency = contract.Currency.Name,
-        Total = contract.Total,
+        MinTotal = contract.MinTotal,
+        MaxTotal = contract.MaxTotal,
+        Total = contract.MaxTotal,
         StatusName = contract.Status.GetName()
       };
     }

@@ -136,6 +136,14 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
+    public decimal MinTotal {
+      get; internal set;
+    }
+
+    public decimal MaxTotal {
+      get; internal set;
+    }
+
     public decimal Total {
       get; internal set;
     }
@@ -196,6 +204,14 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
     public string Currency {
+      get; internal set;
+    }
+
+    public decimal MinTotal {
+      get; internal set;
+    }
+
+    public decimal MaxTotal {
       get; internal set;
     }
 

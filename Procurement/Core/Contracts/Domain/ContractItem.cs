@@ -207,7 +207,14 @@ namespace Empiria.Procurement.Contracts {
     } = EntityStatus.Pending;
 
 
-    public decimal Total {
+    public decimal MinTotal {
+      get {
+        return MinQuantity * UnitPrice;
+      }
+    }
+
+
+    public decimal MaxTotal {
       get {
         return MaxQuantity * UnitPrice;
       }
@@ -244,6 +251,13 @@ namespace Empiria.Procurement.Contracts {
     INamedEntity IPayableEntityItem.BudgetAccount {
       get {
         return BudgetAccount;
+      }
+    }
+
+
+    decimal IPayableEntityItem.Total {
+      get {
+        return MaxTotal;
       }
     }
 

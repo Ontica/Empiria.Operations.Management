@@ -52,7 +52,6 @@ namespace Empiria.Tests.Procurement.Contracts {
         ManagedByOrgUnitUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
         BudgetTypeUID = TestingConstants.CONTRACT_BUDGET_TYPE_UID,
         SupplierUID = TestingConstants.SUPPLIER_UID,
-        Total = 237762005.00M,
       };
 
       ContractHolderDto sut = _usecases.CreateContract(fields);
@@ -61,7 +60,6 @@ namespace Empiria.Tests.Procurement.Contracts {
       Assert.NotNull(sut.Contract.UID);
       Assert.Equal(fields.ContractNo, sut.Contract.ContractNo);
       Assert.Equal(fields.Name, sut.Contract.Name);
-      Assert.Equal(fields.Total, sut.Contract.Total);
     }
 
     [Fact]
@@ -78,7 +76,6 @@ namespace Empiria.Tests.Procurement.Contracts {
         ManagedByOrgUnitUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
         BudgetTypeUID = TestingConstants.CONTRACT_BUDGET_TYPE_UID,
         SupplierUID = TestingConstants.SUPPLIER_UID,
-        Total = 9300402.32M,
       };
 
       ContractHolderDto sut = _usecases.UpdateContract(TestingConstants.CONTRACT_UID, fields);
@@ -87,7 +84,6 @@ namespace Empiria.Tests.Procurement.Contracts {
       Assert.NotNull(sut.Contract.UID);
       Assert.Equal(fields.ContractNo, sut.Contract.ContractNo);
       Assert.Equal(fields.Name, sut.Contract.Name);
-      Assert.Equal(fields.Total, sut.Contract.Total);
     }
 
     [Fact]

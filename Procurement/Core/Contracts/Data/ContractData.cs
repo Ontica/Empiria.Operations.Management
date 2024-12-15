@@ -18,7 +18,7 @@ namespace Empiria.Procurement.Contracts.Data {
     #region Methods
 
     static internal FixedList<Contract> GetContracts(string filter, string sortBy) {
-      var sql = "SELECT * FROM OMS_CONTRACTS ";
+      var sql = "SELECT * FROM vw_OMS_CONTRACTS ";
 
       if (!string.IsNullOrWhiteSpace(filter)) {
         sql += $" WHERE {filter}";
@@ -39,7 +39,7 @@ namespace Empiria.Procurement.Contracts.Data {
                      o.Id, o.UID, o.ContractType.Id, o.ContractCategory.Id, o.ContractNo, o.Name,
                      o.Description, o.Currency.Id, o.FromDate, o.ToDate, o.SignDate,
                      o.ManagedByOrgUnit.Id, o.BudgetType.Id, o.Customer.Id, o.Supplier.Id,
-                     o.Total, extensionData, o.Keywords, o.Parent.Id,
+                     extensionData, o.Keywords, o.Parent.Id,
                      o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);

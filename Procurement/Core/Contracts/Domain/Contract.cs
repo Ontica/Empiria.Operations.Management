@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Empiria.Json;
 using Empiria.Ontology;
@@ -113,8 +114,14 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    [DataField("CONTRACT_TOTAL")]
-    public decimal Total {
+    [DataField("CONTRACT_MIN_TOTAL")]
+    public decimal MinTotal {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_MAX_TOTAL")]
+    public decimal MaxTotal {
       get; private set;
     }
 
@@ -301,6 +308,8 @@ namespace Empiria.Procurement.Contracts {
 
       contractItem.SetPosition(_items.Value.Count - 1);
 
+      UpdateTotals();
+
       return contractItem;
     }
 
@@ -377,9 +386,11 @@ namespace Empiria.Procurement.Contracts {
 
       _items.Value.Remove(contractItem);
 
-      for(int index = removedItemPosition; index < _items.Value.Count; index++) {
+      for (int index = removedItemPosition; index < _items.Value.Count; index++) {
         _items.Value[index].SetPosition(index);
       }
+
+      UpdateTotals();
 
       return contractItem;
     }
@@ -406,7 +417,6 @@ namespace Empiria.Procurement.Contracts {
       SignDate = fields.SignDate;
       BudgetType = BudgetType.Parse(fields.BudgetTypeUID);
       Currency = PatchField(fields.CurrencyUID, Currency);
-      Total = fields.Total;
 
       if (Supplier.Distinct(lastSupplier)) {
         UpdateSupplierForAllItems();
@@ -422,6 +432,8 @@ namespace Empiria.Procurement.Contracts {
 
       contractItem.Update(fields);
 
+      UpdateTotals();
+
       return contractItem;
     }
 
@@ -433,6 +445,12 @@ namespace Empiria.Procurement.Contracts {
       foreach (ContractItem item in GetItems()) {
         item.SetSupplier(Supplier);
       }
+    }
+
+
+    private void UpdateTotals() {
+      MinTotal = _items.Value.Sum(x => x.MinTotal);
+      MaxTotal = _items.Value.Sum(x => x.MaxTotal);
     }
 
     #endregion Helpers
