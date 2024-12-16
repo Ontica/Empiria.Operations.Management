@@ -26,7 +26,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         Contract = MapContract(contract),
         Items = ContractItemMapper.Map(contract.GetItems()),
         BudgetTransactions = MapBudgetTransactions(contract),
-        Milestones = ContractMilestoneMapper.Map(contract.GetMilestones()),
+        Orders = ContractOrderMapper.Map(ContractOrder.GetListFor(contract)),
         Documents = DocumentServices.GetEntityDocuments(contract),
         History = HistoryServices.GetEntityHistory(contract),
         Actions = MapActions(contract)

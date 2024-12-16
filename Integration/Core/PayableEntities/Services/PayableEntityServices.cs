@@ -41,11 +41,11 @@ namespace Empiria.Payments.Payables.Services {
 
       var payableType = PayableType.Parse(query.PayableTypeUID);
 
-      var milestones = BaseObject.GetFullList<ContractMilestone>()
-                                 .ToFixedList()
-                                 .FindAll(x => x.Status != StateEnums.EntityStatus.Deleted);
+      var orders = BaseObject.GetFullList<ContractOrder>()
+                             .ToFixedList()
+                             .FindAll(x => x.Status != StateEnums.EntityStatus.Deleted);
 
-      return PayableEntityMapper.Map(milestones);
+      return PayableEntityMapper.Map(orders);
     }
 
     #endregion Use cases

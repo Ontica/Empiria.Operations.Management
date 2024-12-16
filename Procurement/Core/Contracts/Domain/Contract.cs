@@ -371,10 +371,6 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    internal FixedList<ContractMilestone> GetMilestones() {
-      return ContractMilestone.GetListFor(this);
-    }
-
     internal ContractItem RemoveItem(string contractItemUID) {
       Assertion.Require(contractItemUID, nameof(contractItemUID));
 

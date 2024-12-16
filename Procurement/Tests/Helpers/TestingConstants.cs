@@ -21,11 +21,7 @@ namespace Empiria.Tests.Procurement {
 
     static internal string CONTRACT_ITEM_PRODUCT_UID = "05ae770b-14cb-4cfe-88fe-cc3b15b7e424";
 
-    static internal string CONTRACT_MILESTONE_PRODUCT_UID = "05ae770b-14cb-4cfe-88fe-cc3b15b7e424";
-
     static internal string CONTRACT_PRODUCT_UNIT_UID = "bdfc9360-6e4c-4e95-85a8-766c6b3571db";
-
-    static internal string CONTRACT_MILESTONE_ITEM_UNIT_UID = "bdfc9360-6e4c-4e95-85a8-766c6b3571db";
 
     static internal string MANAGED_BY_ORG_UNIT_UID = "e387c433-8704-4d27-a8eb-fa1e002b5024";
 
@@ -44,10 +40,6 @@ namespace Empiria.Tests.Procurement {
     static internal string DOCUMENT_UID = "dd72111e-69df-4e21-ba74-d0e64f7e4e54";
 
     static internal string DOCUMENT_TYPE_UID = "05581e90-3bb4-42f4-8629-bf3503b2eda6";
-
-    static internal string CONTRACT_MILESTONE_UID = "ad717126-ce40-4ff4-a5b1-c5ed7cc1f369";
-
-    static internal string CONTRACT_MILESTONE_ITEM_UID = "4d959cbe-06a0-4a24-a14e-e2f1c1b1ffb4";
 
     static internal string CONTRACT_CURRENCY_UID = "358626ea-3c2c-44dd-80b5-18017fe3927e";
 
