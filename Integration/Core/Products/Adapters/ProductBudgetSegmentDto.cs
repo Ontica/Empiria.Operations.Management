@@ -33,6 +33,10 @@ namespace Empiria.Operations.Integration.Products.Adapters {
       get; internal set;
     }
 
+    public string Observations {
+      get; internal set;
+    }
+
   }  // class ProductBudgetSegmentDto
 
 }  // namespace Empiria.Operations.Integration.Products.Adapters

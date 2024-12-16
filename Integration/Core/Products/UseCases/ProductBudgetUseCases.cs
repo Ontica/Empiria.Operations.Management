@@ -44,10 +44,10 @@ namespace Empiria.Operations.Integration.Products.UseCases {
       Assertion.Require(productUID, nameof(productUID));
       Assertion.Require(fields, nameof(fields));
 
-      var product = Product.Parse(productUID);
       var segment = BudgetAccountSegment.Parse(fields.BudgetSegmentUID);
+      var product = Product.Parse(productUID);
 
-      var link = new BudgetAccountSegmentLink(segment, product);
+      var link = new BudgetAccountSegmentLink(segment, product, fields.Observations);
 
       link.Save();
 

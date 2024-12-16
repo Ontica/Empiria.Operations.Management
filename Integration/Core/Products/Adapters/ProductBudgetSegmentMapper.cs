@@ -29,6 +29,7 @@ namespace Empiria.Operations.Integration.Products.Adapters {
         BudgetSegment = link.BudgetAccountSegment.MapToNamedEntity(),
         BudgetSegmentType = link.BudgetAccountSegment.BudgetSegmentType.MapToNamedEntity(),
         BudgetType = link.BudgetAccountSegment.BudgetSegmentType.BudgetType.MapToNamedEntity(),
+        Observations = link.Description,
       };
     }
 
