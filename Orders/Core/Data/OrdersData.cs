@@ -44,11 +44,13 @@ namespace Empiria.Orders.Data {
     }
 
 
-    static internal void WriteOrderItem(OrderItem o, string extensionData) {
+    static internal void WriteOrderItem(PayableOrderItem o, string extensionData) {
       var op = DataOperation.Parse("write_OMS_Order_Item",
                      o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Description,
-                     extensionData,
-                     o.Keywords, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+                     o.Product.Id, o.ProductUnit.Id, o.Quantity, o.UnitPrice, o.Currency.Id,
+                     o.RelatedItemId, o.RequisitionItemId, o.RequesterOrgUnit.Id,
+                     o.BudgetAccount.Id, o.Project.Id, o.Provider.Id, extensionData,
+                     o.Keywords, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }

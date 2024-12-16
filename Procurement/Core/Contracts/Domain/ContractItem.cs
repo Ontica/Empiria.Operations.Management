@@ -123,9 +123,9 @@ namespace Empiria.Procurement.Contracts {
 
 
     [DataField("CONTRACT_ITEM_REQUISITION_ITEM_ID")]
-    public int RequisitionItemId {
+    internal int RequisitionItemId {
       get; private set;
-    }
+    } = -1;
 
 
     [DataField("CONTRACT_ITEM_REQUESTER_ORG_UNIT_ID")]

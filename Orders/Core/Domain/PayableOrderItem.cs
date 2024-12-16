@@ -11,6 +11,8 @@
 using Empiria.Budgeting;
 using Empiria.Financial;
 
+using Empiria.Orders.Data;
+
 namespace Empiria.Orders {
 
   /// <summary>Represents a payable order item.</summary>
@@ -26,7 +28,7 @@ namespace Empiria.Orders {
 
     #endregion Constructors and parsers
 
-    #region Propreties
+    #region Properties
 
     [DataField("ORDER_ITEM_UNIT_PRICE")]
     public decimal UnitPrice {
@@ -58,32 +60,40 @@ namespace Empiria.Orders {
 
     INamedEntity IPayableEntityItem.BudgetAccount {
       get {
-        return BudgetAccount.MapToNamedEntity();
+        return BudgetAccount;
       }
     }
 
 
     INamedEntity IPayableEntityItem.Currency {
       get {
-        return Currency.MapToNamedEntity();
+        return Currency;
       }
     }
 
 
     INamedEntity IPayableEntityItem.Product {
       get {
-        return base.Product.MapToNamedEntity();
+        return base.Product;
       }
     }
 
 
     INamedEntity IPayableEntityItem.Unit {
       get {
-        return base.QuantityUnit.MapToNamedEntity();
+        return base.ProductUnit;
       }
     }
 
     #endregion IPayableEntityItem implementation
+
+    #region Methods
+
+    protected override void OnSave() {
+      OrdersData.WriteOrderItem(this, this.ExtData.ToString());
+    }
+
+    #endregion Methods
 
   }  // class PayableOrderItem
 

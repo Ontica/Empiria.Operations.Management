@@ -14,9 +14,8 @@ using Empiria.Json;
 using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.Products;
+using Empiria.Projects;
 using Empiria.StateEnums;
-
-using Empiria.Orders.Data;
 
 namespace Empiria.Orders {
 
@@ -50,6 +49,12 @@ namespace Empiria.Orders {
     }
 
 
+    [DataField("ORDER_ITEM_DESCRIPTION")]
+    public string Description {
+      get; private set;
+    }
+
+
     string INamedEntity.Name {
       get {
         if (Description.Length != 0) {
@@ -60,14 +65,14 @@ namespace Empiria.Orders {
     }
 
 
-    [DataField("ORDER_ITEM_DESCRIPTION")]
-    public string Description {
+    [DataField("ORDER_ITEM_PRODUCT_ID")]
+    public Product Product {
       get; private set;
     }
 
 
-    [DataField("ORDER_ITEM_PRODUCT_ID")]
-    public Product Product {
+    [DataField("ORDER_ITEM_PRODUCT_UNIT_ID")]
+    public ProductUnit ProductUnit {
       get; private set;
     }
 
@@ -78,19 +83,51 @@ namespace Empiria.Orders {
     }
 
 
-    [DataField("ORDER_ITEM_QTY_UNIT_ID")]
-    public ProductUnit QuantityUnit {
-      get; private set;
-    }
-
     public string Keywords {
       get {
         return EmpiriaString.BuildKeywords(Description, Product.Name);
       }
     }
 
+
+    [DataField("ORDER_ITEM_RELATED_ITEM_ID")]
+    protected internal int RelatedItemId {
+      get; protected set;
+    } = -1;
+
+
+    [DataField("ORDER_ITEM_REQUISITION_ITEM_ID")]
+    internal int RequisitionItemId {
+      get; private set;
+    } = -1;
+
+
+    [DataField("ORDER_ITEM_REQUESTER_ORG_UNIT_ID")]
+    public OrganizationalUnit RequesterOrgUnit {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_PROJECT_ID")]
+    public Project Project {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_PROVIDER_ID")]
+    public Party Provider {
+      get; private set;
+    }
+
+
     [DataField("ORDER_ITEM_EXT_DATA")]
     protected JsonObject ExtData {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_POSITION")]
+    public int Position {
       get; private set;
     }
 
@@ -124,13 +161,11 @@ namespace Empiria.Orders {
     }
 
 
-    protected override void OnSave() {
+    protected override void OnBeforeSave() {
       if (base.IsNew) {
         this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         this.PostingTime = DateTime.Now;
       }
-
-      OrdersData.WriteOrderItem(this, this.ExtData.ToString());
     }
 
     #endregion Methods

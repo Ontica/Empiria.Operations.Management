@@ -27,9 +27,12 @@ namespace Empiria.Procurement.Contracts {
 
     #region Properties
 
-    [DataField("ORDER_ITEM_CONTRACT_ITEM_ID")]
     public ContractItem ContractItem {
-      get; private set;
+      get {
+        return ContractItem.Parse(base.RelatedItemId);
+      } set {
+        base.RelatedItemId = value.Id;
+      }
     }
 
     #endregion Properties
