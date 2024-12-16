@@ -10,7 +10,6 @@
 
 using Empiria.Orders;
 
-using Empiria.Procurement.Contracts.Adapters;
 using Empiria.Procurement.Contracts.Data;
 
 namespace Empiria.Procurement.Contracts {
@@ -48,13 +47,9 @@ namespace Empiria.Procurement.Contracts {
 
     #region Properties
 
+    [DataField("ORDER_CONTRACT_ID")]
     public Contract Contract {
-      get {
-        return Contract.Parse(base.ContractId);
-      }
-      private set {
-        base.ContractId = value.Id;
-      }
+      get; private set;
     }
 
 
@@ -72,6 +67,11 @@ namespace Empiria.Procurement.Contracts {
       Assertion.Require(contractOrderItem, nameof(contractOrderItem));
 
       base.AddItem(contractOrderItem);
+    }
+
+
+    protected override void OnSave() {
+      ContractOrdersData.WriteOrder(this, this.ExtData.ToString());
     }
 
 

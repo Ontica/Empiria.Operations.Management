@@ -11,7 +11,10 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Empiria.Budgeting;
 using Empiria.Financial;
+
+using Empiria.Orders.Data;
 
 namespace Empiria.Orders {
 
@@ -31,6 +34,21 @@ namespace Empiria.Orders {
     static public new PayableOrder Empty => ParseEmpty<PayableOrder>();
 
     #endregion Constructors and parsers
+
+    #region Properties
+
+    [DataField("ORDER_BUDGET_ID")]
+    public Budget Budget {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_CURRENCY_ID")]
+    public Currency Currency {
+      get; private set;
+    }
+
+    #endregion Properties
 
     #region IPayableEntity interface
 
@@ -69,10 +87,17 @@ namespace Empiria.Orders {
       base.AddItem(orderItem);
     }
 
+
     public decimal GetTotal() {
       return base.GetItems<PayableOrderItem>()
                   .Sum(x => x.Total);
     }
+
+
+    protected override void OnSave() {
+      OrdersData.WriteOrder(this, this.ExtData.ToString());
+    }
+
 
     internal protected virtual void RemoveItem(PayableOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));

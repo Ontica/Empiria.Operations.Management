@@ -15,11 +15,8 @@ using System.Linq;
 using Empiria.Json;
 using Empiria.Ontology;
 using Empiria.Parties;
-using Empiria.StateEnums;
-
-using Empiria.Budgeting;
-using Empiria.Financial;
 using Empiria.Projects;
+using Empiria.StateEnums;
 
 using Empiria.Orders.Data;
 
@@ -124,12 +121,6 @@ namespace Empiria.Orders {
     }
 
 
-    [DataField("ORDER_BUDGET_ID")]
-    public Budget Budget {
-      get; private set;
-    }
-
-
     [DataField("ORDER_REQUESTED_BY_ID")]
     public Party RequestedBy {
       get; private set;
@@ -142,20 +133,8 @@ namespace Empiria.Orders {
     } = -1;
 
 
-    [DataField("ORDER_CONTRACT_ID")]
-    protected internal int ContractId {
-      get; set;
-    } = -1;
-
-
     [DataField("ORDER_PROJECT_ID")]
     public Project Project {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_CURRENCY_ID")]
-    public Currency Currency {
       get; private set;
     }
 
@@ -246,14 +225,11 @@ namespace Empiria.Orders {
                          .ToFixedList();
     }
 
-
-    protected override void OnSave() {
+    protected override void OnBeforeSave() {
       if (base.IsNew) {
         this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         this.PostingTime = DateTime.Now;
       }
-
-      OrdersData.WriteOrder(this, this.ExtData.ToString());
     }
 
 

@@ -31,12 +31,12 @@ namespace Empiria.Orders.Data {
     }
 
 
-    static internal void WriteOrder(Order o, string extensionData) {
+    static internal void WriteOrder(PayableOrder o, string extensionData) {
       var op = DataOperation.Parse("write_OMS_Order",
                      o.Id, o.UID, o.OrderType.Id, o.Category.Id, o.OrderNo, o.Description,
                      string.Join(" ", o.Identificators), string.Join(" ", o.Tags),
                      o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
-                     o.Budget.Id, o.RequisitionId, o.ContractId, o.Project.Id, o.Currency.Id,
+                     o.Budget.Id, o.RequisitionId, -1, o.Project.Id, o.Currency.Id,
                      o.Source.Id, (char) o.Priority, extensionData, o.Keywords,
                      o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
