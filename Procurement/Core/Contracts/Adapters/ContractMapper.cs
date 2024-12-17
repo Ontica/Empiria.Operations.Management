@@ -64,6 +64,27 @@ namespace Empiria.Procurement.Contracts.Adapters {
                        .ToFixedList();
     }
 
+    static internal ContractDescriptor MapToDescriptor(Contract contract) {
+      return new ContractDescriptor {
+        UID = contract.UID,
+        ContractCategory = contract.ContractCategory.Name,
+        ContractNo = contract.ContractNo,
+        Name = contract.Name,
+        Description = contract.Description,
+        ManagedByOrgUnit = contract.ManagedByOrgUnit.FullName,
+        Supplier = contract.Supplier.Name,
+        FromDate = contract.FromDate,
+        ToDate = contract.ToDate,
+        SignDate = contract.SignDate,
+        BudgetType = contract.BudgetType.DisplayName,
+        Currency = contract.Currency.Name,
+        MinTotal = contract.MinTotal,
+        MaxTotal = contract.MaxTotal,
+        Total = contract.MaxTotal,
+        StatusName = contract.Status.GetName()
+      };
+    }
+
     #region Helpers
 
     static private ContractActions MapActions(Contract contract) {
@@ -83,28 +104,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
       FixedList<BudgetTransaction> transactions = BudgetTransaction.GetFor(contract);
 
       return BudgetTransactionMapper.MapToDescriptor(transactions);
-    }
-
-
-    static private ContractDescriptor MapToDescriptor(Contract contract) {
-      return new ContractDescriptor {
-        UID = contract.UID,
-        ContractCategory = contract.ContractCategory.Name,
-        ContractNo = contract.ContractNo,
-        Name = contract.Name,
-        Description = contract.Description,
-        ManagedByOrgUnit = contract.ManagedByOrgUnit.FullName,
-        Supplier = contract.Supplier.Name,
-        FromDate = contract.FromDate,
-        ToDate = contract.ToDate,
-        SignDate = contract.SignDate,
-        BudgetType = contract.BudgetType.DisplayName,
-        Currency = contract.Currency.Name,
-        MinTotal = contract.MinTotal,
-        MaxTotal = contract.MaxTotal,
-        Total = contract.MaxTotal,
-        StatusName = contract.Status.GetName()
-      };
     }
 
     #endregion Helpers

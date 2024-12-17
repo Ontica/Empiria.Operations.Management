@@ -22,16 +22,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
 
     static internal ContractOrderDto Map(ContractOrder order) {
-      return new ContractOrderDto {
-        UID = order.UID,
-        Contract = order.Contract.MapToNamedEntity(),
-        OrderNo = order.OrderNo,
-        Description = order.Description,
-        ManagedBy = order.Responsible.MapToNamedEntity(),
-        Provider = order.Provider.MapToNamedEntity(),
-        Total = order.GetTotal(),
-        Status = order.Status.MapToDto()
-      };
+      return new ContractOrderDto(order);
     }
 
 
@@ -75,16 +66,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
 
     static private ContractOrderDescriptor MapToDescriptor(ContractOrder order) {
-      return new ContractOrderDescriptor {
-        UID = order.UID,
-        OrderNo = order.OrderNo,
-        Description = order.Description,
-        ProviderName = order.Provider.Name,
-        BeneficiaryName = order.Beneficiary.Name,
-        ManagedByName = order.Responsible.Name,
-        Total = order.GetTotal(),
-        StatusName = order.Status.GetName()
-      };
+      return new ContractOrderDescriptor(order);
     }
 
     #endregion Helpers
