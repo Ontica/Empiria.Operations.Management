@@ -25,6 +25,10 @@ namespace Empiria.Orders {
 
     #region Constructors and parsers
 
+    protected OrderItem(OrderItemType powertype) : base(powertype) {
+      // Required by Empiria Framework for all partitioned types.
+    }
+
     static private OrderItem Parse(int id) => ParseId<OrderItem>(id);
 
     static private OrderItem Parse(string uid) => ParseKey<OrderItem>(uid);
@@ -102,8 +106,8 @@ namespace Empiria.Orders {
     } = -1;
 
 
-    [DataField("ORDER_ITEM_REQUESTER_ORG_UNIT_ID")]
-    public OrganizationalUnit RequesterOrgUnit {
+    [DataField("ORDER_ITEM_REQUESTED_BY_ID")]
+    public Party RequestedBy {
       get; private set;
     }
 
@@ -118,6 +122,12 @@ namespace Empiria.Orders {
     public Party Provider {
       get; private set;
     }
+
+
+    [DataField("ORDER_ITEM_PER_EACH_ITEM_ID")]
+    internal int PerEachItemId {
+      get; private set;
+    } = -1;
 
 
     [DataField("ORDER_ITEM_EXT_DATA")]

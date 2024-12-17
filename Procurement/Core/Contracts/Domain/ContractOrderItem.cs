@@ -17,6 +17,10 @@ namespace Empiria.Procurement.Contracts {
 
     #region Constructors and parsers
 
+    protected ContractOrderItem(OrderItemType powertype) : base(powertype) {
+      // Required by Empiria Framework for all partitioned types.
+    }
+
     static private ContractOrderItem Parse(int id) => ParseId<ContractOrderItem>(id);
 
     static private ContractOrderItem Parse(string uid) => ParseKey<ContractOrderItem>(uid);

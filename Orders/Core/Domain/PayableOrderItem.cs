@@ -20,6 +20,10 @@ namespace Empiria.Orders {
 
     #region Constructors and parsers
 
+    protected PayableOrderItem(OrderItemType powertype) : base(powertype) {
+      // Required by Empiria Framework for all partitioned types.
+    }
+
     static private PayableOrderItem Parse(int id) => ParseId<PayableOrderItem>(id);
 
     static private PayableOrderItem Parse(string uid) => ParseKey<PayableOrderItem>(uid);
