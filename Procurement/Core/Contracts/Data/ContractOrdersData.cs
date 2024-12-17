@@ -34,7 +34,8 @@ namespace Empiria.Procurement.Contracts.Data {
                      string.Join(" ", o.Identificators), string.Join(" ", o.Tags),
                      o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
                      o.Budget.Id, o.RequisitionId, o.Contract.Id, o.Project.Id, o.Currency.Id,
-                     o.Source.Id, (char) o.Priority, extensionData, o.Keywords,
+                     o.Source.Id, (char) o.Priority, o.AuthorizationTime, o.AuthorizedBy.Id,
+                     o.ClosingTime, o.ClosedBy.Id, extensionData, o.Keywords,
                      o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);

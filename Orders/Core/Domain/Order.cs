@@ -115,6 +115,16 @@ namespace Empiria.Orders {
     }
 
 
+    public bool IsForMultipleBeneficiaries {
+      get {
+        return ExtData.Get("isForMultipleBeneficiaries", false);
+      }
+      set {
+        ExtData.SetIf("isForMultipleBeneficiaries", value, value);
+      }
+    }
+
+
     [DataField("ORDER_PROVIDER_ID")]
     public Party Provider {
       get; private set;
@@ -147,6 +157,30 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_PRIORITY", Default = Priority.Normal)]
     public Priority Priority {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_AUTHORIZATION_TIME")]
+    public DateTime AuthorizationTime {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_AUTHORIZED_BY_ID")]
+    public Party AuthorizedBy {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_CLOSING_TIME")]
+    public DateTime ClosingTime {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_CLOSED_BY_ID")]
+    public Party ClosedBy {
       get; private set;
     }
 

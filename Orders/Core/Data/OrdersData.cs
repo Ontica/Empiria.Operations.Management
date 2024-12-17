@@ -37,7 +37,8 @@ namespace Empiria.Orders.Data {
                      string.Join(" ", o.Identificators), string.Join(" ", o.Tags),
                      o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
                      o.Budget.Id, o.RequisitionId, -1, o.Project.Id, o.Currency.Id,
-                     o.Source.Id, (char) o.Priority, extensionData, o.Keywords,
+                     o.Source.Id, (char) o.Priority, o.AuthorizationTime, o.AuthorizedBy.Id,
+                     o.ClosingTime, o.ClosedBy.Id, extensionData, o.Keywords,
                      o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
@@ -48,8 +49,8 @@ namespace Empiria.Orders.Data {
       var op = DataOperation.Parse("write_OMS_Order_Item",
                      o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Description,
                      o.Product.Id, o.ProductUnit.Id, o.Quantity, o.UnitPrice, o.Currency.Id,
-                     o.RelatedItemId, o.RequisitionItemId, o.RequesterOrgUnit.Id,
-                     o.BudgetAccount.Id, o.Project.Id, o.Provider.Id, extensionData,
+                     o.RelatedItemId, o.RequisitionItemId, o.RequestedBy.Id,
+                     o.BudgetAccount.Id, o.Project.Id, o.Provider.Id, o.PerEachItemId, extensionData,
                      o.Keywords, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
