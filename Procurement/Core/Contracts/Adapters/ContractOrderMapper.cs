@@ -10,9 +10,6 @@
 
 using Empiria.StateEnums;
 
-using Empiria.Documents.Services;
-using Empiria.History.Services;
-
 namespace Empiria.Procurement.Contracts.Adapters {
 
   /// <summary>Provides data mapping services for contract supply orders.</summary>
@@ -30,14 +27,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
         Contract = order.Contract.MapToNamedEntity(),
         OrderNo = order.OrderNo,
         Description = order.Description,
-        ManagedByOrgUnit = order.Responsible.MapToNamedEntity(),
-        Supplier = order.Provider.MapToNamedEntity(),
+        ManagedBy = order.Responsible.MapToNamedEntity(),
+        Provider = order.Provider.MapToNamedEntity(),
         Total = order.GetTotal(),
-        Status = order.Status.MapToDto(),
-        Items = Map(order.GetItems<ContractOrderItem>()),
-        Documents = DocumentServices.GetEntityDocuments(order),
-        History = HistoryServices.GetEntityHistory(order),
-        Actions = MapActions()
+        Status = order.Status.MapToDto()
       };
     }
 
@@ -84,12 +77,11 @@ namespace Empiria.Procurement.Contracts.Adapters {
     static private ContractOrderDescriptor MapToDescriptor(ContractOrder order) {
       return new ContractOrderDescriptor {
         UID = order.UID,
-        ContractUID = order.Contract.UID,
         OrderNo = order.OrderNo,
         Description = order.Description,
-        Provider = order.Provider.Name,
-        Beneficiary = order.Beneficiary.Name,
-        Responsible = order.Responsible.Name,
+        ProviderName = order.Provider.Name,
+        BeneficiaryName = order.Beneficiary.Name,
+        ManagedByName = order.Responsible.Name,
         Total = order.GetTotal(),
         StatusName = order.Status.GetName()
       };
