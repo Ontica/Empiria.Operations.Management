@@ -16,11 +16,11 @@ using Empiria.Json;
 using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.Products;
+using Empiria.Projects;
 using Empiria.StateEnums;
 using Empiria.Time;
 
 using Empiria.Budgeting;
-using Empiria.Projects;
 
 using Empiria.Procurement.Contracts.Data;
 
@@ -36,6 +36,7 @@ namespace Empiria.Procurement.Contracts {
       // Required by Empiria Framework.
     }
 
+
     public ContractItem(ContractItemType contractItemType,
                         Contract contract, ContractItemFields fields) : this(contractItemType) {
       Assertion.Require(contract, nameof(contract));
@@ -45,6 +46,7 @@ namespace Empiria.Procurement.Contracts {
 
       Update(fields);
     }
+
 
     static internal ContractItem Parse(string contractItemUID) => ParseKey<ContractItem>(contractItemUID);
 

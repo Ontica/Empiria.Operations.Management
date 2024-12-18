@@ -25,7 +25,7 @@ namespace Empiria.Procurement.Contracts {
 
     static private ContractOrderItem Parse(string uid) => ParseKey<ContractOrderItem>(uid);
 
-    static internal ContractOrderItem Empty => ParseEmpty<ContractOrderItem>();
+    static internal new ContractOrderItem Empty => ParseEmpty<ContractOrderItem>();
 
     #endregion Constructors and parsers
 

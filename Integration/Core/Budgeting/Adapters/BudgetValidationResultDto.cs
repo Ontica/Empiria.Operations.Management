@@ -16,6 +16,7 @@ namespace Empiria.Operations.Integration.Budgeting.Adapters {
     public string Result {
       get; internal set;
     }
+
   } // class BudgetValidationResultDto
 
 }  // namespace Empiria.Operations.Integration.Budgeting.Adapters

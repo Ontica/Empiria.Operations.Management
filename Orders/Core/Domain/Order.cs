@@ -229,7 +229,7 @@ namespace Empiria.Orders {
     }
 
 
-    internal protected virtual void AddItem(OrderItem orderItem) {
+    public virtual void AddItem(OrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
       Assertion.Require(orderItem.Order.Equals(this), "OrderItem.Order instance mismatch.");
 
@@ -237,7 +237,7 @@ namespace Empiria.Orders {
     }
 
 
-    internal protected virtual void Delete() {
+    public virtual void Delete() {
       Assertion.Require(this.Status == EntityStatus.Active || this.Status == EntityStatus.Suspended,
                   $"No se puede eliminar una orden que está en estado {this.Status.GetName()}.");
 
@@ -267,7 +267,7 @@ namespace Empiria.Orders {
     }
 
 
-    internal protected virtual void RemoveItem(OrderItem orderItem) {
+    public virtual void RemoveItem(OrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
 
       orderItem.Delete();
@@ -278,7 +278,7 @@ namespace Empiria.Orders {
 
     internal protected virtual void Suspend() {
       Assertion.Require(this.Status == EntityStatus.Active,
-                  $"No se puede suspender un contrato que no está activo.");
+                  $"No se puede suspender una orden que no está activa.");
 
       this.Status = EntityStatus.Suspended;
     }

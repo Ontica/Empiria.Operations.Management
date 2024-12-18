@@ -8,8 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
 using System.Collections.Generic;
-
 using Empiria.Data;
 
 namespace Empiria.Orders.Data {
@@ -28,6 +28,22 @@ namespace Empiria.Orders.Data {
       var op = DataOperation.Parse(sql);
 
       return DataReader.GetList<OrderItem>(op);
+    }
+
+
+    static internal FixedList<Order> Search(string filter, string sort) {
+      var sql = "SELECT * FROM OMS_ORDERS";
+
+      if (!string.IsNullOrWhiteSpace(filter)) {
+        sql += $" WHERE {filter}";
+      }
+      if (!string.IsNullOrWhiteSpace(sort)) {
+        sql += $" ORDER BY {sort}";
+      }
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<Order>(op);
     }
 
 
