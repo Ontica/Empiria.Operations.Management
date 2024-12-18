@@ -8,6 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
+
 namespace Empiria.Orders {
 
   /// <summary>Represents an order category which holds orders of the same kind or order type.</summary>
@@ -26,6 +28,13 @@ namespace Empiria.Orders {
     static public FixedList<OrderCategory> GetList() {
       return BaseObject.GetList<OrderCategory>()
                        .ToFixedList();
+    }
+
+    internal static FixedList<OrderCategory> GetListFor(OrderType orderType) {
+      Assertion.Require(orderType, nameof(orderType));
+
+      return BaseObject.GetFullList<OrderCategory>()
+                       .FindAll(x => x.OrderType.Equals(orderType));
     }
 
     static public OrderCategory Empty => ParseEmpty<OrderCategory>();
@@ -50,7 +59,7 @@ namespace Empiria.Orders {
 
     public bool IsAssignable {
       get {
-        return base.ExtendedDataField.Get("isAssignable", IsEmptyInstance ? false : true);
+        return base.ExtendedDataField.Get("isAssignable", true);
       }
     }
 
