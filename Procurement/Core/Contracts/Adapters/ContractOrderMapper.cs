@@ -10,26 +10,38 @@
 
 using Empiria.StateEnums;
 
+using Empiria.Documents.Services;
+using Empiria.History.Services;
+
+using Empiria.Budgeting.Transactions.Adapters;
+using Empiria.Budgeting.Transactions;
+
+using Empiria.Orders.Adapters;
+
 namespace Empiria.Procurement.Contracts.Adapters {
 
   /// <summary>Provides data mapping services for contract supply orders.</summary>
   static internal class ContractOrderMapper {
 
-    static internal FixedList<ContractOrderDto> Map(FixedList<ContractOrder> orders) {
-      return orders.Select(x => Map(x))
-                   .ToFixedList();
-    }
-
-
-    static internal ContractOrderDto Map(ContractOrder order) {
-      return new ContractOrderDto(order);
+    static internal ContractOrderHolderDto Map(ContractOrder order) {
+      return new ContractOrderHolderDto {
+        Order = new ContractOrderDto(order),
+        Items = new FixedList<Orders.OrderItem>(),
+        BudgetTransactions = MapBudgetTransactions(order),
+        Documents = DocumentServices.GetEntityDocuments(order),
+        History = HistoryServices.GetEntityHistory(order),
+        Actions = MapActions(),
+      };
     }
 
 
     static internal FixedList<ContractOrderDescriptor> MapToDescriptor(FixedList<ContractOrder> orders) {
       return orders.Select(x => MapToDescriptor(x))
                    .ToFixedList();
+    }
 
+    static internal ContractOrderDescriptor MapToDescriptor(ContractOrder order) {
+      return new ContractOrderDescriptor(order);
     }
 
 
@@ -58,15 +70,18 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     #region Helpers
 
-    static private BaseActions MapActions() {
-      return new BaseActions {
-        CanEditDocuments = true
+    static private PayableOrderActions MapActions() {
+      return new PayableOrderActions {
+        CanEditDocuments = true,
+        CanRequestBudget = true,
       };
     }
 
 
-    static private ContractOrderDescriptor MapToDescriptor(ContractOrder order) {
-      return new ContractOrderDescriptor(order);
+    static private FixedList<BudgetTransactionDescriptorDto> MapBudgetTransactions(ContractOrder order) {
+      FixedList<BudgetTransaction> transactions = BudgetTransaction.GetFor(order);
+
+      return BudgetTransactionMapper.MapToDescriptor(transactions);
     }
 
     #endregion Helpers

@@ -31,14 +31,9 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public FixedList<ContractOrderDto> Orders {
+    public FixedList<ContractOrderDescriptor> Orders {
       get; internal set;
     }
-
-    // ToDo: Remove
-    public FixedList<object> Milestones {
-      get; internal set;
-    } = new FixedList<object>();
 
     public FixedList<DocumentDto> Documents {
       get; internal set;

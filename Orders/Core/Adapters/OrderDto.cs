@@ -28,15 +28,15 @@ namespace Empiria.Orders.Adapters {
     }
 
     public FixedList<DocumentDto> Documents {
-      get; internal set;
+      get; set;
     }
 
     public FixedList<HistoryDto> History {
-      get; internal set;
+      get; set;
     }
 
-    public PayableOrderActions Actions {
-      get; internal set;
+    public OrderActions Actions {
+      get; set;
     }
 
   }  // class OrderHolderDto

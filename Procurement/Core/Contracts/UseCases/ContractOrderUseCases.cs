@@ -31,7 +31,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
     #region Use cases
 
-    public ContractOrderDto CreateContractOrder(ContractOrderFields fields) {
+    public ContractOrderHolderDto CreateContractOrder(ContractOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();
@@ -48,7 +48,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
     }
 
 
-    public ContractOrderDto GetContractOrder(string contractOrderUID) {
+    public ContractOrderHolderDto GetContractOrder(string contractOrderUID) {
       Assertion.Require(contractOrderUID, nameof(contractOrderUID));
 
       var order = ContractOrder.Parse(contractOrderUID);
@@ -68,7 +68,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
     }
 
 
-    public ContractOrderDto UpdateContractOrder(ContractOrderFields fields) {
+    public ContractOrderHolderDto UpdateContractOrder(ContractOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();

@@ -12,6 +12,12 @@ using Empiria.Orders.Adapters;
 
 namespace Empiria.Procurement.Contracts.Adapters {
 
+  /// <summary>Data transfer object used to return complete contract supply orders information.</summary>
+  public class ContractOrderHolderDto : PayableOrderHolderDto {
+
+  }  // class ContractOrderHolderDto
+
+
   /// <summary>Data transfer object used to return a contract supply order.</summary>
   public class ContractOrderDto : PayableOrderDto {
 
@@ -24,6 +30,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
   }  // class ContractOrderDto
+
 
 
   /// <summary>Output Dto used to return minimal contract supply order data.</summary>

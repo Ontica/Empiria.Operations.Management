@@ -18,3 +18,5 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("Empiria.Orders.Tests")]
+[assembly: InternalsVisibleTo("Empiria.Procurement.Core")]
+[assembly: InternalsVisibleTo("Empiria.Operations.Integration.Core")]
