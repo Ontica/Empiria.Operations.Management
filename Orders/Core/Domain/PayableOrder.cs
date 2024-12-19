@@ -106,9 +106,21 @@ namespace Empiria.Orders {
     }
 
 
-    internal void Update(PayableOrderFields fields) {
+    internal protected void Update(PayableOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
+      fields.EnsureValid();
+
+      if (this.GetItems<PayableOrderItem>().Count != 0 &&
+         (this.Budget.Distinct(Budget.Parse(fields.BudgetUID)) ||
+          this.Currency.Distinct(Currency.Parse(fields.CurrencyUID)))) {
+        Assertion.RequireFail("No es posible cambiar el presupuesto o la moneda, " +
+                              "debido a que la orden tiene registradas uno o más partidas.");
+      }
+      this.Budget = Budget.Parse(fields.BudgetUID);
+      this.Currency = Currency.Parse(fields.CurrencyUID);
+
+      base.Update(fields);
     }
 
     #endregion Methods

@@ -79,7 +79,7 @@ namespace Empiria.Orders {
     } = Priority.Normal;
 
 
-    internal virtual void EnsureIsValid() {
+    internal virtual void EnsureValid() {
       Assertion.Require(OrderTypeUID, nameof(OrderTypeUID));
       Assertion.Require(CategoryUID, nameof(CategoryUID));
       Assertion.Require(Description, nameof(Description));

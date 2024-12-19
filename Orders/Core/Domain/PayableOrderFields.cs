@@ -23,8 +23,8 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
-    internal override void EnsureIsValid() {
-      base.EnsureIsValid();
+    internal override void EnsureValid() {
+      base.EnsureValid();
 
       Assertion.Require(BudgetUID, nameof(BudgetUID));
       Assertion.Require(CurrencyUID, nameof(CurrencyUID));

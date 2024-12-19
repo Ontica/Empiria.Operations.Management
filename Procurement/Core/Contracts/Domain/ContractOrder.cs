@@ -81,13 +81,6 @@ namespace Empiria.Procurement.Contracts {
       base.RemoveItem(contractOrderItem);
     }
 
-
-    internal void Update(ContractOrderFields fields) {
-      Assertion.Require(fields, nameof(fields));
-
-      base.Update(fields);
-    }
-
     #endregion Methods
 
   }  // class ContractOrder

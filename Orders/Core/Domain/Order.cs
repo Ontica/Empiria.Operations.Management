@@ -19,6 +19,7 @@ using Empiria.Projects;
 using Empiria.StateEnums;
 
 using Empiria.Orders.Data;
+using System.Security.Cryptography;
 
 namespace Empiria.Orders {
 
@@ -281,6 +282,24 @@ namespace Empiria.Orders {
                   $"No se puede suspender una orden que no está activa.");
 
       this.Status = EntityStatus.Suspended;
+    }
+
+    internal protected virtual void Update(OrderFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      Category = PatchField(fields.CategoryUID, Category);
+      Description = PatchCleanField(fields.Description, Description);
+      _identificators = string.Join(" ", fields.Identificators);
+      _tags = string.Join(" ", fields.Tags);
+      Responsible = PatchField(fields.ResponsibleUID, Responsible);
+      Beneficiary = PatchField(fields.BeneficiaryUID, Beneficiary);
+      IsForMultipleBeneficiaries = fields.IsForMultipleBeneficiaries;
+      Provider = PatchField(fields.ProviderUID, Provider);
+      RequestedBy = PatchField(fields.RequestedByUID, RequestedBy);
+      Project = PatchField(fields.ProjectUID, Project);
+      Priority = fields.Priority;
     }
 
     #endregion Methods

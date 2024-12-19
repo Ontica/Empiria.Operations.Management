@@ -54,18 +54,19 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
     public OrderHolderDto CreateOrder(ContractOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
+      fields.EnsureValid();
+
       var orderType = OrderType.Parse(fields.OrderTypeUID);
 
       PayableOrder order;
 
-
       if (orderType.Equals(OrderType.ContractOrder)) {
         var contract = Contract.Parse(fields.ContractUID);
         order = new ContractOrder(contract);
-        ((ContractOrder) order).Update(fields);
+        order.Update(fields);
       } else {
         order = new PayableOrder(orderType);
-        order.Update((PayableOrderFields) fields);
+        order.Update(fields);
       }
 
       order.Save();
@@ -124,6 +125,8 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
 
     public OrderHolderDto UpdateOrder(ContractOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
 
       var order = PayableOrder.Parse(fields.UID);
 

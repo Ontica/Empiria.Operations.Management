@@ -34,17 +34,17 @@ namespace Empiria.Procurement.Contracts.UseCases {
     public ContractOrderHolderDto CreateContractOrder(ContractOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      fields.EnsureIsValid();
+      fields.EnsureValid();
 
       var contract = Contract.Parse(fields.ContractUID);
 
-      var contractOrder = new ContractOrder(contract);
+      var order = new ContractOrder(contract);
 
-      //contractOrder.Update(fields);
+      order.Update(fields);
 
-      contractOrder.Save();
+      order.Save();
 
-      return ContractOrderMapper.Map(contractOrder);
+      return ContractOrderMapper.Map(order);
     }
 
 
@@ -57,29 +57,31 @@ namespace Empiria.Procurement.Contracts.UseCases {
     }
 
 
-    public void RemoveContractOrder(string contractOrderUID) {
+    public ContractOrderHolderDto RemoveContractOrder(string contractOrderUID) {
       Assertion.Require(contractOrderUID, nameof(contractOrderUID));
 
       var order = ContractOrder.Parse(contractOrderUID);
 
-      // order.Delete();
+      order.Delete();
 
       order.Save();
+
+      return ContractOrderMapper.Map(order);
     }
 
 
     public ContractOrderHolderDto UpdateContractOrder(ContractOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      fields.EnsureIsValid();
+      fields.EnsureValid();
 
-      var contractOrder = ContractOrder.Parse(fields.UID);
+      var order = ContractOrder.Parse(fields.UID);
 
-      // contractOrder.Update(fields);
+      order.Update(fields);
 
-      contractOrder.Save();
+      order.Save();
 
-      return ContractOrderMapper.Map(contractOrder);
+      return ContractOrderMapper.Map(order);
     }
 
     #endregion Use cases
