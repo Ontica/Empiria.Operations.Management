@@ -8,57 +8,19 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Orders.Adapters;
+
 namespace Empiria.Procurement.Contracts.Adapters {
 
   /// <summary>Data transfer object used to return contract supply order items.</summary>
-  public class ContractOrderItemDto {
+  public class ContractOrderItemDto : PayableOrderItemDto {
 
-    public string UID {
-      get; internal set;
-    }
-
-    public NamedEntityDto Order {
-      get; internal set;
-    }
-
-    public NamedEntityDto OrderType {
-      get; internal set;
+    internal ContractOrderItemDto(ContractOrderItem item) : base(item) {
+      ContractItem = item.ContractItem.MapToNamedEntity();
     }
 
     public NamedEntityDto ContractItem {
-      get; internal set;
-    }
-
-    public string Description {
-      get; internal set;
-    }
-
-    public NamedEntityDto Product {
-      get; internal set;
-    }
-
-    public NamedEntityDto ProductUnit {
-      get; internal set;
-    }
-
-    public decimal Quantity {
-      get; internal set;
-    }
-
-    public decimal UnitPrice {
-      get; internal set;
-    }
-
-    public decimal Total {
-      get; internal set;
-    }
-
-    public NamedEntityDto BudgetAccount {
-      get; internal set;
-    }
-
-    public NamedEntityDto Status {
-      get; internal set;
+      get; private set;
     }
 
   }  // class ContractOrderItemDto

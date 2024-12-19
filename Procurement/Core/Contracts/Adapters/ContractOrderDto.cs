@@ -15,6 +15,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
   /// <summary>Data transfer object used to return complete contract supply orders information.</summary>
   public class ContractOrderHolderDto : PayableOrderHolderDto {
 
+    public new FixedList<ContractOrderItemDto> Items {
+      get; set;
+    }
+
   }  // class ContractOrderHolderDto
 
 

@@ -8,8 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.StateEnums;
-
 using Empiria.Documents.Services;
 using Empiria.History.Services;
 
@@ -26,7 +24,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
     static internal ContractOrderHolderDto Map(ContractOrder order) {
       return new ContractOrderHolderDto {
         Order = new ContractOrderDto(order),
-        Items = new FixedList<Orders.OrderItem>(),
+        Items = Map(order.GetItems<ContractOrderItem>()),
         BudgetTransactions = MapBudgetTransactions(order),
         Documents = DocumentServices.GetEntityDocuments(order),
         History = HistoryServices.GetEntityHistory(order),
@@ -52,20 +50,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
 
     static internal ContractOrderItemDto Map(ContractOrderItem orderItem) {
-      return new ContractOrderItemDto {
-        UID = orderItem.UID,
-        Order = orderItem.Order.MapToNamedEntity(),
-        OrderType = orderItem.Order.OrderType.MapToNamedEntity(),
-        ContractItem = orderItem.ContractItem.MapToNamedEntity(),
-        Description = orderItem.Description,
-        Quantity = orderItem.Quantity,
-        ProductUnit = orderItem.ProductUnit.MapToNamedEntity(),
-        Product = orderItem.Product.MapToNamedEntity(),
-        UnitPrice = orderItem.UnitPrice,
-        BudgetAccount = orderItem.BudgetAccount.MapToNamedEntity(),
-        Status = orderItem.Status.MapToDto()
-      };
-
+      return new ContractOrderItemDto(orderItem);
     }
 
     #region Helpers

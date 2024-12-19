@@ -189,6 +189,7 @@ namespace Empiria.Orders.Adapters {
       ProviderName = order.Provider.Name;
       RequestedByName = order.RequestedBy.Name;
       ProjectName = order.Project.Name;
+      PriorityUID = order.Priority.ToString();
       PriorityName = order.Priority.GetName();
       AuthorizationTime = order.AuthorizationTime;
       AuthorizedByName = order.AuthorizedBy.Name;
@@ -234,6 +235,10 @@ namespace Empiria.Orders.Adapters {
     }
 
     public string ProjectName {
+      get; private set;
+    }
+
+    public string PriorityUID {
       get; private set;
     }
 

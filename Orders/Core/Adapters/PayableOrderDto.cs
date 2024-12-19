@@ -15,6 +15,10 @@ namespace Empiria.Orders.Adapters {
   /// <summary>Data transfer object used to return complete payable orders information.</summary>
   public class PayableOrderHolderDto : OrderHolderDto {
 
+    public new FixedList<PayableOrderItemDto> Items {
+      get; set;
+    }
+
     public FixedList<BudgetTransactionDescriptorDto> BudgetTransactions {
       get; internal set;
     }
@@ -65,7 +69,7 @@ namespace Empiria.Orders.Adapters {
   public class PayableOrderDescriptor : OrderDescriptor {
 
     protected PayableOrderDescriptor(PayableOrder order) : base(order) {
-      BudgetTypeName = order.Budget.BudgetType.Name;
+      BudgetTypeName = order.Budget.BudgetType.DisplayName;
       BudgetName = order.Budget.Name;
       CurrencyName = order.Currency.Name;
       Total = order.GetTotal();
