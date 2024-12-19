@@ -34,7 +34,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
     public ContractOrderHolderDto CreateContractOrder(ContractOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      fields.EnsureValid();
+      fields.EnsureIsValid();
 
       var contract = Contract.Parse(fields.ContractUID);
 
@@ -71,7 +71,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
     public ContractOrderHolderDto UpdateContractOrder(ContractOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      fields.EnsureValid();
+      fields.EnsureIsValid();
 
       var contractOrder = ContractOrder.Parse(fields.UID);
 

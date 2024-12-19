@@ -13,8 +13,10 @@ using System.Web.Http;
 using Empiria.WebApi;
 
 using Empiria.Orders.Adapters;
-using Empiria.Operations.Integration.Orders.Adapters;
 
+using Empiria.Procurement.Contracts;
+
+using Empiria.Operations.Integration.Orders.Adapters;
 using Empiria.Operations.Integration.Orders.UseCases;
 
 namespace Empiria.Operations.Integration.Orders.WebApi {
@@ -32,6 +34,32 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
         OrderHolderDto order = usecases.ActivateOrder(orderUID);
 
         return new SingleObjectModel(base.Request, order);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v8/order-management/orders")]
+    public SingleObjectModel CreateOrder([FromBody] ContractOrderFields fields) {
+
+      base.RequireBody(fields);
+
+      using (var usecases = OrderManagementUseCases.UseCaseInteractor()) {
+        OrderHolderDto order = usecases.CreateOrder(fields);
+
+        return new SingleObjectModel(base.Request, order);
+      }
+    }
+
+
+    [HttpDelete]
+    [Route("v8/order-management/orders/{orderUID:guid}")]
+    public NoDataModel DeleteOrder([FromUri] string orderUID) {
+
+      using (var usecases = OrderManagementUseCases.UseCaseInteractor()) {
+        _ = usecases.DeleteOrder(orderUID);
+
+        return new NoDataModel(base.Request);
       }
     }
 
@@ -68,6 +96,26 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
       using (var usecases = OrderManagementUseCases.UseCaseInteractor()) {
         OrderHolderDto order = usecases.SuspendOrder(orderUID);
+
+        return new SingleObjectModel(base.Request, order);
+      }
+    }
+
+
+    [HttpPut, HttpPatch]
+    [Route("v8/product-management/products/{orderUID:guid}")]
+    public SingleObjectModel UpdateOrder([FromUri] string orderUID,
+                                         [FromBody] ContractOrderFields fields) {
+
+      base.RequireBody(fields);
+
+      Assertion.Require(fields.UID.Length == 0 || fields.UID == orderUID,
+                        "OrderUID mismatch.");
+
+      fields.UID = orderUID;
+
+      using (var usecases = OrderManagementUseCases.UseCaseInteractor()) {
+        OrderHolderDto order = usecases.UpdateOrder(fields);
 
         return new SingleObjectModel(base.Request, order);
       }

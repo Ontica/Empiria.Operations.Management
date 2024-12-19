@@ -23,7 +23,7 @@ namespace Empiria.Orders {
 
     #region Constructors and parsers
 
-    protected PayableOrder(OrderType orderType) : base(orderType) {
+    internal protected PayableOrder(OrderType orderType) : base(orderType) {
       // Required by Empiria Framework for all partitioned types.
     }
 
@@ -103,6 +103,12 @@ namespace Empiria.Orders {
       Assertion.Require(orderItem, nameof(orderItem));
 
       base.RemoveItem(orderItem);
+    }
+
+
+    internal void Update(PayableOrderFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
     }
 
     #endregion Methods

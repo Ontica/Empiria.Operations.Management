@@ -1,7 +1,7 @@
 ﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
 *  Module   : Orders Management Integration                 Component : Use cases Layer                      *
-*  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Use case interactor class            *
+*  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Use case interactor class            *
 *  Type     : OrderManagementUseCases                       License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Use cases used to update and return orders information.                                        *
@@ -12,9 +12,12 @@ using Empiria.Services;
 
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
-using Empiria.Operations.Integration.Orders.Adapters;
-using System;
 using Empiria.Orders.Data;
+
+using Empiria.Procurement.Contracts;
+using Empiria.Procurement.Contracts.Adapters;
+
+using Empiria.Operations.Integration.Orders.Adapters;
 
 namespace Empiria.Operations.Integration.Orders.UseCases {
 
@@ -41,6 +44,42 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
       var order = Order.Parse(orderUID);
 
       order.Activate();
+
+      order.Save();
+
+      return OrderHolderMapper.Map(order);
+    }
+
+
+    public OrderHolderDto CreateOrder(ContractOrderFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      var orderType = OrderType.Parse(fields.OrderTypeUID);
+
+      PayableOrder order;
+
+
+      if (orderType.Equals(OrderType.ContractOrder)) {
+        var contract = Contract.Parse(fields.ContractUID);
+        order = new ContractOrder(contract);
+        ((ContractOrder) order).Update(fields);
+      } else {
+        order = new PayableOrder(orderType);
+        order.Update((PayableOrderFields) fields);
+      }
+
+      order.Save();
+
+      return OrderHolderMapper.Map(order);
+    }
+
+
+    public OrderHolderDto DeleteOrder(string orderUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+
+      var order = Order.Parse(orderUID);
+
+      order.Delete();
 
       order.Save();
 
@@ -77,6 +116,18 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
       var order = Order.Parse(orderUID);
 
       order.Suspend();
+
+      order.Save();
+
+      return OrderHolderMapper.Map(order);
+    }
+
+    public OrderHolderDto UpdateOrder(ContractOrderFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      var order = PayableOrder.Parse(fields.UID);
+
+      order.Update(fields);
 
       order.Save();
 
