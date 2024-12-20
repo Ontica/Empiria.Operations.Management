@@ -8,9 +8,13 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System.Collections.Generic;
+
 using Empiria.Services;
 
 using Empiria.Products;
+using Empiria.Products.SATMexico;
+
 using Empiria.Products.Services;
 using Empiria.Products.Services.Adapters;
 
@@ -76,7 +80,13 @@ namespace Empiria.Operations.Integration.Products.UseCases {
 
       FixedList<Product> products = ProductServices.SearchProducts(keywords);
 
-      return ProductMapper.MapToSearchDescriptor(products);
+      var list = new List<ProductSearchDto>(ProductMapper.MapToSearchDescriptor(products));
+
+      FixedList<SATProductoCucop> cucopProducts = ProductServices.SearchCucopProducts(keywords);
+
+      list.AddRange(ProductMapper.MapToSearchDescriptor(cucopProducts));
+
+      return list.ToFixedList();
     }
 
 
