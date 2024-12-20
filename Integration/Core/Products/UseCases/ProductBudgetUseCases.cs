@@ -47,7 +47,7 @@ namespace Empiria.Operations.Integration.Products.UseCases {
       var segment = BudgetAccountSegment.Parse(fields.BudgetSegmentUID);
       var product = Product.Parse(productUID);
 
-      var link = new BudgetAccountSegmentLink(segment, product, fields.Observations);
+      var link = new BudgetAccountSegmentLink(segment, product, fields.Code, fields.Observations);
 
       link.Save();
 

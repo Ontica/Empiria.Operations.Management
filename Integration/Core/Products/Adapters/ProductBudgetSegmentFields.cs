@@ -18,6 +18,11 @@ namespace Empiria.Operations.Integration.Products.Adapters {
     } = string.Empty;
 
 
+    public string Code {
+      get; set;
+    } = string.Empty;
+
+
     public string Observations {
       get; set;
     } = string.Empty;
