@@ -88,7 +88,7 @@ namespace Empiria.Orders {
     }
 
 
-    [DataField("ORDER_ITEM_QTY")]
+    [DataField("ORDER_ITEM_PRODUCT_QTY")]
     public decimal Quantity {
       get; private set;
     }

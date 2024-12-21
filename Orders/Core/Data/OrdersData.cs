@@ -8,8 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
 using System.Collections.Generic;
+
 using Empiria.Data;
 
 namespace Empiria.Orders.Data {
@@ -63,9 +63,9 @@ namespace Empiria.Orders.Data {
 
     static internal void WriteOrderItem(PayableOrderItem o, string extensionData) {
       var op = DataOperation.Parse("write_OMS_Order_Item",
-                     o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Description,
-                     o.Product.Id, o.ProductUnit.Id, o.Quantity, o.UnitPrice, o.Currency.Id,
-                     o.RelatedItemId, o.RequisitionItemId, o.RequestedBy.Id,
+                     o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Product.Id,
+                     o.Description, o.ProductUnit.Id, o.Quantity, o.UnitPrice, o.Discount,
+                     o.Currency.Id, o.RelatedItemId, o.RequisitionItemId, o.RequestedBy.Id,
                      o.BudgetAccount.Id, o.Project.Id, o.Provider.Id, o.PerEachItemId, extensionData,
                      o.Keywords, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 

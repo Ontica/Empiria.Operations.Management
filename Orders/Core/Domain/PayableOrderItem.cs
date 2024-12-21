@@ -52,6 +52,12 @@ namespace Empiria.Orders {
     }
 
 
+    [DataField("ORDER_ITEM_DISCOUNT")]
+    public decimal Discount {
+      get; private set;
+    }
+
+
     [DataField("ORDER_ITEM_CURRENCY_ID")]
     public Currency Currency {
       get; private set;
@@ -66,7 +72,7 @@ namespace Empiria.Orders {
 
     public decimal Total {
       get {
-        return Quantity * UnitPrice;
+        return (Quantity * UnitPrice) - Discount;
       }
     }
 
@@ -116,6 +122,7 @@ namespace Empiria.Orders {
       fields.EnsureValid();
 
       UnitPrice = fields.UnitPrice;
+      Discount = fields.Discount;
       Currency = PatchField(fields.CurrencyUID, Order.Currency);
       BudgetAccount = BudgetAccount.Parse(fields.BudgetAccountUID);
 
