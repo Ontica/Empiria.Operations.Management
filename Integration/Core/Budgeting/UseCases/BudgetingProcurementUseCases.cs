@@ -20,6 +20,7 @@ using Empiria.Budgeting.Transactions.Adapters;
 using Empiria.Budgeting.Transactions.UseCases;
 
 using Empiria.Operations.Integration.Budgeting.Adapters;
+using Empiria.Procurement.Contracts;
 
 namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
@@ -89,8 +90,17 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       var SISTEMA_DE_ADQUISICIONES = OperationSource.Parse(10);
 
+      int contractId = -1;
+
+      if (payableEntity is Contract contract) {
+        contractId = contract.Id;
+      }
+      if (payableEntity is ContractOrder contractOrder) {
+        contractId = contractOrder.Contract.Id;
+      }
       return new BudgetTransactionFields {
         TransactionTypeUID = transactionType.UID,
+        ContractId = contractId,
         BaseBudgetUID = "f3163d06-10b7-4fe1-8c44-9f10604a6c6b",
         OperationSourceUID = SISTEMA_DE_ADQUISICIONES.UID,
         Description = payableEntity.Name,
