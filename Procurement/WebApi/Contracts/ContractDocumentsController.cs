@@ -45,7 +45,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
       DocumentFields fields = GetFormDataFromHttpRequest<DocumentFields>("document");
 
-      InputFile documentFile = base.GetInputFileFromHttpRequest(fields.DocumentProductUID);
+      InputFile documentFile = base.GetInputFileFromHttpRequest();
 
       var document = DocumentServices.StoreDocument(documentFile, contract, fields);
 
