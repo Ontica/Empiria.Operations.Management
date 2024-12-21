@@ -24,6 +24,11 @@ namespace Empiria.Orders {
       // Required by Empiria Framework for all partitioned types.
     }
 
+    protected internal PayableOrderItem(OrderItemType powertype,
+                                        PayableOrder order) : base(powertype, order) {
+      // no-op
+    }
+
     static private PayableOrderItem Parse(int id) => ParseId<PayableOrderItem>(id);
 
     static private PayableOrderItem Parse(string uid) => ParseKey<PayableOrderItem>(uid);
@@ -33,6 +38,13 @@ namespace Empiria.Orders {
     #endregion Constructors and parsers
 
     #region Properties
+
+    public new PayableOrder Order {
+      get {
+        return (PayableOrder) base.Order;
+      }
+    }
+
 
     [DataField("ORDER_ITEM_UNIT_PRICE")]
     public decimal UnitPrice {
@@ -95,6 +107,19 @@ namespace Empiria.Orders {
 
     protected override void OnSave() {
       OrdersData.WriteOrderItem(this, this.ExtData.ToString());
+    }
+
+
+    internal void Update(PayableOrderItemFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      UnitPrice = fields.UnitPrice;
+      Currency = PatchField(fields.CurrencyUID, Order.Currency);
+      BudgetAccount = BudgetAccount.Parse(fields.BudgetAccountUID);
+
+      base.Update(fields);
     }
 
     #endregion Methods

@@ -83,7 +83,9 @@ namespace Empiria.Procurement.Contracts {
     internal void EnsureValid() {
       Assertion.Require(ProductUID, "Necesito se proporcione el producto.");
       Assertion.Require(ProductUnitUID, "Necesito la unidad de medida del producto.");
-      Assertion.Require(UnitPrice > 0, "Necesito el precio unitario.");
+      Assertion.Require(BudgetAccountUID, "Necesito la cuenta presupuestal a la que aplica el concepto.");
+      Assertion.Require(PeriodicityTypeUID, "Necesito la periodicidad de entrega del producto.");
+      Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");
       Assertion.Require(MinQuantity > 0, "Necesito se proporcione la cantidad mínima.");
       Assertion.Require(MaxQuantity > 0, "Necesito se proporcione la cantidad máxima.");
       Assertion.Require(MinQuantity <= MaxQuantity,

@@ -29,6 +29,14 @@ namespace Empiria.Orders {
       // Required by Empiria Framework for all partitioned types.
     }
 
+
+    protected OrderItem(OrderItemType powertype, Order order) : base(powertype) {
+      Assertion.Require(order, nameof(order));
+      Assertion.Require(!order.IsEmptyInstance, nameof(order));
+
+      this.Order = order;
+    }
+
     static private OrderItem Parse(int id) => ParseId<OrderItem>(id);
 
     static private OrderItem Parse(string uid) => ParseKey<OrderItem>(uid);
@@ -53,6 +61,12 @@ namespace Empiria.Orders {
     }
 
 
+    [DataField("ORDER_ITEM_PRODUCT_ID")]
+    public Product Product {
+      get; private set;
+    }
+
+
     [DataField("ORDER_ITEM_DESCRIPTION")]
     public string Description {
       get; private set;
@@ -68,13 +82,6 @@ namespace Empiria.Orders {
       }
     }
 
-
-    [DataField("ORDER_ITEM_PRODUCT_ID")]
-    public Product Product {
-      get; private set;
-    }
-
-
     [DataField("ORDER_ITEM_PRODUCT_UNIT_ID")]
     public ProductUnit ProductUnit {
       get; private set;
@@ -84,13 +91,6 @@ namespace Empiria.Orders {
     [DataField("ORDER_ITEM_QTY")]
     public decimal Quantity {
       get; private set;
-    }
-
-
-    public string Keywords {
-      get {
-        return EmpiriaString.BuildKeywords(Description, Product.Name);
-      }
     }
 
 
@@ -159,6 +159,13 @@ namespace Empiria.Orders {
       get; private set;
     }
 
+
+    public string Keywords {
+      get {
+        return EmpiriaString.BuildKeywords(Description, Product.Name);
+      }
+    }
+
     #endregion Properties
 
     #region Methods
@@ -176,6 +183,23 @@ namespace Empiria.Orders {
         this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         this.PostingTime = DateTime.Now;
       }
+    }
+
+
+    internal void Update(OrderItemFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      Product = PatchField(fields.ProductUID, Product);
+      Description = EmpiriaString.Clean(fields.Description);
+      ProductUnit = PatchField(fields.ProductUnitUID, ProductUnit);
+      Quantity = fields.Quantity;
+      RequestedBy = PatchField(fields.RequestedByUID, Order.RequestedBy);
+      Project = PatchField(fields.ProjectUID, Order.Project);
+      Provider = PatchField(fields.ProviderUID, Order.Provider);
+
+      MarkAsDirty();
     }
 
     #endregion Methods

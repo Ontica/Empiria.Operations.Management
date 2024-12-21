@@ -21,6 +21,16 @@ namespace Empiria.Procurement.Contracts {
       // Required by Empiria Framework for all partitioned types.
     }
 
+    internal ContractOrderItem(ContractOrder order,
+                               ContractItem contractItem) : base(OrderItemType.ContractOrderItemType, order) {
+
+      Assertion.Require(contractItem, nameof(contractItem));
+
+      _ = order.GetItem<ContractOrderItem>(contractItem.UID);
+
+      this.ContractItem = contractItem;
+    }
+
     static private ContractOrderItem Parse(int id) => ParseId<ContractOrderItem>(id);
 
     static private ContractOrderItem Parse(string uid) => ParseKey<ContractOrderItem>(uid);
@@ -30,6 +40,12 @@ namespace Empiria.Procurement.Contracts {
     #endregion Constructors and parsers
 
     #region Properties
+
+    public new ContractOrder Order {
+      get {
+        return (ContractOrder) base.Order;
+      }
+    }
 
     public ContractItem ContractItem {
       get {
