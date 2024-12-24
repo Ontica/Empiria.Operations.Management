@@ -57,6 +57,29 @@ namespace Empiria.Procurement.Contracts {
 
     #endregion Properties
 
+    #region Methods
+
+    internal void Update(ContractOrderItemFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      var contractItem = ContractItem.Parse(fields.ContractItemUID);
+
+      // ToDo: validate quantity
+
+      fields.ProductUID = contractItem.Product.UID;
+      fields.ProductUnitUID = contractItem.ProductUnit.UID;
+      fields.CurrencyUID = contractItem.Currency.UID;
+      fields.BudgetAccountUID = contractItem.BudgetAccount.UID;
+      fields.Description = PatchCleanField(fields.Description, contractItem.Description);
+      fields.ProjectUID = PatchCleanField(fields.ProjectUID, contractItem.Project.UID);
+
+      base.Update(fields);
+    }
+
+    #endregion Methods
+
   }  // class ContractOrderItem
 
 }  // namespace Empiria.Procurement.Contracts
