@@ -2,7 +2,7 @@
 *                                                                                                            *
 *  Module   : Orders Management Integration                 Component : Use cases Layer                      *
 *  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Use case interactor class            *
-*  Type     : OrderManagementUseCases                       License   : Please read LICENSE.txt file         *
+*  Type     : OrderUseCases                                 License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Use cases used to update and return orders information.                                        *
 *                                                                                                            *
@@ -22,16 +22,16 @@ using Empiria.Operations.Integration.Orders.Adapters;
 namespace Empiria.Operations.Integration.Orders.UseCases {
 
   /// <summary>Use cases used to update and return orders information.</summary>
-  public class OrderManagementUseCases : UseCase {
+  public class OrderUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected OrderManagementUseCases() {
+    protected OrderUseCases() {
       // no-op
     }
 
-    static public OrderManagementUseCases UseCaseInteractor() {
-      return CreateInstance<OrderManagementUseCases>();
+    static public OrderUseCases UseCaseInteractor() {
+      return CreateInstance<OrderUseCases>();
     }
 
     #endregion Constructors and parsers
@@ -139,6 +139,6 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
 
     #endregion Use cases
 
-  }  // class OrderManagementUseCases
+  }  // class OrderUseCases
 
 }  // namespace Empiria.Operations.Integration.Orders.UseCases

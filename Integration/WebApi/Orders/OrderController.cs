@@ -2,7 +2,7 @@
 *                                                                                                            *
 *  Module   : Orders Management Integration                 Component : Web Api Layer                        *
 *  Assembly : Empiria.Operations.Integration.WebApi.dll     Pattern   : Web Api Controller                   *
-*  Type     : OrderManagementController                     License   : Please read LICENSE.txt file         *
+*  Type     : OrderController                               License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Web api used to handle integrated orders.                                                      *
 *                                                                                                            *
@@ -22,7 +22,7 @@ using Empiria.Operations.Integration.Orders.UseCases;
 namespace Empiria.Operations.Integration.Orders.WebApi {
 
   /// <summary>Web api used to handle integrated orders.</summary>
-  public class OrderManagementController : WebApiController {
+  public class OrderController : WebApiController {
 
     #region Web Apis
 
@@ -30,7 +30,7 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     [Route("v8/order-management/orders/{orderUID:guid}/activate")]
     public SingleObjectModel ActivateOrder([FromUri] string orderUID) {
 
-      using (var usecases = OrderManagementUseCases.UseCaseInteractor()) {
+      using (var usecases = OrderUseCases.UseCaseInteractor()) {
         OrderHolderDto order = usecases.ActivateOrder(orderUID);
 
         return new SingleObjectModel(base.Request, order);
@@ -44,7 +44,7 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
       base.RequireBody(fields);
 
-      using (var usecases = OrderManagementUseCases.UseCaseInteractor()) {
+      using (var usecases = OrderUseCases.UseCaseInteractor()) {
         OrderHolderDto order = usecases.CreateOrder(fields);
 
         return new SingleObjectModel(base.Request, order);
@@ -56,7 +56,7 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     [Route("v8/order-management/orders/{orderUID:guid}")]
     public NoDataModel DeleteOrder([FromUri] string orderUID) {
 
-      using (var usecases = OrderManagementUseCases.UseCaseInteractor()) {
+      using (var usecases = OrderUseCases.UseCaseInteractor()) {
         _ = usecases.DeleteOrder(orderUID);
 
         return new NoDataModel(base.Request);
@@ -68,7 +68,7 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     [Route("v8/order-management/orders/{orderUID:guid}")]
     public SingleObjectModel GetOrder([FromUri] string orderUID) {
 
-      using (var usecases = OrderManagementUseCases.UseCaseInteractor()) {
+      using (var usecases = OrderUseCases.UseCaseInteractor()) {
         OrderHolderDto order = usecases.GetOrder(orderUID);
 
         return new SingleObjectModel(base.Request, order);
@@ -82,7 +82,7 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
       base.RequireBody(query);
 
-      using (var usecases = OrderManagementUseCases.UseCaseInteractor()) {
+      using (var usecases = OrderUseCases.UseCaseInteractor()) {
         FixedList<OrderDescriptor> orders = usecases.SearchOrders(query);
 
         return new CollectionModel(base.Request, orders);
@@ -94,7 +94,7 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     [Route("v8/order-management/orders/{orderUID:guid}/suspend")]
     public SingleObjectModel SuspendOrder([FromUri] string orderUID) {
 
-      using (var usecases = OrderManagementUseCases.UseCaseInteractor()) {
+      using (var usecases = OrderUseCases.UseCaseInteractor()) {
         OrderHolderDto order = usecases.SuspendOrder(orderUID);
 
         return new SingleObjectModel(base.Request, order);
@@ -103,7 +103,7 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
 
     [HttpPut, HttpPatch]
-    [Route("v8/product-management/products/{orderUID:guid}")]
+    [Route("v8/order-management/orders/{orderUID:guid}")]
     public SingleObjectModel UpdateOrder([FromUri] string orderUID,
                                          [FromBody] ContractOrderFields fields) {
 
@@ -114,7 +114,7 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
       fields.UID = orderUID;
 
-      using (var usecases = OrderManagementUseCases.UseCaseInteractor()) {
+      using (var usecases = OrderUseCases.UseCaseInteractor()) {
         OrderHolderDto order = usecases.UpdateOrder(fields);
 
         return new SingleObjectModel(base.Request, order);
@@ -123,6 +123,6 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
     #endregion Web Apis
 
-  }  // class OrderManagementController
+  }  // class OrderController
 
 }  // namespace Empiria.Operations.Orders.WebApi
