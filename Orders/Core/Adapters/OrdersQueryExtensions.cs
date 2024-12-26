@@ -1,8 +1,8 @@
-﻿/* Empiria Integrated Operations Management ******************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  Module   : Orders Management Integration                 Component : Adapters Layer                       *
-*  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Query Type Extensions                *
-*  Type     : OrdersQueryExtensions                         License   : Please read LICENSE.txt file         *
+*  Module   : Orders Management                          Component : Adapters Layer                          *
+*  Assembly : Empiria.Orders.Core.dll                    Pattern   : Query Type Extensions                   *
+*  Type     : OrdersQueryExtensions                      License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Extension methods for OrdersQuery type.                                                        *
 *                                                                                                            *
@@ -12,10 +12,9 @@ using Empiria.Parties;
 using Empiria.StateEnums;
 
 using Empiria.Budgeting;
-using Empiria.Orders;
 using Empiria.Projects;
 
-namespace Empiria.Operations.Integration.Orders.Adapters {
+namespace Empiria.Orders.Adapters {
 
   /// <summary>Extension methods for OrdersQuery type.</summary>
   static internal class OrdersQueryExtensions {
@@ -206,6 +205,6 @@ namespace Empiria.Operations.Integration.Orders.Adapters {
 
     #endregion Helpers
 
-  }  // class ContractQueryExtensions
+  }  // class OrdersQueryExtensions
 
-} // namespace Empiria.Operations.Integration.Orders.Adapters
+} // namespace Empiria.Orders.Adapters

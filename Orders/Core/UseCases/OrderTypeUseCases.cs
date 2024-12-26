@@ -1,8 +1,8 @@
-﻿/* Empiria Integrated Operations Management ******************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  Module   : Orders Management Integration                 Component : Use cases Layer                      *
-*  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Use case interactor class            *
-*  Type     : OrderTypeUseCases                             License   : Please read LICENSE.txt file         *
+*  Module   : Orders Management                          Component : Use Cases Layer                         *
+*  Assembly : Empiria.Orders.Core.dll                    Pattern   : Use case interactor class               *
+*  Type     : OrderTypeUseCases                          License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Use cases used to return order types information.                                              *
 *                                                                                                            *
@@ -10,9 +10,7 @@
 
 using Empiria.Services;
 
-using Empiria.Orders;
-
-namespace Empiria.Operations.Integration.Orders.UseCases {
+namespace Empiria.Orders.UseCases {
 
   /// <summary>Use cases used return order types information.</summary>
   public class OrderTypeUseCases : UseCase {
@@ -45,4 +43,4 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
 
   }  // class OrderTypeUseCases
 
-}  // namespace Empiria.Operations.Integration.Orders.UseCases
+}  // namespace Empiria.Orders.UseCases

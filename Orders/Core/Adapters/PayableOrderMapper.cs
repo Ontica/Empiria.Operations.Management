@@ -1,8 +1,8 @@
-﻿/* Empiria Integrated Operations Management ******************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  Module   : Orders Management Integration                 Component : Adapters Layer                       *
-*  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Mapper                               *
-*  Type     : PayableOrderMapper                            License   : Please read LICENSE.txt file         *
+*  Module   : Orders Management                          Component : Adapters Layer                          *
+*  Assembly : Empiria.Orders.Core.dll                    Pattern   : Mapper                                  *
+*  Type     : PayableOrderMapper                         License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Maps payable orders and their order items to their corresponding DTOs.                         *
 *                                                                                                            *
@@ -10,13 +10,11 @@
 
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
+
 using Empiria.Documents.Services;
 using Empiria.History.Services;
 
-using Empiria.Orders;
-using Empiria.Orders.Adapters;
-
-namespace Empiria.Operations.Integration.Orders.Adapters {
+namespace Empiria.Orders.Adapters {
 
   /// <summary>Maps payable orders and their order items to their corresponding DTOs.</summary>
   static public class PayableOrderMapper {
@@ -78,4 +76,4 @@ namespace Empiria.Operations.Integration.Orders.Adapters {
 
   }  // class PayableOrderMapper
 
-}  // namespace Empiria.Operations.Integration.Orders.Adapters
+}  // namespace Empiria.Orders.Adapters

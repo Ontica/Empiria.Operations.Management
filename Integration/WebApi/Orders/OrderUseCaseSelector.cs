@@ -10,12 +10,10 @@
 
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
+using Empiria.Orders.UseCases;
 
 using Empiria.Procurement.Contracts;
 using Empiria.Procurement.Contracts.UseCases;
-
-using Empiria.Operations.Integration.Orders.UseCases;
-using System;
 
 namespace Empiria.Operations.Integration.Orders {
 

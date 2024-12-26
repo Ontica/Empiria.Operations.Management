@@ -1,8 +1,8 @@
-﻿/* Empiria Integrated Operations Management ******************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  Module   : Orders Management Integration                 Component : Adapters Layer                       *
-*  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Query DTO                            *
-*  Type     : OrdersQuery                                   License   : Please read LICENSE.txt file         *
+*  Module   : Orders Management                          Component : Adapters Layer                          *
+*  Assembly : Empiria.Orders.Core.dll                    Pattern   : Query DTO                               *
+*  Type     : OrdersQuery                                License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Query data transfer object used to search orders.                                              *
 *                                                                                                            *
@@ -10,7 +10,7 @@
 
 using Empiria.StateEnums;
 
-namespace Empiria.Operations.Integration.Orders.Adapters {
+namespace Empiria.Orders.Adapters {
 
   /// <summary>Query data transfer object used to search orders.</summary>
   public class OrdersQuery {
@@ -74,6 +74,6 @@ namespace Empiria.Operations.Integration.Orders.Adapters {
       get; set;
     } = string.Empty;
 
-  }  // class ContractQuery
+  }  // class OrdersQuery
 
-} // namespace Empiria.Operations.Integration.Orders.Adapters
+} // namespace namespace Empiria.Orders.Adapters

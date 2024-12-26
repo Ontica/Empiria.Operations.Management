@@ -1,8 +1,8 @@
-﻿/* Empiria Integrated Operations Management ******************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  Module   : Orders Management Integration                 Component : Use cases Layer                      *
-*  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Use case interactor class            *
-*  Type     : PayableOrderUseCases                          License   : Please read LICENSE.txt file         *
+*  Module   : Orders Management                          Component : Use Cases Layer                         *
+*  Assembly : Empiria.Orders.Core.dll                    Pattern   : Use case interactor class               *
+*  Type     : PayableOrderUseCases                       License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Use cases used to update and return payable orders.                                            *
 *                                                                                                            *
@@ -10,13 +10,11 @@
 
 using Empiria.Services;
 
-using Empiria.Orders;
 using Empiria.Orders.Data;
+
 using Empiria.Orders.Adapters;
 
-using Empiria.Operations.Integration.Orders.Adapters;
-
-namespace Empiria.Operations.Integration.Orders.UseCases {
+namespace Empiria.Orders.UseCases {
 
   /// <summary>Use cases used to update and return payable orders.</summary>
   public class PayableOrderUseCases : UseCase {

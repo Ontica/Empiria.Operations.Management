@@ -12,7 +12,7 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
-using Empiria.Operations.Integration.Orders.UseCases;
+using Empiria.Orders.UseCases;
 
 namespace Empiria.Operations.Integration.Orders.WebApi {
 

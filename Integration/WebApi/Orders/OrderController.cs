@@ -15,11 +15,10 @@ using Empiria.WebApi;
 
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
+using Empiria.Orders.UseCases;
 
 using Empiria.Procurement.Contracts;
 
-using Empiria.Operations.Integration.Orders.Adapters;
-using Empiria.Operations.Integration.Orders.UseCases;
 
 namespace Empiria.Operations.Integration.Orders.WebApi {
 
@@ -197,4 +196,4 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
   }  // class OrderController
 
-}  // namespace Empiria.Operations.Orders.WebApi
+}  // namespace Empiria.Operations.Integration.Orders.WebApi
