@@ -57,7 +57,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
     }
 
 
-    public ContractOrderHolderDto RemoveContractOrder(string contractOrderUID) {
+    public ContractOrderHolderDto DeleteContractOrder(string contractOrderUID) {
       Assertion.Require(contractOrderUID, nameof(contractOrderUID));
 
       var order = ContractOrder.Parse(contractOrderUID);
