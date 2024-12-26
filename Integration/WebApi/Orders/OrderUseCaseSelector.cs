@@ -15,6 +15,7 @@ using Empiria.Procurement.Contracts;
 using Empiria.Procurement.Contracts.UseCases;
 
 using Empiria.Operations.Integration.Orders.UseCases;
+using System;
 
 namespace Empiria.Operations.Integration.Orders {
 
@@ -40,6 +41,24 @@ namespace Empiria.Operations.Integration.Orders {
     }
 
 
+    static internal OrderItemDto CreateOrderItem(string orderUID, OrderItemFields orderItemFields) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(orderItemFields, nameof(orderItemFields));
+
+      var order = Order.Parse(orderUID);
+
+      if (order is ContractOrder) {
+        using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
+          return usecases.CreateContractOrderItem(order.UID, (ContractOrderItemFields) orderItemFields);
+        }
+      }
+
+      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
+        return usecases.CreateOrderItem(order.UID, (PayableOrderItemFields) orderItemFields);
+      }
+    }
+
+
     static internal OrderHolderDto DeleteOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
@@ -53,6 +72,24 @@ namespace Empiria.Operations.Integration.Orders {
 
       using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
         return usecases.DeleteOrder(order.UID);
+      }
+    }
+
+
+    static internal OrderItemDto DeleteOrderItem(string orderUID, string orderItemUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(orderItemUID, nameof(orderItemUID));
+
+      var order = Order.Parse(orderUID);
+
+      if (order is ContractOrder) {
+        using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
+          return usecases.DeleteContractOrderItem(order.UID, orderItemUID);
+        }
+      }
+
+      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
+        return usecases.DeleteOrderItem(order.UID, orderItemUID);
       }
     }
 
@@ -89,6 +126,25 @@ namespace Empiria.Operations.Integration.Orders {
 
       using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
         return usecases.UpdateOrder((PayableOrderFields) fields);
+      }
+    }
+
+
+    static internal OrderItemDto UpdateOrderItem(string orderUID, string orderItemUID, OrderItemFields fields) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(orderItemUID, nameof(orderItemUID));
+      Assertion.Require(fields, nameof(fields));
+
+      var order = Order.Parse(orderUID);
+
+      if (order is ContractOrder) {
+        using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
+          return usecases.UpdateContractOrderItem(order.UID, orderItemUID, (ContractOrderItemFields) fields);
+        }
+      }
+
+      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
+        return usecases.UpdateOrderItem(order.UID, orderItemUID, (PayableOrderItemFields) fields);
       }
     }
 

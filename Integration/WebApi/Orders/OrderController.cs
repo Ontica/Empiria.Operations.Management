@@ -44,8 +44,6 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     [Route("v8/order-management/orders")]
     public SingleObjectModel CreateOrder([FromBody] object fields) {
 
-      base.RequireBody(fields);
-
       OrderFields orderFields = MapToOrderFields(fields);
 
       OrderHolderDto order = OrderUseCaseSelector.CreateOrder(orderFields);
@@ -54,11 +52,35 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     }
 
 
+    [HttpPost]
+    [Route("v8/order-management/orders/{orderUID:guid}/items")]
+    public SingleObjectModel CreateOrderItem([FromUri] string orderUID,
+                                             [FromBody] object fields) {
+
+      OrderItemFields orderItemFields = MapToOrderItemFields(orderUID, fields);
+
+      OrderItemDto orderItem = OrderUseCaseSelector.CreateOrderItem(orderUID, orderItemFields);
+
+      return new SingleObjectModel(base.Request, orderItem);
+    }
+
+
     [HttpDelete]
     [Route("v8/order-management/orders/{orderUID:guid}")]
     public NoDataModel DeleteOrder([FromUri] string orderUID) {
 
       _ = OrderUseCaseSelector.DeleteOrder(orderUID);
+
+      return new NoDataModel(base.Request);
+    }
+
+
+    [HttpDelete]
+    [Route("v8/order-management/orders/{orderUID:guid}/items/{orderItemUID:guid}")]
+    public NoDataModel DeleteOrderItem([FromUri] string orderUID,
+                                       [FromUri] string orderItemUID) {
+
+      _ = OrderUseCaseSelector.DeleteOrderItem(orderUID, orderItemUID);
 
       return new NoDataModel(base.Request);
     }
@@ -81,7 +103,7 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
       base.RequireBody(query);
 
       using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
-        FixedList<OrderDescriptor> orders = usecases.SearchOrders(query);
+        FixedList<PayableOrderDescriptor> orders = usecases.SearchOrders(query);
 
         return new CollectionModel(base.Request, orders);
       }
@@ -105,8 +127,6 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     public SingleObjectModel UpdateOrder([FromUri] string orderUID,
                                          [FromBody] object fields) {
 
-      base.RequireBody(fields);
-
       OrderFields orderFields = MapToOrderFields(fields);
 
       Assertion.Require(orderFields.UID.Length == 0 || orderFields.UID == orderUID,
@@ -117,6 +137,21 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
       OrderHolderDto order = OrderUseCaseSelector.UpdateOrder(orderFields);
 
       return new SingleObjectModel(base.Request, order);
+    }
+
+
+    [HttpPut, HttpPatch]
+    [Route("v8/order-management/orders/{orderUID:guid}/items/{orderItemUID:guid}")]
+    public SingleObjectModel UpdateOrderItem([FromUri] string orderUID,
+                                             [FromUri] string orderItemUID,
+                                             [FromBody] object fields) {
+
+      OrderItemFields orderItemFields = MapToOrderItemFields(orderUID, fields);
+
+      OrderItemDto orderItem = OrderUseCaseSelector.UpdateOrderItem(orderUID, orderItemUID,
+                                                                    orderItemFields);
+
+      return new SingleObjectModel(base.Request, orderItem);
     }
 
     #endregion Web Apis
@@ -139,6 +174,22 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
       } else {
         return JsonConverter.ToObject<PayableOrderFields>(json.ToString());
+      }
+    }
+
+
+    private OrderItemFields MapToOrderItemFields(string orderUID, object fields) {
+
+      base.RequireBody(fields);
+
+      JsonObject json = base.GetJsonFromBody(fields);
+
+      var order = Order.Parse(orderUID);
+
+      if (order is ContractOrder) {
+        return JsonConverter.ToObject<ContractOrderItemFields>(json.ToString());
+      } else {
+        return JsonConverter.ToObject<PayableOrderItemFields>(json.ToString());
       }
     }
 
