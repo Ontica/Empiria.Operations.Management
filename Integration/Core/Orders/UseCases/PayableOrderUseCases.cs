@@ -2,36 +2,33 @@
 *                                                                                                            *
 *  Module   : Orders Management Integration                 Component : Use cases Layer                      *
 *  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Use case interactor class            *
-*  Type     : OrderUseCases                                 License   : Please read LICENSE.txt file         *
+*  Type     : PayableOrderUseCases                          License   : Please read LICENSE.txt file         *
 *                                                                                                            *
-*  Summary  : Use cases used to update and return orders information.                                        *
+*  Summary  : Use cases used to update and return payable orders.                                            *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.Services;
 
 using Empiria.Orders;
-using Empiria.Orders.Adapters;
 using Empiria.Orders.Data;
-
-using Empiria.Procurement.Contracts;
-using Empiria.Procurement.Contracts.Adapters;
+using Empiria.Orders.Adapters;
 
 using Empiria.Operations.Integration.Orders.Adapters;
 
 namespace Empiria.Operations.Integration.Orders.UseCases {
 
-  /// <summary>Use cases used to update and return orders information.</summary>
-  public class OrderUseCases : UseCase {
+  /// <summary>Use cases used to update and return payable orders.</summary>
+  public class PayableOrderUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected OrderUseCases() {
+    protected PayableOrderUseCases() {
       // no-op
     }
 
-    static public OrderUseCases UseCaseInteractor() {
-      return CreateInstance<OrderUseCases>();
+    static public PayableOrderUseCases UseCaseInteractor() {
+      return CreateInstance<PayableOrderUseCases>();
     }
 
     #endregion Constructors and parsers
@@ -41,7 +38,7 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
     public OrderHolderDto ActivateOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
-      var order = Order.Parse(orderUID);
+      var order = PayableOrder.Parse(orderUID);
 
       order.Activate();
 
@@ -51,23 +48,17 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
     }
 
 
-    public OrderHolderDto CreateOrder(ContractOrderFields fields) {
+    public OrderHolderDto CreateOrder(PayableOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
+      Assertion.Require(fields.OrderTypeUID, nameof(fields.OrderTypeUID));
 
       fields.EnsureValid();
 
       var orderType = OrderType.Parse(fields.OrderTypeUID);
 
-      PayableOrder order;
+      var order = new PayableOrder(orderType);
 
-      if (orderType.Equals(OrderType.ContractOrder)) {
-        var contract = Contract.Parse(fields.ContractUID);
-        order = new ContractOrder(contract);
-        order.Update(fields);
-      } else {
-        order = new PayableOrder(orderType);
-        order.Update(fields);
-      }
+      order.Update(fields);
 
       order.Save();
 
@@ -78,7 +69,7 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
     public OrderHolderDto DeleteOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
-      var order = Order.Parse(orderUID);
+      var order = PayableOrder.Parse(orderUID);
 
       order.Delete();
 
@@ -91,7 +82,7 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
     public OrderHolderDto GetOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
-      var order = Order.Parse(orderUID);
+      var order = PayableOrder.Parse(orderUID);
 
       return OrderHolderMapper.Map(order);
     }
@@ -114,7 +105,7 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
     public OrderHolderDto SuspendOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
-      var order = Order.Parse(orderUID);
+      var order = PayableOrder.Parse(orderUID);
 
       order.Suspend();
 
@@ -123,7 +114,8 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
       return OrderHolderMapper.Map(order);
     }
 
-    public OrderHolderDto UpdateOrder(ContractOrderFields fields) {
+
+    public OrderHolderDto UpdateOrder(PayableOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();
@@ -139,6 +131,6 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
 
     #endregion Use cases
 
-  }  // class OrderUseCases
+  }  // class PayableOrderUseCases
 
 }  // namespace Empiria.Operations.Integration.Orders.UseCases
