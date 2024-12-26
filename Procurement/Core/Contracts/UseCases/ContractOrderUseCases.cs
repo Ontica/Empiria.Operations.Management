@@ -48,12 +48,22 @@ namespace Empiria.Procurement.Contracts.UseCases {
     }
 
 
-    public ContractOrderHolderDto GetContractOrder(string contractOrderUID) {
-      Assertion.Require(contractOrderUID, nameof(contractOrderUID));
+    public ContractOrderItemDto CreateContractOrderItem(string orderUID, ContractOrderItemFields fields) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(fields, nameof(fields));
 
-      var order = ContractOrder.Parse(contractOrderUID);
+      var contractOrder = ContractOrder.Parse(orderUID);
+      var contractItem = ContractItem.Parse(fields.ContractItemUID);
 
-      return ContractOrderMapper.Map(order);
+      var item = new ContractOrderItem(contractOrder, contractItem);
+
+      item.Update(fields);
+
+      contractOrder.AddItem(item);
+
+      item.Save();
+
+      return ContractOrderMapper.Map(item);
     }
 
 
@@ -65,6 +75,31 @@ namespace Empiria.Procurement.Contracts.UseCases {
       order.Delete();
 
       order.Save();
+
+      return ContractOrderMapper.Map(order);
+    }
+
+
+    public ContractOrderItemDto DeleteContractOrderItem(string orderUID, string orderItemUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(orderItemUID, nameof(orderItemUID));
+
+      var order = ContractOrder.Parse(orderUID);
+
+      var item = order.GetItem<ContractOrderItem>(orderItemUID);
+
+      order.RemoveItem(item);
+
+      item.Save();
+
+      return ContractOrderMapper.Map(item);
+    }
+
+
+    public ContractOrderHolderDto GetContractOrder(string contractOrderUID) {
+      Assertion.Require(contractOrderUID, nameof(contractOrderUID));
+
+      var order = ContractOrder.Parse(contractOrderUID);
 
       return ContractOrderMapper.Map(order);
     }
@@ -82,6 +117,24 @@ namespace Empiria.Procurement.Contracts.UseCases {
       order.Save();
 
       return ContractOrderMapper.Map(order);
+    }
+
+
+    public ContractOrderItemDto UpdateContractOrderItem(string orderUID,
+                                                        string orderItemUID,
+                                                        ContractOrderItemFields fields) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(fields, nameof(fields));
+
+      var order = ContractOrder.Parse(orderUID);
+
+      var item = order.GetItem<ContractOrderItem>(orderItemUID);
+
+      item.Update(fields);
+
+      item.Save();
+
+      return ContractOrderMapper.Map(item);
     }
 
     #endregion Use cases

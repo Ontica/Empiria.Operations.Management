@@ -4,7 +4,7 @@
 *  Assembly : Empiria.Procurement.Core.dll               Pattern   : Mapper                                  *
 *  Type     : ContractOrderMapper                        License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Provides data mapping services for contract supply orders.                                     *
+*  Summary  : Provides data mapping services for procurement contract orders.                                *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -18,7 +18,7 @@ using Empiria.Orders.Adapters;
 
 namespace Empiria.Procurement.Contracts.Adapters {
 
-  /// <summary>Provides data mapping services for contract supply orders.</summary>
+  /// <summary>Provides data mapping services for procurement contract orders.</summary>
   static internal class ContractOrderMapper {
 
     static internal ContractOrderHolderDto Map(ContractOrder order) {
@@ -28,7 +28,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         BudgetTransactions = MapBudgetTransactions(order),
         Documents = DocumentServices.GetEntityDocuments(order),
         History = HistoryServices.GetEntityHistory(order),
-        Actions = MapActions(),
+        Actions = MapActions(order),
       };
     }
 
@@ -55,10 +55,15 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     #region Helpers
 
-    static private PayableOrderActions MapActions() {
+    static private PayableOrderActions MapActions(ContractOrder order) {
       return new PayableOrderActions {
         CanEditDocuments = true,
         CanRequestBudget = true,
+        CanActivate = true,
+        CanDelete = true,
+        CanEditItems = true,
+        CanSuspend = true,
+        CanUpdate = true,
       };
     }
 
