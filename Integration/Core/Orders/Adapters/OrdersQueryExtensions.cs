@@ -23,7 +23,7 @@ namespace Empiria.Operations.Integration.Orders.Adapters {
     #region Extension Methods
 
     static internal void EnsureIsValid(this OrdersQuery query) {
-      // no - op
+      Assertion.Require(query.OrderTypeUID, nameof(query.OrderTypeUID));
     }
 
     static internal string MapToFilterString(this OrdersQuery query) {
@@ -147,13 +147,9 @@ namespace Empiria.Operations.Integration.Orders.Adapters {
 
 
     static private string BuildOrderTypeFilter(string orderTypeUID) {
-      if (orderTypeUID == string.Empty) {
-        return string.Empty;
-      }
-
       var orderType = OrderType.Parse(orderTypeUID);
 
-      return $"ORDER_TYPE_ID = {orderType.Id}";
+      return $"ORDER_TYPE_ID IN ({orderType.GetAllSubclassesFilter()})";
     }
 
 
