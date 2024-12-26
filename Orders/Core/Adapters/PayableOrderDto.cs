@@ -38,7 +38,7 @@ namespace Empiria.Orders.Adapters {
   /// <summary>Data transfer object used to return payable orders information.</summary>
   public class PayableOrderDto : OrderDto {
 
-    protected PayableOrderDto(PayableOrder order) : base(order) {
+    protected internal PayableOrderDto(PayableOrder order) : base(order) {
       BudgetType = order.Budget.BudgetType.MapToNamedEntity();
       Budget = order.Budget.MapToNamedEntity();
       Currency = order.Currency.MapToNamedEntity();
@@ -68,7 +68,7 @@ namespace Empiria.Orders.Adapters {
   /// <summary>Output Dto used to return minimal payable order data.</summary>
   public class PayableOrderDescriptor : OrderDescriptor {
 
-    protected PayableOrderDescriptor(PayableOrder order) : base(order) {
+    protected internal PayableOrderDescriptor(PayableOrder order) : base(order) {
       BudgetTypeName = order.Budget.BudgetType.DisplayName;
       BudgetName = order.Budget.Name;
       CurrencyName = order.Currency.Name;

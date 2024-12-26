@@ -35,7 +35,7 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
 
     #region Use cases
 
-    public OrderHolderDto ActivateOrder(string orderUID) {
+    public PayableOrderHolderDto ActivateOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
       var order = PayableOrder.Parse(orderUID);
@@ -44,11 +44,11 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
 
       order.Save();
 
-      return OrderHolderMapper.Map(order);
+      return PayableOrderMapper.Map(order);
     }
 
 
-    public OrderHolderDto CreateOrder(PayableOrderFields fields) {
+    public PayableOrderHolderDto CreateOrder(PayableOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
       Assertion.Require(fields.OrderTypeUID, nameof(fields.OrderTypeUID));
 
@@ -62,11 +62,29 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
 
       order.Save();
 
-      return OrderHolderMapper.Map(order);
+      return PayableOrderMapper.Map(order);
     }
 
 
-    public OrderHolderDto DeleteOrder(string orderUID) {
+    public PayableOrderItemDto CreateOrderItem(string orderUID, PayableOrderItemFields fields) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(fields, nameof(fields));
+
+      var order = PayableOrder.Parse(orderUID);
+
+      var item = new PayableOrderItem(OrderItemType.PurchaseOrderItemType, order);
+
+      item.Update(fields);
+
+      order.AddItem(item);
+
+      item.Save();
+
+      return PayableOrderMapper.Map(item);
+    }
+
+
+    public PayableOrderHolderDto DeleteOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
       var order = PayableOrder.Parse(orderUID);
@@ -75,20 +93,36 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
 
       order.Save();
 
-      return OrderHolderMapper.Map(order);
+      return PayableOrderMapper.Map(order);
     }
 
 
-    public OrderHolderDto GetOrder(string orderUID) {
+    public PayableOrderItemDto DeleteOrderItem(string orderUID, string orderItemUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(orderItemUID, nameof(orderItemUID));
+
+      var order = PayableOrder.Parse(orderUID);
+
+      var item = order.GetItem<PayableOrderItem>(orderItemUID);
+
+      order.RemoveItem(item);
+
+      item.Save();
+
+      return PayableOrderMapper.Map(item);
+    }
+
+
+    public PayableOrderHolderDto GetOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
       var order = PayableOrder.Parse(orderUID);
 
-      return OrderHolderMapper.Map(order);
+      return PayableOrderMapper.Map(order);
     }
 
 
-    public FixedList<OrderDescriptor> SearchOrders(OrdersQuery query) {
+    public FixedList<PayableOrderDescriptor> SearchOrders(OrdersQuery query) {
       Assertion.Require(query, nameof(query));
 
       query.EnsureIsValid();
@@ -98,11 +132,11 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
 
       FixedList<Order> orders = OrdersData.Search(filter, sort);
 
-      return OrderHolderMapper.Map(orders);
+      return PayableOrderMapper.Map(orders);
     }
 
 
-    public OrderHolderDto SuspendOrder(string orderUID) {
+    public PayableOrderHolderDto SuspendOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
       var order = PayableOrder.Parse(orderUID);
@@ -111,11 +145,11 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
 
       order.Save();
 
-      return OrderHolderMapper.Map(order);
+      return PayableOrderMapper.Map(order);
     }
 
 
-    public OrderHolderDto UpdateOrder(PayableOrderFields fields) {
+    public PayableOrderHolderDto UpdateOrder(PayableOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();
@@ -126,7 +160,24 @@ namespace Empiria.Operations.Integration.Orders.UseCases {
 
       order.Save();
 
-      return OrderHolderMapper.Map(order);
+      return PayableOrderMapper.Map(order);
+    }
+
+
+    public PayableOrderItemDto UpdateOrderItem(string orderUID, string orderItemUID,
+                                               PayableOrderItemFields fields) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(fields, nameof(fields));
+
+      var order = PayableOrder.Parse(orderUID);
+
+      var item = order.GetItem<PayableOrderItem>(orderItemUID);
+
+      item.Update(fields);
+
+      item.Save();
+
+      return PayableOrderMapper.Map(item);
     }
 
     #endregion Use cases
