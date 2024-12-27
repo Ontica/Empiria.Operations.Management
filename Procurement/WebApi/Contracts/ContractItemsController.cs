@@ -37,6 +37,21 @@ namespace Empiria.Procurement.Contracts.WebApi {
     }
 
 
+    [HttpGet]
+    [Route("v8/procurement/contracts/{contractUID:guid}/items/to-order")]
+    public CollectionModel GetContractItemsToOrder([FromUri] string contractUID,
+                                                   [FromUri] string keywords = "") {
+
+      keywords = keywords ?? string.Empty;
+
+      using (var usecases = ContractItemUseCases.UseCaseInteractor()) {
+        FixedList<ContractItemDto> itemsToOrder = usecases.GetContractItemsToOrder(contractUID, keywords);
+
+        return new CollectionModel(base.Request, itemsToOrder);
+      }
+    }
+
+
     [HttpDelete]
     [Route("v8/procurement/contracts/{contractUID:guid}/items/{contractItemUID:guid}")]
     public NoDataModel RemoveContractItem([FromUri] string contractUID,
