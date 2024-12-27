@@ -26,7 +26,7 @@ namespace Empiria.Procurement.Contracts {
 
       Assertion.Require(contractItem, nameof(contractItem));
 
-      _ = order.GetItem<ContractOrderItem>(contractItem.UID);
+      _ = order.Contract.GetItem(contractItem.UID);
 
       this.ContractItem = contractItem;
     }
