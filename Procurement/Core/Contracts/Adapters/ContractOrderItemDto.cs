@@ -16,10 +16,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
   public class ContractOrderItemDto : PayableOrderItemDto {
 
     internal ContractOrderItemDto(ContractOrderItem item) : base(item) {
-      ContractItem = item.ContractItem.MapToNamedEntity();
+      ContractItem = ContractItemMapper.Map(item.ContractItem);
     }
 
-    public NamedEntityDto ContractItem {
+    public ContractItemDto ContractItem {
       get; private set;
     }
 
