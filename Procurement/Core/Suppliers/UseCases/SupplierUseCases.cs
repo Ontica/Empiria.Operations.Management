@@ -10,9 +10,14 @@
 
 using Empiria.Services;
 
+using Empiria.Parties;
+
 using Empiria.Procurement.Contracts;
 using Empiria.Procurement.Contracts.Data;
 using Empiria.Procurement.Contracts.Adapters;
+
+using Empiria.Procurement.Suppliers.Adapters;
+using Empiria.Procurement.Suppliers.Data;
 
 namespace Empiria.Procurement.Suppliers.UseCases {
 
@@ -33,11 +38,11 @@ namespace Empiria.Procurement.Suppliers.UseCases {
 
     #region Use cases
 
-     internal FixedList<ContractDto> GetSupplierContractsToOrder(string supplierUID) {
+    public FixedList<ContractDto> GetSupplierContractsToOrder(string supplierUID) {
       Assertion.Require(supplierUID, nameof(supplierUID));
 
       var query = new ContractQuery {
-         SupplierUID = supplierUID
+        SupplierUID = supplierUID
       };
 
       string filter = query.MapToFilterString();
@@ -47,6 +52,18 @@ namespace Empiria.Procurement.Suppliers.UseCases {
       FixedList<Contract> contracts = ContractData.GetContracts(filter, sortBy);
 
       return ContractMapper.MapContracts(contracts);
+    }
+
+
+    public FixedList<SupplierDescriptor> SearchSuppliers(SuppliersQuery query) {
+      Assertion.Require(query, nameof(query));
+
+      string filter = query.MapToFilterString();
+      string sortBy = query.MapToSortString();
+
+      FixedList<Party> suppliers = SuppliersData.GetSuppliers(filter, sortBy);
+
+      return SupplierMapper.Map(suppliers);
     }
 
     #endregion Use cases
