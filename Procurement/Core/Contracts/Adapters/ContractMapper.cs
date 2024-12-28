@@ -59,10 +59,18 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
 
+    static internal FixedList<ContractDto> MapContracts(FixedList<Contract> contracts) {
+      return contracts.Select(x => MapContract(x))
+                      .ToFixedList();
+    }
+
+
     static internal FixedList<ContractDescriptor> MapToDescriptor(FixedList<Contract> contracts) {
       return contracts.Select(contract => MapToDescriptor(contract))
                        .ToFixedList();
     }
+
+
 
     static internal ContractDescriptor MapToDescriptor(Contract contract) {
       return new ContractDescriptor {
