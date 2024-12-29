@@ -25,6 +25,9 @@ namespace Empiria.Orders {
 
     internal protected PayableOrder(OrderType orderType) : base(orderType) {
       // Required by Empiria Framework for all partitioned types.
+
+      base.OrderNo = EmpiriaString.BuildRandomString(8)
+                                  .ToUpperInvariant();
     }
 
     static public new PayableOrder Parse(int id) => ParseId<PayableOrder>(id);
@@ -66,7 +69,7 @@ namespace Empiria.Orders {
 
     INamedEntity IPayableEntity.PayTo {
       get {
-        return base.Beneficiary;
+        return base.Provider;
       }
     }
 
