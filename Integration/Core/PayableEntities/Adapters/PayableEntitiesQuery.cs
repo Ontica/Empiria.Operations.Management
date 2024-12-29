@@ -13,6 +13,11 @@ namespace Empiria.Payments.Payables.Adapters {
   /// <summary>Input query DTO used to retrive payable entities.</summary>
   public class PayableEntitiesQuery {
 
+    public string OrganizationalUnitUID {
+      get; set;
+    } = string.Empty;
+
+
     public string PayableTypeUID {
       get; set;
     } = string.Empty;
