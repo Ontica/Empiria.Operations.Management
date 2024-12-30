@@ -28,7 +28,6 @@ namespace Empiria.Procurement.Contracts {
       Assertion.Require(!contract.IsEmptyInstance, nameof(contract));
 
       Contract = contract;
-      OrderNo = EmpiriaString.BuildRandomString(16);
     }
 
     static internal new ContractOrder Parse(int id) => ParseId<ContractOrder>(id);
@@ -71,6 +70,10 @@ namespace Empiria.Procurement.Contracts {
 
 
     protected override void OnSave() {
+      if (IsNew) {
+        OrderNo = ContractOrdersData.GetNextContractOrderNo(Contract);
+      }
+
       ContractOrdersData.WriteOrder(this, this.ExtData.ToString());
     }
 

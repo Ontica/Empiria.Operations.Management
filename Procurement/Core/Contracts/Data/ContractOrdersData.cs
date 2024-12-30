@@ -28,6 +28,33 @@ namespace Empiria.Procurement.Contracts.Data {
     }
 
 
+    static internal string GetNextContractOrderNo(Contract contract) {
+      Assertion.Require(contract, nameof(contract));
+
+      string sql = "SELECT MAX(ORDER_NO) " +
+                   "FROM OMS_ORDERS " +
+                  $"WHERE ORDER_CONTRACT_ID = {contract.Id} AND " +
+                  $"ORDER_NO LIKE '{contract.ContractNo} - %' AND " +
+                  $"ORDER_STATUS <> 'X'";
+
+      string lastOrderNo = DataReader.GetScalar(DataOperation.Parse(sql), string.Empty);
+
+      if (string.IsNullOrWhiteSpace(lastOrderNo)) {
+        return $"{contract.ContractNo} - 01";
+      }
+
+      var lastNumber = lastOrderNo.Substring(lastOrderNo.Length - 2);
+
+      if (EmpiriaString.IsInteger(lastNumber)) {
+        int number = EmpiriaString.ToInteger(lastNumber) + 1;
+
+        return $"{contract.ContractNo} - {number.ToString("00")}";
+      }
+
+      return $"{contract.ContractNo} - 01";
+    }
+
+
     static internal void WriteOrder(ContractOrder o, string extensionData) {
       var op = DataOperation.Parse("write_OMS_Order",
                      o.Id, o.UID, o.OrderType.Id, o.Category.Id, o.OrderNo, o.Description,
