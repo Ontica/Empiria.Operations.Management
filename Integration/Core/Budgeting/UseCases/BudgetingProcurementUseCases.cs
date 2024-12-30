@@ -101,10 +101,10 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
       return new BudgetTransactionFields {
         TransactionTypeUID = transactionType.UID,
         ContractId = contractId,
-        BaseBudgetUID = "f3163d06-10b7-4fe1-8c44-9f10604a6c6b",
+        BaseBudgetUID = payableEntity.Budget.UID,
         OperationSourceUID = SISTEMA_DE_ADQUISICIONES.UID,
         Description = payableEntity.Name,
-        BasePartyUID = "f7ca6769-b771-4371-9ee2-a7710bf4291f",
+        BasePartyUID = payableEntity.OrganizationalUnit.UID,
         RequestedByUID = Party.ParseWithContact(ExecutionServer.CurrentContact).UID,
         ApplicationDate = DateTime.Today
       };

@@ -73,6 +73,41 @@ namespace Empiria.Orders {
       }
     }
 
+    INamedEntity IPayableEntity.OrganizationalUnit {
+      get {
+        return this.Responsible;
+      }
+    }
+
+
+    INamedEntity IPayableEntity.Currency {
+      get {
+        return this.Currency;
+      }
+    }
+
+
+    decimal IPayableEntity.Total {
+      get {
+        return this.GetTotal();
+      }
+    }
+
+
+    INamedEntity IPayableEntity.Budget {
+      get {
+        return this.Budget;
+      }
+    }
+
+
+    INamedEntity IPayableEntity.Project {
+      get {
+        return this.Project;
+      }
+    }
+
+
     IEnumerable<IPayableEntityItem> IPayableEntity.Items {
       get {
         return base.GetItems<PayableOrderItem>()

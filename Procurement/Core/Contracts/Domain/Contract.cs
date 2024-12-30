@@ -15,6 +15,7 @@ using System.Linq;
 using Empiria.Json;
 using Empiria.Ontology;
 using Empiria.Parties;
+using Empiria.Projects;
 using Empiria.StateEnums;
 using Empiria.Financial;
 
@@ -40,16 +41,11 @@ namespace Empiria.Procurement.Contracts {
       // Required by Empiria Framework.
     }
 
-    static internal Contract Parse(int contractId) {
-      return BaseObject.ParseId<Contract>(contractId);
-    }
+    static internal Contract Parse(int contractId) => ParseId<Contract>(contractId);
 
+    static public Contract Parse(string contractUID) => ParseKey<Contract>(contractUID);
 
-    static public Contract Parse(string contractUID) {
-      return BaseObject.ParseKey<Contract>(contractUID);
-    }
-
-    static public Contract Empty => BaseObject.ParseEmpty<Contract>();
+    static public Contract Empty => ParseEmpty<Contract>();
 
     protected override void OnLoad() {
       _items = new Lazy<List<ContractItem>>(() => ContractItemData.GetContractItems(this));
@@ -238,6 +234,39 @@ namespace Empiria.Procurement.Contracts {
       }
     }
 
+
+    INamedEntity IPayableEntity.OrganizationalUnit {
+      get {
+        return this.ManagedByOrgUnit;
+      }
+    }
+
+
+    INamedEntity IPayableEntity.Currency {
+      get {
+        return this.Currency;
+      }
+    }
+
+
+    decimal IPayableEntity.Total {
+      get {
+        return this.MaxTotal;
+      }
+    }
+
+    INamedEntity IPayableEntity.Budget {
+      get {
+        return Budget.Empty;
+      }
+    }
+
+
+    INamedEntity IPayableEntity.Project {
+      get {
+        return Project.Empty;
+      }
+    }
 
     IEnumerable<IPayableEntityItem> IPayableEntity.Items {
       get {
