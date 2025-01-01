@@ -10,8 +10,9 @@
 
 using Empiria.Services;
 
+using Empiria.Orders;
+
 using Empiria.Payments.Payables.Adapters;
-using Empiria.Procurement.Contracts;
 
 namespace Empiria.Payments.Payables.Services {
 
@@ -41,7 +42,7 @@ namespace Empiria.Payments.Payables.Services {
 
       var payableType = PayableType.Parse(query.PayableTypeUID);
 
-      var orders = BaseObject.GetFullList<ContractOrder>()
+      var orders = BaseObject.GetFullList<PayableOrder>()
                              .ToFixedList()
                              .FindAll(x => x.Status != StateEnums.EntityStatus.Deleted);
 

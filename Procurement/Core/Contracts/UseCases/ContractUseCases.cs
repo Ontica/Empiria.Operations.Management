@@ -79,10 +79,10 @@ namespace Empiria.Procurement.Contracts.UseCases {
     public FixedList<ContractDescriptor> SearchContracts(ContractQuery query) {
       Assertion.Require(query, nameof(query));
 
-      string condition = query.MapToFilterString();
-      string orderBy = query.MapToSortString();
+      string filter = query.MapToFilterString();
+      string sortBy = query.MapToSortString();
 
-      FixedList<Contract> contracts = ContractData.GetContracts(condition, orderBy);
+      FixedList<Contract> contracts = ContractData.GetContracts(filter, sortBy);
 
       return ContractMapper.MapToDescriptor(contracts);
     }

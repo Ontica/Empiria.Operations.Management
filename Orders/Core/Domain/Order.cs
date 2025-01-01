@@ -19,7 +19,6 @@ using Empiria.Projects;
 using Empiria.StateEnums;
 
 using Empiria.Orders.Data;
-using System.Security.Cryptography;
 
 namespace Empiria.Orders {
 
@@ -239,7 +238,7 @@ namespace Empiria.Orders {
 
 
     public virtual void Delete() {
-      Assertion.Require(this.Status == EntityStatus.Active || this.Status == EntityStatus.Suspended,
+      Assertion.Require(this.Status == EntityStatus.Pending,
                   $"No se puede eliminar una orden que está en estado {this.Status.GetName()}.");
 
       this.Status = EntityStatus.Deleted;

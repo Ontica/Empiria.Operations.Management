@@ -26,6 +26,8 @@ namespace Empiria.Payments.Payables.WebApi {
     [Route("v2/payments-management/payable-entities/search")]
     public CollectionModel SearchPayableEntities([FromBody] PayableEntitiesQuery query) {
 
+      base.RequireBody(query);
+
       using (var services = PayableEntityServices.ServiceInteractor()) {
         FixedList<PayableEntityDto> payableEntities = services.SearchPayableEntities(query);
 

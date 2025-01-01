@@ -221,7 +221,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-
   } // class ContractDescriptor
 
 }  // namespace Empiria.Procurement.Contracts.Adapters
