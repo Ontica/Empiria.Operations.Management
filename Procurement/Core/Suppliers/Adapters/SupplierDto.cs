@@ -8,7 +8,35 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Documents.Services.Adapters;
+using Empiria.History.Services.Adapters;
+
+using Empiria.Financial.Adapters;
+
 namespace Empiria.Procurement.Suppliers.Adapters {
+
+  /// <summary>Holds full information for a supplier.</summary>
+  public class SupplierHolderDto {
+
+    public SupplierDescriptor Supplier {
+      get; internal set;
+    }
+
+    public FixedList<PaymentAccountDto> PaymentAccounts {
+      get; internal set;
+    }
+
+    public FixedList<DocumentDto> Documents {
+      get; internal set;
+    }
+
+    public FixedList<HistoryDto> History {
+      get; internal set;
+    }
+
+  }  // class SupplierHolderDto
+
+
 
   /// <summary>Output DTO used to return minimal suppliers data to be used in lists.</summary>
   public class SupplierDescriptor {

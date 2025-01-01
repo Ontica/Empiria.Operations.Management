@@ -11,19 +11,34 @@
 using Empiria.Parties;
 using Empiria.StateEnums;
 
+using Empiria.Documents.Services;
+using Empiria.History.Services;
+using Empiria.Financial.Services;
+
 namespace Empiria.Procurement.Suppliers.Adapters {
 
   /// <summary>Maps suppliers to their DTOs.</summary>
   static internal class SupplierMapper {
 
+    static internal SupplierHolderDto Map(Party supplier) {
+      return new SupplierHolderDto {
+         Supplier = MapToDescriptor(supplier),
+         PaymentAccounts = PaymentAccountServices.GetPaymentAccounts(supplier.UID),
+         Documents = DocumentServices.GetEntityDocuments(supplier),
+         History = HistoryServices.GetEntityHistory(supplier),
+      };
+    }
+
+
     static internal FixedList<SupplierDescriptor> Map(FixedList<Party> suppliers) {
-      return suppliers.Select(x => Map(x))
+      return suppliers.Select(x => MapToDescriptor(x))
                       .ToFixedList();
     }
 
+
     #region Helpers
 
-    static private SupplierDescriptor Map(Party party) {
+    static private SupplierDescriptor MapToDescriptor(Party party) {
 
       if (party is Organization) {
         return MapOrganization((Organization) party);

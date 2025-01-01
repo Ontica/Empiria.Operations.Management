@@ -24,6 +24,29 @@ namespace Empiria.Procurement.Suppliers.WebApi {
 
     #region Query web apis
 
+    [HttpGet]
+    [Route("v8/procurement/suppliers/{supplierUID:guid}/contracts/to-order")]
+    public CollectionModel GetSupplierContractsToOrder([FromUri] string supplierUID) {
+
+      using (var usecases = SupplierUseCases.UseCaseInteractor()) {
+        FixedList<ContractDto> contracts = usecases.GetSupplierContractsToOrder(supplierUID);
+
+        return new CollectionModel(base.Request, contracts);
+      }
+    }
+
+
+    [HttpGet]
+    [Route("v8/procurement/suppliers/{supplierUID:guid}")]
+    public SingleObjectModel GetSupplier([FromUri] string supplierUID) {
+
+      using (var usecases = SupplierUseCases.UseCaseInteractor()) {
+        SupplierHolderDto supplier = usecases.GetSupplier(supplierUID);
+
+        return new SingleObjectModel(base.Request, supplier);
+      }
+    }
+
 
     [HttpPost]
     [Route("v8/procurement/suppliers/search")]
@@ -35,18 +58,6 @@ namespace Empiria.Procurement.Suppliers.WebApi {
         FixedList<SupplierDescriptor> suppliers = usecases.SearchSuppliers(query);
 
         return new CollectionModel(base.Request, suppliers);
-      }
-    }
-
-
-    [HttpGet]
-    [Route("v8/procurement/suppliers/{supplierUID:guid}/contracts/to-order")]
-    public CollectionModel GetSupplierContractsToOrder([FromUri] string supplierUID) {
-
-      using (var usecases = SupplierUseCases.UseCaseInteractor()) {
-        FixedList<ContractDto> contracts = usecases.GetSupplierContractsToOrder(supplierUID);
-
-        return new CollectionModel(base.Request, contracts);
       }
     }
 

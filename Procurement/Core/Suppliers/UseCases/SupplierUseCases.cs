@@ -55,6 +55,15 @@ namespace Empiria.Procurement.Suppliers.UseCases {
     }
 
 
+    public SupplierHolderDto GetSupplier(string supplierUID) {
+      Assertion.Require(supplierUID, nameof(supplierUID));
+
+      var supplier = Party.Parse(supplierUID);
+
+      return SupplierMapper.Map(supplier);
+    }
+
+
     public FixedList<SupplierDescriptor> SearchSuppliers(SuppliersQuery query) {
       Assertion.Require(query, nameof(query));
 
