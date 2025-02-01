@@ -49,7 +49,7 @@ namespace Empiria.Procurement.Suppliers.Adapters {
       get; internal set;
     }
 
-    public string SupplierTypeName {
+    public string TypeName {
       get; internal set;
     }
 

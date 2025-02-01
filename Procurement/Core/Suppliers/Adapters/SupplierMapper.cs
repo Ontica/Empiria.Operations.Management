@@ -58,7 +58,7 @@ namespace Empiria.Procurement.Suppliers.Adapters {
       return new SupplierDescriptor {
         UID = group.UID,
         TypeUID = group.PartyType.UID,
-        SupplierTypeName = "Grupo de proveedores",
+        TypeName = "Grupo de proveedores",
         Name = group.Name,
         CommonName = string.Empty,
         TaxCode = "N/A",
@@ -72,7 +72,7 @@ namespace Empiria.Procurement.Suppliers.Adapters {
       return new SupplierDescriptor {
         UID = person.UID,
         TypeUID = person.PartyType.UID,
-        SupplierTypeName = "Persona física",
+        TypeName = "Persona física",
         Name = person.Name,
         CommonName = string.Empty,
         TaxCode = person.TaxData.TaxCode,
@@ -86,7 +86,7 @@ namespace Empiria.Procurement.Suppliers.Adapters {
       return new SupplierDescriptor {
         UID = organization.UID,
         TypeUID = organization.PartyType.UID,
-        SupplierTypeName = "Persona moral",
+        TypeName = "Persona moral",
         Name = organization.Name,
         CommonName = organization.CommonName,
         TaxCode = organization.TaxData.TaxCode,
