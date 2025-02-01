@@ -13,6 +13,7 @@ using System;
 using Empiria.Documents.Services.Adapters;
 using Empiria.History.Services.Adapters;
 
+using Empiria.Budgeting.Adapters;
 using Empiria.Budgeting.Transactions.Adapters;
 
 namespace Empiria.Procurement.Contracts.Adapters {
@@ -126,7 +127,11 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto BudgetType {
+    public BudgetTypeDto BudgetType {
+      get; internal set;
+    }
+
+    public FixedList<NamedEntityDto> Budgets {
       get; internal set;
     }
 

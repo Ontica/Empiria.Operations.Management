@@ -210,6 +210,16 @@ namespace Empiria.Procurement.Contracts {
       get; private set;
     }
 
+
+    public FixedList<Budget> Budgets {
+      get {
+        Predicate<Budget> canRequest = x => x.CanRequest;
+
+        return this.BudgetType.GetBudgets(FromDate, ToDate, canRequest)
+                              .Sort((x,y) => x.Year.CompareTo(y.Year));
+      }
+    }
+
     #endregion Properties
 
     #region IPayableEntity implementation
@@ -257,7 +267,9 @@ namespace Empiria.Procurement.Contracts {
 
     INamedEntity IPayableEntity.Budget {
       get {
-        return Budget.Empty;
+        var budgets = BudgetType.GetBudgets(FromDate, ToDate);
+
+        return budgets.Count != 0 ? budgets[0] : Budget.Empty;
       }
     }
 
@@ -369,7 +381,7 @@ namespace Empiria.Procurement.Contracts {
 
 
     internal bool CanRequestBudget() {
-      return CanUpdate();
+      return CanUpdate() && Budgets.Count != 0;
     }
 
 

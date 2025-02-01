@@ -8,11 +8,12 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.StateEnums;
+
 using Empiria.Documents.Services;
 using Empiria.History.Services;
 
-using Empiria.StateEnums;
-
+using Empiria.Budgeting.Adapters;
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 
@@ -46,7 +47,8 @@ namespace Empiria.Procurement.Contracts.Adapters {
                                 group.Members.MapToNamedEntityList() : new FixedList<NamedEntityDto>(),
         ManagedByOrgUnit = contract.ManagedByOrgUnit.MapToNamedEntity(),
         IsForMultipleOrgUnits = contract.IsForMultipleOrgUnits,
-        BudgetType = contract.BudgetType.MapToNamedEntity(),
+        BudgetType = BudgetTypeMapper.Map(contract.BudgetType, contract.Budgets),
+        Budgets = contract.Budgets.MapToNamedEntityList(),
         FromDate = contract.FromDate,
         ToDate = contract.ToDate,
         SignDate = contract.SignDate,
