@@ -68,7 +68,8 @@ namespace Empiria.Procurement.Contracts.UseCases {
       var contract = Contract.Parse(contractUID);
       var budget = Budget.Parse(budgetUID);
 
-      FixedList<ContractItem> items = contract.GetItems(); // ToDo: FindAll(x => x.Budget.Equals(budget));
+      FixedList<ContractItem> items = contract.GetItems()
+                                              .FindAll(x => x.Budget.Equals(budget));
 
       return ContractItemMapper.Map(items);
     }
