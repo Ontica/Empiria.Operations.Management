@@ -13,7 +13,6 @@ using Empiria.StateEnums;
 using Empiria.Documents.Services;
 using Empiria.History.Services;
 
-using Empiria.Budgeting.Adapters;
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 
@@ -47,7 +46,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
                                 group.Members.MapToNamedEntityList() : new FixedList<NamedEntityDto>(),
         ManagedByOrgUnit = contract.ManagedByOrgUnit.MapToNamedEntity(),
         IsForMultipleOrgUnits = contract.IsForMultipleOrgUnits,
-        BudgetType = BudgetTypeMapper.Map(contract.BudgetType, contract.Budgets),
+        BudgetType = contract.BudgetType.MapToNamedEntity(),
         Budgets = contract.Budgets.MapToNamedEntityList(),
         FromDate = contract.FromDate,
         ToDate = contract.ToDate,

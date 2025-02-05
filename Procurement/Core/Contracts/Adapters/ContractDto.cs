@@ -127,7 +127,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public BudgetTypeDto BudgetType {
+    public NamedEntityDto BudgetType {
       get; internal set;
     }
 
