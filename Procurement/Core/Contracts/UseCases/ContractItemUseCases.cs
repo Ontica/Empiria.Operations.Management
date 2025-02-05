@@ -12,6 +12,7 @@ using Empiria.Services;
 
 using Empiria.Procurement.Contracts.Adapters;
 using System;
+using Empiria.Budgeting;
 
 namespace Empiria.Procurement.Contracts.UseCases {
 
@@ -59,13 +60,15 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
 
     public FixedList<ContractItemDto> GetContractItemsToOrder(string contractUID,
+                                                              string budgetUID,
                                                               string keywords) {
       Assertion.Require(contractUID, nameof(contractUID));
       keywords = keywords ?? string.Empty;
 
       var contract = Contract.Parse(contractUID);
+      var budget = Budget.Parse(budgetUID);
 
-      FixedList<ContractItem> items = contract.GetItems();
+      FixedList<ContractItem> items = contract.GetItems(); // ToDo: FindAll(x => x.Budget.Equals(budget));
 
       return ContractItemMapper.Map(items);
     }
