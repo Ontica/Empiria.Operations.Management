@@ -111,7 +111,7 @@ namespace Empiria.Operations.Integration.Products.UseCases {
 
       var product = Product.Parse(query.ProductUID);
       var orgUnit = OrganizationalUnit.Parse(query.OrgUnitUID);
-      var budgetType = BudgetType.Parse(query.BudgetTypeUID);
+      var budget = Budget.Parse(query.BudgetUID);
 
       var segments = BudgetAccountSegmentLink.GetBudgetAccountSegmentsForProduct(product);
 
@@ -119,7 +119,7 @@ namespace Empiria.Operations.Integration.Products.UseCases {
         return new FixedList<NamedEntityDto>();
       }
 
-      var searcher = new BudgetAccountSearcher(budgetType);
+      var searcher = new BudgetAccountSearcher(budget.BudgetType);
 
       FixedList<BudgetAccount> accounts = searcher.Search(orgUnit, segments);
 

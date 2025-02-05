@@ -19,7 +19,7 @@ namespace Empiria.Operations.Integration.Budgeting.Adapters {
     } = string.Empty;
 
 
-    public string BudgetTypeUID {
+    public string BudgetUID {
       get; set;
     } = string.Empty;
 
@@ -37,7 +37,7 @@ namespace Empiria.Operations.Integration.Budgeting.Adapters {
 
     static internal void EnsureValid(this BudgetAccountsForProductQuery query) {
       Assertion.Require(query.ProductUID, nameof(query.ProductUID));
-      Assertion.Require(query.BudgetTypeUID, nameof(query.BudgetTypeUID));
+      Assertion.Require(query.BudgetUID, nameof(query.BudgetUID));
       Assertion.Require(query.OrgUnitUID, nameof(query.OrgUnitUID));
     }
   }
