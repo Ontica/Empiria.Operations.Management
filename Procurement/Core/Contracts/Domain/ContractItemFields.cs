@@ -60,6 +60,11 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
+    public string BudgetUID {
+      get; set;
+    } = string.Empty;
+
+
     public string BudgetAccountUID {
       get; set;
     } = string.Empty;
@@ -83,6 +88,7 @@ namespace Empiria.Procurement.Contracts {
     internal void EnsureValid() {
       Assertion.Require(ProductUID, "Necesito se proporcione el producto.");
       Assertion.Require(ProductUnitUID, "Necesito la unidad de medida del producto.");
+      Assertion.Require(BudgetUID, "Necesito el presupuesto al que aplica el concepto.");
       Assertion.Require(BudgetAccountUID, "Necesito la cuenta presupuestal a la que aplica el concepto.");
       Assertion.Require(PeriodicityTypeUID, "Necesito la periodicidad de entrega del producto.");
       Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");

@@ -136,6 +136,12 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
+    [DataField("CONTRACT_ITEM_BUDGET_ID")]
+    public Budget Budget {
+      get; private set;
+    }
+
+
     [DataField("CONTRACT_ITEM_BUDGET_ACCOUNT_ID")]
     public BudgetAccount BudgetAccount {
       get; private set;
@@ -315,6 +321,7 @@ namespace Empiria.Procurement.Contracts {
       this.Currency = PatchField(fields.CurrencyUID, Contract.Currency);
       this.RequisitionItemId = -1;
       this.RequesterOrgUnit = PatchField(fields.RequesterOrgUnitUID, Contract.ManagedByOrgUnit);
+      this.Budget = PatchField(fields.BudgetUID, Budget);
       this.BudgetAccount = PatchField(fields.BudgetAccountUID, BudgetAccount);
       this.Project = PatchField(fields.ProjectUID, Project.Empty);
       this.Supplier = PatchField(fields.SupplierUID, Contract.Supplier);

@@ -57,6 +57,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
+    public NamedEntityDto Budget {
+      get; internal set;
+    }
+
     public NamedEntityDto BudgetAccount {
       get; internal set;
     }

@@ -31,6 +31,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         MaxQuantity = contractItem.MaxQuantity,
         UnitPrice = contractItem.UnitPrice,
         RequesterOrgUnit = contractItem.RequesterOrgUnit.MapToNamedEntity(),
+        Budget = contractItem.Budget.MapToNamedEntity(),
         BudgetAccount = contractItem.BudgetAccount.MapToNamedEntity(),
         Project = contractItem.Project.MapToNamedEntity(),
         Supplier = contractItem.Supplier.MapToNamedEntity(),
