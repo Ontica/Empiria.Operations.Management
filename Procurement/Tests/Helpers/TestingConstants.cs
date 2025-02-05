@@ -17,6 +17,8 @@ namespace Empiria.Tests.Procurement {
 
     static internal string CONTRACT_TYPE_UID = "c64ee45d-6a1b-4ee6-925b-b77c4527b077";
 
+    static internal string CONTRACT_BUDGET_UID = "eb64f764-a808-49df-a132-436daef2d68c";
+
     static internal string CONTRACT_ITEM_UID = "bf596018-7f37-4c09-95a8-f3f6d9fac24a";
 
     static internal string CONTRACT_ITEM_PRODUCT_UID = "05ae770b-14cb-4cfe-88fe-cc3b15b7e424";

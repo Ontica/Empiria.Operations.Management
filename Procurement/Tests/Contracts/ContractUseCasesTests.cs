@@ -44,13 +44,11 @@ namespace Empiria.Tests.Procurement.Contracts {
         ContractCategoryUID = TestingConstants.CONTRACT_TYPE_UID,
         ContractNo = "DAGA/146/2023",
         Name = "BANOBRAS-2023-O-00ABCD",
-        Description = "Fábrica de Software 2023-2024",
+        Description = "Fábrica de Software 2023-2025",
         CurrencyUID = TestingConstants.CONTRACT_CURRENCY_UID,
-        FromDate = new DateTime(2023, 11, 07),
-        ToDate = new DateTime(2024, 12, 31),
-        SignDate = new DateTime(2023, 11, 07),
         ManagedByOrgUnitUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
         BudgetTypeUID = TestingConstants.CONTRACT_BUDGET_TYPE_UID,
+        BudgetsUIDs = new string[] { TestingConstants.CONTRACT_BUDGET_UID },
         SupplierUID = TestingConstants.SUPPLIER_UID,
       };
 

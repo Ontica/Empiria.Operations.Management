@@ -213,10 +213,10 @@ namespace Empiria.Procurement.Contracts {
 
     public FixedList<Budget> Budgets {
       get {
-        Predicate<Budget> canRequest = x => x.CanRequest;
-
-        return this.BudgetType.GetBudgets(FromDate, ToDate, canRequest)
-                              .Sort((x,y) => x.Year.CompareTo(y.Year));
+        return ExtData.GetFixedList<Budget>("budgets", false);
+      }
+      private set {
+        ExtData.Set("budgets", value.Select(x => x.Id).ToArray());
       }
     }
 
@@ -267,9 +267,7 @@ namespace Empiria.Procurement.Contracts {
 
     INamedEntity IPayableEntity.Budget {
       get {
-        var budgets = BudgetType.GetBudgets(FromDate, ToDate);
-
-        return budgets.Count != 0 ? budgets[0] : Budget.Empty;
+        return Budgets.Count != 0 ? Budgets[0] : Budget.Empty;
       }
     }
 
@@ -381,7 +379,7 @@ namespace Empiria.Procurement.Contracts {
 
 
     internal bool CanRequestBudget() {
-      return CanUpdate() && Budgets.Count != 0;
+      return CanUpdate() && Budgets.Count(x => x.CanRequest) != 0;
     }
 
 
@@ -453,6 +451,7 @@ namespace Empiria.Procurement.Contracts {
       ToDate = fields.ToDate;
       SignDate = fields.SignDate;
       BudgetType = BudgetType.Parse(fields.BudgetTypeUID);
+      Budgets = fields.BudgetsUIDs.Select(x => Budget.Parse(x)).ToFixedList();
       Currency = PatchField(fields.CurrencyUID, Currency);
 
       if (Supplier.Distinct(lastSupplier)) {

@@ -41,6 +41,11 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
+    public string[] BudgetsUIDs {
+      get; set;
+    } = new string[0];
+
+
     public string ManagedByOrgUnitUID {
       get; set;
     } = string.Empty;
@@ -85,7 +90,9 @@ namespace Empiria.Procurement.Contracts {
       Assertion.Require(ContractCategoryUID, "Necesito la clasificación o categoría del contrato.");
       Assertion.Require(Name, "Necesito el nombre del contrato.");
       Assertion.Require(CurrencyUID, "Necesito la moneda del contrato.");
-      Assertion.Require(BudgetTypeUID, "Necesito el tipo de presupuesto del contrato.");
+      Assertion.Require(BudgetTypeUID, "Necesito se seleccione el tipo de presupuesto.");
+      Assertion.Require(BudgetsUIDs.Length > 0, "Necesito se seleccione el presupuesto " +
+                                                "que se utilizará para el contrato.");
     }
 
   }  // class ContractFields
