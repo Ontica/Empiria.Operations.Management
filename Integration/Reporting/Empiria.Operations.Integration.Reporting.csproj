@@ -3,20 +3,20 @@
     <Company>Ontica</Company>
     <Product>Empiria Integrated Operations Management System</Product>
     <Description>
-      HTTP/JSON web api used to interact with the Empiria Integrated Operations Management System's backend.
+      Provides services to obtain integrated operations management information and reports.
     </Description>
     <Copyright>(c) 2002-2025. La Vía Óntica SC, Ontica LLC y de los autores. Todos los derechos reservados.</Copyright>
-    <Version>8.0</Version>
+    <Version>8.0.0</Version>
     <AssemblyVersion>8.0.0</AssemblyVersion>
     <FileVersion>8.0.0.0</FileVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/Ontica/Empiria.Operations.Management/blob/master/Integration/WebApi/LICENSE.txt</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Ontica/Empiria.Operations.Management/tree/master/Integration/WebApi</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/Ontica/Empiria.Operations.Management/blob/master/Integration/Reporting/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Ontica/Empiria.Operations.Management/tree/master/Integration/Reporting</PackageProjectUrl>
     <PackageIconUrl>http://www.ontica.org/logo.ontica.png</PackageIconUrl>
     <PackageTags>
       administración de las operaciones, requisiciones, proveeduría, suministro, inventarios, almacenes, contratos,
-      administración publica, gobierno electrónico, activo fijo, gastos, Banca de desarrollo, BANOBRAS, México
+      administración publica, gobierno electrónico, activo fijo, gastos, reportes, Banca de desarrollo, BANOBRAS, México
     </PackageTags>
     <RepositoryUrl>https://github.com/Ontica/Empiria.Operations.Management</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -25,10 +25,11 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <NeutralLanguage></NeutralLanguage>
     <Configurations>Debug;Release;Multisolutions</Configurations>
-    <AssemblyName>Empiria.Operations.Integration.WebApi</AssemblyName>
-    <RootNamespace>Empiria.Operations.Integration.WebApi</RootNamespace>
+    <AssemblyName>Empiria.Operations.Integration.Reporting</AssemblyName>
+    <RootNamespace>Empiria.Operations.Integration.Reporting</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' Or '$(Configuration)|$(Platform)' == 'Multisolutions|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' Or '$(Configuration)|$(Platform)'=='Multisolutions|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -40,7 +41,7 @@
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <NoWarn />
+    <NoWarn>CS1591</NoWarn>
     <WarningsAsErrors />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -55,20 +56,15 @@
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <NoWarn />
+    <NoWarn>CS1591</NoWarn>
     <WarningsAsErrors />
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System.Net.Http" />
-  </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
-    <PackageReference Include="Empiria.WebApi" Version="2.0.0" />
-    <PackageReference Include="Empiria.Operations.Integration.Core" Version="8.0.0" />
-    <PackageReference Include="Empiria.Operations.Integration.Reporting" Version="8.0.0" />
+    <PackageReference Include="Empiria.Services" Version="1.0.0" />
+    <PackageReference Include="Empiria.Inventory.Core" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Multisolutions' ">
-    <ProjectReference Include="..\..\..\extensions\WebApi\Empiria.WebApi.csproj" />
-    <ProjectReference Include="..\Core\Empiria.Operations.Integration.Core.csproj" />
-    <ProjectReference Include="..\Reporting\Empiria.Operations.Integration.Reporting.csproj" />
+    <ProjectReference Include="..\..\..\extensions\Services\Empiria.Services.csproj" />
+    <ProjectReference Include="..\..\Inventory\Core\Empiria.Inventory.Core.csproj" />
   </ItemGroup>
 </Project>
