@@ -16,6 +16,7 @@ using Empiria.Budgeting.Transactions.Adapters;
 
 using Empiria.Operations.Integration.Budgeting.Adapters;
 using Empiria.Operations.Integration.Budgeting.UseCases;
+using Empiria.Budgeting.Transactions.UseCases;
 
 namespace Empiria.Operations.Integration.Budgeting.WebApi {
 
@@ -56,6 +57,19 @@ namespace Empiria.Operations.Integration.Budgeting.WebApi {
         BudgetValidationResultDto validationResult = usecases.ValidateBudget(fields);
 
         return new SingleObjectModel(base.Request, validationResult);
+      }
+    }
+
+    [HttpPost]
+    [Route("v2/budgeting/related-documents/for-transaction-edition/search")]
+    public CollectionModel SearchRelatedDocumentsForTransactionEdition([FromBody] RelatedDocumentsQuery query) {
+
+      base.RequireBody(query);
+
+      using (var usecases = BudgetingProcurementUseCases.UseCaseInteractor()) {
+        FixedList<NamedEntityDto> list = usecases.SearchRelatedDocumentsForTransactionEdition(query);
+
+        return new CollectionModel(base.Request, list);
       }
     }
 

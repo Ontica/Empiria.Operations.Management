@@ -1,7 +1,7 @@
 ﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
 *  Module   : Operations-Budgeting Integration              Component : Use cases Layer                      *
-*  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Use case interactor class            *
+*  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Use case interactor class            *
 *  Type     : BudgetingProcurementUseCases                  License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Use cases used to integrate organization's procurement operations with the budgeting system.   *
@@ -15,12 +15,14 @@ using Empiria.Services;
 using Empiria.Financial;
 using Empiria.Parties;
 
+using Empiria.Budgeting;
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 using Empiria.Budgeting.Transactions.UseCases;
 
-using Empiria.Operations.Integration.Budgeting.Adapters;
 using Empiria.Procurement.Contracts;
+
+using Empiria.Operations.Integration.Budgeting.Adapters;
 
 namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
@@ -60,6 +62,23 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
 
       return BudgetTransactionMapper.MapToDescriptor(transaction);
+    }
+
+
+    public FixedList<NamedEntityDto> SearchRelatedDocumentsForTransactionEdition(RelatedDocumentsQuery query) {
+      Assertion.Require(query, nameof(query));
+
+      var filter = new Filter();
+
+      var orgUnit = OrganizationalUnit.Parse(query.OrganizationalUnitUID);
+
+      filter.AppendAnd($"CONTRACT_MGMT_ORG_UNIT_ID = {orgUnit.Id}");
+      if (query.Keywords.Length != 0) {
+        filter.AppendAnd(SearchExpression.ParseAndLikeKeywords("CONTRACT_KEYWORDS", query.Keywords));
+      }
+
+      return Contract.GetFullList<Contract>(filter.ToString(), "CONTRACT_NO")
+                     .MapToNamedEntityList();
     }
 
 
