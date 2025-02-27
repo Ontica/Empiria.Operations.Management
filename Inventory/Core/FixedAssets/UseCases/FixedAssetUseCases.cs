@@ -10,6 +10,10 @@
 
 using Empiria.Services;
 
+using Empiria.Contacts;
+
+using Empiria.HumanResources;
+
 using Empiria.Inventory.FixedAssets.Data;
 using Empiria.Inventory.FixedAssets.Adapters;
 
@@ -38,6 +42,15 @@ namespace Empiria.Inventory.FixedAssets.UseCases {
       var fixedAsset = FixedAsset.Parse(fixedAssetUID);
 
       return FixedAssetMapper.Map(fixedAsset);
+    }
+
+
+    public FixedList<NamedEntityDto> GetFixedAssetKeepers(string keywords) {
+      keywords = keywords ?? string.Empty;
+
+      FixedList<Parties.Person> employees = Employment.GetEmployees();
+
+      return employees.MapToNamedEntityList();
     }
 
 

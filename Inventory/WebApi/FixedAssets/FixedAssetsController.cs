@@ -35,6 +35,18 @@ namespace Empiria.Inventory.FixedAssets.WebApi {
 
 
     [HttpGet]
+    [Route("v2/fixed-assets/keepers")]
+    public CollectionModel GetFixedAssetKeepers([FromUri] string keywords = "") {
+
+      using (var usecases = FixedAssetUseCases.UseCaseInteractor()) {
+        FixedList<NamedEntityDto> keepers = usecases.GetFixedAssetKeepers(keywords);
+
+        return new CollectionModel(base.Request, keepers);
+      }
+    }
+
+
+    [HttpGet]
     [Route("v2/fixed-assets/types")]
     public CollectionModel GetFixedAssetTypes() {
 
