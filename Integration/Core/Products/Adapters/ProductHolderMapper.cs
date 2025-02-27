@@ -1,7 +1,7 @@
 ﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
 *  Module   : Products-Budgeting Integration                Component : Adapters Layer                       *
-*  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Mapper                               *
+*  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Mapper                               *
 *  Type     : ProductHolderMapper                           License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Maps integrated product information into ProductHolderDto instances.                           *

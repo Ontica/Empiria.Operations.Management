@@ -1,7 +1,7 @@
 ﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
 *  Module   : Products-Budgeting Integration                Component : Adapters Layer                       *
-*  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Mapper                               *
+*  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Mapper                               *
 *  Type     : ProductBudgetSegmentMapper                    License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Maps product budget segments to ProductBudgetSegmentDto instances.                             *

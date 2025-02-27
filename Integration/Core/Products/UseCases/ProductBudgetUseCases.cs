@@ -1,7 +1,7 @@
 ﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
 *  Module   : Products-Budgeting Integration                Component : Use cases Layer                      *
-*  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Use case interactor class            *
+*  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Use case interactor class            *
 *  Type     : ProductBudgetUseCases                         License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Use cases used to integrate products with budget segments and retrieve their budget accounts.  *

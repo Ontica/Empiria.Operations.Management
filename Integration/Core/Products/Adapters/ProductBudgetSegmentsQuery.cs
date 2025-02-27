@@ -1,7 +1,7 @@
 ﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
 *  Module   : Products-Budgeting Integration                Component : Adapters Layer                       *
-*  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Input Query DTO                      *
+*  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Input Query DTO                      *
 *  Type     : ProductBudgetSegmentsQuery                    License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Input query DTO used to search product budget segments.                                        *

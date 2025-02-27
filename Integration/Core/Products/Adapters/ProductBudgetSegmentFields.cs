@@ -1,7 +1,7 @@
 ﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
 *  Module   : Products-Budgeting Integration                Component : Adapters Layer                       *
-*  Assembly : Empiria.Operations.Integration.UseCases.dll   Pattern   : Input fields DTO                     *
+*  Assembly : Empiria.Operations.Core.UseCases.dll          Pattern   : Input fields DTO                     *
 *  Type     : ProductBudgetSegmentFields                    License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Input fields used to update product budget segments.                                           *
