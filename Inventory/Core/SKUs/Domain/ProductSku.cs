@@ -1,16 +1,17 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Products SKU Management                    Component : Domain Layer                            *
-*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Information Holder                      *
+*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Partitioned Type / Information Holder   *
 *  Type     : ProductSku                                 License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Represents a product stock keeping unit (SKU).                                                 *
+*  Summary  : Partitioned type that represents a product stock keeping unit (SKU).                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
 
 using Empiria.Json;
+using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
@@ -18,13 +19,14 @@ using Empiria.Products;
 
 namespace Empiria.Inventory.SKUs {
 
-  /// <summary>Represents a product stock keeping unit (SKU).</summary>
+  /// <summary>Partitioned type that represents a product stock keeping unit (SKU).</summary>
+  [PartitionedType(typeof(ProductSkuType))]
   public class ProductSku : BaseObject, INamedEntity {
 
     #region Constructors and parsers
 
-    public ProductSku() {
-      // Required by Empiria Framework.
+    protected ProductSku(ProductSkuType productSkuType) : base(productSkuType) {
+      // Required by Empiria Framework for all partitioned types.
     }
 
     static internal ProductSku Parse(int id) => ParseId<ProductSku>(id);
@@ -37,9 +39,10 @@ namespace Empiria.Inventory.SKUs {
 
     #region Properties
 
-    [DataField("SKU_TYPE_ID")]
     public ProductSkuType SkuType {
-      get; private set;
+      get {
+        return (ProductSkuType) base.GetEmpiriaType();
+      }
     }
 
 

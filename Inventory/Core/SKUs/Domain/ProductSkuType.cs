@@ -1,33 +1,40 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Products SKU Management                    Component : Domain Layer                            *
-*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Information Holder                      *
+*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Power type                              *
 *  Type     : ProductSkuType                             License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Represents a product stock keeping unit type.                                                  *
+*  Summary  : Power type that describes a product stock keeping unit type (SKU).                             *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System.Linq;
+
+using Empiria.Ontology;
+
 namespace Empiria.Inventory.SKUs {
 
-  /// <summary>Represents a product SKU type.</summary>
-  public class ProductSkuType : GeneralObject {
+  /// <summary>Power type that describes a product stock keeping unit type (SKU).</summary>
+  [Powertype(typeof(ProductSku))]
+  public class ProductSkuType : Powertype {
 
     #region Constructors and parsers
 
-    static internal ProductSkuType Parse(int id) {
-      return ParseId<ProductSkuType>(id);
+    private ProductSkuType() {
+      // Empiria powertype types always have this constructor.
     }
 
-    static internal ProductSkuType Parse(string uid) {
-      return ParseKey<ProductSkuType>(uid);
+    static public new ProductSkuType Parse(int typeId) => Parse<ProductSkuType>(typeId);
+
+    static public new ProductSkuType Parse(string typeName) => Parse<ProductSkuType>(typeName);
+
+    static public FixedList<ProductSkuType> GetList() {
+      return Empty.GetAllSubclasses()
+            .Select(x => (ProductSkuType) x)
+            .ToFixedList();
     }
 
-    static internal FixedList<ProductSkuType> GetList() {
-      return GetList<ProductSkuType>().ToFixedList();
-    }
-
-    static internal ProductSkuType Empty => ParseEmpty<ProductSkuType>();
+    static public ProductSkuType Empty => Parse("ObjectTypeInfo.ProductSku");
 
     #endregion Constructors and parsers
 
