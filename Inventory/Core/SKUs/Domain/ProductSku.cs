@@ -46,12 +46,6 @@ namespace Empiria.Inventory {
     }
 
 
-    [DataField("SKU_MAIN_CATEGORY_ID")]
-    public ProductSkuCategory MainCategory {
-      get; private set;
-    }
-
-
     [DataField("SKU_NO")]
     public string SkuNo {
       get; private set;

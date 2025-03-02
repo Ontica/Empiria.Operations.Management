@@ -36,7 +36,6 @@ namespace Empiria.Tests.Inventory {
         Assert.NotNull(sut.Brand);
         Assert.NotNull(sut.Description);
         Assert.NotNull(sut.Identificators);
-        Assert.NotNull(sut.MainCategory);
         Assert.NotNull(sut.Model);
         Assert.NotEmpty(sut.Name);
         Assert.NotNull(sut.Product);
