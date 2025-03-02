@@ -31,7 +31,7 @@ namespace Empiria.Tests.Inventory.FixedAssets {
 
     [Fact]
     public void Should_Parse_All_Fixed_Assets() {
-      var fixedAssets = BaseObject.GetFullList<FixedAsset>();
+      var fixedAssets = BaseObject.GetList<FixedAsset>();
 
       foreach (FixedAsset sut in fixedAssets) {
         Assert.NotNull(sut.Building);

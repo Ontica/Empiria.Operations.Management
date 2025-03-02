@@ -17,7 +17,7 @@ using Empiria.StateEnums;
 
 using Empiria.Products;
 
-namespace Empiria.Inventory.SKUs {
+namespace Empiria.Inventory {
 
   /// <summary>Partitioned type that represents a product stock keeping unit (SKU).</summary>
   [PartitionedType(typeof(ProductSkuType))]
@@ -165,8 +165,8 @@ namespace Empiria.Inventory.SKUs {
 
 
     [DataField("SKU_EXT_DATA")]
-    private JsonObject ExtData {
-      get; set;
+    internal JsonObject ExtData {
+      get; private set;
     }
 
 
@@ -188,7 +188,7 @@ namespace Empiria.Inventory.SKUs {
     }
 
 
-    public string Keywords {
+    public virtual string Keywords {
       get {
         return EmpiriaString.BuildKeywords(SkuNo, Name, Brand, Model, SerialNo, Description,
                                            _identificators, _tags, Product.Keywords);
@@ -197,6 +197,6 @@ namespace Empiria.Inventory.SKUs {
 
     #endregion Properties
 
-  }  // class ProductSKU
+  }  // class ProductSku
 
-}  // namespace Empiria.Inventory.SKUs
+}  // namespace Empiria.Inventory

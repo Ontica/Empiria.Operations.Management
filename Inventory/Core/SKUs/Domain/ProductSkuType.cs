@@ -12,7 +12,7 @@ using System.Linq;
 
 using Empiria.Ontology;
 
-namespace Empiria.Inventory.SKUs {
+namespace Empiria.Inventory {
 
   /// <summary>Power type that describes a product stock keeping unit type (SKU).</summary>
   [Powertype(typeof(ProductSku))]
@@ -40,4 +40,4 @@ namespace Empiria.Inventory.SKUs {
 
   }  // class ProductSkuType
 
-}  // namespace Empiria.Inventory.SKUs
+}  // namespace Empiria.Inventory

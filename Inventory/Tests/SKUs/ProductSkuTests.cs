@@ -10,9 +10,9 @@
 
 using Xunit;
 
-using Empiria.Inventory.SKUs;
+using Empiria.Inventory;
 
-namespace Empiria.Tests.Inventory.SKUs {
+namespace Empiria.Tests.Inventory {
 
   /// <summary>Unit tests for ProductSku instances.</summary>
   public class ProductSkuTests {
@@ -21,7 +21,7 @@ namespace Empiria.Tests.Inventory.SKUs {
 
     [Fact]
     public void Should_Get_All_Products_Skus() {
-      var sut = BaseObject.GetFullList<ProductSku>();
+      var sut = BaseObject.GetFullList<ProductSku>("SKU_ID < 1000");
 
       Assert.NotNull(sut);
       Assert.NotEmpty(sut);
@@ -30,7 +30,7 @@ namespace Empiria.Tests.Inventory.SKUs {
 
     [Fact]
     public void Should_Parse_All_Products_Skus() {
-      var productSkus = BaseObject.GetFullList<ProductSku>();
+      var productSkus = BaseObject.GetFullList<ProductSku>("SKU_ID < 1000");
 
       foreach (ProductSku sut in productSkus) {
         Assert.NotNull(sut.Brand);
@@ -60,4 +60,4 @@ namespace Empiria.Tests.Inventory.SKUs {
 
   }  // class ProductSkuTests
 
-}  // namespace Empiria.Tests.Inventory.SKUs
+}  // namespace Empiria.Tests.Inventory

@@ -8,7 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-namespace Empiria.Inventory.SKUs {
+namespace Empiria.Inventory {
 
   /// <summary>Represents a product SKU Category.</summary>
   public class ProductSkuCategory : GeneralObject {
@@ -33,4 +33,4 @@ namespace Empiria.Inventory.SKUs {
 
   }  // class ProductSkuCategory
 
-}  // namespace Empiria.Inventory.SKUs
+}  // namespace Empiria.Inventory
