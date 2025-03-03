@@ -26,11 +26,11 @@ namespace Empiria.Inventory.Assets.Adapters {
 
     static internal string MapToFilterString(this AssetsQuery query) {
 
-      string custodianOrgUnitFilter = BuildCustodianOrgUnitFilter(query.CustodianOrgUnitUID);
+      string managerOrgUnitFilter = BuildManagerOrgUnitFilter(query.CustodianOrgUnitUID);
 
       string statusFilter = BuildStatusFilter(query.Status);
 
-      string inventoryNoFilter = BuildInventoryNoFilter(query.InventoryNo);
+      string assetNoFilter = BuildAssetNoFilter(query.InventoryNo);
 
       string assetTypeFilter = BuildAssetTypeFilter(query.FixedAssetTypeUID);
 
@@ -39,10 +39,10 @@ namespace Empiria.Inventory.Assets.Adapters {
       string keywordsFilter = BuildKeywordsFilter(query.Keywords);
 
 
-      var filter = new Filter(custodianOrgUnitFilter);
+      var filter = new Filter(managerOrgUnitFilter);
 
       filter.AppendAnd(statusFilter);
-      filter.AppendAnd(inventoryNoFilter);
+      filter.AppendAnd(assetNoFilter);
       filter.AppendAnd(locationFilter);
       filter.AppendAnd(assetTypeFilter);
       filter.AppendAnd(keywordsFilter);
@@ -57,56 +57,55 @@ namespace Empiria.Inventory.Assets.Adapters {
         return query.OrderBy;
       }
 
-      return "FXD_ASST_INVENTORY_NO";
-
+      return "SKU_NO";
     }
 
     #endregion Extension Methods
 
     #region Helpers
 
-    static private string BuildCustodianOrgUnitFilter(string custodianOrgUnitUID) {
-      if (custodianOrgUnitUID == string.Empty) {
+    static private string BuildManagerOrgUnitFilter(string managerOrgUnitUID) {
+      if (managerOrgUnitUID.Length == 0) {
         return string.Empty;
       }
 
-      var custodianOrgUnit = OrganizationalUnit.Parse(custodianOrgUnitUID);
+      var managerOrgUnit = OrganizationalUnit.Parse(managerOrgUnitUID);
 
-      return $"FXD_ASST_CUSTODIAN_ORG_UNIT_ID = {custodianOrgUnit.Id}";
+      return $"ASSET_MGR_ORG_UNIT_ID = {managerOrgUnit.Id}";
     }
 
 
     static private string BuildAssetTypeFilter(string assetTypeUID) {
-      if (assetTypeUID == string.Empty) {
+      if (assetTypeUID.Length == 0) {
         return string.Empty;
       }
 
       var assetType = AssetType.Parse(assetTypeUID);
 
-      return $"FXD_ASST_TYPE_ID = {assetType.Id}";
+      return $"ASSET_TYPE_ID = {assetType.Id}";
     }
 
 
-    static private string BuildInventoryNoFilter(string inventoryNo) {
-      if (inventoryNo == string.Empty) {
+    static private string BuildAssetNoFilter(string assetNo) {
+      if (assetNo.Length == 0) {
         return string.Empty;
       }
 
-      return $"FXD_ASST_INVENTORY_NO LIKE '%{inventoryNo}%'";
+      return $"SKU_NO LIKE '%{assetNo}%'";
     }
 
 
     static private string BuildKeywordsFilter(string keywords) {
-      if (keywords == string.Empty) {
+      if (keywords.Length == 0) {
         return string.Empty;
       }
 
-      return SearchExpression.ParseAndLike("FXD_ASST_KEYWORDS", keywords);
+      return SearchExpression.ParseAndLike("ASSET_KEYWORDS", keywords);
     }
 
 
     static private string BuildLocationFilter(AssetsQuery query) {
-      if (string.IsNullOrWhiteSpace(query.BuildingUID)) {
+      if (query.BuildingUID.Length == 0) {
         return string.Empty;
       }
 
@@ -115,7 +114,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       if (query.PlaceUID.Length != 0) {
         location = Location.Parse(query.PlaceUID);
 
-        return $"FXD_ASST_LOCATION_ID = {location.Id}";
+        return $"ASSET_LOCATION_ID = {location.Id}";
       }
 
       if (query.FloorUID.Length != 0) {
@@ -128,16 +127,16 @@ namespace Empiria.Inventory.Assets.Adapters {
 
       var locationIds = locations.Select(x => x.Id).ToFixedList().ToArray();
 
-      return SearchExpression.ParseInSet("FXD_ASST_LOCATION_ID", locationIds);
+      return SearchExpression.ParseInSet("ASSET_LOCATION_ID", locationIds);
     }
 
 
     static private string BuildStatusFilter(EntityStatus status) {
       if (status == EntityStatus.All) {
-        return "FXD_ASST_STATUS <> 'X' ";
+        return "ASSET_STATUS <> 'X'";
       }
 
-      return $"FXD_ASST_STATUS = '{(char) status}'";
+      return $"ASSET_STATUS = '{(char) status}'";
     }
 
     #endregion Helpers

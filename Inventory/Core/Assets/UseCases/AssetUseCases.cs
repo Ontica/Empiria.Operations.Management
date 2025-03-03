@@ -65,7 +65,7 @@ namespace Empiria.Inventory.Assets.UseCases {
       string filter = query.MapToFilterString();
       string orderBy = query.MapToSortString();
 
-      FixedList<Asset> assets = AssetsData.GetAssets(filter, orderBy);
+      FixedList<Asset> assets = AssetsData.SearchAssets(filter, orderBy);
 
       return AssetMapper.Map(assets);
     }

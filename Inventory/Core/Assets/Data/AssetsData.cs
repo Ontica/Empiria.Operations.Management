@@ -19,24 +19,6 @@ namespace Empiria.Inventory.Assets.Data {
 
     #region Methods
 
-    static internal FixedList<Asset> GetAssets(string filter, string sortBy) {
-      var sql = "SELECT * FROM OMS_FIXED_ASSETS";
-
-      if (!string.IsNullOrWhiteSpace(filter)) {
-        sql += $" WHERE {filter}";
-      }
-
-      if (!string.IsNullOrWhiteSpace(sortBy)) {
-        sql += $" ORDER BY {sortBy}";
-      }
-
-      var dataOperation = DataOperation.Parse(sql);
-
-      return DataReader.GetFixedList<Asset>(dataOperation);
-
-    }
-
-
     static internal FixedList<AssetTransaction> GetTransactions(Asset asset) {
       var sql = "SELECT * FROM OMS_TRANSACTIONS " +
          $"WHERE OMS_TXN_ID IN " +
@@ -61,6 +43,23 @@ namespace Empiria.Inventory.Assets.Data {
       var op = DataOperation.Parse(sql);
 
       return DataReader.GetList<AssetTransactionEntry>(op);
+    }
+
+
+    static internal FixedList<Asset> SearchAssets(string filter, string sortBy) {
+      var sql = "SELECT * FROM VW_OMS_ASSETS";
+
+      if (!string.IsNullOrWhiteSpace(filter)) {
+        sql += $" WHERE {filter}";
+      }
+
+      if (!string.IsNullOrWhiteSpace(sortBy)) {
+        sql += $" ORDER BY {sortBy}";
+      }
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<Asset>(op);
     }
 
 

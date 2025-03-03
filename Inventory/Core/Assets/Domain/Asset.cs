@@ -37,56 +37,28 @@ namespace Empiria.Inventory.Assets {
 
     #region Properties
 
-    [DataField("FXD_ASST_TYPE_ID")]
+    [DataField("ASSET_TYPE_ID")]
     public AssetType AssetType {
       get; private set;
     }
 
 
-    [DataField("FXD_ASST_PRODUCT_ID")]
-    public Product Product {
+    [DataField("ASSET_SKU_ID")]
+    public ProductSku Sku {
       get; private set;
     }
 
-
-    [DataField("FXD_ASST_NAME")]
-    private string _name;
 
     public string Name {
       get {
-        return _name.Length == 0 ? Product.Name : _name;
-      }
-      private set {
-        _name = EmpiriaString.Clean(value);
+        return Sku.Name;
       }
     }
 
 
-    [DataField("FXD_ASST_INVENTORY_NO")]
-    public string InventoryNo {
-      get; private set;
-    }
-
-
-    [DataField("FXD_ASST_LABEL")]
-    public string Label {
-      get; private set;
-    }
-
-
-    [DataField("FXD_ASST_DESCRIPTION")]
+    [DataField("ASSET_DESCRIPTION")]
     public string Description {
       get; private set;
-    }
-
-
-    public string Model  {
-      get {
-        return ExtData.Get("model", "N/D");
-      }
-      private set {
-        ExtData.SetIfValue("model", EmpiriaString.Clean(value));
-      }
     }
 
 
@@ -100,13 +72,7 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("FXD_ASST_BRAND")]
-    public string Brand {
-      get; private set;
-    }
-
-
-    [DataField("FXD_ASST_IDENTIFICATORS")]
+    [DataField("ASSET_IDENTIFICATORS")]
     private string _identificators = string.Empty;
 
 
@@ -117,7 +83,7 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("FXD_ASST_TAGS")]
+    [DataField("ASSET_TAGS")]
     private string _tags = string.Empty;
 
     public FixedList<string> Tags {
@@ -127,19 +93,31 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("FXD_ASST_CUSTODIAN_ORG_UNIT_ID")]
-    public OrganizationalUnit CustodianOrgUnit {
+    [DataField("ASSET_MGR_ID")]
+    public Person Manager {
       get; private set;
     }
 
 
-    [DataField("FXD_ASST_CUSTODIAN_PERSON_ID")]
-    public Person CustodianPerson {
+    [DataField("ASSET_MGR_ORG_UNIT_ID")]
+    public OrganizationalUnit ManagerOrgUnit {
       get; private set;
     }
 
 
-    [DataField("FXD_ASST_LOCATION_ID")]
+    [DataField("ASSET_ASSIGNED_TO_ID")]
+    public Person AssignedTo {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_ASSIGNED_TO_ORG_UNIT_ID")]
+    public OrganizationalUnit AssignedToOrgUnit {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_LOCATION_ID")]
     public Location Location {
       get; private set;
     }
@@ -166,49 +144,49 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("FXD_ASST_CONDITION")]
+    [DataField("ASSET_CONDITION")]
     public string Condition {
       get; private set;
     }
 
 
-    [DataField("FXD_ASST_START_DATE")]
+    [DataField("ASSET_START_DATE")]
     public DateTime StartDate {
       get; private set;
     }
 
 
-    [DataField("FXD_ASST_END_DATE")]
+    [DataField("ASSET_END_DATE")]
     public DateTime EndDate {
       get; private set;
     }
 
 
-    [DataField("FXD_ASST_LAST_UPDATE")]
+    [DataField("ASSET_LAST_UPDATE")]
     public DateTime LastUpdate {
       get; private set;
     }
 
 
-    [DataField("FXD_ASST_EXT_DATA")]
+    [DataField("ASSET_EXT_DATA")]
     private JsonObject ExtData {
       get; set;
     }
 
 
-    [DataField("FXD_ASST_POSTED_BY_ID")]
+    [DataField("ASSET_POSTED_BY_ID")]
     public Party PostedBy {
       get; private set;
     }
 
 
-    [DataField("FXD_ASST_POSTING_TIME")]
+    [DataField("ASSET_POSTING_TIME")]
     public DateTime PostingTime {
       get; private set;
     }
 
 
-    [DataField("FXD_ASST_STATUS", Default = EntityStatus.Pending)]
+    [DataField("ASSET_STATUS", Default = EntityStatus.Pending)]
     public EntityStatus Status {
       get; private set;
     }
@@ -216,10 +194,10 @@ namespace Empiria.Inventory.Assets {
 
     public string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(InventoryNo, Name, Description, Label,
-                                           Brand, Model, Year.ToString(), AssetType.Name,
+        return EmpiriaString.BuildKeywords(AssetType.Name, Sku.Keywords, Description, Year.ToString(),
                                            _identificators, _tags, this.Condition, this.Location.FullName,
-                                           this.CustodianOrgUnit.Keywords, this.CustodianPerson.Keywords);
+                                           this.AssignedTo.Keywords, this.AssignedToOrgUnit.Keywords,
+                                           this.Manager.Keywords, this.ManagerOrgUnit.Keywords);
       }
     }
 
