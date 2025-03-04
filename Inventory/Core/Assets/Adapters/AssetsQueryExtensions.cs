@@ -1,7 +1,7 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Assets Management                          Component : Adapters Layer                          *
-*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Type Extensions                         *
+*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Query Type Extensions                   *
 *  Type     : AssetsQueryExtensions                      License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Extension methods for AssetsQuery type.                                                        *
@@ -26,25 +26,33 @@ namespace Empiria.Inventory.Assets.Adapters {
 
     static internal string MapToFilterString(this AssetsQuery query) {
 
-      string managerOrgUnitFilter = BuildManagerOrgUnitFilter(query.CustodianOrgUnitUID);
+      string assignedToFilter = BuildAssignedToFilter(query.AssignedToUID);
 
-      string statusFilter = BuildStatusFilter(query.Status);
-
-      string assetNoFilter = BuildAssetNoFilter(query.InventoryNo);
-
-      string assetTypeFilter = BuildAssetTypeFilter(query.FixedAssetTypeUID);
+      string assignedToOrgUnitFilter = BuildAssignedToOrgUnitFilter(query.AssignedToOrgUnitUID);
 
       string locationFilter = BuildLocationFilter(query);
 
+      string managerFilter = BuildManagerFilter(query.ManagerUID);
+
+      string assetTypeFilter = BuildAssetTypeFilter(query.AssetTypeUID);
+
+      string managerOrgUnitFilter = BuildManagerOrgUnitFilter(query.ManagerOrgUnitUID);
+
+      string statusFilter = BuildStatusFilter(query.Status);
+
+      string assetNoFilter = BuildAssetNoFilter(query.AssetNo);
+
       string keywordsFilter = BuildKeywordsFilter(query.Keywords);
 
+      var filter = new Filter(assignedToFilter);
 
-      var filter = new Filter(managerOrgUnitFilter);
-
+      filter.AppendAnd(assignedToOrgUnitFilter);
+      filter.AppendAnd(locationFilter);
+      filter.AppendAnd(managerFilter);
+      filter.AppendAnd(managerOrgUnitFilter);
+      filter.AppendAnd(assetTypeFilter);
       filter.AppendAnd(statusFilter);
       filter.AppendAnd(assetNoFilter);
-      filter.AppendAnd(locationFilter);
-      filter.AppendAnd(assetTypeFilter);
       filter.AppendAnd(keywordsFilter);
 
       return filter.ToString();
@@ -64,14 +72,12 @@ namespace Empiria.Inventory.Assets.Adapters {
 
     #region Helpers
 
-    static private string BuildManagerOrgUnitFilter(string managerOrgUnitUID) {
-      if (managerOrgUnitUID.Length == 0) {
+    static private string BuildAssetNoFilter(string assetNo) {
+      if (assetNo.Length == 0) {
         return string.Empty;
       }
 
-      var managerOrgUnit = OrganizationalUnit.Parse(managerOrgUnitUID);
-
-      return $"ASSET_MGR_ORG_UNIT_ID = {managerOrgUnit.Id}";
+      return $"SKU_NO LIKE '%{assetNo}%'";
     }
 
 
@@ -86,12 +92,25 @@ namespace Empiria.Inventory.Assets.Adapters {
     }
 
 
-    static private string BuildAssetNoFilter(string assetNo) {
-      if (assetNo.Length == 0) {
+    static private string BuildAssignedToFilter(string assignedToUID) {
+      if (assignedToUID.Length == 0) {
         return string.Empty;
       }
 
-      return $"SKU_NO LIKE '%{assetNo}%'";
+      var assignedTo = Person.Parse(assignedToUID);
+
+      return $"ASSET_ASSIGNED_TO_ID = {assignedTo.Id}";
+    }
+
+
+    static private string BuildAssignedToOrgUnitFilter(string assignedToOrgUnitUID) {
+      if (assignedToOrgUnitUID.Length == 0) {
+        return string.Empty;
+      }
+
+      var assignedToOrgUnit = OrganizationalUnit.Parse(assignedToOrgUnitUID);
+
+      return $"ASSET_ASSIGNED_TO_ORG_UNIT_ID = {assignedToOrgUnit.Id}";
     }
 
 
@@ -128,6 +147,28 @@ namespace Empiria.Inventory.Assets.Adapters {
       var locationIds = locations.Select(x => x.Id).ToFixedList().ToArray();
 
       return SearchExpression.ParseInSet("ASSET_LOCATION_ID", locationIds);
+    }
+
+
+    static private string BuildManagerFilter(string managerUID) {
+      if (managerUID.Length == 0) {
+        return string.Empty;
+      }
+
+      var manager = Person.Parse(managerUID);
+
+      return $"ASSET_MGR_ID = {manager.Id}";
+    }
+
+
+    static private string BuildManagerOrgUnitFilter(string managerOrgUnitUID) {
+      if (managerOrgUnitUID.Length == 0) {
+        return string.Empty;
+      }
+
+      var managerOrgUnit = OrganizationalUnit.Parse(managerOrgUnitUID);
+
+      return $"ASSET_MGR_ORG_UNIT_ID = {managerOrgUnit.Id}";
     }
 
 

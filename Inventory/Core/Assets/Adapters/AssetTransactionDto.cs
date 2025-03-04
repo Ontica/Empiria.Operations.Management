@@ -142,7 +142,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public string FixedAsset {
+    public string Asset {
       get; internal set;
     }
 

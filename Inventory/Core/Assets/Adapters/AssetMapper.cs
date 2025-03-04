@@ -22,7 +22,7 @@ namespace Empiria.Inventory.Assets.Adapters {
 
     static internal AssetHolderDto Map(Asset asset) {
       return new AssetHolderDto {
-        FixedAsset = MapAsset(asset),
+        Asset = MapAsset(asset),
         Transactions = AssetTransactionMapper.Map(AssetsData.GetTransactions(asset)),
         Documents = DocumentServices.GetEntityDocuments(asset),
         History = HistoryServices.GetEntityHistory(asset),
@@ -34,20 +34,21 @@ namespace Empiria.Inventory.Assets.Adapters {
     static internal AssetDto MapAsset(Asset asset) {
       return new AssetDto {
         UID = asset.UID,
-        FixedAssetType = asset.AssetType.MapToNamedEntity(),
-        InventoryNo = asset.Sku.SkuNo,
-        Label = string.Empty,
+        AssetNo = asset.AssetNo,
+        AssetType = asset.AssetType.MapToNamedEntity(),
         Name = asset.Name,
         Description = asset.Description,
-        Brand = asset.Sku.Brand,
-        Model = asset.Sku.Model,
+        Brand = asset.Brand,
+        Model = asset.Model,
         Year = asset.Year,
+        AssignedTo = asset.AssignedTo.MapToNamedEntity(),
+        AssignedToOrgUnit = asset.AssignedToOrgUnit.MapToNamedEntity(),
+        Manager = asset.Manager.MapToNamedEntity(),
+        ManagerOrgUnit = asset.ManagerOrgUnit.MapToNamedEntity(),
         Building = asset.Building.MapToNamedEntity(),
         Floor = asset.Floor.MapToNamedEntity(),
         Place = asset.Place.MapToNamedEntity(),
         LocationName = asset.Location.FullName,
-        CustodianPerson = asset.AssignedTo.MapToNamedEntity(),
-        CustodianOrgUnit = asset.AssignedToOrgUnit.MapToNamedEntity(),
         StartDate = asset.StartDate,
         EndDate = asset.EndDate,
         Status = asset.Status.MapToDto()
@@ -72,14 +73,14 @@ namespace Empiria.Inventory.Assets.Adapters {
     static private AssetDescriptor MapToDescriptor(Asset asset) {
       return new AssetDescriptor {
         UID = asset.UID,
-        FixedAssetTypeName = asset.AssetType.Name,
-        InventoryNo = asset.Sku.SkuNo,
-        Label = string.Empty,
+        AssetNo = asset.AssetNo,
+        AssetTypeName = asset.AssetType.Name,
         Name = asset.Name,
         Description = asset.Description,
         LocationName = asset.Location.FullName,
         Condition = asset.Condition,
-        CustodianOrgUnitName = asset.AssignedToOrgUnit.FullName,
+        AssignedToName = asset.AssignedTo.FullName,
+        AssignedToOrgUnitName = asset.AssignedToOrgUnit.FullName,
         StartDate = asset.StartDate,
         EndDate = asset.EndDate,
         StatusName = asset.Status.GetName()

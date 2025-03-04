@@ -17,7 +17,7 @@ namespace Empiria.Inventory.Assets.Adapters {
 
   public class AssetHolderDto {
 
-    public AssetDto FixedAsset {
+    public AssetDto Asset {
       get; internal set;
     }
 
@@ -48,65 +48,86 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto FixedAssetType {
+
+    public string AssetNo {
       get; internal set;
     }
 
-    public string InventoryNo {
+
+    public NamedEntityDto AssetType {
       get; internal set;
     }
+
 
     public string Name {
       get; internal set;
     }
 
+
     public string Description {
       get; internal set;
     }
+
 
     public string Brand {
       get; internal set;
     }
 
+
     public string Model {
       get; internal set;
     }
+
 
     public int Year {
       get; internal set;
     }
 
-    public string Label {
+
+    public NamedEntityDto AssignedTo {
       get; internal set;
     }
 
-    public NamedEntityDto CustodianOrgUnit {
+
+    public NamedEntityDto AssignedToOrgUnit {
       get; internal set;
     }
 
-    public NamedEntityDto CustodianPerson {
+
+    public NamedEntityDto Manager {
       get; internal set;
     }
+
+
+    public NamedEntityDto ManagerOrgUnit {
+      get; internal set;
+    }
+
 
     public NamedEntityDto Building {
       get; internal set;
     }
 
+
     public NamedEntityDto Floor {
       get; internal set;
     }
+
 
     public NamedEntityDto Place {
       get; internal set;
     }
 
+
     public string LocationName {
       get; internal set;
     }
 
+
     public DateTime StartDate {
       get; internal set;
     }
+
 
     public DateTime EndDate {
       get; internal set;
@@ -127,11 +148,11 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public string FixedAssetTypeName {
+    public string AssetNo {
       get; internal set;
     }
 
-    public string InventoryNo {
+    public string AssetTypeName {
       get; internal set;
     }
 
@@ -143,11 +164,11 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public string Label {
+    public string AssignedToName {
       get; internal set;
     }
 
-    public string CustodianOrgUnitName {
+    public string AssignedToOrgUnitName {
       get; internal set;
     }
 

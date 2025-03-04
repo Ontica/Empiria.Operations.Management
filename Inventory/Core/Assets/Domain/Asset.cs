@@ -11,10 +11,10 @@
 using System;
 
 using Empiria.Json;
-using Empiria.Locations;
 using Empiria.Parties;
-using Empiria.Products;
 using Empiria.StateEnums;
+
+using Empiria.Locations;
 
 namespace Empiria.Inventory.Assets {
 
@@ -43,6 +43,13 @@ namespace Empiria.Inventory.Assets {
     }
 
 
+    public string AssetNo {
+      get {
+        return Sku.SkuNo;
+      }
+    }
+
+
     [DataField("ASSET_SKU_ID")]
     public ProductSku Sku {
       get; private set;
@@ -59,6 +66,20 @@ namespace Empiria.Inventory.Assets {
     [DataField("ASSET_DESCRIPTION")]
     public string Description {
       get; private set;
+    }
+
+
+    public string Brand {
+      get {
+        return Sku.Brand;
+      }
+    }
+
+
+    public string Model {
+      get {
+        return Sku.Model;
+      }
     }
 
 

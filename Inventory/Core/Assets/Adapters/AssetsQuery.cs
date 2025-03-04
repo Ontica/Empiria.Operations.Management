@@ -15,17 +15,32 @@ namespace Empiria.Inventory.Assets.Adapters {
   /// <summary>Query data transfer object used to search assets.</summary>
   public class AssetsQuery {
 
-    public string InventoryNo {
+    public string AssetNo {
       get; set;
     } = string.Empty;
 
 
-    public string FixedAssetTypeUID {
+    public string AssetTypeUID {
       get; set;
     } = string.Empty;
 
 
-    public string CustodianOrgUnitUID {
+    public string AssignedToUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string AssignedToOrgUnitUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string ManagerUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string ManagerOrgUnitUID {
       get; set;
     } = string.Empty;
 
