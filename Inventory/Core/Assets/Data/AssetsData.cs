@@ -47,7 +47,9 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal FixedList<Asset> SearchAssets(string filter, string sortBy) {
-      var sql = "SELECT * FROM VW_OMS_ASSETS";
+      var sql = "SELECT OMS_ASSETS.* " +
+                "FROM OMS_ASSETS INNER JOIN OMS_PRODUCTS_SKUS " +
+                "ON OMS_ASSETS.ASSET_SKU_ID = OMS_PRODUCTS_SKUS.SKU_ID";
 
       if (!string.IsNullOrWhiteSpace(filter)) {
         sql += $" WHERE {filter}";
