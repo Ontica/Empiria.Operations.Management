@@ -39,72 +39,75 @@ namespace Empiria.Inventory.Assets {
 
     #endregion Constructors and parsers
 
-    [DataField("OMS_TXN_ENTRY_TXN_ID")]
+    [DataField("ASSET_ENTRY_TXN_ID")]
     public AssetTransaction Transaction {
-      get;
-      private set;
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_ENTRY_TYPE_ID")]
+    [DataField("ASSET_ENTRY_TYPE_ID")]
     public int EntryTypeId {
-      get;
-      private set;
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_ENTRY_OBJECT_ID")]
+    [DataField("ASSET_ENTRY_ASSET_ID")]
     public Asset Asset {
-      get;
-      private set;
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_ENTRY_OPERATION_TYPE_ID")]
-    public int OperationTypeId {
-      get;
-      private set;
-    }
-
-
-    [DataField("OMS_TXN_ENTRY_OPERATION_ID")]
-    public int OperationId {
-      get;
-      private set;
-    }
-
-
-    [DataField("OMS_TXN_ENTRY_DESCRIPTION")]
+    [DataField("ASSET_ENTRY_DESCRIPTION")]
     public string Description {
-      get;
-      private set;
+      get; private set;
     }
 
-    [DataField("OMS_TXN_ENTRY_EXT_DATA")]
+
+    [DataField("ASSET_ENTRY_OPERATION_TYPE_ID")]
+    public int OperationTypeId {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_ENTRY_OPERATION_ID")]
+    public int OperationId {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_ENTRY_OPERATION_DATA")]
+    internal protected JsonObject OperationData {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_ENTRY_OPERATION_VALUE")]
+    public decimal OperationValue {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_ENTRY_EXT_DATA")]
     internal protected JsonObject ExtensionData {
-      get;
-      private set;
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_ENTRY_POSTED_BY_ID")]
+    [DataField("ASSET_ENTRY_POSTED_BY_ID")]
     public Party PostedBy {
-      get;
-      private set;
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_ENTRY_POSTING_TIME")]
+    [DataField("ASSET_ENTRY_POSTING_TIME")]
     public DateTime PostingTime {
-      get;
-      private set;
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_ENTRY_STATUS", Default = TransactionStatus.Pending)]
+    [DataField("ASSET_ENTRY_STATUS", Default = TransactionStatus.Pending)]
     public TransactionStatus Status {
-      get;
-      private set;
+      get; private set;
     }
 
 

@@ -15,6 +15,8 @@ using Empiria.Json;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
+using Empiria.Locations;
+
 using Empiria.Inventory.Assets.Data;
 
 namespace Empiria.Inventory.Assets {
@@ -48,147 +50,159 @@ namespace Empiria.Inventory.Assets {
 
     #region Properties
 
-    [DataField("OMS_TXN_TYPE_ID")]
+    [DataField("ASSET_TXN_TYPE_ID")]
     public AssetTransactionType AssetTransactionType {
-      get;
-      private set;
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_SOURCE_ID")]
-    public OperationSource OperationSource {
-      get;
-      private set;
-    }
-
-
-    [DataField("OMS_TXN_BASE_PARTY_ID")]
-    public Party BaseParty {
-      get;
-      private set;
-    }
-
-
-    [DataField("OMS_TXN_NUMBER")]
+    [DataField("ASSET_TXN_NO")]
     public string TransactionNo {
-      get;
-      private set;
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_DESCRIPTION")]
+    [DataField("ASSET_TXN_DESCRIPTION")]
     public string Description {
-      get;
-      private set;
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_IDENTIFICATORS")]
-    public string Identificators {
-      get;
-      private set;
+    [DataField("ASSET_TXN_IDENTIFICATORS")]
+    private string _identificators = string.Empty;
+
+
+    public FixedList<string> Identificators {
+      get {
+        return _identificators.Split(' ').ToFixedList();
+      }
     }
 
 
-    [DataField("OMS_TXN_TAGS")]
-    public string Tags {
-      get;
-      private set;
+    [DataField("ASSET_TXN_TAGS")]
+    private string _tags = string.Empty;
+
+    public FixedList<string> Tags {
+      get {
+        return _tags.Split(' ').ToFixedList();
+      }
     }
 
 
-    [DataField("OMS_TXN_BASE_ENTITY_TYPE_ID")]
-    public int BaseEntityTypeId {
-      get;
-      private set;
+    [DataField("ASSET_TXN_MGR_ID")]
+    public Person Manager {
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_BASE_ENTITY_ID")]
-    public int BaseEntityId {
-      get;
-      private set;
+    [DataField("ASSET_TXN_MGR_ORG_UNIT_ID")]
+    public OrganizationalUnit ManagerOrgUnit {
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_APPLICATION_DATE")]
-    public DateTime ApplicationDate {
-      get;
-      private set;
+    [DataField("ASSET_TXN_ASSIGNED_TO_ID")]
+    public Person AssignedTo {
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_APPLIED_BY_ID")]
-    public Party AppliedBy {
-      get;
-      private set;
+    [DataField("ASSET_TXN_ASSIGNED_TO_ORG_UNIT_ID")]
+    public OrganizationalUnit AssignedToOrgUnit {
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_RECORDING_DATE")]
-    public DateTime RecordingDate {
-      get;
-      private set;
+    [DataField("ASSET_TXN_LOCATION_ID")]
+    public Location Location {
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_RECORDED_BY_ID")]
-    public Party RecordedBy {
-      get;
-      private set;
+    public Location Building {
+      get {
+        return Location.SeekTree(LocationType.Building);
+      }
     }
 
 
-    [DataField("OMS_TXN_AUTHORIZATION_TIME")]
-    public DateTime AuthorizationTime {
-      get;
-      private set;
+    public Location Floor {
+      get {
+        return Location.SeekTree(LocationType.Floor);
+      }
     }
 
 
-    [DataField("OMS_TXN_AUTHORIZED_BY_ID")]
-    public Party AuthorizedBy {
-      get;
-      private set;
+    public Location Place {
+      get {
+        return Location.SeekTree(LocationType.Place);
+      }
     }
 
 
-    [DataField("OMS_TXN_REQUESTED_TIME")]
+    [DataField("ASSET_TXN_SOURCE_ID")]
+    public OperationSource OperationSource {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_TXN_REQUESTED_TIME")]
     public DateTime RequestedTime {
-      get;
-      private set;
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_REQUESTED_BY_ID")]
+    [DataField("ASSET_TXN_REQUESTED_BY_ID")]
     public Party RequestedBy {
-      get;
-      private set;
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_EXT_DATA")]
+    [DataField("ASSET_TXN_APPLICATION_TIME")]
+    public DateTime ApplicationTime {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_TXN_APPLIED_BY_ID")]
+    public Party AppliedBy {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_TXN_RECORDING_TIME")]
+    public DateTime RecordingTime {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_TXN_RECORDED_BY_ID")]
+    public Party RecordedBy {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_TXN_EXT_DATA")]
     internal protected JsonObject ExtensionData {
-      get;
-      private set;
+      get; private set;
     }
 
 
-    [DataField("OMS_TXN_POSTING_TIME")]
+    [DataField("ASSET_TXN_POSTING_TIME")]
     public DateTime PostingTime {
       get;
       private set;
     }
 
 
-    [DataField("OMS_TXN_POSTED_BY_ID")]
+    [DataField("ASSET_TXN_POSTED_BY_ID")]
     public Party PostedBy {
       get;
       private set;
     }
 
 
-    [DataField("OMS_TXN_STATUS", Default = TransactionStatus.Pending)]
+    [DataField("ASSET_TXN_STATUS", Default = TransactionStatus.Pending)]
     public TransactionStatus Status {
       get;
       private set;
@@ -197,9 +211,11 @@ namespace Empiria.Inventory.Assets {
 
     public virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(TransactionNo, Description, Identificators, Tags,
-                                           AssetTransactionType.Name,
-                                           BaseParty.Keywords);
+        return EmpiriaString.BuildKeywords(TransactionNo, Description, _identificators, _tags,
+                                           AssetTransactionType.Name, Manager.Keywords,
+                                           ManagerOrgUnit.Keywords, AssignedTo.Keywords,
+                                           AssignedToOrgUnit.Keywords, Location.Keywords,
+                                           OperationSource.Keywords);
       }
     }
 

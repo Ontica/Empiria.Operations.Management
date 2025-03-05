@@ -9,7 +9,6 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System.Collections.Generic;
-
 using Empiria.Data;
 
 namespace Empiria.Inventory.Assets.Data {
@@ -20,13 +19,13 @@ namespace Empiria.Inventory.Assets.Data {
     #region Methods
 
     static internal FixedList<AssetTransaction> GetTransactions(Asset asset) {
-      var sql = "SELECT * FROM OMS_TRANSACTIONS " +
-         $"WHERE OMS_TXN_ID IN " +
-            $"(SELECT OMS_TXN_ENTRY_TXN_ID FROM OMS_TRANSACTION_ENTRIES " +
-              $"WHERE OMS_TXN_ENTRY_OBJECT_ID = {asset.Id} " +
-              $"AND OMS_TXN_ENTRY_STATUS <> 'X') " +
-         $"AND OMS_TXN_STATUS <> 'X' " +
-         $"ORDER BY OMS_TXN_NUMBER";
+      var sql = "SELECT * FROM OMS_ASSETS_TRANSACTIONS " +
+         $"WHERE ASSET_TXN_ID IN " +
+            $"(SELECT ASSET_ENTRY_TXN_ID FROM OMS_ASSETS_ENTRIES " +
+              $"WHERE ASSET_ENTRY_ASSET_ID = {asset.Id} " +
+              $"AND ASSET_ENTRY_STATUS <> 'X') " +
+         $"AND ASSET_TXN_STATUS <> 'X' " +
+         $"ORDER BY ASSET_TXN_NO";
 
       var op = DataOperation.Parse(sql);
 
@@ -35,10 +34,10 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal List<AssetTransactionEntry> GetTransactionEntries(AssetTransaction transaction) {
-      var sql = "SELECT * FROM OMS_TRANSACTION_ENTRIES " +
-         $"WHERE OMS_TXN_ENTRY_TXN_ID = {transaction.Id} AND " +
-               $"OMS_TXN_ENTRY_STATUS <> 'X' " +
-         $"ORDER BY OMS_TXN_ENTRY_ID";
+      var sql = "SELECT * FROM OMS_ASSETS_ENTRIES " +
+         $"WHERE ASSET_ENTRY_TXN_ID = {transaction.Id} AND " +
+               $"ASSET_ENTRY_STATUS <> 'X' " +
+         $"ORDER BY ASSET_ENTRY_ID";
 
       var op = DataOperation.Parse(sql);
 
@@ -65,13 +64,16 @@ namespace Empiria.Inventory.Assets.Data {
     }
 
 
-    static internal FixedList<AssetTransaction> SearchTransactions(string filter, string sort) {
-      Assertion.Require(filter, nameof(filter));
-      Assertion.Require(sort, nameof(sort));
+    static internal FixedList<AssetTransaction> SearchTransactions(string filter, string sortBy) {
+      var sql = "SELECT * FROM OMS_ASSETS_TRANSACTIONS";
 
-      var sql = "SELECT * FROM OMS_TRANSACTIONS " +
-               $"WHERE {filter} " +
-               $"ORDER BY {sort}";
+      if (!string.IsNullOrWhiteSpace(filter)) {
+        sql += $" WHERE {filter}";
+      }
+
+      if (!string.IsNullOrWhiteSpace(sortBy)) {
+        sql += $" ORDER BY {sortBy}";
+      }
 
       var op = DataOperation.Parse(sql);
 
