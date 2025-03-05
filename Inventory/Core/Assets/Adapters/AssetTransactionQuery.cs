@@ -22,7 +22,37 @@ namespace Empiria.Inventory.Assets.Adapters {
     } = string.Empty;
 
 
-    public string BasePartyUID {
+    public string ManagerUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string ManagerOrgUnitUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string AssignedToUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string AssignedToOrgUnitUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string BuildingUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string FloorUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string PlaceUID {
       get; set;
     } = string.Empty;
 
@@ -85,6 +115,7 @@ namespace Empiria.Inventory.Assets.Adapters {
     public TransactionStage Stage {
       get; set;
     } = TransactionStage.All;
+
 
     public string OrderBy {
       get; set;

@@ -66,7 +66,39 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto BaseParty {
+    public string Description {
+      get; internal set;
+    }
+
+    public NamedEntityDto Manager {
+      get; internal set;
+    }
+
+    public NamedEntityDto ManagerOrgUnit {
+      get; internal set;
+    }
+
+    public NamedEntityDto AssignedTo {
+      get; internal set;
+    }
+
+    public NamedEntityDto AssignedToOrgUnit {
+      get; internal set;
+    }
+
+    public NamedEntityDto Building {
+      get; internal set;
+    }
+
+    public NamedEntityDto Floor {
+      get; internal set;
+    }
+
+    public NamedEntityDto Place {
+      get; internal set;
+    }
+
+    public string LocationName {
       get; internal set;
     }
 
@@ -74,15 +106,15 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public string Description {
+    public DateTime RequestedTime {
       get; internal set;
     }
 
-    public DateTime RequestedDate {
+    public DateTime ApplicationTime {
       get; internal set;
     }
 
-    public DateTime ApplicationDate {
+    public DateTime RecordingTime {
       get; internal set;
     }
 
@@ -108,7 +140,27 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public string BasePartyName {
+    public string Description {
+      get; internal set;
+    }
+
+    public string ManagerName {
+      get; internal set;
+    }
+
+    public string ManagerOrgUnitName {
+      get; internal set;
+    }
+
+    public string AssignedToName {
+      get; internal set;
+    }
+
+    public string AssignedToOrgUnitName {
+      get; internal set;
+    }
+
+    public string LocationName {
       get; internal set;
     }
 
@@ -116,15 +168,15 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public string Description {
+    public DateTime RequestedTime {
       get; internal set;
     }
 
-    public DateTime RequestedDate {
+    public DateTime ApplicationTime {
       get; internal set;
     }
 
-    public DateTime ApplicationDate {
+    public DateTime RecordingTime {
       get; internal set;
     }
 

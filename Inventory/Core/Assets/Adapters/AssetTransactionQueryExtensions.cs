@@ -25,7 +25,7 @@ namespace Empiria.Inventory.Assets.Adapters {
 
     static internal string MapToFilterString(this AssetTransactionQuery query) {
       string transactionTypeFilter = BuildTransactionTypeFilter(query.TransactionTypeUID);
-      string basePartyFilter = BuildBasePartyFilter(query.BasePartyUID);
+      string managerOrgUnitFilter = BuildManagerOrgUnitFilter(query.ManagerOrgUnitUID);
       string operationSourceFilter = BuildOperationSourceFilter(query.OperationSourceUID);
 
       string tagsFilter = BuildTagsFilter(query.Tags);
@@ -34,7 +34,7 @@ namespace Empiria.Inventory.Assets.Adapters {
 
       var filter = new Filter(transactionTypeFilter);
 
-      filter.AppendAnd(basePartyFilter);
+      filter.AppendAnd(managerOrgUnitFilter);
       filter.AppendAnd(operationSourceFilter);
       filter.AppendAnd(tagsFilter);
       filter.AppendAnd(keywordsFilter);
@@ -48,7 +48,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       if (query.OrderBy.Length != 0) {
         return query.OrderBy;
       } else {
-        return "OMS_TXN_NUMBER, OMS_TXN_APPLICATION_DATE, OMS_TXN_REQUESTED_TIME";
+        return "ASSET_TXN_NO, ASSET_TXN_APPLICATION_TIME, ASSET_TXN_REQUESTED_TIME";
       }
     }
 
@@ -56,14 +56,14 @@ namespace Empiria.Inventory.Assets.Adapters {
 
     #region Helpers
 
-    static private string BuildBasePartyFilter(string basePartyUID) {
-      if (basePartyUID.Length == 0) {
+    static private string BuildManagerOrgUnitFilter(string managerOrgUnitUID) {
+      if (managerOrgUnitUID.Length == 0) {
         return string.Empty;
       }
 
-      var baseParty = Party.Parse(basePartyUID);
+      var baseParty = OrganizationalUnit.Parse(managerOrgUnitUID);
 
-      return $"OMS_TXN_BASE_PARTY_ID = {baseParty.Id}";
+      return $"ASSET_TXN_MGR_ORG_UNIT_ID = {baseParty.Id}";
     }
 
 
@@ -74,7 +74,7 @@ namespace Empiria.Inventory.Assets.Adapters {
 
       var operationSource = OperationSource.Parse(operationSourceUID);
 
-      return $"OMS_TXN_SOURCE_ID = {operationSource.Id}";
+      return $"ASSET_TXN_SOURCE_ID = {operationSource.Id}";
     }
 
 
@@ -85,7 +85,7 @@ namespace Empiria.Inventory.Assets.Adapters {
 
       var transactionType = AssetTransactionType.Parse(transactionTypeUID);
 
-      return $"OMS_TXN_TYPE_ID = {transactionType.Id}";
+      return $"ASSET_TXN_TYPE_ID = {transactionType.Id}";
     }
 
 
@@ -93,16 +93,16 @@ namespace Empiria.Inventory.Assets.Adapters {
       if (keywords.Length == 0) {
         return string.Empty;
       }
-      return SearchExpression.ParseAndLikeKeywords("OMS_TXN_KEYWORDS", keywords);
+      return SearchExpression.ParseAndLikeKeywords("ASSET_TXN_KEYWORDS", keywords);
     }
 
 
     static private string BuildStatusFilter(TransactionStatus status) {
       if (status == TransactionStatus.All) {
-        return "OMS_TXN_STATUS <> 'X' ";
+        return "ASSET_TXN_STATUS <> 'X' ";
       }
 
-      return $"OMS_TXN_STATUS = '{(char) status}'";
+      return $"ASSET_TXN_STATUS = '{(char) status}'";
     }
 
 

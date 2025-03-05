@@ -36,9 +36,17 @@ namespace Empiria.Inventory.Assets.Adapters {
         TransactionNo = transaction.TransactionNo,
         Description = transaction.Description,
         OperationSource = transaction.OperationSource.MapToNamedEntity(),
-        BaseParty = transaction.BaseParty.MapToNamedEntity(),
-        ApplicationDate = transaction.ApplicationDate,
-        RequestedDate = transaction.RequestedTime,
+        Manager = transaction.Manager.MapToNamedEntity(),
+        ManagerOrgUnit = transaction.ManagerOrgUnit.MapToNamedEntity(),
+        AssignedTo = transaction.AssignedTo.MapToNamedEntity(),
+        AssignedToOrgUnit = transaction.AssignedToOrgUnit.MapToNamedEntity(),
+        Building = transaction.Building.MapToNamedEntity(),
+        Floor = transaction.Floor.MapToNamedEntity(),
+        Place = transaction.Place.MapToNamedEntity(),
+        LocationName = transaction.Location.Name,
+        ApplicationTime = transaction.ApplicationTime,
+        RecordingTime = transaction.RecordingTime,
+        RequestedTime = transaction.RequestedTime,
         Status = transaction.Status.MapToNamedEntity()
       };
     }
@@ -66,9 +74,14 @@ namespace Empiria.Inventory.Assets.Adapters {
         TransactionNo = transaction.TransactionNo,
         Description = transaction.Description,
         OperationSourceName = transaction.OperationSource.Name,
-        BasePartyName = transaction.BaseParty.Name,
-        ApplicationDate = transaction.ApplicationDate,
-        RequestedDate = transaction.RequestedTime,
+        ManagerName = transaction.Manager.Name,
+        ManagerOrgUnitName = transaction.ManagerOrgUnit.Name,
+        AssignedToName = transaction.AssignedTo.Name,
+        AssignedToOrgUnitName = transaction.AssignedToOrgUnit.Name,
+        LocationName = transaction.Location.Name,
+        ApplicationTime = transaction.ApplicationTime,
+        RecordingTime = transaction.RecordingTime,
+        RequestedTime = transaction.RequestedTime,
         StatusName = transaction.Status.GetName()
       };
     }
