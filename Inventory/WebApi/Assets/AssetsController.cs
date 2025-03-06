@@ -23,7 +23,7 @@ namespace Empiria.Inventory.Assets.WebApi {
     #region Web Apis
 
     [HttpGet]
-    [Route("v2/fixed-assets/{assetUID:guid}")]
+    [Route("v2/assets/{assetUID:guid}")]
     public SingleObjectModel GetAsset([FromUri] string assetUID) {
 
       using (var usecases = AssetUseCases.UseCaseInteractor()) {
@@ -35,7 +35,7 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpGet]
-    [Route("v2/fixed-assets/keepers")]
+    [Route("v2/assets/keepers")]
     public CollectionModel GetAssetKeepers([FromUri] string keywords = "") {
 
       using (var usecases = AssetUseCases.UseCaseInteractor()) {
@@ -47,7 +47,7 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpGet]
-    [Route("v2/fixed-assets/types")]
+    [Route("v2/assets/types")]
     public CollectionModel GetAssetTypes() {
 
       using (var usecases = AssetUseCases.UseCaseInteractor()) {
@@ -59,7 +59,7 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpPost]
-    [Route("v2/fixed-assets/search")]
+    [Route("v2/assets/search")]
     public CollectionModel SearchAssets([FromBody] AssetsQuery query) {
 
       base.RequireBody(query);

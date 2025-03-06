@@ -24,7 +24,7 @@ namespace Empiria.Inventory.Assets.WebApi {
     #region Command web apis
 
     [HttpDelete]
-    [Route("v2/fixed-assets/{assetUID:guid}/documents/{documentUID:guid}")]
+    [Route("v2/assets/{assetUID:guid}/documents/{documentUID:guid}")]
     public NoDataModel RemoveAssetDocument([FromUri] string assetUID,
                                            [FromUri] string documentUID) {
 
@@ -38,7 +38,7 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpPost]
-    [Route("v2/fixed-assets/{assetUID:guid}/documents")]
+    [Route("v2/assets/{assetUID:guid}/documents")]
     public SingleObjectModel StoreAssetDocument([FromUri] string assetUID) {
 
       var asset = Asset.Parse(assetUID);
@@ -54,7 +54,7 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpPut, HttpPatch]
-    [Route("v2/fixed-assets/{assetUID:guid}/documents/{documentUID:guid}")]
+    [Route("v2/assets/{assetUID:guid}/documents/{documentUID:guid}")]
     public SingleObjectModel UpdateAssetDocument([FromUri] string assetUID,
                                                  [FromUri] string documentUID,
                                                  [FromBody] DocumentFields fields) {

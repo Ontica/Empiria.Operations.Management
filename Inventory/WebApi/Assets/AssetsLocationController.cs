@@ -22,7 +22,7 @@ namespace Empiria.Inventory.Assets.WebApi {
     #region Web Apis
 
     [HttpGet]
-    [Route("v2/fixed-assets/locations/root")]
+    [Route("v2/assets/locations/root")]
     public CollectionModel GetAssetsRootLocations() {
 
       using (var usecases = AssetLocationUseCases.UseCaseInteractor()) {
@@ -34,7 +34,7 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpGet]
-    [Route("v2/fixed-assets/locations/{locationUID}/children")]
+    [Route("v2/assets/locations/{locationUID}/children")]
     public CollectionModel GetAssetLocationsList([FromUri] string locationUID) {
 
       using (var usecases = AssetLocationUseCases.UseCaseInteractor()) {

@@ -24,7 +24,7 @@ namespace Empiria.Inventory.Assets.WebApi {
     #region Web Apis
 
     [HttpGet]
-    [Route("v2/fixed-assets/transactions/types")]
+    [Route("v2/assets/transactions/types")]
     public CollectionModel GetAssetTransactionTypes() {
 
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
@@ -36,7 +36,7 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpGet]
-    [Route("v2/fixed-assets/transactions/{transactionUID:guid}")]
+    [Route("v2/assets/transactions/{transactionUID:guid}")]
     public SingleObjectModel GetAssetTransaction([FromUri] string transactionUID) {
 
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
@@ -48,7 +48,7 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpPost]
-    [Route("v2/fixed-assets/transactions/search")]
+    [Route("v2/assets/transactions/search")]
     public CollectionModel SearchAssetTransactions([FromBody] AssetsTransactionsQuery query) {
 
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
@@ -60,7 +60,7 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpPost]
-    [Route("v2/fixed-assets/transactions/parties")]
+    [Route("v2/assets/transactions/parties")]
     public CollectionModel SearchAssetTransactionParties([FromBody] TransactionPartiesQuery query) {
 
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {

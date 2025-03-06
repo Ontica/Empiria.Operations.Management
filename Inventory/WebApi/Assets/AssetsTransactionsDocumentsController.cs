@@ -24,7 +24,7 @@ namespace Empiria.Inventory.Assets.WebApi {
     #region Command web apis
 
     [HttpDelete]
-    [Route("v2/fixed-assets/transactions/{transactionUID:guid}/documents/{documentUID:guid}")]
+    [Route("v2/assets/transactions/{transactionUID:guid}/documents/{documentUID:guid}")]
     public NoDataModel RemoveAssetTransactionDocument([FromUri] string transactionUID,
                                                       [FromUri] string documentUID) {
 
@@ -38,7 +38,7 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpPost]
-    [Route("v2/fixed-assets/transactions/{transactionUID:guid}/documents")]
+    [Route("v2/assets/transactions/{transactionUID:guid}/documents")]
     public SingleObjectModel StoreAssetTransactionDocument([FromUri] string transactionUID) {
 
       var transaction = AssetTransaction.Parse(transactionUID);
@@ -54,7 +54,7 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpPut, HttpPatch]
-    [Route("v2/fixed-assets/transactions/{transactionUID:guid}/documents/{documentUID:guid}")]
+    [Route("v2/assets/transactions/{transactionUID:guid}/documents/{documentUID:guid}")]
     public SingleObjectModel UpdateAssetTransactionDocument([FromUri] string transactionUID,
                                                             [FromUri] string documentUID,
                                                             [FromBody] DocumentFields fields) {
