@@ -9,7 +9,9 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System.Collections.Generic;
+
 using Empiria.Data;
+using Empiria.Parties;
 
 namespace Empiria.Inventory.Assets.Data {
 
@@ -17,6 +19,19 @@ namespace Empiria.Inventory.Assets.Data {
   static internal class AssetsData {
 
     #region Methods
+
+    static internal FixedList<Person> GetAssetsAssignees() {
+      var sql = "SELECT DISTINCT * FROM PARTIES " +
+                "WHERE PARTY_ID IN (SELECT ASSET_ASSIGNED_TO_ID " +
+                                   "FROM OMS_ASSETS " +
+                                   "WHERE ASSET_STATUS <> 'X') " +
+                "ORDER BY PARTY_NAME";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<Person>(op);
+    }
+
 
     static internal FixedList<AssetTransaction> GetTransactions(Asset asset) {
       var sql = "SELECT * FROM OMS_ASSETS_TRANSACTIONS " +
@@ -33,11 +48,24 @@ namespace Empiria.Inventory.Assets.Data {
     }
 
 
+    static internal FixedList<Person> GetTransactionsAssignees() {
+      var sql = "SELECT DISTINCT * FROM PARTIES " +
+                "WHERE PARTY_ID IN (SELECT ASSET_TXN_ASSIGNED_TO_ID " +
+                                   "FROM OMS_ASSETS_TRANSACTIONS " +
+                                   "WHERE ASSET_TXN_STATUS <> 'X') " +
+                "ORDER BY PARTY_NAME";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<Person>(op);
+    }
+
+
     static internal List<AssetTransactionEntry> GetTransactionEntries(AssetTransaction transaction) {
       var sql = "SELECT * FROM OMS_ASSETS_ENTRIES " +
-         $"WHERE ASSET_ENTRY_TXN_ID = {transaction.Id} AND " +
-               $"ASSET_ENTRY_STATUS <> 'X' " +
-         $"ORDER BY ASSET_ENTRY_ID";
+               $"WHERE ASSET_ENTRY_TXN_ID = {transaction.Id} AND " +
+                     $"ASSET_ENTRY_STATUS <> 'X' " +
+               $"ORDER BY ASSET_ENTRY_ID";
 
       var op = DataOperation.Parse(sql);
 

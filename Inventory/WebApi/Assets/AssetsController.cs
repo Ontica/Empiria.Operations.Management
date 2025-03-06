@@ -35,13 +35,13 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpGet]
-    [Route("v2/assets/keepers")]
-    public CollectionModel GetAssetKeepers([FromUri] string keywords = "") {
+    [Route("v2/assets/assignees")]
+    public CollectionModel GetAssetsAssignees([FromUri] string keywords = "") {
 
       using (var usecases = AssetUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> keepers = usecases.GetAssetKeepers(keywords);
+        FixedList<NamedEntityDto> assignees = usecases.GetAssetsAssignees(keywords);
 
-        return new CollectionModel(base.Request, keepers);
+        return new CollectionModel(base.Request, assignees);
       }
     }
 

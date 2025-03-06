@@ -43,12 +43,12 @@ namespace Empiria.Inventory.Assets.UseCases {
     }
 
 
-    public FixedList<NamedEntityDto> GetAssetKeepers(string keywords) {
+    public FixedList<NamedEntityDto> GetAssetsAssignees(string keywords) {
       keywords = keywords ?? string.Empty;
 
-      FixedList<Parties.Person> employees = Employment.GetEmployees();
+      FixedList<Parties.Person> assignees = AssetsData.GetAssetsAssignees();
 
-      return employees.MapToNamedEntityList();
+      return assignees.MapToNamedEntityList();
     }
 
 

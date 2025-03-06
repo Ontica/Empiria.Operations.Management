@@ -47,6 +47,18 @@ namespace Empiria.Inventory.Assets.WebApi {
     }
 
 
+    [HttpGet]
+    [Route("v2/assets/transactions/assignees")]
+    public CollectionModel GetAssetTransactionsAssignees([FromUri] string keywords = "") {
+
+      using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
+        FixedList<NamedEntityDto> assignees = usecases.GetAssetTransactionsAssignees(keywords);
+
+        return new CollectionModel(base.Request, assignees);
+      }
+    }
+
+
     [HttpPost]
     [Route("v2/assets/transactions/search")]
     public CollectionModel SearchAssetTransactions([FromBody] AssetsTransactionsQuery query) {
