@@ -2,7 +2,7 @@
 *                                                                                                            *
 *  Module   : Assets Management                          Component : Adapters Layer                          *
 *  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Query DTO                               *
-*  Type     : AssetTransactionQuery                      License   : Please read LICENSE.txt file            *
+*  Type     : AssetsTransactionsQuery                    License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Query data transfer object used to search assets transactions.                                 *
 *                                                                                                            *
@@ -15,7 +15,7 @@ using Empiria.StateEnums;
 namespace Empiria.Inventory.Assets.Adapters {
 
   /// <summary>Query data transfer object used to search assets transactions.</summary>
-  public class AssetTransactionQuery {
+  public class AssetsTransactionsQuery {
 
     public string TransactionTypeUID {
       get; set;
@@ -121,6 +121,6 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; set;
     } = string.Empty;
 
-  }  // class AssetTransactionQuery
+  }  // class AssetsTransactionsQuery
 
 }  // namespace Empiria.Inventory.Assets.Adapters

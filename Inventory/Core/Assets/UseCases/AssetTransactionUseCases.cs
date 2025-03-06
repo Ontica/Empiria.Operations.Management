@@ -51,7 +51,7 @@ namespace Empiria.Inventory.Assets.UseCases {
     }
 
 
-    public FixedList<AssetTransactionDescriptorDto> SearchAssetTransactions(AssetTransactionQuery query) {
+    public FixedList<AssetTransactionDescriptorDto> SearchAssetTransactions(AssetsTransactionsQuery query) {
       Assertion.Require(query, nameof(query));
 
       string filter = query.MapToFilterString();

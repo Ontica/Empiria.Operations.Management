@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Module   : Assets Management                          Component : Adapters Layer                          *
 *  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Query extension methods                 *
-*  Type     : AssetTransactionQueryExtensions            License   : Please read LICENSE.txt file            *
+*  Type     : AssetsTransactionsQueryExtensions          License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Extension methods for AssetTransactionQuery interface adapter.                                 *
+*  Summary  : Extension methods for AssetsTransactionsQuery interface adapter.                               *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -15,17 +15,17 @@ using Empiria.Locations;
 
 namespace Empiria.Inventory.Assets.Adapters {
 
-  /// <summary>Extension methods for AssetTransactionQuery interface adapter.</summary>
-  static internal class AssetTransactionQueryExtensions {
+  /// <summary>Extension methods for AssetsTransactionsQuery interface adapter.</summary>
+  static internal class AssetsTransactionsQueryExtensions {
 
     #region Extension methods
 
-    static internal void EnsureIsValid(this AssetTransactionQuery query) {
+    static internal void EnsureIsValid(this AssetsTransactionsQuery query) {
       // no-op
     }
 
 
-    static internal string MapToFilterString(this AssetTransactionQuery query) {
+    static internal string MapToFilterString(this AssetsTransactionsQuery query) {
       string transactionTypeFilter = BuildTransactionTypeFilter(query.TransactionTypeUID);
       string assignedToFilter = BuildAssignedToFilter(query.AssignedToUID);
       string assignedToOrgUnitFilter = BuildAssignedToOrgUnitFilter(query.AssignedToOrgUnitUID);
@@ -53,7 +53,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       return filter.ToString();
     }
 
-    static internal string MapToSortString(this AssetTransactionQuery query) {
+    static internal string MapToSortString(this AssetsTransactionsQuery query) {
       if (query.OrderBy.Length != 0) {
         return query.OrderBy;
       } else {
@@ -95,7 +95,7 @@ namespace Empiria.Inventory.Assets.Adapters {
     }
 
 
-    static private string BuildLocationFilter(AssetTransactionQuery query) {
+    static private string BuildLocationFilter(AssetsTransactionsQuery query) {
       if (query.BuildingUID.Length == 0) {
         return string.Empty;
       }
@@ -189,6 +189,6 @@ namespace Empiria.Inventory.Assets.Adapters {
 
     #endregion Helpers
 
-  }  // class AssetTransactionQueryExtensions
+  }  // class AssetsTransactionsQueryExtensions
 
 }  // namespace Empiria.Inventory.Assets.Adapters
