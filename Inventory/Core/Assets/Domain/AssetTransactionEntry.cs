@@ -1,7 +1,7 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Assets Management                          Component : Domain Layer                            *
-*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Information Holder                      *
+*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Partitioned Type / Information Holder   *
 *  Type     : AssetTransactionEntry                      License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Represents an asset transaction entry.                                                         *
@@ -11,21 +11,23 @@
 using System;
 
 using Empiria.Json;
+using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
 namespace Empiria.Inventory.Assets {
 
   /// <summary>Represents an asset transaction entry.</summary>
+  [PartitionedType(typeof(AssetTransactionEntryType))]
   public class AssetTransactionEntry : BaseObject {
 
     #region Constructors and parsers
 
-    private AssetTransactionEntry() {
-      // Required by Empiria Framework.
+    protected AssetTransactionEntry(AssetTransactionEntryType entryType) : base(entryType) {
+      // Required by Empiria Framework for all partitioned types.
     }
 
-    internal AssetTransactionEntry(AssetTransaction transaction) {
+    internal AssetTransactionEntry(AssetTransactionEntryType entryType, AssetTransaction transaction) : base(entryType) {
       Assertion.Require(transaction, nameof(transaction));
 
       this.Transaction = transaction;
@@ -39,14 +41,15 @@ namespace Empiria.Inventory.Assets {
 
     #endregion Constructors and parsers
 
-    [DataField("ASSET_ENTRY_TXN_ID")]
-    public AssetTransaction Transaction {
-      get; private set;
+    public AssetTransactionEntryType AssetTransactionEntryType {
+      get {
+        return (AssetTransactionEntryType) base.GetEmpiriaType();
+      }
     }
 
 
-    [DataField("ASSET_ENTRY_TYPE_ID")]
-    public int EntryTypeId {
+    [DataField("ASSET_ENTRY_TXN_ID")]
+    public AssetTransaction Transaction {
       get; private set;
     }
 
@@ -63,14 +66,8 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("ASSET_ENTRY_OPERATION_TYPE_ID")]
-    public int OperationTypeId {
-      get; private set;
-    }
-
-
     [DataField("ASSET_ENTRY_OPERATION_ID")]
-    public int OperationId {
+    internal int OperationId {
       get; private set;
     }
 
@@ -81,14 +78,14 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("ASSET_ENTRY_OPERATION_VALUE")]
-    public decimal OperationValue {
+    [DataField("ASSET_ENTRY_EXT_DATA")]
+    internal protected JsonObject ExtensionData {
       get; private set;
     }
 
 
-    [DataField("ASSET_ENTRY_EXT_DATA")]
-    internal protected JsonObject ExtensionData {
+    [DataField("ASSET_ENTRY_POSITION")]
+    internal int Position {
       get; private set;
     }
 
@@ -113,7 +110,7 @@ namespace Empiria.Inventory.Assets {
 
     public virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(Transaction.Keywords, Asset.Keywords, Description);
+        return EmpiriaString.BuildKeywords(Description, Asset.Keywords, Transaction.Keywords);
       }
     }
 
