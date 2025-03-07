@@ -21,7 +21,7 @@ namespace Empiria.Tests.Inventory.Assets {
 
     [Fact]
     public void Should_Read_All_Asset_Transaction_Types() {
-      var sut = BaseObject.GetList<AssetTransactionType>();
+      var sut = AssetTransactionType.GetList();
 
       Assert.NotNull(sut);
       Assert.NotEmpty(sut);

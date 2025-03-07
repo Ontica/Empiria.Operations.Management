@@ -1,10 +1,10 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Assets Management                          Component : Domain Layer                            *
-*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Information Holder                      *
+*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Partitioned Type / Information Holder   *
 *  Type     : AssetTransaction                           License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Represents an asset transaction.                                                               *
+*  Summary  : Represents an assets transaction type.                                                         *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 
 using Empiria.Json;
+using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
@@ -21,7 +22,8 @@ using Empiria.Inventory.Assets.Data;
 
 namespace Empiria.Inventory.Assets {
 
-  /// <summary>Represents as asset transaction type.</summary>
+  /// <summary>Represents an assets transaction type.</summary>
+  [PartitionedType(typeof(AssetTransactionType))]
   public class AssetTransaction : BaseObject {
 
     #region Fields
@@ -31,6 +33,10 @@ namespace Empiria.Inventory.Assets {
     #endregion Fields
 
     #region Constructors and parsers
+
+    protected AssetTransaction(AssetTransactionType transactionType) : base(transactionType) {
+      // Required by Empiria Framework for all partitioned types.
+    }
 
     static internal AssetTransaction Parse(int id) => ParseId<AssetTransaction>(id);
 
@@ -50,9 +56,10 @@ namespace Empiria.Inventory.Assets {
 
     #region Properties
 
-    [DataField("ASSET_TXN_TYPE_ID")]
     public AssetTransactionType AssetTransactionType {
-      get; private set;
+      get {
+        return (AssetTransactionType) base.GetEmpiriaType();
+      }
     }
 
 

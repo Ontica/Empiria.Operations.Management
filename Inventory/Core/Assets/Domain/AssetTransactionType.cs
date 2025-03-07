@@ -1,29 +1,40 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Assets Management                          Component : Domain Layer                            *
-*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Information Holder                      *
+*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Power type                              *
 *  Type     : AssetTransactionType                       License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Represents an asset transaction type.                                                          *
+*  Summary  : Power type that describes an assets transaction.                                               *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System.Linq;
+
+using Empiria.Ontology;
+
 namespace Empiria.Inventory.Assets {
 
-  /// <summary>Represents an asset transaction type.</summary>
-  public class AssetTransactionType : GeneralObject {
+  /// <summary>Power type that describes an assets transaction.</summary>
+  [Powertype(typeof(AssetTransaction))]
+  public class AssetTransactionType : Powertype {
 
     #region Constructors and parsers
 
-    static internal AssetTransactionType Parse(int id) => ParseId<AssetTransactionType>(id);
-
-    static internal AssetTransactionType Parse(string uid) => ParseKey<AssetTransactionType>(uid);
-
-    static internal FixedList<AssetTransactionType> GetList() {
-      return GetList<AssetTransactionType>().ToFixedList();
+    private AssetTransactionType() {
+      // Empiria power type types always have this constructor.
     }
 
-    static internal AssetTransactionType Empty => ParseEmpty<AssetTransactionType>();
+    static public new AssetTransactionType Parse(int typeId) => Parse<AssetTransactionType>(typeId);
+
+    static public new AssetTransactionType Parse(string typeName) => Parse<AssetTransactionType>(typeName);
+
+    static public FixedList<AssetTransactionType> GetList() {
+      return Empty.GetAllSubclasses()
+                  .Select(x => (AssetTransactionType) x)
+                  .ToFixedList();
+    }
+
+    static public AssetTransactionType Empty => Parse("ObjectTypeInfo.AssetTransaction");
 
     #endregion Constructors and parsers
 
