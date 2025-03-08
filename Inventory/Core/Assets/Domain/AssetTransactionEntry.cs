@@ -73,13 +73,13 @@ namespace Empiria.Inventory.Assets {
 
 
     [DataField("ASSET_ENTRY_OPERATION_DATA")]
-    internal protected JsonObject OperationData {
+    protected JsonObject OperationData {
       get; private set;
     }
 
 
     [DataField("ASSET_ENTRY_EXT_DATA")]
-    internal protected JsonObject ExtensionData {
+    protected JsonObject ExtensionData {
       get; private set;
     }
 

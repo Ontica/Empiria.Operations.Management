@@ -190,7 +190,7 @@ namespace Empiria.Inventory.Assets {
 
 
     [DataField("ASSET_TXN_EXT_DATA")]
-    internal protected JsonObject ExtensionData {
+    protected JsonObject ExtData {
       get; private set;
     }
 
@@ -240,6 +240,16 @@ namespace Empiria.Inventory.Assets {
     internal FixedList<Asset> GetAssets() {
       return Entries.Select(x => x.Asset)
                     .ToFixedList();
+    }
+
+
+    protected override void OnSave() {
+      if (IsNew) {
+        PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+        PostingTime = DateTime.Now;
+      }
+
+      AssetsTransactionsData.WriteAssetTransaction(this, this.ExtData.ToString());
     }
 
 

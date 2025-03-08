@@ -65,7 +65,7 @@ namespace Empiria.Tests.Inventory.Assets {
 
     [Fact]
     public void Should_Search_Asset_Transactions() {
-      var sut = AssetsData.SearchTransactions(string.Empty, string.Empty);
+      var sut = AssetsTransactionsData.SearchTransactions(string.Empty, string.Empty);
 
       Assert.NotNull(sut);
       Assert.NotEmpty(sut);

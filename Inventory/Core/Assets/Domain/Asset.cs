@@ -16,6 +16,8 @@ using Empiria.StateEnums;
 
 using Empiria.Locations;
 
+using Empiria.Inventory.Assets.Data;
+
 namespace Empiria.Inventory.Assets {
 
   /// <summary>Represents an asset.</summary>
@@ -189,9 +191,15 @@ namespace Empiria.Inventory.Assets {
     }
 
 
+    [DataField("ASSET_ACCOUNTING_DATA")]
+    protected JsonObject AccountingData {
+      get; private set;
+    }
+
+
     [DataField("ASSET_EXT_DATA")]
-    private JsonObject ExtData {
-      get; set;
+    protected JsonObject ExtData {
+      get; private set;
     }
 
 
@@ -223,6 +231,19 @@ namespace Empiria.Inventory.Assets {
     }
 
     #endregion Properties
+
+    #region Methods
+
+    protected override void OnSave() {
+      if (IsNew) {
+        PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+        PostingTime = DateTime.Now;
+      }
+
+      AssetsData.WriteAsset(this, this.AccountingData.ToString(), this.ExtData.ToString());
+    }
+
+    #endregion Methods
 
   }  // class Asset
 

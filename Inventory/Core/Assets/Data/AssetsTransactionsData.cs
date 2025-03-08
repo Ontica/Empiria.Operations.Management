@@ -76,6 +76,18 @@ namespace Empiria.Inventory.Assets.Data {
       return DataReader.GetFixedList<AssetTransaction>(op);
     }
 
+
+    static internal void WriteAssetTransaction(AssetTransaction o, string extensionData) {
+      var op = DataOperation.Parse("write_asset_transaction", o.Id, o.UID, o.AssetTransactionType.Id,
+        o.TransactionNo, o.Description, string.Join(" ", o.Identificators), string.Join(" ", o.Tags),
+        o.Manager.Id, o.ManagerOrgUnit.Id, o.AssignedTo.Id, o.AssignedToOrgUnit.Id,
+        o.Location.Id, o.OperationSource.Id, o.RequestedTime, o.RequestedBy.Id,
+        o.ApplicationTime, o.AppliedBy.Id, o.RecordingTime, o.RecordedBy.Id,
+        extensionData, o.Keywords, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+
+      DataWriter.Execute(op);
+    }
+
     #endregion Methods
 
   }  // class AssetsTransactionsData

@@ -36,7 +36,6 @@ namespace Empiria.Tests.Inventory.Assets {
         Assert.NotNull(sut.Transaction);
         Assert.NotNull(sut.Asset);
         Assert.NotNull(sut.Description);
-        Assert.NotNull(sut.OperationData);
         Assert.True(sut.Position >= 0);
       }
     }

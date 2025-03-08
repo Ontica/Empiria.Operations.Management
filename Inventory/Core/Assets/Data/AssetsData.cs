@@ -30,6 +30,7 @@ namespace Empiria.Inventory.Assets.Data {
       return DataReader.GetFixedList<Person>(op);
     }
 
+
     static internal FixedList<Asset> SearchAssets(string filter, string sortBy) {
       var sql = "SELECT OMS_ASSETS.* " +
                 "FROM OMS_ASSETS INNER JOIN OMS_PRODUCTS_SKUS " +
@@ -46,6 +47,17 @@ namespace Empiria.Inventory.Assets.Data {
       var op = DataOperation.Parse(sql);
 
       return DataReader.GetFixedList<Asset>(op);
+    }
+
+
+    static internal void WriteAsset(Asset o, string accountingData, string extensionData) {
+      var op = DataOperation.Parse("write_asset", o.Id, o.UID, o.AssetType.Id,
+        o.Sku.Id, o.Description, string.Join(" ", o.Identificators), string.Join(" ", o.Tags),
+        o.Manager.Id, o.ManagerOrgUnit.Id, o.AssignedTo.Id, o.AssignedToOrgUnit.Id,
+        o.Location.Id, o.Condition, accountingData, extensionData, o.Keywords,
+        o.StartDate, o.EndDate, o.LastUpdate, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+
+      DataWriter.Execute(op);
     }
 
     #endregion Methods
