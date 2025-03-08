@@ -23,7 +23,7 @@ namespace Empiria.Inventory.Assets.Adapters {
     static internal AssetHolderDto Map(Asset asset) {
       return new AssetHolderDto {
         Asset = MapAsset(asset),
-        Transactions = AssetTransactionMapper.Map(AssetsData.GetTransactions(asset)),
+        Transactions = AssetTransactionMapper.Map(AssetsTransactionsData.GetTransactions(asset)),
         Documents = DocumentServices.GetEntityDocuments(asset),
         History = HistoryServices.GetEntityHistory(asset),
         Actions = MapActions()

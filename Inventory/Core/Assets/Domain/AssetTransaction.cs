@@ -244,7 +244,7 @@ namespace Empiria.Inventory.Assets {
 
 
     internal void Reload() {
-      _entries = new Lazy<List<AssetTransactionEntry>>(() => AssetsData.GetTransactionEntries(this));
+      _entries = new Lazy<List<AssetTransactionEntry>>(() => AssetsTransactionsData.GetTransactionEntries(this));
     }
 
     #endregion Methods

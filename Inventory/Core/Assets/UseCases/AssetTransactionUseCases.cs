@@ -47,7 +47,7 @@ namespace Empiria.Inventory.Assets.UseCases {
     public FixedList<NamedEntityDto> GetAssetTransactionsAssignees(string keywords) {
       keywords = keywords ?? string.Empty;
 
-      FixedList<Person> assignees = AssetsData.GetTransactionsAssignees();
+      FixedList<Person> assignees = AssetsTransactionsData.GetTransactionsAssignees();
 
       return assignees.MapToNamedEntityList();
     }
@@ -67,7 +67,7 @@ namespace Empiria.Inventory.Assets.UseCases {
 
       string sort = query.MapToSortString();
 
-      FixedList<AssetTransaction> transactions = AssetsData.SearchTransactions(filter, sort);
+      FixedList<AssetTransaction> transactions = AssetsTransactionsData.SearchTransactions(filter, sort);
 
       return AssetTransactionMapper.Map(transactions);
     }
