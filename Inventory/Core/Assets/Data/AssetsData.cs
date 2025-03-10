@@ -51,7 +51,8 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal void WriteAsset(Asset o, string accountingData, string extensionData) {
-      var op = DataOperation.Parse("write_asset", o.Id, o.UID, o.AssetType.Id,
+
+      var op = DataOperation.Parse("WRITE_OMS_ASSET", o.Id, o.UID, o.AssetType.Id,
         o.Sku.Id, o.Description, string.Join(" ", o.Identificators), string.Join(" ", o.Tags),
         o.Manager.Id, o.ManagerOrgUnit.Id, o.AssignedTo.Id, o.AssignedToOrgUnit.Id,
         o.Location.Id, o.Condition, accountingData, extensionData, o.Keywords,

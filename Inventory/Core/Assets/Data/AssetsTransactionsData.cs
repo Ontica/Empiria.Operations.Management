@@ -78,12 +78,25 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal void WriteAssetTransaction(AssetTransaction o, string extensionData) {
-      var op = DataOperation.Parse("write_asset_transaction", o.Id, o.UID, o.AssetTransactionType.Id,
+
+      var op = DataOperation.Parse("WRITE_OMS_ASSET_TRANSACTION", o.Id, o.UID, o.AssetTransactionType.Id,
         o.TransactionNo, o.Description, string.Join(" ", o.Identificators), string.Join(" ", o.Tags),
         o.Manager.Id, o.ManagerOrgUnit.Id, o.AssignedTo.Id, o.AssignedToOrgUnit.Id,
         o.Location.Id, o.OperationSource.Id, o.RequestedTime, o.RequestedBy.Id,
         o.ApplicationTime, o.AppliedBy.Id, o.RecordingTime, o.RecordedBy.Id,
         extensionData, o.Keywords, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+
+      DataWriter.Execute(op);
+    }
+
+
+    static internal void WriteAssetTransactionEntry(AssetTransactionEntry o,
+                                                    string operationData,
+                                                    string extensionData) {
+
+      var op = DataOperation.Parse("WRITE_OMS_ASSET_ENTRY", o.Id, o.UID, o.AssetTransactionEntryType.Id,
+        o.Transaction.Id, o.Asset.Id, o.Description, o.OperationId, operationData, extensionData,
+        o.Keywords, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }

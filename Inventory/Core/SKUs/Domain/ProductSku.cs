@@ -17,6 +17,8 @@ using Empiria.StateEnums;
 
 using Empiria.Products;
 
+using Empiria.Inventory.Data;
+
 namespace Empiria.Inventory {
 
   /// <summary>Partitioned type that represents a product stock keeping unit (SKU).</summary>
@@ -114,8 +116,8 @@ namespace Empiria.Inventory {
 
 
     [DataField("SKU_VARIANT_ATTRS")]
-    private JsonObject VariantAttrs {
-      get; set;
+    protected JsonObject VariantAttrs {
+      get; private set;
     }
 
 
@@ -159,7 +161,7 @@ namespace Empiria.Inventory {
 
 
     [DataField("SKU_EXT_DATA")]
-    internal JsonObject ExtData {
+    protected JsonObject ExtData {
       get; private set;
     }
 
@@ -190,6 +192,19 @@ namespace Empiria.Inventory {
     }
 
     #endregion Properties
+
+    #region Methods
+
+    protected override void OnSave() {
+      if (IsNew) {
+        PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+        PostingTime = DateTime.Now;
+      }
+
+      ProductsSkusData.WriteProductSku(this, this.VariantAttrs.ToString(), this.ExtData.ToString());
+    }
+
+    #endregion Methods
 
   }  // class ProductSku
 
