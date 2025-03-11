@@ -31,9 +31,38 @@ namespace Empiria.Inventory.Assets.UseCases {
       return UseCase.CreateInstance<AssetTransactionUseCases>();
     }
 
+
     #endregion Constructors and parsers
 
     #region Use cases
+
+    public AssetTransactionHolderDto CreateAssetTransaction(AssetTransactionFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      var transactionType = AssetTransactionType.Parse(fields.TransactionTypeUID);
+
+      var transaction = new AssetTransaction(transactionType);
+
+      transaction.Update(fields);
+
+      transaction.Save();
+
+      return AssetTransactionMapper.Map(transaction);
+    }
+
+
+    public AssetTransactionHolderDto DeleteAssetTransaction(string transactionUID) {
+      Assertion.Require(transactionUID, nameof(transactionUID));
+
+      var transaction = AssetTransaction.Parse(transactionUID);
+
+      transaction.Delete();
+
+      transaction.Save();
+
+      return AssetTransactionMapper.Map(transaction);
+    }
+
 
     public AssetTransactionHolderDto GetAssetTransaction(string transactionUID) {
       Assertion.Require(transactionUID, nameof(transactionUID));
@@ -77,6 +106,21 @@ namespace Empiria.Inventory.Assets.UseCases {
       var persons = BaseObject.GetList<Person>();
 
       return persons.MapToNamedEntityList();
+    }
+
+
+    public AssetTransactionHolderDto UpdateAssetTransaction(string transactionUID,
+                                                            AssetTransactionFields fields) {
+      Assertion.Require(transactionUID, nameof(transactionUID));
+      Assertion.Require(fields, nameof(fields));
+
+      var transaction = AssetTransaction.Parse(transactionUID);
+
+      transaction.Update(fields);
+
+      transaction.Save();
+
+      return AssetTransactionMapper.Map(transaction);
     }
 
     #endregion Use cases

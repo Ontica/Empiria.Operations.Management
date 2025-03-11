@@ -19,6 +19,7 @@ using Empiria.StateEnums;
 using Empiria.Locations;
 
 using Empiria.Inventory.Assets.Data;
+using Empiria.Inventory.Assets.Adapters;
 
 namespace Empiria.Inventory.Assets {
 
@@ -34,7 +35,7 @@ namespace Empiria.Inventory.Assets {
 
     #region Constructors and parsers
 
-    protected AssetTransaction(AssetTransactionType transactionType) : base(transactionType) {
+    internal protected AssetTransaction(AssetTransactionType transactionType) : base(transactionType) {
       // Required by Empiria Framework for all partitioned types.
     }
 
@@ -219,7 +220,7 @@ namespace Empiria.Inventory.Assets {
     public virtual string Keywords {
       get {
         return EmpiriaString.BuildKeywords(TransactionNo, Description, _identificators, _tags,
-                                           AssetTransactionType.Name, Manager.Keywords,
+                                           AssetTransactionType.DisplayName, Manager.Keywords,
                                            ManagerOrgUnit.Keywords, AssignedTo.Keywords,
                                            AssignedToOrgUnit.Keywords, Location.Keywords,
                                            OperationSource.Keywords);
@@ -236,6 +237,10 @@ namespace Empiria.Inventory.Assets {
     #endregion Properties
 
     #region Methods
+
+    internal void Delete() {
+
+    }
 
     internal FixedList<Asset> GetAssets() {
       return Entries.Select(x => x.Asset)
@@ -255,6 +260,11 @@ namespace Empiria.Inventory.Assets {
 
     internal void Reload() {
       _entries = new Lazy<List<AssetTransactionEntry>>(() => AssetsTransactionsData.GetTransactionEntries(this));
+    }
+
+
+    internal void Update(AssetTransactionFields fields) {
+
     }
 
     #endregion Methods

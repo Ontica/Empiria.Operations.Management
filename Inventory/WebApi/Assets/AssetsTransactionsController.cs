@@ -23,6 +23,32 @@ namespace Empiria.Inventory.Assets.WebApi {
 
     #region Web Apis
 
+    [HttpPost]
+    [Route("v2/assets/transactions")]
+    public SingleObjectModel CreateAssetTransaction([FromBody] AssetTransactionFields fields) {
+
+      base.RequireBody(fields);
+
+      using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
+        AssetTransactionHolderDto transaction = usecases.CreateAssetTransaction(fields);
+
+        return new SingleObjectModel(base.Request, transaction);
+      }
+    }
+
+
+    [HttpDelete]
+    [Route("v2/assets/transactions/{transactionUID:guid}")]
+    public NoDataModel DeleteAssetTransaction([FromUri] string transactionUID) {
+
+      using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
+        _ = usecases.DeleteAssetTransaction(transactionUID);
+
+        return new NoDataModel(base.Request);
+      }
+    }
+
+
     [HttpGet]
     [Route("v2/assets/transactions/types")]
     public CollectionModel GetAssetTransactionTypes() {
@@ -63,6 +89,8 @@ namespace Empiria.Inventory.Assets.WebApi {
     [Route("v2/assets/transactions/search")]
     public CollectionModel SearchAssetTransactions([FromBody] AssetsTransactionsQuery query) {
 
+      base.RequireBody(query);
+
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
         FixedList<AssetTransactionDescriptorDto> transactions = usecases.SearchAssetTransactions(query);
 
@@ -75,12 +103,30 @@ namespace Empiria.Inventory.Assets.WebApi {
     [Route("v2/assets/transactions/parties")]
     public CollectionModel SearchAssetTransactionParties([FromBody] TransactionPartiesQuery query) {
 
+      base.RequireBody(query);
+
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
         FixedList<NamedEntityDto> parties = usecases.SearchAssetTransactionsParties(query);
 
         return new CollectionModel(base.Request, parties);
       }
     }
+
+
+    [HttpPut, HttpPatch]
+    [Route("v2/assets/transactions/{transactionUID:guid}")]
+    public SingleObjectModel UpdateAssetTransaction([FromUri] string transactionUID,
+                                                    [FromBody] AssetTransactionFields fields) {
+
+      base.RequireBody(fields);
+
+      using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
+        AssetTransactionHolderDto transaction = usecases.UpdateAssetTransaction(transactionUID, fields);
+
+        return new SingleObjectModel(base.Request, transaction);
+      }
+    }
+
     #endregion Web Apis
 
   }  // class AssetsTransactionsController
