@@ -35,6 +35,8 @@ namespace Empiria.Inventory.Assets.Adapters {
         TransactionType = transaction.AssetTransactionType.MapToNamedEntity(),
         TransactionNo = transaction.TransactionNo,
         Description = transaction.Description,
+        Identificators = transaction.Identificators,
+        Tags = transaction.Tags,
         OperationSource = transaction.OperationSource.MapToNamedEntity(),
         Manager = transaction.Manager.MapToNamedEntity(),
         ManagerOrgUnit = transaction.ManagerOrgUnit.MapToNamedEntity(),
@@ -70,7 +72,7 @@ namespace Empiria.Inventory.Assets.Adapters {
     static private AssetTransactionDescriptorDto MapToDescriptor(AssetTransaction transaction) {
       return new AssetTransactionDescriptorDto {
         UID = transaction.UID,
-        TransactionTypeName = transaction.AssetTransactionType.Name,
+        TransactionTypeName = transaction.AssetTransactionType.DisplayName,
         TransactionNo = transaction.TransactionNo,
         Description = transaction.Description,
         OperationSourceName = transaction.OperationSource.Name,

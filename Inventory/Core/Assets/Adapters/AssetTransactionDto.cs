@@ -70,6 +70,14 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
+    public FixedList<string> Identificators {
+      get; internal set;
+    }
+
+    public FixedList<string> Tags {
+      get; internal set;
+    }
+
     public NamedEntityDto Manager {
       get; internal set;
     }

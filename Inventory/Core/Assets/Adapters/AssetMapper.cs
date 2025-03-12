@@ -38,6 +38,8 @@ namespace Empiria.Inventory.Assets.Adapters {
         AssetType = asset.AssetType.MapToNamedEntity(),
         Name = asset.Name,
         Description = asset.Description,
+        Identificators = asset.Identificators,
+        Tags = asset.Tags,
         Brand = asset.Brand,
         Model = asset.Model,
         Year = asset.Year,
