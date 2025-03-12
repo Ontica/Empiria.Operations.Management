@@ -8,6 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
+
 namespace Empiria.Inventory.Assets.Adapters {
 
   /// <summary>Input fields used to update and create asset transactions.</summary>
@@ -15,6 +17,70 @@ namespace Empiria.Inventory.Assets.Adapters {
 
     public string TransactionTypeUID {
       get; set;
+    } = string.Empty;
+
+
+    public string Description {
+      get; set;
+    } = string.Empty;
+
+
+    public string[] Identificators {
+      get; set;
+    } = new string[0];
+
+
+    public string[] Tags {
+      get; set;
+    } = new string[0];
+
+
+    public string ManagerUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string ManagerOrgUnitUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string AssignedToUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string AssignedToOrgUnitUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string LocationUID {
+      get; set;
+    } = string.Empty;
+
+
+    public DateTime RequestedTime {
+      get; internal set;
+    } = DateTime.Today;
+
+
+    public DateTime ApplicationTime {
+      get; internal set;
+    } = DateTime.Today;
+
+
+    internal void EnsureValid() {
+      Assertion.Require(TransactionTypeUID, nameof(TransactionTypeUID));
+      Assertion.Require(Description, nameof(Description));
+      Assertion.Require(ManagerUID, nameof(ManagerUID));
+      Assertion.Require(ManagerOrgUnitUID, nameof(ManagerOrgUnitUID));
+      Assertion.Require(AssignedToUID, nameof(AssignedToUID));
+      Assertion.Require(AssignedToOrgUnitUID, nameof(AssignedToOrgUnitUID));
+      Assertion.Require(LocationUID, nameof(LocationUID));
+
+      Assertion.Require(RequestedTime <= ApplicationTime,
+        "La fecha de solicitud debe ser anterior o igual a la fecha de aplicación.");
     }
 
   }  // class AssetTransactionFields

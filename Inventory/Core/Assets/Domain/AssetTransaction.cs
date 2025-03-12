@@ -79,7 +79,6 @@ namespace Empiria.Inventory.Assets {
     [DataField("ASSET_TXN_IDENTIFICATORS")]
     private string _identificators = string.Empty;
 
-
     public FixedList<string> Identificators {
       get {
         return _identificators.Split(' ').ToFixedList();
@@ -239,8 +238,12 @@ namespace Empiria.Inventory.Assets {
     #region Methods
 
     internal void Delete() {
+      Assertion.Require(this.Status == TransactionStatus.Pending,
+                        $"Transaction can not be deleted. Its status is {Status.GetName()}.");
 
+      this.Status = TransactionStatus.Deleted;
     }
+
 
     internal FixedList<Asset> GetAssets() {
       return Entries.Select(x => x.Asset)
@@ -258,13 +261,26 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    internal void Reload() {
+    private void Reload() {
       _entries = new Lazy<List<AssetTransactionEntry>>(() => AssetsTransactionsData.GetTransactionEntries(this));
     }
 
 
     internal void Update(AssetTransactionFields fields) {
+      Assertion.Require(fields, nameof(fields));
 
+      fields.EnsureValid();
+
+      Description = PatchCleanField(fields.Description, Description);
+      _identificators = string.Join(" ", fields.Identificators);
+      _tags = string.Join(" ", fields.Tags);
+      Manager = PatchField(fields.ManagerUID, Manager);
+      ManagerOrgUnit = PatchField(fields.ManagerOrgUnitUID, ManagerOrgUnit);
+      AssignedTo = PatchField(fields.AssignedToUID, AssignedTo);
+      AssignedToOrgUnit = PatchField(fields.AssignedToOrgUnitUID, AssignedToOrgUnit);
+      Location = PatchField(fields.LocationUID, Location);
+      RequestedTime = PatchField(fields.RequestedTime, RequestedTime);
+      ApplicationTime = PatchField(fields.ApplicationTime, ApplicationTime);
     }
 
     #endregion Methods

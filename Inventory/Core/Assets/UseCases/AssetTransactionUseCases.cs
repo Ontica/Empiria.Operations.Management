@@ -39,6 +39,8 @@ namespace Empiria.Inventory.Assets.UseCases {
     public AssetTransactionHolderDto CreateAssetTransaction(AssetTransactionFields fields) {
       Assertion.Require(fields, nameof(fields));
 
+      fields.EnsureValid();
+
       var transactionType = AssetTransactionType.Parse(fields.TransactionTypeUID);
 
       var transaction = new AssetTransaction(transactionType);
@@ -113,6 +115,8 @@ namespace Empiria.Inventory.Assets.UseCases {
                                                             AssetTransactionFields fields) {
       Assertion.Require(transactionUID, nameof(transactionUID));
       Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
 
       var transaction = AssetTransaction.Parse(transactionUID);
 
