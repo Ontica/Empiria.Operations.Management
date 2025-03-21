@@ -84,6 +84,15 @@ namespace Empiria.Inventory.Assets.UseCases {
     }
 
 
+    public FixedList<NamedEntityDto> GetAssetTransactionsManagers(string keywords) {
+      keywords = keywords ?? string.Empty;
+
+      FixedList<Person> managers = AssetsTransactionsData.GetTransactionsManagers();
+
+      return managers.MapToNamedEntityList();
+    }
+
+
     public FixedList<NamedEntityDto> GetAssetTransactionTypes() {
       var transactionTypes = AssetTransactionType.GetList();
 

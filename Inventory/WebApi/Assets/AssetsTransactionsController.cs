@@ -11,6 +11,7 @@
 using System.Web.Http;
 
 using Empiria.StateEnums;
+
 using Empiria.WebApi;
 
 using Empiria.Inventory.Assets.Adapters;
@@ -81,6 +82,18 @@ namespace Empiria.Inventory.Assets.WebApi {
         FixedList<NamedEntityDto> assignees = usecases.GetAssetTransactionsAssignees(keywords);
 
         return new CollectionModel(base.Request, assignees);
+      }
+    }
+
+
+    [HttpGet]
+    [Route("v2/assets/transactions/managers")]
+    public CollectionModel GetAssetTransactionsManagers([FromUri] string keywords = "") {
+
+      using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
+        FixedList<NamedEntityDto> managers = usecases.GetAssetTransactionsManagers(keywords);
+
+        return new CollectionModel(base.Request, managers);
       }
     }
 

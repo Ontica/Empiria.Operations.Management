@@ -48,6 +48,19 @@ namespace Empiria.Inventory.Assets.Data {
     }
 
 
+    static internal FixedList<Person> GetTransactionsManagers() {
+      var sql = "SELECT DISTINCT * FROM PARTIES " +
+          "WHERE PARTY_ID IN (SELECT ASSET_TXN_MGR_ID " +
+                             "FROM OMS_ASSETS_TRANSACTIONS " +
+                             "WHERE ASSET_TXN_STATUS <> 'X') " +
+          "ORDER BY PARTY_NAME";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<Person>(op);
+    }
+
+
     static internal List<AssetTransactionEntry> GetTransactionEntries(AssetTransaction transaction) {
       var sql = "SELECT * FROM OMS_ASSETS_ENTRIES " +
                $"WHERE ASSET_ENTRY_TXN_ID = {transaction.Id} AND " +
