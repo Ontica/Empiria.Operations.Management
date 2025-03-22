@@ -61,12 +61,12 @@ namespace Empiria.Inventory.Assets.Adapters {
 
 
     public DateTime RequestedTime {
-      get; internal set;
+      get; set;
     } = DateTime.Today;
 
 
     public DateTime ApplicationTime {
-      get; internal set;
+      get; set;
     } = DateTime.Today;
 
 

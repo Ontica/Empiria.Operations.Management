@@ -11,7 +11,6 @@
 using System.Web.Http;
 
 using Empiria.StateEnums;
-
 using Empiria.WebApi;
 
 using Empiria.Inventory.Assets.Adapters;
@@ -27,8 +26,6 @@ namespace Empiria.Inventory.Assets.WebApi {
     [HttpPost]
     [Route("v2/assets/transactions")]
     public SingleObjectModel CreateAssetTransaction([FromBody] AssetTransactionFields fields) {
-
-      base.RequireBody(fields);
 
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
         AssetTransactionHolderDto transaction = usecases.CreateAssetTransaction(fields);
@@ -102,8 +99,6 @@ namespace Empiria.Inventory.Assets.WebApi {
     [Route("v2/assets/transactions/search")]
     public CollectionModel SearchAssetTransactions([FromBody] AssetsTransactionsQuery query) {
 
-      base.RequireBody(query);
-
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
         FixedList<AssetTransactionDescriptorDto> transactions = usecases.SearchAssetTransactions(query);
 
@@ -115,8 +110,6 @@ namespace Empiria.Inventory.Assets.WebApi {
     [HttpPost]
     [Route("v2/assets/transactions/parties")]
     public CollectionModel SearchAssetTransactionParties([FromBody] TransactionPartiesQuery query) {
-
-      base.RequireBody(query);
 
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
         FixedList<NamedEntityDto> parties = usecases.SearchAssetTransactionsParties(query);
@@ -130,8 +123,6 @@ namespace Empiria.Inventory.Assets.WebApi {
     [Route("v2/assets/transactions/{transactionUID:guid}")]
     public SingleObjectModel UpdateAssetTransaction([FromUri] string transactionUID,
                                                     [FromBody] AssetTransactionFields fields) {
-
-      base.RequireBody(fields);
 
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
         AssetTransactionHolderDto transaction = usecases.UpdateAssetTransaction(transactionUID, fields);

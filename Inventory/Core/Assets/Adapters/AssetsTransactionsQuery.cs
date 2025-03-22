@@ -94,7 +94,7 @@ namespace Empiria.Inventory.Assets.Adapters {
 
     public DateTime ToDate {
       get; set;
-    } = ExecutionServer.DateMinValue;
+    } = ExecutionServer.DateMaxValue;
 
 
     public TransactionPartyType PartyType {
