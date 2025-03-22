@@ -31,12 +31,23 @@ namespace Empiria.Inventory.Assets {
     static public FixedList<AssetTransactionType> GetList() {
       return Empty.GetAllSubclasses()
                   .Select(x => (AssetTransactionType) x)
-                  .ToFixedList();
+                  .ToFixedList()
+                  .Sort((x, y) => x.SortOrder.CompareTo(y.SortOrder));
     }
 
     static public AssetTransactionType Empty => Parse("ObjectTypeInfo.AssetTransaction");
 
     #endregion Constructors and parsers
+
+    #region Properties
+
+    public int SortOrder {
+      get {
+        return base.ExtensionData.Get("sortOrder", 0);
+      }
+    }
+
+    #endregion Properties
 
   }  // class AssetTransactionType
 
