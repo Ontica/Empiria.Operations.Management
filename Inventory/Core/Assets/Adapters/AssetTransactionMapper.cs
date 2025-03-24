@@ -24,7 +24,7 @@ namespace Empiria.Inventory.Assets.Adapters {
         Entries = AssetMapper.Map(transaction.GetAssets()),
         Documents = DocumentServices.GetEntityDocuments(transaction),
         History = HistoryServices.GetEntityHistory(transaction),
-        Actions = MapActions()
+        Actions = MapActions(transaction)
       };
     }
 
@@ -61,10 +61,14 @@ namespace Empiria.Inventory.Assets.Adapters {
 
     #region Helpers
 
-    static private AssetTransactionActions MapActions() {
+    static private AssetTransactionActions MapActions(AssetTransaction transaction) {
       return new AssetTransactionActions {
-        CanAuthorize = true,
-        CanEditDocuments = true
+        CanAuthorize = false,
+        CanEditDocuments = true,
+        CanClose = transaction.CanClose(),
+        CanDelete = transaction.CanEdit(),
+        CanOpen = transaction.CanOpen(),
+        CanUpdate = transaction.CanEdit(),
       };
     }
 

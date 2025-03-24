@@ -35,6 +35,18 @@ namespace Empiria.Inventory.Assets.WebApi {
     }
 
 
+    [HttpPost]
+    [Route("v2/assets/transactions/{transactionUID:guid}/close")]
+    public SingleObjectModel CloseAssetTransaction([FromUri] string transactionUID) {
+
+      using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
+        AssetTransactionHolderDto transaction = usecases.CloseAssetTransaction(transactionUID);
+
+        return new SingleObjectModel(base.Request, transaction);
+      }
+    }
+
+
     [HttpDelete]
     [Route("v2/assets/transactions/{transactionUID:guid}")]
     public NoDataModel DeleteAssetTransaction([FromUri] string transactionUID) {

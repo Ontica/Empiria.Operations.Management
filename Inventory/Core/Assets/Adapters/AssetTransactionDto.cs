@@ -48,6 +48,14 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
+    public bool CanClose {
+      get; internal set;
+    }
+
+    public bool CanOpen {
+      get; internal set;
+    }
+
   }  // class AssetTransactionActions
 
 

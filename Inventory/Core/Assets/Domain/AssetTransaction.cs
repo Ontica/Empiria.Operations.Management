@@ -237,6 +237,31 @@ namespace Empiria.Inventory.Assets {
 
     #region Methods
 
+    internal bool CanClose() {
+      return this.Status == TransactionStatus.Pending &&
+             this.Entries.Count > 0;
+    }
+
+
+    internal bool CanEdit() {
+      return this.Status == TransactionStatus.Pending;
+    }
+
+
+    internal bool CanOpen() {
+      return this.Status == TransactionStatus.Completed;
+    }
+
+
+    internal void Close() {
+      Assertion.Require(this.CanClose(),
+                        $"Transaction can not be closed. Its status is {Status.GetName()}, " +
+                        $"Entries = {Entries.Count}.");
+
+      this.Status = TransactionStatus.Completed;
+    }
+
+
     internal void Delete() {
       Assertion.Require(this.Status == TransactionStatus.Pending,
                         $"Transaction can not be deleted. Its status is {Status.GetName()}.");
@@ -253,6 +278,7 @@ namespace Empiria.Inventory.Assets {
 
     protected override void OnSave() {
       if (IsNew) {
+        TransactionNo = "No determinado";
         PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         PostingTime = DateTime.Now;
       }

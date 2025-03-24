@@ -53,6 +53,19 @@ namespace Empiria.Inventory.Assets.UseCases {
     }
 
 
+    public AssetTransactionHolderDto CloseAssetTransaction(string transactionUID) {
+      Assertion.Require(transactionUID, nameof(transactionUID));
+
+      var transaction = AssetTransaction.Parse(transactionUID);
+
+      transaction.Close();
+
+      transaction.Save();
+
+      return AssetTransactionMapper.Map(transaction);
+    }
+
+
     public AssetTransactionHolderDto DeleteAssetTransaction(string transactionUID) {
       Assertion.Require(transactionUID, nameof(transactionUID));
 
