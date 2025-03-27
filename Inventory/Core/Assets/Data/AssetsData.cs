@@ -19,11 +19,11 @@ namespace Empiria.Inventory.Assets.Data {
     #region Methods
 
     static internal FixedList<Person> GetAssetsAssignees() {
-      var sql = "SELECT DISTINCT * FROM PARTIES " +
-                "WHERE PARTY_ID IN (SELECT ASSET_ASSIGNED_TO_ID " +
-                                   "FROM OMS_ASSETS " +
-                                   "WHERE ASSET_STATUS <> 'X') " +
-                "ORDER BY PARTY_NAME";
+      var sql = "SELECT DISTINCT * FROM Parties " +
+                "WHERE Party_ID IN (SELECT Asset_Assigned_To_ID " +
+                                   "FROM OMS_Assets " +
+                                   "WHERE Asset_Status <> 'X') " +
+                "ORDER BY Party_Name";
 
       var op = DataOperation.Parse(sql);
 
@@ -32,9 +32,9 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal FixedList<Asset> SearchAssets(string filter, string sortBy) {
-      var sql = "SELECT OMS_ASSETS.* " +
-                "FROM OMS_ASSETS INNER JOIN OMS_PRODUCTS_SKUS " +
-                "ON OMS_ASSETS.ASSET_SKU_ID = OMS_PRODUCTS_SKUS.SKU_ID";
+      var sql = "SELECT OMS_Assets.* " +
+                "FROM OMS_Assets INNER JOIN OMS_Products_SKUS " +
+                "ON OMS_Assets.Asset_SKU_ID = OMS_Products_SKUS.SKU_ID";
 
       if (!string.IsNullOrWhiteSpace(filter)) {
         sql += $" WHERE {filter}";
@@ -52,7 +52,7 @@ namespace Empiria.Inventory.Assets.Data {
 
     static internal void WriteAsset(Asset o, string accountingData, string extensionData) {
 
-      var op = DataOperation.Parse("WRITE_OMS_ASSET", o.Id, o.UID, o.AssetType.Id,
+      var op = DataOperation.Parse("write_OMS_Asset", o.Id, o.UID, o.AssetType.Id,
         o.Sku.Id, o.Description, string.Join(" ", o.Identificators), string.Join(" ", o.Tags),
         o.Manager.Id, o.ManagerOrgUnit.Id, o.AssignedTo.Id, o.AssignedToOrgUnit.Id,
         o.Location.Id, o.Condition, accountingData, extensionData, o.Keywords,

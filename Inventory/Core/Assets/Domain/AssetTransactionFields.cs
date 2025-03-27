@@ -10,7 +10,7 @@
 
 using System;
 
-namespace Empiria.Inventory.Assets.Adapters {
+namespace Empiria.Inventory.Assets {
 
   /// <summary>Input fields used to update and create asset transactions.</summary>
   public class AssetTransactionFields {
@@ -85,4 +85,4 @@ namespace Empiria.Inventory.Assets.Adapters {
 
   }  // class AssetTransactionFields
 
-}  // namespace Empiria.Inventory.Assets.Adapters
+}  // namespace Empiria.Inventory.Assets

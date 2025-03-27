@@ -21,13 +21,13 @@ namespace Empiria.Inventory.Assets.Data {
     #region Methods
 
     static internal FixedList<AssetTransaction> GetTransactions(Asset asset) {
-      var sql = "SELECT * FROM OMS_ASSETS_TRANSACTIONS " +
-         $"WHERE ASSET_TXN_ID IN " +
-            $"(SELECT ASSET_ENTRY_TXN_ID FROM OMS_ASSETS_ENTRIES " +
-              $"WHERE ASSET_ENTRY_ASSET_ID = {asset.Id} " +
-              $"AND ASSET_ENTRY_STATUS <> 'X') " +
-         $"AND ASSET_TXN_STATUS <> 'X' " +
-         $"ORDER BY ASSET_TXN_NO";
+      var sql = "SELECT * FROM OMS_Assets_Transactions " +
+                "WHERE Asset_TXN_ID IN " +
+                    $"(SELECT Asset_Entry_TXN_ID FROM OMS_Assets_Entries" +
+                    $" WHERE Asset_Entry_Asset_ID = {asset.Id}" +
+                    $" AND Asset_Entry_Status <> 'X') " +
+         $"AND Asset_TXN_Status <> 'X' " +
+         $"ORDER BY Asset_TXN_No";
 
       var op = DataOperation.Parse(sql);
 
@@ -36,11 +36,12 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal FixedList<Person> GetTransactionsAssignees() {
-      var sql = "SELECT DISTINCT * FROM PARTIES " +
-                "WHERE PARTY_ID IN (SELECT ASSET_TXN_ASSIGNED_TO_ID " +
-                                   "FROM OMS_ASSETS_TRANSACTIONS " +
-                                   "WHERE ASSET_TXN_STATUS <> 'X') " +
-                "ORDER BY PARTY_NAME";
+      var sql = "SELECT DISTINCT * FROM Parties " +
+                "WHERE Party_ID IN " +
+                    "(SELECT Asset_TXN_Assigned_To_ID" +
+                    " FROM OMS_Assets_Transactions" +
+                    " WHERE Asset_TXN_Status <> 'X') " +
+                "ORDER BY Party_Name";
 
       var op = DataOperation.Parse(sql);
 
@@ -49,11 +50,11 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal FixedList<Person> GetTransactionsManagers() {
-      var sql = "SELECT DISTINCT * FROM PARTIES " +
-          "WHERE PARTY_ID IN (SELECT ASSET_TXN_MGR_ID " +
-                             "FROM OMS_ASSETS_TRANSACTIONS " +
-                             "WHERE ASSET_TXN_STATUS <> 'X') " +
-          "ORDER BY PARTY_NAME";
+      var sql = "SELECT DISTINCT * FROM Parties " +
+                "WHERE Party_ID IN (SELECT Asset_TXN_Mgr_ID " +
+                                   "FROM OMS_Assets_Transactions " +
+                                   "WHERE Asset_TXN_Status <> 'X') " +
+                "ORDER BY Party_Name";
 
       var op = DataOperation.Parse(sql);
 
@@ -62,10 +63,10 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal List<AssetTransactionEntry> GetTransactionEntries(AssetTransaction transaction) {
-      var sql = "SELECT * FROM OMS_ASSETS_ENTRIES " +
-               $"WHERE ASSET_ENTRY_TXN_ID = {transaction.Id} AND " +
-                     $"ASSET_ENTRY_STATUS <> 'X' " +
-               $"ORDER BY ASSET_ENTRY_ID";
+      var sql = "SELECT * FROM OMS_Assets_Entries " +
+               $"WHERE Asset_Entry_TXN_ID = {transaction.Id} AND " +
+                     $"Asset_TXN_Status <> 'X' " +
+               $"ORDER BY Asset_Entry_ID";
 
       var op = DataOperation.Parse(sql);
 
@@ -74,7 +75,7 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal FixedList<AssetTransaction> SearchTransactions(string filter, string sortBy) {
-      var sql = "SELECT * FROM OMS_ASSETS_TRANSACTIONS";
+      var sql = "SELECT * FROM OMS_Assets_Transactions";
 
       if (!string.IsNullOrWhiteSpace(filter)) {
         sql += $" WHERE {filter}";
@@ -92,7 +93,7 @@ namespace Empiria.Inventory.Assets.Data {
 
     static internal void WriteAssetTransaction(AssetTransaction o, string extensionData) {
 
-      var op = DataOperation.Parse("WRITE_OMS_ASSET_TRANSACTION", o.Id, o.UID, o.AssetTransactionType.Id,
+      var op = DataOperation.Parse("write_OMS_Asset_Transaction", o.Id, o.UID, o.AssetTransactionType.Id,
         o.TransactionNo, o.Description, string.Join(" ", o.Identificators), string.Join(" ", o.Tags),
         o.Manager.Id, o.ManagerOrgUnit.Id, o.AssignedTo.Id, o.AssignedToOrgUnit.Id,
         o.Location.Id, o.OperationSource.Id, o.RequestedTime, o.RequestedBy.Id,
@@ -107,8 +108,9 @@ namespace Empiria.Inventory.Assets.Data {
                                                     string operationData,
                                                     string extensionData) {
 
-      var op = DataOperation.Parse("WRITE_OMS_ASSET_ENTRY", o.Id, o.UID, o.AssetTransactionEntryType.Id,
-        o.Transaction.Id, o.Asset.Id, o.Description, o.OperationId, operationData, extensionData,
+      var op = DataOperation.Parse("write_OMS_Asset_Entry", o.Id, o.UID,
+        o.AssetTransactionEntryType.Id, o.Transaction.Id,
+        o.Asset.Id, o.Description, o.OperationId, operationData, extensionData,
         o.Keywords, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
