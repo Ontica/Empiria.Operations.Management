@@ -19,7 +19,6 @@ using Empiria.StateEnums;
 using Empiria.Locations;
 
 using Empiria.Inventory.Assets.Data;
-using Empiria.Inventory.Assets.Adapters;
 
 namespace Empiria.Inventory.Assets {
 
@@ -284,6 +283,10 @@ namespace Empiria.Inventory.Assets {
       }
 
       AssetsTransactionsData.WriteAssetTransaction(this, this.ExtData.ToString());
+
+      foreach (AssetTransactionEntry entry in Entries) {
+        entry.Save();
+      }
     }
 
 
@@ -309,7 +312,67 @@ namespace Empiria.Inventory.Assets {
       ApplicationTime = PatchField(fields.ApplicationTime, ApplicationTime);
     }
 
+
     #endregion Methods
+
+    #region Entries Methods
+
+    internal AssetTransactionEntry AppendEntry(AssetTransactionEntryFields fields) {
+      Assertion.Require(fields, nameof(fields));
+      Assertion.Require(CanEdit(), $"Asset transaction {this.UID} can not be edited.");
+
+      fields.EnsureValid();
+
+      var entryType = AssetTransactionEntryType.Parse(fields.EntryTypeUID);
+      var asset = Asset.Parse(fields.AssetUID);
+
+      AssetTransactionEntry entry = new AssetTransactionEntry(entryType, this, asset);
+
+      entry.Update(fields);
+
+      _entries.Value.Add(entry);
+
+      return entry;
+    }
+
+
+    internal AssetTransactionEntry GetEntry(string transactionEntryUID) {
+      Assertion.Require(transactionEntryUID, nameof(transactionEntryUID));
+
+      var entry = Entries.Find(x => x.UID == transactionEntryUID);
+
+      Assertion.Require(entry, $"Transaction entry {transactionEntryUID} not found.");
+
+      return entry;
+    }
+
+
+    internal void RemoveEntry(AssetTransactionEntry entry) {
+      Assertion.Require(entry, nameof(entry));
+      Assertion.Require(CanEdit(), $"Asset transaction {this.UID} can not be edited.");
+
+      _ = GetEntry(entry.UID);
+
+      entry.Delete();
+
+      _entries.Value.Remove(entry);
+    }
+
+
+    internal void UpdateEntry(AssetTransactionEntry entry,
+                              AssetTransactionEntryFields fields) {
+      Assertion.Require(entry, nameof(entry));
+      Assertion.Require(fields, nameof(fields));
+      Assertion.Require(CanEdit(), $"Asset transaction {this.UID} can not be edited.");
+
+      fields.EnsureValid();
+
+      _ = GetEntry(entry.UID);
+
+      entry.Update(fields);
+    }
+
+    #endregion Entries Methods
 
   }  // class AssetTransaction
 

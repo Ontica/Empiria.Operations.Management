@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
 using Empiria.Documents.Services;
 using Empiria.History.Services;
 
@@ -29,7 +30,37 @@ namespace Empiria.Inventory.Assets.Adapters {
     }
 
 
-    static internal AssetTransactionDto MapAssetTransaction(AssetTransaction transaction) {
+    static internal AssetTransactionEntryDto Map(AssetTransactionEntry entry) {
+      return new AssetTransactionEntryDto {
+        UID = entry.UID,
+        EntryType = entry.AssetTransactionEntryType.MapToNamedEntity(),
+        Transaction = ((INamedEntity) entry.Transaction).MapToNamedEntity(),
+        Asset = entry.Asset.MapToNamedEntity(),
+        Description = entry.Description
+      };
+    }
+
+
+    static internal FixedList<AssetTransactionDescriptorDto> Map(FixedList<AssetTransaction> transactions) {
+      return transactions.Select(transaction => MapToDescriptor(transaction))
+                         .ToFixedList();
+    }
+
+    #region Helpers
+
+    static private AssetTransactionActions MapActions(AssetTransaction transaction) {
+      return new AssetTransactionActions {
+        CanAuthorize = false,
+        CanEditDocuments = true,
+        CanClose = transaction.CanClose(),
+        CanDelete = transaction.CanEdit(),
+        CanOpen = transaction.CanOpen(),
+        CanUpdate = transaction.CanEdit(),
+      };
+    }
+
+
+    static private AssetTransactionDto MapAssetTransaction(AssetTransaction transaction) {
       return new AssetTransactionDto {
         UID = transaction.UID,
         TransactionType = transaction.AssetTransactionType.MapToNamedEntity(),
@@ -50,25 +81,6 @@ namespace Empiria.Inventory.Assets.Adapters {
         RecordingTime = transaction.RecordingTime,
         RequestedTime = transaction.RequestedTime,
         Status = transaction.Status.MapToNamedEntity()
-      };
-    }
-
-
-    static internal FixedList<AssetTransactionDescriptorDto> Map(FixedList<AssetTransaction> transactions) {
-      return transactions.Select(transaction => MapToDescriptor(transaction))
-                         .ToFixedList();
-    }
-
-    #region Helpers
-
-    static private AssetTransactionActions MapActions(AssetTransaction transaction) {
-      return new AssetTransactionActions {
-        CanAuthorize = false,
-        CanEditDocuments = true,
-        CanClose = transaction.CanClose(),
-        CanDelete = transaction.CanEdit(),
-        CanOpen = transaction.CanOpen(),
-        CanUpdate = transaction.CanEdit(),
       };
     }
 

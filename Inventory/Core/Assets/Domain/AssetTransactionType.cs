@@ -41,6 +41,14 @@ namespace Empiria.Inventory.Assets {
 
     #region Properties
 
+    public AssetTransactionEntryType DefaultAssetTransactionEntryType {
+      get {
+        return base.ExtensionData.Get("defaultAssetTransactionEntryTypeId",
+                                      AssetTransactionEntryType.Empty);
+      }
+    }
+
+
     public int SortOrder {
       get {
         return base.ExtensionData.Get("sortOrder", 0);

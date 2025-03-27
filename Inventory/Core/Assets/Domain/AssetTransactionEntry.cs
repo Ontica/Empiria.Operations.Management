@@ -15,11 +15,13 @@ using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
+using Empiria.Inventory.Assets.Data;
+
 namespace Empiria.Inventory.Assets {
 
   /// <summary>Represents an asset transaction entry.</summary>
   [PartitionedType(typeof(AssetTransactionEntryType))]
-  public class AssetTransactionEntry : BaseObject {
+  public class AssetTransactionEntry : BaseObject, INamedEntity {
 
     #region Constructors and parsers
 
@@ -27,10 +29,14 @@ namespace Empiria.Inventory.Assets {
       // Required by Empiria Framework for all partitioned types.
     }
 
-    internal AssetTransactionEntry(AssetTransactionEntryType entryType, AssetTransaction transaction) : base(entryType) {
+    internal AssetTransactionEntry(AssetTransactionEntryType entryType,
+                                   AssetTransaction transaction,
+                                   Asset asset) : base(entryType) {
       Assertion.Require(transaction, nameof(transaction));
+      Assertion.Require(asset, nameof(asset));
 
       this.Transaction = transaction;
+      this.Asset = asset;
     }
 
     static public AssetTransactionEntry Parse(int id) => ParseId<AssetTransactionEntry>(id);
@@ -40,6 +46,8 @@ namespace Empiria.Inventory.Assets {
     static public AssetTransactionEntry Empty => ParseEmpty<AssetTransactionEntry>();
 
     #endregion Constructors and parsers
+
+    #region Properties
 
     public AssetTransactionEntryType AssetTransactionEntryType {
       get {
@@ -65,6 +73,7 @@ namespace Empiria.Inventory.Assets {
       get; private set;
     }
 
+    string INamedEntity.Name => Description;
 
     [DataField("ASSET_ENTRY_OPERATION_ID")]
     internal int OperationId {
@@ -79,7 +88,7 @@ namespace Empiria.Inventory.Assets {
 
 
     [DataField("ASSET_ENTRY_EXT_DATA")]
-    protected JsonObject ExtensionData {
+    protected JsonObject ExtData {
       get; private set;
     }
 
@@ -113,6 +122,43 @@ namespace Empiria.Inventory.Assets {
         return EmpiriaString.BuildKeywords(Description, Asset.Keywords, Transaction.Keywords);
       }
     }
+
+    #endregion Properties
+
+    #region Methods
+
+    internal void Delete() {
+      this.Status = TransactionStatus.Deleted;
+      MarkAsDirty();
+    }
+
+
+    protected override void OnSave() {
+      if (!IsDirty) {
+        return;
+      }
+      if (IsNew) {
+        PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+        PostingTime = DateTime.Now;
+      }
+
+      AssetsTransactionsData.WriteAssetTransactionEntry(this, this.OperationData.ToString(),
+                                                        this.ExtData.ToString());
+    }
+
+
+    internal void Update(AssetTransactionEntryFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      Asset = PatchField(fields.AssetUID, Asset);
+      Description = EmpiriaString.Clean(fields.Description);
+
+      MarkAsDirty();
+    }
+
+    #endregion Methods
 
   }  // class AssetTransactionEntry
 

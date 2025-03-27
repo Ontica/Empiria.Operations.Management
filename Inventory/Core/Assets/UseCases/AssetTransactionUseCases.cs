@@ -15,6 +15,7 @@ using Empiria.StateEnums;
 
 using Empiria.Inventory.Assets.Adapters;
 using Empiria.Inventory.Assets.Data;
+using System;
 
 namespace Empiria.Inventory.Assets.UseCases {
 
@@ -36,6 +37,20 @@ namespace Empiria.Inventory.Assets.UseCases {
 
     #region Use cases
 
+
+    public AssetTransactionHolderDto CloseAssetTransaction(string transactionUID) {
+      Assertion.Require(transactionUID, nameof(transactionUID));
+
+      var transaction = AssetTransaction.Parse(transactionUID);
+
+      transaction.Close();
+
+      transaction.Save();
+
+      return AssetTransactionMapper.Map(transaction);
+    }
+
+
     public AssetTransactionHolderDto CreateAssetTransaction(AssetTransactionFields fields) {
       Assertion.Require(fields, nameof(fields));
 
@@ -46,19 +61,6 @@ namespace Empiria.Inventory.Assets.UseCases {
       var transaction = new AssetTransaction(transactionType);
 
       transaction.Update(fields);
-
-      transaction.Save();
-
-      return AssetTransactionMapper.Map(transaction);
-    }
-
-
-    public AssetTransactionHolderDto CloseAssetTransaction(string transactionUID) {
-      Assertion.Require(transactionUID, nameof(transactionUID));
-
-      var transaction = AssetTransaction.Parse(transactionUID);
-
-      transaction.Close();
 
       transaction.Save();
 
@@ -150,6 +152,60 @@ namespace Empiria.Inventory.Assets.UseCases {
     }
 
     #endregion Use cases
+
+    #region Entries use cases
+
+    public AssetTransactionEntryDto CreateAssetTransactionEntry(AssetTransactionEntryFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      var transaction = AssetTransaction.Parse(fields.TransactionUID);
+
+      AssetTransactionEntry entry = transaction.AppendEntry(fields);
+
+      transaction.Save();
+
+      return AssetTransactionMapper.Map(entry);
+    }
+
+
+    public AssetTransactionEntryDto DeleteAssetTransactionEntry(string transactionUID,
+                                                                string transactionEntryUID) {
+      Assertion.Require(transactionUID, nameof(transactionUID));
+      Assertion.Require(transactionEntryUID, nameof(transactionEntryUID));
+
+      var transaction = AssetTransaction.Parse(transactionUID);
+
+      AssetTransactionEntry entry = transaction.GetEntry(transactionEntryUID);
+
+      transaction.RemoveEntry(entry);
+
+      entry.Save();
+
+      transaction.Save();
+
+      return AssetTransactionMapper.Map(entry);
+    }
+
+
+    public AssetTransactionEntryDto UpdateAssetTransactionEntry(AssetTransactionEntryFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      var transaction = AssetTransaction.Parse(fields.TransactionUID);
+
+      AssetTransactionEntry entry = transaction.GetEntry(fields.UID);
+
+      transaction.UpdateEntry(entry, fields);
+
+      transaction.Save();
+
+      return AssetTransactionMapper.Map(entry);
+    }
+
+    #endregion Entries use cases
 
   }  // class AssetTransactionUseCases
 
