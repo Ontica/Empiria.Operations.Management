@@ -24,11 +24,12 @@ namespace Empiria.Inventory.Assets.WebApi {
     #region Web Apis
 
     [HttpPost]
-    [Route("v2/assets/transactions")]
-    public SingleObjectModel CreateAssetTransaction([FromBody] AssetTransactionFields fields) {
+    [Route("v2/assets/transactions/{transactionUID:guid}/clone-for/{transactionTypeUID:guid}")]
+    public SingleObjectModel CloneAssetTransaction([FromUri] string transactionUID,
+                                                   [FromUri] string transactionTypeUID) {
 
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
-        AssetTransactionHolderDto transaction = usecases.CreateAssetTransaction(fields);
+        AssetTransactionHolderDto transaction = usecases.CloneAssetTransaction(transactionUID, transactionTypeUID);
 
         return new SingleObjectModel(base.Request, transaction);
       }
@@ -41,6 +42,18 @@ namespace Empiria.Inventory.Assets.WebApi {
 
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
         AssetTransactionHolderDto transaction = usecases.CloseAssetTransaction(transactionUID);
+
+        return new SingleObjectModel(base.Request, transaction);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v2/assets/transactions")]
+    public SingleObjectModel CreateAssetTransaction([FromBody] AssetTransactionFields fields) {
+
+      using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
+        AssetTransactionHolderDto transaction = usecases.CreateAssetTransaction(fields);
 
         return new SingleObjectModel(base.Request, transaction);
       }

@@ -252,11 +252,36 @@ namespace Empiria.Inventory.Assets {
     }
 
 
+    internal AssetTransaction Clone(AssetTransactionType transactionType) {
+      Assertion.Require(transactionType, nameof(transactionType));
+      Assertion.Require(!this.IsEmptyInstance, "Can not clone the empty instance.");
+
+      var transaction = new AssetTransaction(transactionType);
+
+      transaction.Manager = Manager;
+      transaction.ManagerOrgUnit = ManagerOrgUnit;
+      transaction.Location = Location;
+
+      foreach (var entry in Entries) {
+        var fields = new AssetTransactionEntryFields {
+          EntryTypeUID = transactionType.DefaultAssetTransactionEntryType.UID,
+          AssetUID = entry.Asset.UID,
+        };
+
+        transaction.AppendEntry(fields);
+      }
+
+      return transaction;
+    }
+
+
     internal void Close() {
       Assertion.Require(this.CanClose(),
                         $"Transaction can not be closed. Its status is {Status.GetName()}, " +
                         $"Entries = {Entries.Count}.");
 
+      this.RecordedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+      this.RecordingTime = DateTime.Now;
       this.Status = TransactionStatus.Completed;
     }
 
@@ -371,6 +396,7 @@ namespace Empiria.Inventory.Assets {
 
       entry.Update(fields);
     }
+
 
     #endregion Entries Methods
 

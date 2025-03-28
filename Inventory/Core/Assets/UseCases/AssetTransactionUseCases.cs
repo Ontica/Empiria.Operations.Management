@@ -38,6 +38,21 @@ namespace Empiria.Inventory.Assets.UseCases {
     #region Use cases
 
 
+    public AssetTransactionHolderDto CloneAssetTransaction(string transactionUID, string transactionTypeUID) {
+      Assertion.Require(transactionUID, nameof(transactionUID));
+      Assertion.Require(transactionTypeUID, nameof(transactionTypeUID));
+
+      var sourceTransaction = AssetTransaction.Parse(transactionUID);
+      var transactionType = AssetTransactionType.Parse(transactionTypeUID);
+
+      AssetTransaction transaction = sourceTransaction.Clone(transactionType);
+
+      transaction.Save();
+
+      return AssetTransactionMapper.Map(transaction);
+    }
+
+
     public AssetTransactionHolderDto CloseAssetTransaction(string transactionUID) {
       Assertion.Require(transactionUID, nameof(transactionUID));
 
