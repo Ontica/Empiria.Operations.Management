@@ -51,7 +51,6 @@ namespace Empiria.Inventory.Assets {
                                        .DefaultAssetTransactionEntryType
                                        .UID;
       }
-
     }
 
   }  // class AssetTransactionEntryFields

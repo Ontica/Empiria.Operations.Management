@@ -283,6 +283,7 @@ namespace Empiria.Orders {
       this.Status = EntityStatus.Suspended;
     }
 
+
     internal protected virtual void Update(OrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 

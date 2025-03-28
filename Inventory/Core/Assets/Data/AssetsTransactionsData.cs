@@ -65,7 +65,7 @@ namespace Empiria.Inventory.Assets.Data {
     static internal List<AssetTransactionEntry> GetTransactionEntries(AssetTransaction transaction) {
       var sql = "SELECT * FROM OMS_Assets_Entries " +
                $"WHERE Asset_Entry_TXN_ID = {transaction.Id} AND " +
-                     $"Asset_TXN_Status <> 'X' " +
+                     $"Asset_Entry_Status <> 'X' " +
                $"ORDER BY Asset_Entry_ID";
 
       var op = DataOperation.Parse(sql);
