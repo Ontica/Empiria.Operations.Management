@@ -65,13 +65,21 @@ namespace Empiria.Inventory.Assets.Data {
     }
 
 
-    static internal FixedList<Person> GetTransactionsAssignees() {
+    static internal FixedList<Person> GetTransactionsAssignees(string keywords) {
       var sql = "SELECT DISTINCT * FROM Parties " +
                 "WHERE Party_ID IN " +
                     "(SELECT Asset_TXN_Assigned_To_ID" +
                     " FROM OMS_Assets_Transactions" +
                     " WHERE Asset_TXN_Status <> 'X') " +
+                "{(KEYWORDS.FILTER}} " +
                 "ORDER BY Party_Name";
+
+      if (keywords.Length != 0) {
+        sql = sql.Replace("{(KEYWORDS.FILTER}}",
+                          $"AND {SearchExpression.ParseAndLikeKeywords("PARTY_KEYWORDS", keywords)}");
+      } else {
+        sql = sql.Replace("{(KEYWORDS.FILTER}}", string.Empty);
+      }
 
       var op = DataOperation.Parse(sql);
 
@@ -79,12 +87,20 @@ namespace Empiria.Inventory.Assets.Data {
     }
 
 
-    static internal FixedList<Person> GetTransactionsManagers() {
+    static internal FixedList<Person> GetTransactionsManagers(string keywords) {
       var sql = "SELECT DISTINCT * FROM Parties " +
                 "WHERE Party_ID IN (SELECT Asset_TXN_Mgr_ID " +
                                    "FROM OMS_Assets_Transactions " +
                                    "WHERE Asset_TXN_Status <> 'X') " +
+                "{(KEYWORDS.FILTER}} " +
                 "ORDER BY Party_Name";
+
+      if (keywords.Length != 0) {
+        sql = sql.Replace("{(KEYWORDS.FILTER}}",
+                          $"AND {SearchExpression.ParseAndLikeKeywords("PARTY_KEYWORDS", keywords)}");
+      } else {
+        sql = sql.Replace("{(KEYWORDS.FILTER}}", string.Empty);
+      }
 
       var op = DataOperation.Parse(sql);
 

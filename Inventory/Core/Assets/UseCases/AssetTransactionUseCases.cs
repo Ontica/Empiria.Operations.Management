@@ -108,7 +108,7 @@ namespace Empiria.Inventory.Assets.UseCases {
     public FixedList<NamedEntityDto> GetAssetTransactionsAssignees(string keywords) {
       keywords = keywords ?? string.Empty;
 
-      FixedList<Person> assignees = AssetsTransactionsData.GetTransactionsAssignees();
+      FixedList<Person> assignees = AssetsTransactionsData.GetTransactionsAssignees(keywords);
 
       return assignees.MapToNamedEntityList();
     }
@@ -117,7 +117,7 @@ namespace Empiria.Inventory.Assets.UseCases {
     public FixedList<NamedEntityDto> GetAssetTransactionsManagers(string keywords) {
       keywords = keywords ?? string.Empty;
 
-      FixedList<Person> managers = AssetsTransactionsData.GetTransactionsManagers();
+      FixedList<Person> managers = AssetsTransactionsData.GetTransactionsManagers(keywords);
 
       return managers.MapToNamedEntityList();
     }

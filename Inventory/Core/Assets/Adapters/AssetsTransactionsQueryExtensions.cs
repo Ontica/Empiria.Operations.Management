@@ -157,7 +157,7 @@ namespace Empiria.Inventory.Assets.Adapters {
 
     static private string BuildStatusFilter(TransactionStatus status) {
       if (status == TransactionStatus.All) {
-        return "ASSET_TXN_STATUS <> 'X' ";
+        return "ASSET_TXN_STATUS <> 'X'";
       }
 
       return $"ASSET_TXN_STATUS = '{(char) status}'";
