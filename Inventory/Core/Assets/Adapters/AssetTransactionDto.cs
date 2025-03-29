@@ -48,6 +48,10 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
+    public bool CanClone {
+      get; internal set;
+    }
+
     public bool CanClose {
       get; internal set;
     }

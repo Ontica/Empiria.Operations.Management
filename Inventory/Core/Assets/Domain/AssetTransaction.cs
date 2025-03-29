@@ -255,9 +255,12 @@ namespace Empiria.Inventory.Assets {
     internal AssetTransaction Clone(AssetTransactionType transactionType) {
       Assertion.Require(transactionType, nameof(transactionType));
       Assertion.Require(!this.IsEmptyInstance, "Can not clone the empty instance.");
+      Assertion.Require(this.CanOpen(),
+                        $"Can not clone transaction {this.UID}. Its status is {this.Status.GetName()}.");
 
       var transaction = new AssetTransaction(transactionType);
 
+      transaction.Description = transactionType.DisplayName;
       transaction.Manager = Manager;
       transaction.ManagerOrgUnit = ManagerOrgUnit;
       transaction.Location = Location;

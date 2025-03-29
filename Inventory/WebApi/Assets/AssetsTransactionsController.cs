@@ -24,7 +24,7 @@ namespace Empiria.Inventory.Assets.WebApi {
     #region Web Apis
 
     [HttpPost]
-    [Route("v2/assets/transactions/{transactionUID:guid}/clone-for/{transactionTypeUID:guid}")]
+    [Route("v2/assets/transactions/{transactionUID:guid}/clone-for/{transactionTypeUID}")]
     public SingleObjectModel CloneAssetTransaction([FromUri] string transactionUID,
                                                    [FromUri] string transactionTypeUID) {
 

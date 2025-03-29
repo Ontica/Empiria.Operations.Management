@@ -21,6 +21,23 @@ namespace Empiria.Tests.Inventory.Assets {
     #region Facts
 
     [Fact]
+    public void Should_Clone_Asset_Transaction() {
+      var transactionType = AssetTransactionType.Parse("ObjectTypeInfo.AssetTransaction.FixedAssetsCustody");
+
+      var sourceTransaction = AssetTransaction.Parse(2);
+
+      var sut = sourceTransaction.Clone(transactionType);
+
+      Assert.Equal(transactionType, sut.AssetTransactionType);
+      Assert.Equal(transactionType.DisplayName, sut.Description);
+      Assert.Equal(sourceTransaction.Location, sut.Location);
+      Assert.Equal(sourceTransaction.Manager, sut.Manager);
+      Assert.Equal(sourceTransaction.ManagerOrgUnit, sut.ManagerOrgUnit);
+      Assert.Equal(sourceTransaction.Entries.Count, sut.Entries.Count);
+    }
+
+
+    [Fact]
     public void Should_Get_All_Assets_Transactions() {
       var sut = BaseObject.GetList<AssetTransaction>();
 

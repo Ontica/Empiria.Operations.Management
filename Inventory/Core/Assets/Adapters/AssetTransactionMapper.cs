@@ -52,6 +52,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       return new AssetTransactionActions {
         CanAuthorize = false,
         CanEditDocuments = true,
+        CanClone = transaction.CanOpen(),
         CanClose = transaction.CanClose(),
         CanDelete = transaction.CanEdit(),
         CanOpen = transaction.CanOpen(),
