@@ -149,6 +149,8 @@ namespace Empiria.Inventory.Assets.WebApi {
     public SingleObjectModel UpdateAssetTransaction([FromUri] string transactionUID,
                                                     [FromBody] AssetTransactionFields fields) {
 
+      fields.TransactionTypeUID = transactionUID;
+
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
         AssetTransactionHolderDto transaction = usecases.UpdateAssetTransaction(transactionUID, fields);
 

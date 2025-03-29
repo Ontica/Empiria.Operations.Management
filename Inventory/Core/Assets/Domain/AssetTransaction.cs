@@ -237,8 +237,13 @@ namespace Empiria.Inventory.Assets {
     #region Methods
 
     internal bool CanClose() {
-      return this.Status == TransactionStatus.Pending &&
-             this.Entries.Count > 0;
+      return Status == TransactionStatus.Pending &&
+             Entries.Count > 0 &&
+             !AssignedTo.IsEmptyInstance &&
+             !AssignedToOrgUnit.IsEmptyInstance &&
+             !Manager.IsEmptyInstance &&
+             !ManagerOrgUnit.IsEmptyInstance &&
+             ApplicationTime != ExecutionServer.DateMaxValue;
     }
 
 
@@ -283,9 +288,12 @@ namespace Empiria.Inventory.Assets {
                         $"Transaction can not be closed. Its status is {Status.GetName()}, " +
                         $"Entries = {Entries.Count}.");
 
-      this.RecordedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
-      this.RecordingTime = DateTime.Now;
-      this.Status = TransactionStatus.Completed;
+      AppliedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+      Status = TransactionStatus.Completed;
+      TransactionNo = AssetsTransactionsData.GenerateNextTransactionNo(this);
+      if (OperationSource.IsEmptyInstance) {
+        OperationSource = OperationSource.Parse(11);
+      }
     }
 
 
@@ -305,10 +313,13 @@ namespace Empiria.Inventory.Assets {
 
     protected override void OnSave() {
       if (IsNew) {
-        TransactionNo = "No determinado";
+        TransactionNo = "No determinada";
         PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         PostingTime = DateTime.Now;
       }
+
+      RecordingTime = DateTime.Now;
+      RecordedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
 
       AssetsTransactionsData.WriteAssetTransaction(this, this.ExtData.ToString());
 
