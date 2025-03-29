@@ -49,6 +49,13 @@ namespace Empiria.Inventory.Assets {
     }
 
 
+    public string Prefix {
+      get {
+        return base.ExtensionData.Get("prefix", string.Empty);
+      }
+    }
+
+
     public int SortOrder {
       get {
         return base.ExtensionData.Get("sortOrder", 0);

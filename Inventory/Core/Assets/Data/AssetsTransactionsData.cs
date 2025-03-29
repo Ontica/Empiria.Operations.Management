@@ -20,6 +20,36 @@ namespace Empiria.Inventory.Assets.Data {
 
     #region Methods
 
+    static internal string GenerateNextTransactionNo(AssetTransaction transaction) {
+      Assertion.Require(transaction, nameof(transaction));
+
+      string transactionPrefix = transaction.AssetTransactionType.Prefix;
+
+      Assertion.Require(transactionPrefix,
+          $"Undetermined asset transaction prefix for {transaction.AssetTransactionType.DisplayName}.");
+
+      int year = transaction.ApplicationTime.Year;
+
+      string prefix = $"{year}-AF-{transactionPrefix}";
+
+      string sql = "SELECT MAX(ASSET_TXN_NO) " +
+                   "FROM OMS_ASSETS_TRANSACTIONS " +
+                   $"WHERE ASSET_TXN_NO LIKE '{prefix}-%'";
+
+      string lastUniqueID = DataReader.GetScalar(DataOperation.Parse(sql), string.Empty);
+
+      if (lastUniqueID.Length != 0) {
+
+        int consecutive = int.Parse(lastUniqueID.Split('-')[3]) + 1;
+
+        return $"{prefix}-{consecutive:00000}";
+
+      } else {
+        return $"{prefix}-00001";
+      }
+    }
+
+
     static internal FixedList<AssetTransaction> GetTransactions(Asset asset) {
       var sql = "SELECT * FROM OMS_Assets_Transactions " +
                 "WHERE Asset_TXN_ID IN " +
