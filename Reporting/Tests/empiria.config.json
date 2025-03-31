@@ -1,0 +1,28 @@
+﻿{
+  "appName": "Empiria Operations Reporting Tests Module",
+  "description": "Tests environment settings for the reporting module of the operations management system.",
+  "version": "8.0",
+  "date": "2025-03-31",
+  "settings": [
+    {
+      "type": "",
+      "key": "ApplicationKey",
+      "value": "{{APPLICATION-KEY}}"
+    },
+    {
+      "type": "",
+      "key": "GlobalConfigurationFile",
+      "value": "{{GLOBAL-CONFIGURATION-FILE}}"
+    },
+    {
+      "type": "Tests",
+      "key": "SessionToken",
+      "value": "{{TESTING-SESSION-TOKEN}}"
+    },
+    {
+      "type": "Data",
+      "key": "IsObjectIdGeneratorServer",
+      "value": true
+    }
+  ]
+}
