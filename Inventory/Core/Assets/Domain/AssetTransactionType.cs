@@ -29,7 +29,7 @@ namespace Empiria.Inventory.Assets {
     static public new AssetTransactionType Parse(string typeName) => Parse<AssetTransactionType>(typeName);
 
     static public FixedList<AssetTransactionType> GetList() {
-      return Empty.GetAllSubclasses()
+      return Empty.GetAllSubclasses(false)
                   .Select(x => (AssetTransactionType) x)
                   .ToFixedList()
                   .Sort((x, y) => x.SortOrder.CompareTo(y.SortOrder));

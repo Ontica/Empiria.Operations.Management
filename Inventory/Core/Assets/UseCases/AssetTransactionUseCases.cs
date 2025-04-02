@@ -124,8 +124,7 @@ namespace Empiria.Inventory.Assets.UseCases {
 
 
     public FixedList<NamedEntityDto> GetAssetTransactionTypes() {
-      var transactionTypes = AssetTransactionType.GetList()
-                                                 .FindAll(x => x.Prefix.Length != 0);
+      var transactionTypes = AssetTransactionType.GetList();
 
       return transactionTypes.MapToNamedEntityList(false);
     }
