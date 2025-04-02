@@ -24,7 +24,7 @@ namespace Empiria.Inventory.Assets {
 
   /// <summary>Represents an assets transaction type.</summary>
   [PartitionedType(typeof(AssetTransactionType))]
-  public class AssetTransaction : BaseObject {
+  public class AssetTransaction : BaseObject, INamedEntity {
 
     #region Fields
 
@@ -72,6 +72,13 @@ namespace Empiria.Inventory.Assets {
     [DataField("ASSET_TXN_DESCRIPTION")]
     public string Description {
       get; private set;
+    }
+
+
+    string INamedEntity.Name {
+      get {
+        return $"{TransactionNo}-{AssetTransactionType.DisplayName}";
+      }
     }
 
 
