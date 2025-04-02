@@ -25,7 +25,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto Asset {
+    public AssetDto Asset {
       get; internal set;
     }
 

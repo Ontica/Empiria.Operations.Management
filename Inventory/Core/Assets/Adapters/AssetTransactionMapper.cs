@@ -22,7 +22,7 @@ namespace Empiria.Inventory.Assets.Adapters {
     static internal AssetTransactionHolderDto Map(AssetTransaction transaction) {
       return new AssetTransactionHolderDto {
         Transaction = MapAssetTransaction(transaction),
-        Entries = AssetMapper.Map(transaction.GetAssets()),
+        Entries = Map(transaction.Entries),
         Documents = DocumentServices.GetEntityDocuments(transaction),
         History = HistoryServices.GetEntityHistory(transaction),
         Actions = MapActions(transaction)
@@ -35,7 +35,7 @@ namespace Empiria.Inventory.Assets.Adapters {
         UID = entry.UID,
         EntryType = entry.AssetTransactionEntryType.MapToNamedEntity(),
         Transaction = ((INamedEntity) entry.Transaction).MapToNamedEntity(),
-        Asset = entry.Asset.MapToNamedEntity(),
+        Asset = AssetMapper.MapAsset(entry.Asset),
         Description = entry.Description
       };
     }
@@ -47,6 +47,12 @@ namespace Empiria.Inventory.Assets.Adapters {
     }
 
     #region Helpers
+
+    static private FixedList<AssetTransactionEntryDto> Map(FixedList<AssetTransactionEntry> entries) {
+      return entries.Select(entry => Map(entry))
+                    .ToFixedList();
+    }
+
 
     static private AssetTransactionActions MapActions(AssetTransaction transaction) {
       return new AssetTransactionActions {
