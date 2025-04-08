@@ -69,4 +69,7 @@
     <ProjectReference Include="..\..\..\extensions\WebApi\Empiria.WebApi.csproj" />
     <ProjectReference Include="..\Core\Empiria.Inventory.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Materials\" />
+  </ItemGroup>
 </Project>
