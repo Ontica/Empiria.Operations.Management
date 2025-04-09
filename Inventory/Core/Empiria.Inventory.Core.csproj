@@ -68,10 +68,4 @@
     <ProjectReference Include="..\..\..\extensions\Services\Empiria.Services.csproj" />
     <ProjectReference Include="..\..\Orders\Core\Empiria.Orders.Core.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Materials\Adapters\" />
-    <Folder Include="Materials\Data\" />
-    <Folder Include="Materials\Domain\" />
-    <Folder Include="Materials\UseCases\" />
-  </ItemGroup>
 </Project>
