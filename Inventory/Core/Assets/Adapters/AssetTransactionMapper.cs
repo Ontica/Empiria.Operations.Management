@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
 using Empiria.Documents.Services;
 using Empiria.History.Services;
 
@@ -34,7 +33,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       return new AssetTransactionEntryDto {
         UID = entry.UID,
         EntryType = entry.AssetTransactionEntryType.MapToNamedEntity(),
-        Transaction = ((INamedEntity) entry.Transaction).MapToNamedEntity(),
+        Transaction = entry.Transaction.MapToNamedEntity(),
         Asset = AssetMapper.MapAsset(entry.Asset),
         Description = entry.Description
       };

@@ -216,7 +216,8 @@ namespace Empiria.Procurement.Contracts {
         return ExtData.GetFixedList<Budget>("budgets", false);
       }
       private set {
-        ExtData.Set("budgets", value.Select(x => x.Id).ToArray());
+        ExtData.Set("budgets", value.Select(x => x.Id));
+        ExtData = JsonObject.Parse(ExtData.ToString());
       }
     }
 
@@ -379,7 +380,7 @@ namespace Empiria.Procurement.Contracts {
 
 
     internal bool CanRequestBudget() {
-      return CanUpdate() && Budgets.Count(x => x.CanRequest) != 0;
+      return CanUpdate();
     }
 
 

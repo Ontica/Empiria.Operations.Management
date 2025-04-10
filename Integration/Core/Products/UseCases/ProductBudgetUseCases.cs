@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria;
 using Empiria.Services;
 
 using Empiria.Parties;
@@ -75,7 +74,7 @@ namespace Empiria.Operations.Integration.Products.UseCases {
       var link = BudgetAccountSegmentLink.Parse(budgetSegmentProductLinkUID);
 
       Assertion.Require(link.GetLinkedObject<Product>().Equals(product),
-                        "BudgetSegmentProductLink' product mismatch");
+                        "BudgetSegmentProductLink product mismatch");
 
       link.Delete();
 
@@ -119,7 +118,7 @@ namespace Empiria.Operations.Integration.Products.UseCases {
         return new FixedList<NamedEntityDto>();
       }
 
-      var searcher = new BudgetAccountSearcher(budget.BudgetType);
+      var searcher = new BudgetAccountSearcher(budget.BudgetType, string.Empty);
 
       FixedList<BudgetAccount> accounts = searcher.Search(orgUnit, segments);
 
