@@ -9,6 +9,8 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+using System.Collections.Generic;
+using Empiria.Inventory.Adapters;
 using Empiria.Services;
 
 namespace Empiria.Inventory.UseCases {
@@ -30,16 +32,49 @@ namespace Empiria.Inventory.UseCases {
 
     #region Use cases
 
-    internal InventoryOrder CreateInventoryOrder(InventoryOrderFields fields,
+    internal InventoryHolderDto CreateInventoryOrder(InventoryOrderFields fields,
       string inventoryOrderUID) {
 
       var inventoryOrder = new InventoryOrder(fields, inventoryOrderUID);
+      
       inventoryOrder.Save();
 
-      return inventoryOrder;
+      inventoryOrder.Items = CreateInventoryEntries(inventoryOrder.UID, fields.Items);
+
+      return InventoryOrderMapper.Map(inventoryOrder);
+    }
+
+
+    internal FixedList<InventoryEntry> CreateInventoryEntries(string inventoryOrderUID,
+                                                              FixedList<InventoryEntryFields> inventoryEntryFields) {
+      var returnedItems = new List<InventoryEntry>();
+
+      foreach (var fields in inventoryEntryFields) {
+
+        returnedItems.Add(CreateInventoryEntry(inventoryOrderUID, fields));
+      }
+
+      return returnedItems.ToFixedList();
+    }
+
+
+    internal InventoryEntry CreateInventoryEntry(string inventoryOrderUID, InventoryEntryFields fields) {
+
+      var inventoryEntry = new InventoryEntry(inventoryOrderUID, fields);
+
+      inventoryEntry.Save();
+
+      return inventoryEntry;
     }
 
     #endregion Use cases
+
+    #region Private methods
+
+
+
+
+    #endregion Private methods
 
   } // class InventoryOrderUseCases
 

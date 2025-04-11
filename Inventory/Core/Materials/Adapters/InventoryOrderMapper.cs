@@ -29,14 +29,45 @@ namespace Empiria.Inventory.Adapters {
 
     #region Private methods
 
+    static private InventoryEntryDto MapToInventoryEntryDto(InventoryEntry entry) {
+      return new InventoryEntryDto {
+        UID = entry.UID,
+        InventoryEntryType = NamedEntityDto.Empty,
+        Product = NamedEntityDto.Empty,
+        Sku = NamedEntityDto.Empty,
+        Location = NamedEntityDto.Empty,
+        Unit = NamedEntityDto.Empty,
+        Notes = entry.ObservationNotes,
+        InputQuantity = entry.InputQuantity,
+        InputCost = entry.InputCost,
+        OutputQuantity = entry.OutputQuantity,
+        OutputCost = entry.OutputCost,
+        PostedBy = NamedEntityDto.Empty,
+        PostingTime = entry.PostingTime
+      };
+    }
+
 
     private static FixedList<InventoryEntryDto> MapToItemsDto(FixedList<InventoryEntry> items) {
-      throw new NotImplementedException();
+
+      return items.Select((x) => MapToInventoryEntryDto(x))
+                         .ToFixedList();
     }
 
 
     private static InventoryOrderDto MapToOrderDto(InventoryOrder order) {
-      throw new NotImplementedException();
+
+      return new InventoryOrderDto {
+        UID = order.UID,
+        InventoryOrderType = NamedEntityDto.Empty,
+        Notes = order.Notes,
+        InventoryOrderNo = order.InventoryOrderNo,
+        Reference = NamedEntityDto.Empty,
+        Responsible = NamedEntityDto.Empty,
+        AssignedTo = NamedEntityDto.Empty,
+        PostedBy = NamedEntityDto.Empty,
+        PostingTime = order.PostingTime
+      };
     }
 
     #endregion Private methods

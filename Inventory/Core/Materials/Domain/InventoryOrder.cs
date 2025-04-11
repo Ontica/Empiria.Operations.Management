@@ -66,19 +66,19 @@ namespace Empiria.Inventory {
 
 
     [DataField("Reference_Id")]
-    internal Party Reference {
+    internal int Reference {
       get; set;
     }
 
 
     [DataField("Responsible_Id")]
-    internal Party Responsible {
+    internal int Responsible {
       get; set;
     }
 
 
     [DataField("Assigned_To_Id")]
-    internal Party AssignedTo {
+    internal int AssignedTo {
       get; set;
     }
 
@@ -120,7 +120,7 @@ namespace Empiria.Inventory {
 
 
     [DataField("Posted_By_Id")]
-    internal Party PostedBy {
+    internal int PostedBy {
       get; set;
     }
 
@@ -159,7 +159,7 @@ namespace Empiria.Inventory {
     protected override void OnSave() {
 
       if (IsNew) {
-        this.PostedBy = Party.Parse(1);
+        this.PostedBy = 1; //Party.Parse(1);
         //this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         this.PostingTime = DateTime.Now;
         this.InventoryOrderNo = GenerateOrderNumber();
@@ -179,9 +179,9 @@ namespace Empiria.Inventory {
       }
 
       this.InventoryOrderTypeId = GetEmpiriaType().Id;
-      this.Reference = PatchField(fields.ReferenceUID, Reference);
-      this.Responsible = PatchField(fields.ResponsibleUID, Responsible);
-      this.AssignedTo = PatchField(fields.AssignedToUID, AssignedTo);
+      this.Reference = 1; //PatchField(fields.ReferenceUID, Reference);
+      this.Responsible = 1; //PatchField(fields.ResponsibleUID, Responsible);
+      this.AssignedTo = 1; //PatchField(fields.AssignedToUID, AssignedTo);
       this.Notes = fields.Notes;
 
       this.ScheduledTime = new DateTime(2049, 01, 01); //TODO ENVIAR FECHA PROGRAMADA
@@ -198,7 +198,7 @@ namespace Empiria.Inventory {
         //this.InventoryOrderType.InventoryOrderTypeCode.Name;
 
       if (orderNumber != string.Empty) {
-        return $"{orderNumber}{this.InventoryOrderId.ToString().PadLeft(12, '0')}";
+        return $"{orderNumber}{this.Id.ToString().PadLeft(12, '0')}";
       }
 
       return string.Empty;

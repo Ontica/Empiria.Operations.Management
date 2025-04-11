@@ -48,10 +48,73 @@ namespace Empiria.Inventory {
     }
 
 
+    public FixedList<InventoryEntryFields> Items {
+      get; internal set;
+    } = new FixedList<InventoryEntryFields>();
+
+
     public InventoryStatus Status {
       get; internal set;
     } = InventoryStatus.Abierto;
 
   } // class InventoryOrderFields
+
+
+  public class InventoryEntryFields {
+    
+    public string UID {
+      get; internal set;
+    }
+
+
+    public int InventoryEntryTypeId {
+      get; internal set;
+    }
+
+
+    public string ObservationNotes {
+      get; internal set;
+    }
+
+
+    public int ProductId {
+      get; internal set;
+    }
+
+
+    public int SkuId {
+      get; internal set;
+    }
+
+
+    public int LocationId {
+      get; internal set;
+    }
+
+
+    public int UnitId {
+      get; internal set;
+    }
+
+
+    public decimal InputQuantity {
+      get; internal set;
+    }
+
+
+    public decimal InputCost {
+      get; internal set;
+    }
+
+
+    public decimal OutputCost {
+      get; internal set;
+    }
+
+
+    public decimal OutputQuantity {
+      get; internal set;
+    }
+  }
 
 } // namespace Empiria.Inventory
