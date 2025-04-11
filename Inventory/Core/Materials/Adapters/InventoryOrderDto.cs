@@ -16,6 +16,49 @@ namespace Empiria.Inventory.Adapters {
   public class InventoryOrderDto {
 
 
+    public string UID {
+      get; internal set;
+    }
+
+
+    public NamedEntityDto InventoryOrderType {
+      get; internal set;
+    }
+
+
+    public string Notes {
+      get; internal set;
+    }
+
+
+    public string InventoryOrderNo {
+      get; internal set;
+    }
+
+
+    public NamedEntityDto Reference {
+      get; internal set;
+    }
+
+
+    public NamedEntityDto Responsible {
+      get; internal set;
+    }
+
+
+    public NamedEntityDto AssignedTo {
+      get; internal set;
+    }
+
+
+    public NamedEntityDto PostedBy {
+      get; internal set;
+    }
+
+
+    public DateTime PostingTime {
+      get; internal set;
+    }
 
   } // class InventoryOrderDto
 
