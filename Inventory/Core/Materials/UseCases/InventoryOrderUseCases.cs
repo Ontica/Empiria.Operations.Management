@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using Empiria.Inventory.Adapters;
+using Empiria.Orders;
 using Empiria.Services;
 
 namespace Empiria.Inventory.UseCases {
@@ -32,35 +33,49 @@ namespace Empiria.Inventory.UseCases {
 
     #region Use cases
 
-    internal InventoryHolderDto CreateInventoryOrder(InventoryOrderFields fields,
-      string inventoryOrderUID) {
+    //internal InventoryHolderDto CreateInventoryOrder(InventoryOrderFields fields,
+    //  string inventoryOrderUID) {
 
-      var inventoryOrder = new InventoryOrder(fields, inventoryOrderUID);
-      
-      inventoryOrder.Save();
+    //  var inventoryOrder = new InventoryOrder(fields, inventoryOrderUID);
 
-      inventoryOrder.Items = CreateInventoryEntries(inventoryOrder.UID, fields.Items);
+    //  inventoryOrder.Save();
 
-      return InventoryOrderMapper.Map(inventoryOrder);
-    }
+    //  //inventoryOrder.Items = CreateInventoryEntries(inventoryOrder.UID, fields.Items);
+
+    //  return InventoryOrderMapper.Map(inventoryOrder);
+    //}
 
 
-    internal FixedList<InventoryEntry> CreateInventoryEntries(string inventoryOrderUID,
-                                                              FixedList<InventoryEntryFields> inventoryEntryFields) {
-      var returnedItems = new List<InventoryEntry>();
+    //internal FixedList<InventoryEntry> CreateInventoryEntries(string inventoryOrderUID,
+    //                                                          FixedList<InventoryEntryFields> inventoryEntryFields) {
+    //  var returnedItems = new List<InventoryEntry>();
 
-      foreach (var fields in inventoryEntryFields) {
+    //  foreach (var fields in inventoryEntryFields) {
 
-        returnedItems.Add(CreateInventoryEntry(inventoryOrderUID, fields));
+    //    returnedItems.Add(CreateInventoryEntry(inventoryOrderUID, fields));
+    //  }
+
+    //  return returnedItems.ToFixedList();
+    //}
+
+
+    internal InventoryEntryHolderDto CreateInventoryEntries(InventoryQuery query) {
+      var items = new List<InventoryEntry>();
+
+      foreach (var fields in query.Items) {
+
+        items.Add(CreateInventoryEntry(query.OrderItemUID, fields));
       }
 
-      return returnedItems.ToFixedList();
+      return InventoryOrderMapper.Map(items.ToFixedList());
     }
 
 
-    internal InventoryEntry CreateInventoryEntry(string inventoryOrderUID, InventoryEntryFields fields) {
+    internal InventoryEntry CreateInventoryEntry(string orderItemUID, InventoryEntryFields fields) {
 
-      var inventoryEntry = new InventoryEntry(inventoryOrderUID, fields);
+      var inventoryEntry = new InventoryEntry(orderItemUID);
+
+      inventoryEntry.Update(fields);
 
       inventoryEntry.Save();
 

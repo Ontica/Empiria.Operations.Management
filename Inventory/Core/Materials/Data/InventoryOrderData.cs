@@ -20,14 +20,20 @@ namespace Empiria.Inventory.Data {
 
       var op = DataOperation.Parse("write_OMS_Inventory_Entry",
           entry.Id, entry.UID,
-          entry.InventoryEntryTypeId, entry.InventoryOrder.Id, 
-          entry.ProductId, entry.SkuId,
+          entry.InventoryEntryTypeId,
+          5225,
+          5,
+          //entry.OrderItemId.Order.Id,
+          //entry.OrderItem.Id,
+          //entry.Product.Id,
+          entry.Product,
+          entry.SkuId,
           entry.LocationId, entry.ObservationNotes,
           entry.UnitId, entry.InputQuantity,
           entry.InputCost, entry.OutputQuantity,
           entry.OutputCost, entry.EntryTime,
           entry.Tags, entry.ExtData,
-          entry.InventoryEntryKeywords, entry.PostedById,
+          entry.InventoryEntryKeywords, entry.PostedBy.Id,
           entry.PostingTime, (char) entry.Status);
 
       DataWriter.Execute(op);

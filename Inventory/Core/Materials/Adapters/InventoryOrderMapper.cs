@@ -25,6 +25,14 @@ namespace Empiria.Inventory.Adapters {
       };
     }
 
+
+    static internal InventoryEntryHolderDto Map(FixedList<InventoryEntry> items) {
+
+      return new InventoryEntryHolderDto {
+        Items = MapToItemsDto(items)
+      };
+    }
+
     #endregion Public methods
 
     #region Private methods
@@ -42,7 +50,7 @@ namespace Empiria.Inventory.Adapters {
         InputCost = entry.InputCost,
         OutputQuantity = entry.OutputQuantity,
         OutputCost = entry.OutputCost,
-        PostedBy = NamedEntityDto.Empty,
+        PostedBy = entry.PostedBy.MapToNamedEntity(),
         PostingTime = entry.PostingTime
       };
     }

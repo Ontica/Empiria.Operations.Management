@@ -26,4 +26,14 @@ namespace Empiria.Inventory.Adapters {
 
   } // class InventoryHolderDto
 
+
+  /// <summary>Output DTO used to return inventory entry data.</summary>
+  public class InventoryEntryHolderDto {
+
+    public FixedList<InventoryEntryDto> Items {
+      get; internal set;
+    }
+
+  } // class InventoryEntryHolderDto
+
 } // namespace Empiria.Inventory.Adapters

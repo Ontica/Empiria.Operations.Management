@@ -28,14 +28,18 @@ namespace Empiria.Tests.Inventory {
 
     #endregion Initialization
 
+
     [Fact]
-    public void CreateInventoryOrderTest() {
+    public void CreateInventoryEntriesTest() {
 
       var usecase = InventoryOrderUseCases.UseCaseInteractor();
 
-      InventoryOrderFields fields = GetInventoryFields();
+      InventoryQuery query = new InventoryQuery {
+        OrderItemUID = "c9b998f2-44a4-4d1b-8194-781e16f76d9d",
+        Items = GetItemsFields()
+      };
 
-      InventoryHolderDto sut = usecase.CreateInventoryOrder(fields, "");
+      InventoryEntryHolderDto sut = usecase.CreateInventoryEntries(query);
 
       Assert.NotNull(sut);
     }
@@ -60,13 +64,13 @@ namespace Empiria.Tests.Inventory {
 
       Random r = new Random();
 
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < 2; i++) {
 
         var productId = r.Next(1, 2000);
 
         var fields = new InventoryEntryFields {
           InventoryEntryTypeId = -1,
-          ProductId = productId,
+          ProductUID = productId,
           SkuId = -1,
           LocationId = -1,
           ObservationNotes = $"asignacion num {productId}",

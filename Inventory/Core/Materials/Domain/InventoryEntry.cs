@@ -10,6 +10,9 @@
 
 using System;
 using Empiria.Inventory.Data;
+using Empiria.Orders;
+using Empiria.Parties;
+using Empiria.Products;
 
 namespace Empiria.Inventory {
 
@@ -29,10 +32,11 @@ namespace Empiria.Inventory {
 
     static public InventoryEntry Empty => ParseEmpty<InventoryEntry>();
 
+    
+    public InventoryEntry(string orderItemUID) {
+      Assertion.Require(orderItemUID, nameof(orderItemUID));
 
-    public InventoryEntry(string inventoryOrderUID, InventoryEntryFields fields) {
-
-      MapToInventoryOrderItem(inventoryOrderUID, fields);
+      //this.OrderItem = Orders.OrderItem.Parse(orderItemUID);
     }
 
     #endregion Constructors and parsers
@@ -59,13 +63,19 @@ namespace Empiria.Inventory {
 
 
     [DataField("Inv_Entry_Order_Id")]
-    internal InventoryOrder InventoryOrder {
+    internal int Order {
+      get; set;
+    }
+
+
+    [DataField("Inv_Entry_Order_Item_Id")]
+    internal int OrderItemId {
       get; set;
     }
 
 
     [DataField("Inv_Entry_Product_Id")]
-    internal int ProductId {
+    internal int Product {
       get; set;
     }
 
@@ -143,7 +153,7 @@ namespace Empiria.Inventory {
 
 
     [DataField("Inv_Entry_Posted_By_Id")]
-    internal int PostedById {
+    internal Party PostedBy {
       get; set;
     }
 
@@ -168,7 +178,7 @@ namespace Empiria.Inventory {
     protected override void OnSave() {
 
       if (IsNew) {
-        this.PostedById = 1; //Party.Parse(1);
+        this.PostedBy = Party.Parse(4);
         //this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         this.PostingTime = DateTime.Now;
       }
@@ -176,12 +186,10 @@ namespace Empiria.Inventory {
     }
 
 
-    private void MapToInventoryOrderItem(string inventoryOrderUID,
-                                         InventoryEntryFields fields) {
-
+    internal void Update(InventoryEntryFields fields) {
+      
       this.InventoryEntryTypeId = fields.InventoryEntryTypeId;
-      this.InventoryOrder = InventoryOrder.Parse(inventoryOrderUID);
-      this.ProductId = fields.ProductId;
+      this.Product = fields.ProductUID; //Product.Parse(fields.ProductUID);
       this.SkuId = fields.SkuId;
       this.LocationId = fields.LocationId;
       this.ObservationNotes = fields.ObservationNotes;
@@ -194,8 +202,6 @@ namespace Empiria.Inventory {
       this.Tags = string.Empty;
       this.ExtData = string.Empty;
       this.Status = InventoryStatus.Abierto;
-      
-
     }
 
 

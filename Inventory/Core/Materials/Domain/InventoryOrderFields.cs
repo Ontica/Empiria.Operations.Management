@@ -77,7 +77,7 @@ namespace Empiria.Inventory {
     }
 
 
-    public int ProductId {
+    public int ProductUID {
       get; internal set;
     }
 

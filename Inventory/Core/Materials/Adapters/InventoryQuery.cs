@@ -15,6 +15,14 @@ namespace Empiria.Inventory.Adapters {
   /// <summary>Input query DTO used to retrieve inventory orders.</summary>
   public class InventoryQuery {
 
+    public string OrderItemUID {
+      get; internal set;
+    }
+
+
+    public FixedList<InventoryEntryFields> Items {
+      get; internal set;
+    } = new FixedList<InventoryEntryFields>();
 
   } // class InventoryQuery
 
