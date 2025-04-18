@@ -33,59 +33,49 @@ namespace Empiria.Tests.Inventory {
     public void CreateInventoryEntriesTest() {
 
       var usecase = InventoryOrderUseCases.UseCaseInteractor();
+      string orderUID = "";
+      string orderItemUID = "";
 
-      InventoryQuery query = new InventoryQuery {
-        OrderItemUID = "c9b998f2-44a4-4d1b-8194-781e16f76d9d",
-        Items = GetItemsFields()
+      InventoryEntryFields fields = new InventoryEntryFields {
+        
+        Location = "245A291C-B961-4A33-8B57-C8E6ED2CD473",
+        Product = "0b994feb-1fbe-4cfe-b7e6-436d6e106805",
+        InputQuantity = 1
       };
 
-      InventoryEntryHolderDto sut = usecase.CreateInventoryEntries(query);
+      InventoryEntryDto sut = usecase.CreateInventoryEntry(orderUID, orderItemUID, fields);
 
       Assert.NotNull(sut);
     }
 
 
-    #region Helpers
+    [Fact]
+    public void GetInventoryOrderItemByOrderUIDTest() {
 
-    private InventoryOrderFields GetInventoryFields() {
-      return new InventoryOrderFields {
-        ReferenceUID = "2b0153fb-dee5-47f0-9de6-b9865b9075af",
-        ResponsibleUID = "5f781a0f-221a-44e4-9b24-7dc7fa8744a4",
-        AssignedToUID = "1e88a373-9939-44e0-a301-5426cd01cf4c",
-        Notes = "ESTE REGISTRO ES UNA PRUEBA",
-        Status = InventoryStatus.Abierto,
-        Items = GetItemsFields()
+      var usecase = InventoryOrderUseCases.UseCaseInteractor();
+
+      InventoryHolderDto sut = usecase.GetInventoryOrderByUID("d82a75ff-96bf-4f40-8fdc-f9ec63aec978");
+
+      Assert.NotNull(sut);
+    }
+
+
+    [Fact]
+    public void SearchInventoryOrderTest() {
+
+      var usecase = InventoryOrderUseCases.UseCaseInteractor();
+      
+      InventoryOrderQuery query = new InventoryOrderQuery {
+        Keywords = "",
+        Status = StateEnums.EntityStatus.Deleted
       };
+
+      InventoryOrderDataDto sut = usecase.SearchInventoryOrder(query);
+
+      Assert.NotNull(sut);
     }
 
 
-    private FixedList<InventoryEntryFields> GetItemsFields() {
-      var items = new List<InventoryEntryFields>();
-
-      Random r = new Random();
-
-      for (int i = 0; i < 2; i++) {
-
-        var productId = r.Next(1, 2000);
-
-        var fields = new InventoryEntryFields {
-          InventoryEntryTypeId = -1,
-          ProductUID = productId,
-          SkuId = -1,
-          LocationId = -1,
-          ObservationNotes = $"asignacion num {productId}",
-          UnitId = -1,
-          InputQuantity = r.Next(1, 20),
-          InputCost = r.Next(1, 200),
-          OutputQuantity = 0,
-          OutputCost = r.Next(201, 400)
-        };
-        items.Add(fields);
-      }
-      return items.ToFixedList();
-    }
-
-    #endregion Helpers
   } // class InventoryUseCasesTests
 
 } // namespace Empiria.Tests.Inventory
