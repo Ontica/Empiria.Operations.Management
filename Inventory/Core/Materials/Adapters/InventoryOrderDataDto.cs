@@ -2,28 +2,34 @@
 *                                                                                                            *
 *  Module   : Material Management                        Component : Adapters Layer                          *
 *  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Data Transfer Object                    *
-*  Type     : InventoryQuery                             License   : Please read LICENSE.txt file            *
+*  Type     : InventoryOrderDataDto                      License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Input query DTO used to retrieve inventory orders.                                             *
+*  Summary  : Output DTO used to return inventory descriptor data.                                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+using Empiria.DynamicData;
 
 namespace Empiria.Inventory.Adapters {
 
-  /// <summary>Input query DTO used to retrieve inventory orders.</summary>
-  public class InventoryQuery {
+  /// <summary>Output DTO used to return inventory descriptor data.</summary>
+  public class InventoryOrderDataDto {
 
-    public string OrderItemUID {
-      get; internal set;
+    public InventoryOrderQuery Query {
+      get; set;
     }
 
 
-    public FixedList<InventoryEntryFields> Items {
-      get; internal set;
-    } = new FixedList<InventoryEntryFields>();
+    public FixedList<DataTableColumn> Columns {
+      get; set;
+    }
 
-  } // class InventoryQuery
+
+    public FixedList<InventoryOrderDescriptorDto> Entries {
+      get; set;
+    }
+
+  } // class InventoryOrderDataDto
 
 } // namespace Empiria.Inventory.Adapters
