@@ -61,58 +61,23 @@ namespace Empiria.Inventory {
 
 
   public class InventoryEntryFields {
-    
+
     public string UID {
       get; internal set;
     }
 
 
-    public int InventoryEntryTypeId {
+    public string Location {
       get; internal set;
     }
 
 
-    public string ObservationNotes {
-      get; internal set;
-    }
-
-
-    public int ProductUID {
-      get; internal set;
-    }
-
-
-    public int SkuId {
-      get; internal set;
-    }
-
-
-    public int LocationId {
-      get; internal set;
-    }
-
-
-    public int UnitId {
+    public string Product {
       get; internal set;
     }
 
 
     public decimal InputQuantity {
-      get; internal set;
-    }
-
-
-    public decimal InputCost {
-      get; internal set;
-    }
-
-
-    public decimal OutputCost {
-      get; internal set;
-    }
-
-
-    public decimal OutputQuantity {
       get; internal set;
     }
   }

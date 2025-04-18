@@ -20,9 +20,14 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    public FixedList<InventoryEntryDto> Items {
+    public FixedList<InventoryOrderItemDto> Items {
       get; internal set;
     }
+
+
+    //public FixedList<InventoryEntryDto> Items {
+    //  get; internal set;
+    //}
 
   } // class InventoryHolderDto
 

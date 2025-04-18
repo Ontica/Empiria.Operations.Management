@@ -11,13 +11,14 @@
 using System;
 using System.Collections.Generic;
 using Empiria.Inventory.Adapters;
+using Empiria.Inventory.Data;
 using Empiria.Orders;
 using Empiria.Services;
 
 namespace Empiria.Inventory.UseCases {
 
   /// <summary>Use cases to manage inventory order.</summary>
-  internal class InventoryOrderUseCases : UseCase {
+  public class InventoryOrderUseCases : UseCase {
 
     #region Constructors and parsers
 
@@ -33,60 +34,42 @@ namespace Empiria.Inventory.UseCases {
 
     #region Use cases
 
-    //internal InventoryHolderDto CreateInventoryOrder(InventoryOrderFields fields,
-    //  string inventoryOrderUID) {
 
-    //  var inventoryOrder = new InventoryOrder(fields, inventoryOrderUID);
+    internal InventoryEntryDto CreateInventoryEntry(string orderUID, string orderItemUID,
+                                                    InventoryEntryFields fields) {
 
-    //  inventoryOrder.Save();
+      var inventoryEntry = new InventoryEntry(orderUID, orderItemUID, fields);
 
-    //  //inventoryOrder.Items = CreateInventoryEntries(inventoryOrder.UID, fields.Items);
-
-    //  return InventoryOrderMapper.Map(inventoryOrder);
-    //}
-
-
-    //internal FixedList<InventoryEntry> CreateInventoryEntries(string inventoryOrderUID,
-    //                                                          FixedList<InventoryEntryFields> inventoryEntryFields) {
-    //  var returnedItems = new List<InventoryEntry>();
-
-    //  foreach (var fields in inventoryEntryFields) {
-
-    //    returnedItems.Add(CreateInventoryEntry(inventoryOrderUID, fields));
-    //  }
-
-    //  return returnedItems.ToFixedList();
-    //}
-
-
-    internal InventoryEntryHolderDto CreateInventoryEntries(InventoryQuery query) {
-      var items = new List<InventoryEntry>();
-
-      foreach (var fields in query.Items) {
-
-        items.Add(CreateInventoryEntry(query.OrderItemUID, fields));
-      }
-
-      return InventoryOrderMapper.Map(items.ToFixedList());
-    }
-
-
-    internal InventoryEntry CreateInventoryEntry(string orderItemUID, InventoryEntryFields fields) {
-
-      var inventoryEntry = new InventoryEntry(orderItemUID);
-
-      inventoryEntry.Update(fields);
+      inventoryEntry.Update();
 
       inventoryEntry.Save();
 
-      return inventoryEntry;
+      return InventoryOrderMapper.MapToInventoryEntryDto(inventoryEntry);
+    }
+
+
+    public InventoryHolderDto GetInventoryOrderByUID(string orderUID) {
+
+      var order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
+      order.Items = InventoryOrderData.GetInventoryOrderItemsByOrder(order.InventoryOrderId);
+
+      return InventoryOrderMapper.MapToHolderDto(order);
+    }
+
+
+    public InventoryOrderDataDto SearchInventoryOrder(InventoryOrderQuery query) {
+
+      var filter = query.MapToFilterString();
+      var sort = query.MapToSortString();
+
+      var orders = InventoryOrderData.SearchInventoryOrders(filter, sort);
+
+      return InventoryOrderMapper.InventoryOrderDataDto(orders, query);
     }
 
     #endregion Use cases
 
     #region Private methods
-
-
 
 
     #endregion Private methods

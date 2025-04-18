@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+using Empiria.StateEnums;
 
 namespace Empiria.Inventory.Adapters {
 
@@ -61,5 +62,55 @@ namespace Empiria.Inventory.Adapters {
     }
 
   } // class InventoryOrderDto
+
+
+  /// <summary>Output DTO used to return inventory order item data.</summary>
+  public class InventoryOrderItemDto {
+
+    public string UID {
+      get; internal set;
+    }
+
+
+    public NamedEntityDto Product {
+      get; internal set;
+    }
+
+
+    public string Description {
+      get; internal set;
+    }
+
+
+    public NamedEntityDto ProductUnit {
+      get; internal set;
+    }
+
+
+    public decimal Quantity {
+      get; internal set;
+    }
+
+
+    public NamedEntityDto PostedBy {
+      get; internal set;
+    }
+
+
+    public DateTime PostingTime {
+      get; internal set;
+    }
+
+
+    public EntityStatus Status {
+      get; internal set;
+    }
+
+
+    public FixedList<InventoryEntryDto> EntryItemsDto {
+      get; internal set;
+    }
+
+  } // class InventoryOrderItemDto
 
 } // namespace Empiria.Inventory.Adapters

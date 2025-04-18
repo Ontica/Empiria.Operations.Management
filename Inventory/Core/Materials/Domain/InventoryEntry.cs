@@ -9,10 +9,13 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
+using Empiria.Locations;
 using Empiria.Orders;
 using Empiria.Parties;
 using Empiria.Products;
+using Empiria.Projects;
 
 namespace Empiria.Inventory {
 
@@ -32,12 +35,18 @@ namespace Empiria.Inventory {
 
     static public InventoryEntry Empty => ParseEmpty<InventoryEntry>();
 
-    
-    public InventoryEntry(string orderItemUID) {
+    public InventoryEntry(string orderUID, string orderItemUID, InventoryEntryFields fields) {
+      Assertion.Require(orderUID, nameof(orderUID));
       Assertion.Require(orderItemUID, nameof(orderItemUID));
+      Assertion.Require(fields, nameof(fields));
 
-      //this.OrderItem = Orders.OrderItem.Parse(orderItemUID);
+      this.OrderItem = 5;// OrderItem.GetByUID(orderItemUID);
+      this.Order = Order.Parse(orderUID);
+      this.Location = Location.Parse(fields.Location);
+      this.Product = Product.Parse(fields.Product);
+      this.InputQuantity = fields.InputQuantity;
     }
+
 
     #endregion Constructors and parsers
 
@@ -63,19 +72,19 @@ namespace Empiria.Inventory {
 
 
     [DataField("Inv_Entry_Order_Id")]
-    internal int Order {
+    internal Order Order {
       get; set;
     }
 
 
     [DataField("Inv_Entry_Order_Item_Id")]
-    internal int OrderItemId {
+    internal int OrderItem {
       get; set;
     }
 
 
     [DataField("Inv_Entry_Product_Id")]
-    internal int Product {
+    internal Product Product {
       get; set;
     }
 
@@ -87,7 +96,7 @@ namespace Empiria.Inventory {
 
 
     [DataField("Inv_Entry_Location_Id")]
-    internal int LocationId {
+    internal Location Location {
       get; set;
     }
 
@@ -170,6 +179,13 @@ namespace Empiria.Inventory {
     } = InventoryStatus.Abierto;
 
 
+    public virtual string Keywords {
+      get {
+        return EmpiriaString.BuildKeywords(Order.OrderNo, ObservationNotes);
+      }
+    }
+
+
     #endregion Properties
 
 
@@ -181,24 +197,21 @@ namespace Empiria.Inventory {
         this.PostedBy = Party.Parse(4);
         //this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         this.PostingTime = DateTime.Now;
+        this.EntryTime = DateTime.Now;
       }
       InventoryOrderData.WriteInventoryEntry(this);
     }
 
 
-    internal void Update(InventoryEntryFields fields) {
-      
-      this.InventoryEntryTypeId = fields.InventoryEntryTypeId;
-      this.Product = fields.ProductUID; //Product.Parse(fields.ProductUID);
-      this.SkuId = fields.SkuId;
-      this.LocationId = fields.LocationId;
-      this.ObservationNotes = fields.ObservationNotes;
-      this.UnitId = fields.UnitId;
-      this.InputQuantity = fields.InputQuantity;
-      this.InputCost = fields.InputCost;
-      this.OutputQuantity = fields.OutputQuantity;
-      this.OutputCost = fields.OutputCost;
-      this.EntryTime = new DateTime(2049, 01, 01);
+    internal void Update() {
+
+      //this.Location = -1;
+      this.InventoryEntryTypeId = -1;
+      this.SkuId = -1;
+      this.UnitId = -1;
+      this.InputCost = 0;
+      this.OutputQuantity = 0;
+      this.OutputCost = 0;
       this.Tags = string.Empty;
       this.ExtData = string.Empty;
       this.Status = InventoryStatus.Abierto;

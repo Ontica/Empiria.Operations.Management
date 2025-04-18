@@ -13,9 +13,47 @@ using System;
 namespace Empiria.Inventory.Adapters {
 
   /// <summary>Output DTO used to return inventory order descriptor data.</summary>
-  internal class InventoryOrderDescriptorDto {
+  public class InventoryOrderDescriptorDto {
 
 
+    public string UID {
+      get; set;
+    }
+
+
+    public string OrderTypeName {
+      get; set;
+    }
+
+
+    public string OrderNo {
+      get; set;
+    }
+
+
+    public string ResponsibleName {
+      get; set;
+    }
+
+
+    public string Description {
+      get; set;
+    }
+
+
+    public string PostedByName {
+      get; set;
+    }
+
+
+    public DateTime PostingTime {
+      get; set;
+    }
+
+
+    public string Status {
+      get; set;
+    }
 
   } // class InventoryOrderDescriptorDto
 
