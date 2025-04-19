@@ -15,16 +15,22 @@ using Empiria.StateEnums;
 namespace Empiria.Inventory {
 
   /// <summary>Represents an inventory order item.</summary>
-  internal class InventoryOrderItem {
+  public class InventoryOrderItem {
 
     [DataField("Order_Item_Id")]
-    internal int InventoryOrderItemId {
+    internal int OrderItemId {
       get; set;
     }
 
 
     [DataField("Order_Item_UID")]
     internal string InventoryOrderItemUID {
+      get; set;
+    }
+
+
+    [DataField("Order_Item_Type_Id")]
+    internal int ItemTypeId {
       get; set;
     }
 
@@ -54,7 +60,7 @@ namespace Empiria.Inventory {
 
 
     [DataField("Order_Item_Product_Qty")]
-    internal decimal Quantity {
+    internal decimal ProductQuantity {
       get; set;
     }
 
@@ -74,6 +80,11 @@ namespace Empiria.Inventory {
     [DataField("Order_Item_Status", Default = EntityStatus.Active)]
     public EntityStatus Status {
       get; set;
+    }
+
+
+    internal FixedList<InventoryEntry> Entries {
+      get; set; 
     }
 
   } // class InventoryOrderItem

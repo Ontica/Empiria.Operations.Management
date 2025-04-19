@@ -9,6 +9,8 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+using System.Linq;
+using Empiria.Inventory.Data;
 
 namespace Empiria.Inventory {
 
@@ -23,41 +25,6 @@ namespace Empiria.Inventory {
     Cerrado = 'C'
 
   }
-
-
-  /// <summary>Input fields DTO used to create and update inventory order.</summary>
-  internal class InventoryOrderFields {
-
-    public string ReferenceUID {
-      get; internal set;
-    }
-
-
-    public string ResponsibleUID {
-      get; internal set;
-    }
-
-
-    public string AssignedToUID {
-      get; internal set;
-    }
-
-
-    public string Notes {
-      get; internal set;
-    }
-
-
-    public FixedList<InventoryEntryFields> Items {
-      get; internal set;
-    } = new FixedList<InventoryEntryFields>();
-
-
-    public InventoryStatus Status {
-      get; internal set;
-    } = InventoryStatus.Abierto;
-
-  } // class InventoryOrderFields
 
 
   public class InventoryEntryFields {
@@ -77,9 +44,31 @@ namespace Empiria.Inventory {
     }
 
 
-    public decimal InputQuantity {
+    public decimal Quantity {
       get; internal set;
     }
   }
+
+
+  static public class InventoryEntryFieldsExtensions {
+
+    static internal void EnsureIsValid(this InventoryEntryFields fields,
+                                       int productId,
+                                       string orderItemUID) {
+
+      var orderItem = InventoryOrderData.GetInventoryOrderItemsByUID(orderItemUID);
+      var entries = InventoryOrderData.GetInventoryEntriesByOrderItemId(orderItem);
+
+      Assertion.Require((fields.Quantity + entries.Sum(x => x.InputQuantity)) <= orderItem.ProductQuantity,
+                        $"La suma de productos ingresados " +
+                        $"es mayor al registro en la orden de inventario!");
+
+      Assertion.Require(productId == orderItem.ProductId, "El producto que intenta registrar " +
+                        "no es el mismo que está registrado en la orden de inventario!");
+    }
+
+
+  }
+
 
 } // namespace Empiria.Inventory

@@ -10,9 +10,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Empiria.DynamicData;
+using Empiria.Inventory.UseCases;
 using Empiria.Orders;
 using Empiria.Parties;
+using Empiria.Products;
 using Empiria.StateEnums;
 
 namespace Empiria.Inventory.Adapters {
@@ -36,10 +39,10 @@ namespace Empiria.Inventory.Adapters {
 
       List<DataTableColumn> columns = new List<DataTableColumn>();
 
-      columns.Add(new DataTableColumn("orderTypeName", "Tipo", "text"));
-      columns.Add(new DataTableColumn("inventoryOrderNo", "Número de orden", "text-link"));
+      columns.Add(new DataTableColumn("orderTypeName", "Tipo de orden", "text"));
+      columns.Add(new DataTableColumn("orderNo", "Número de orden", "text-link"));
       columns.Add(new DataTableColumn("responsibleName", "Responsable", "text"));
-      columns.Add(new DataTableColumn("description", "Descripción", "text"));
+      //columns.Add(new DataTableColumn("description", "Descripción", "text"));
       columns.Add(new DataTableColumn("postedByName", "Registrado por", "text"));
       columns.Add(new DataTableColumn("postingTime", "Fecha registro", "date"));
       columns.Add(new DataTableColumn("status", "Estatus", "text-tag"));
@@ -48,19 +51,12 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    static internal InventoryHolderDto MapToHolderDto(InventoryOrder order) {
+    static internal InventoryHolderDto MapToHolderDto(InventoryOrder order, InventoryOrderActions actions) {
 
       return new InventoryHolderDto {
         Order = MapToOrderDto(order),
-        Items = MapToOrderItemsDto(order.Items)
-      };
-    }
-
-
-    static internal InventoryEntryHolderDto Map(FixedList<InventoryEntry> items) {
-
-      return new InventoryEntryHolderDto {
-        Items = MapToInventoryEntryDto(items)
+        Items = MapToOrderItemsDto(order.Items),
+        Actions = actions
       };
     }
 
@@ -73,33 +69,37 @@ namespace Empiria.Inventory.Adapters {
 
 
     static private InventoryOrderDescriptorDto MapToDescriptor(InventoryOrder x) {
-      
-        var descriptor = new InventoryOrderDescriptorDto();
-        descriptor.UID = x.InventoryOrderUID;
-        descriptor.OrderTypeName = GetOrderTypeName(x.InventoryOrderTypeId);
-        // OrderType.Parse(x.InventoryOrderTypeId).Name;
-        descriptor.OrderNo = x.InventoryOrderNo;
-        descriptor.ResponsibleName = x.ResponsibleId > 0 ? Party.Parse(x.ResponsibleId).Name : "Sin Asignar";
-        descriptor.Description = x.Order_Description;
-        descriptor.PostedByName = x.PostedById > 0 ? Party.Parse(x.PostedById).Name : "Sin asignar";
-        descriptor.PostingTime = x.PostingTime;
-        descriptor.Status = x.Status.GetName();
 
-        return descriptor;
+      var descriptor = new InventoryOrderDescriptorDto();
+      descriptor.UID = x.InventoryOrderUID;
+      descriptor.OrderTypeName = GetOrderTypeName(x.InventoryOrderTypeId).Name;
+      // OrderType.Parse(x.InventoryOrderTypeId).Name;
+      descriptor.OrderNo = x.InventoryOrderNo;
+      descriptor.ResponsibleName = x.ResponsibleId > 0 ? Party.Parse(x.ResponsibleId).Name : "Sin Asignar";
+      descriptor.Description = x.Order_Description;
+      descriptor.PostedByName = x.PostedById > 0 ? Party.Parse(x.PostedById).Name : "Sin asignar";
+      descriptor.PostingTime = x.PostingTime;
+      descriptor.Status = x.Status.GetName();
+
+      return descriptor;
     }
 
-    private static string GetOrderTypeName(int inventoryOrderTypeId) {
+    private static NamedEntityDto GetOrderTypeName(int inventoryOrderTypeId) {
 
       if (inventoryOrderTypeId == 4005) {
-        return "Orden de compra";
+
+        return new NamedEntityDto("4005", "Orden de compra");
       }
       if (inventoryOrderTypeId == 4008) {
-        return "Orden de venta";
+
+        return new NamedEntityDto("4008", "Orden de venta");
       }
       if (inventoryOrderTypeId == 4009) {
-        return "Orden de devolución de venta";
+
+        return new NamedEntityDto("4009", "Orden de devolución de venta");
       } else {
-        return string.Empty;
+
+        return NamedEntityDto.Empty;
       }
     }
 
@@ -107,19 +107,12 @@ namespace Empiria.Inventory.Adapters {
 
     #region Private methods
 
-    static internal InventoryEntryDto MapToInventoryEntryDto(InventoryEntry entry) {
+    static internal InventoryEntryDto MapToInventoryEntryDto(InventoryEntry entry, string productName) {
       return new InventoryEntryDto {
         UID = entry.UID,
-        InventoryEntryType = NamedEntityDto.Empty,
-        Product = NamedEntityDto.Empty,
-        Sku = NamedEntityDto.Empty,
-        Location = NamedEntityDto.Empty,
-        Unit = NamedEntityDto.Empty,
-        Notes = entry.ObservationNotes,
-        InputQuantity = entry.InputQuantity,
-        InputCost = entry.InputCost,
-        OutputQuantity = entry.OutputQuantity,
-        OutputCost = entry.OutputCost,
+        Product = productName,
+        Location = InventoryOrderUseCases.GetLocationEntryById(entry.LocationId).Name,
+        Quantity = entry.InputQuantity,
         PostedBy = entry.PostedBy.MapToNamedEntity(),
         PostingTime = entry.PostingTime
       };
@@ -133,14 +126,25 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    static private InventoryOrderItemDto MapToOrderItemDto(InventoryOrderItem x) {
-      return new InventoryOrderItemDto();
+    static private InventoryOrderItemDto MapToOrderItemDto(InventoryOrderItem item) {
+
+      var dto = new InventoryOrderItemDto();
+      dto.UID = item.InventoryOrderItemUID;
+      dto.ProductName = InventoryOrderUseCases.GetProductEntryById(item.ProductId).Name;
+      dto.Quantity = item.ProductQuantity;
+      dto.AssignedQuantity = item.Entries.Sum(x => x.InputQuantity);
+      dto.PostedBy = new NamedEntityDto(item.PostedBy.UID, item.PostedBy.Name);
+      dto.PostingTime = item.PostingTime;
+      dto.Entries = MapToInventoryEntriesDto(item.Entries, dto.ProductName);
+      dto.Status = item.Status;
+      return dto;
     }
 
 
-    private static FixedList<InventoryEntryDto> MapToInventoryEntryDto(FixedList<InventoryEntry> items) {
+    private static FixedList<InventoryEntryDto> MapToInventoryEntriesDto(FixedList<InventoryEntry> items,
+                                                                         string productName) {
 
-      return items.Select((x) => MapToInventoryEntryDto(x))
+      return items.Select((x) => MapToInventoryEntryDto(x, productName))
                          .ToFixedList();
     }
 
@@ -149,14 +153,15 @@ namespace Empiria.Inventory.Adapters {
 
       return new InventoryOrderDto {
         UID = order.InventoryOrderUID,
-        InventoryOrderType = NamedEntityDto.Empty,
-        Notes = order.Order_Description,
-        InventoryOrderNo = order.InventoryOrderNo,
-        Reference = NamedEntityDto.Empty,
-        Responsible = NamedEntityDto.Empty,
-        AssignedTo = NamedEntityDto.Empty,
-        PostedBy = NamedEntityDto.Empty,
-        PostingTime = order.PostingTime
+        OrderType = GetOrderTypeName(order.InventoryOrderTypeId),
+        Description = order.Order_Description,
+        OrderNo = order.InventoryOrderNo,
+        Responsible = new NamedEntityDto(Party.Parse(order.ResponsibleId).UID,
+                                         Party.Parse(order.ResponsibleId).Name),
+        PostedBy = new NamedEntityDto(Party.Parse(order.PostedById).UID, Party.Parse(order.PostedById).Name),
+        PostingTime = order.PostingTime,
+        ClosingTime = order.ClosingTime,
+        Status = new NamedEntityDto(order.Status.ToString(), order.Status.GetName())
       };
     }
 

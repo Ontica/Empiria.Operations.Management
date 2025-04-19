@@ -20,52 +20,17 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    public NamedEntityDto InventoryEntryType {
+    public string Product {
       get; internal set;
     }
 
 
-    public NamedEntityDto Product {
+    public string Location {
       get; internal set;
     }
 
 
-    public NamedEntityDto Sku {
-      get; internal set;
-    }
-
-
-    public NamedEntityDto Location {
-      get; internal set;
-    }
-
-
-    public string Notes {
-      get; internal set;
-    }
-
-
-    public NamedEntityDto Unit {
-      get; internal set;
-    }
-
-
-    public decimal InputQuantity {
-      get; internal set;
-    }
-
-
-    public decimal InputCost {
-      get; internal set;
-    }
-
-
-    public decimal OutputQuantity {
-      get; internal set;
-    }
-
-
-    public decimal OutputCost {
+    public decimal Quantity {
       get; internal set;
     }
 

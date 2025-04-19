@@ -35,16 +35,15 @@ namespace Empiria.Inventory {
 
     static public InventoryEntry Empty => ParseEmpty<InventoryEntry>();
 
-    public InventoryEntry(string orderUID, string orderItemUID, InventoryEntryFields fields) {
-      Assertion.Require(orderUID, nameof(orderUID));
-      Assertion.Require(orderItemUID, nameof(orderItemUID));
-      Assertion.Require(fields, nameof(fields));
+    public InventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
+      Assertion.Require(order, nameof(order));
+      Assertion.Require(orderItem, nameof(orderItem));
 
-      this.OrderItem = 5;// OrderItem.GetByUID(orderItemUID);
-      this.Order = Order.Parse(orderUID);
-      this.Location = Location.Parse(fields.Location);
-      this.Product = Product.Parse(fields.Product);
-      this.InputQuantity = fields.InputQuantity;
+      this.OrderId = order.OrderId;
+      this.OrderItemId = orderItem.OrderItemId;
+      this.InventoryEntryTypeId = orderItem.ItemTypeId;
+      this.UnitId = orderItem.ProductUnitId;
+      this.OrderItemProductId = orderItem.ProductId;
     }
 
 
@@ -72,19 +71,19 @@ namespace Empiria.Inventory {
 
 
     [DataField("Inv_Entry_Order_Id")]
-    internal Order Order {
+    internal int OrderId {
       get; set;
     }
 
 
     [DataField("Inv_Entry_Order_Item_Id")]
-    internal int OrderItem {
+    internal int OrderItemId {
       get; set;
     }
 
 
     [DataField("Inv_Entry_Product_Id")]
-    internal Product Product {
+    internal int ProductId {
       get; set;
     }
 
@@ -96,13 +95,13 @@ namespace Empiria.Inventory {
 
 
     [DataField("Inv_Entry_Location_Id")]
-    internal Location Location {
+    internal int LocationId {
       get; set;
     }
 
 
     [DataField("Inv_Entry_Observations")]
-    public string ObservationNotes {
+    public string Observations {
       get; set;
     } = string.Empty;
 
@@ -179,9 +178,14 @@ namespace Empiria.Inventory {
     } = InventoryStatus.Abierto;
 
 
+    internal int OrderItemProductId {
+      get; private set;
+    }
+
+
     public virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(Order.OrderNo, ObservationNotes);
+        return EmpiriaString.BuildKeywords(Observations);
       }
     }
 
@@ -203,12 +207,17 @@ namespace Empiria.Inventory {
     }
 
 
-    internal void Update() {
+    internal void Update(InventoryEntryFields fields, string orderItemUID) {
 
-      //this.Location = -1;
-      this.InventoryEntryTypeId = -1;
+      ProductEntry product = InventoryOrderData.GetProductEntryByName(fields.Product);
+      LocationEntry location = InventoryOrderData.GetLocationEntryByName(fields.Location);
+      
+      fields.EnsureIsValid(product.ProductId, orderItemUID);
+
+      this.InputQuantity = fields.Quantity;
+      this.ProductId = product.ProductId;
+      this.LocationId = location.LocationId;
       this.SkuId = -1;
-      this.UnitId = -1;
       this.InputCost = 0;
       this.OutputQuantity = 0;
       this.OutputCost = 0;

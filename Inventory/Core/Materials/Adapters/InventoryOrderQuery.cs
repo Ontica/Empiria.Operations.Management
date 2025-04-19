@@ -77,11 +77,14 @@ namespace Empiria.Inventory.Adapters {
 
 
     private static string BuildStatusFilter(EntityStatus status) {
-      
-      if (status != EntityStatus.All) {
-        return $"Order_Status = '{(char) status}'";
+
+      if (status == EntityStatus.All) {
+        return $"Order_Status != '{(char) EntityStatus.Discontinued}' AND " +
+               $"Order_Status != '{(char) EntityStatus.Suspended}' AND " +
+               $"Order_Status != '{(char) EntityStatus.Deleted}' ";
       }
-      return string.Empty;
+
+      return $"Order_Status = '{(char) status}'";
     }
 
 

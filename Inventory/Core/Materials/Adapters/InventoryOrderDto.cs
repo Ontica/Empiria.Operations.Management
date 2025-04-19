@@ -22,22 +22,17 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    public NamedEntityDto InventoryOrderType {
+    public NamedEntityDto OrderType {
       get; internal set;
     }
 
 
-    public string Notes {
+    public string OrderNo {
       get; internal set;
     }
 
 
-    public string InventoryOrderNo {
-      get; internal set;
-    }
-
-
-    public NamedEntityDto Reference {
+    public string Description {
       get; internal set;
     }
 
@@ -47,7 +42,12 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    public NamedEntityDto AssignedTo {
+    public DateTime ClosingTime {
+      get; internal set;
+    }
+
+
+    public DateTime PostingTime {
       get; internal set;
     }
 
@@ -57,8 +57,9 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    public DateTime PostingTime {
-      get; internal set;
+    public NamedEntityDto Status {
+      get;
+      internal set;
     }
 
   } // class InventoryOrderDto
@@ -69,17 +70,17 @@ namespace Empiria.Inventory.Adapters {
 
     public string UID {
       get; internal set;
-    }
+    } = string.Empty;
 
 
-    public NamedEntityDto Product {
+    public string ProductName {
       get; internal set;
-    }
+    } = string.Empty;
 
 
     public string Description {
       get; internal set;
-    }
+    } = string.Empty;
 
 
     public NamedEntityDto ProductUnit {
@@ -88,6 +89,11 @@ namespace Empiria.Inventory.Adapters {
 
 
     public decimal Quantity {
+      get; internal set;
+    }
+
+
+    public decimal AssignedQuantity {
       get; internal set;
     }
 
@@ -107,10 +113,10 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    public FixedList<InventoryEntryDto> EntryItemsDto {
+    public FixedList<InventoryEntryDto> Entries {
       get; internal set;
     }
-
+    
   } // class InventoryOrderItemDto
 
 } // namespace Empiria.Inventory.Adapters

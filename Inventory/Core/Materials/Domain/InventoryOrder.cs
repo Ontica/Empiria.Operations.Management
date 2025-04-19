@@ -16,7 +16,7 @@ using Empiria.StateEnums;
 namespace Empiria.Inventory {
 
   /// <summary>Represents an inventory order.</summary>
-  internal class InventoryOrder {
+  public class InventoryOrder {
 
     #region Constructors and parsers
 
@@ -29,7 +29,7 @@ namespace Empiria.Inventory {
     #region Properties
 
     [DataField("Order_Id")]
-    internal int InventoryOrderId {
+    internal int OrderId {
       get; set;
     }
 
@@ -73,6 +73,12 @@ namespace Empiria.Inventory {
 
     [DataField("Order_Posting_Time")]
     internal DateTime PostingTime {
+      get; set;
+    }
+
+
+    [DataField("Order_Closing_Time")]
+    internal DateTime ClosingTime {
       get; set;
     }
 

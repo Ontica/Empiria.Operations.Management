@@ -25,9 +25,9 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    //public FixedList<InventoryEntryDto> Items {
-    //  get; internal set;
-    //}
+    public InventoryOrderActions Actions {
+      get; internal set;
+    }
 
   } // class InventoryHolderDto
 
@@ -40,5 +40,41 @@ namespace Empiria.Inventory.Adapters {
     }
 
   } // class InventoryEntryHolderDto
+
+
+  public class InventoryOrderActions {
+
+
+    public bool CanEdit {
+      get; set;
+    } = false;
+
+
+    public bool CanEditItems {
+      get; set;
+    } = false;
+
+
+    public bool CanEditEntries {
+      get; set;
+    } = false;
+
+
+    public bool CanDelete {
+      get; set;
+    } = false;
+
+
+    public bool CanClose {
+      get; set;
+    } = false;
+
+
+    public bool CanOpen {
+      get; set;
+    } = false;
+
+
+  } // class InventoryOrderActions
 
 } // namespace Empiria.Inventory.Adapters

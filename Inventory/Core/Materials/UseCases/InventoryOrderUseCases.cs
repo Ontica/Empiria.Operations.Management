@@ -14,6 +14,7 @@ using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
 using Empiria.Orders;
 using Empiria.Services;
+using Empiria.StateEnums;
 
 namespace Empiria.Inventory.UseCases {
 
@@ -35,25 +36,65 @@ namespace Empiria.Inventory.UseCases {
     #region Use cases
 
 
-    internal InventoryEntryDto CreateInventoryEntry(string orderUID, string orderItemUID,
+    public InventoryHolderDto CreateInventoryEntry(string orderUID, string orderItemUID,
                                                     InventoryEntryFields fields) {
 
-      var inventoryEntry = new InventoryEntry(orderUID, orderItemUID, fields);
+      var order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
+      var orderItem = InventoryOrderData.GetInventoryOrderItemsByUID(orderItemUID);
+      
+      var inventoryEntry = new InventoryEntry(order, orderItem);
 
-      inventoryEntry.Update();
+      inventoryEntry.Update(fields, orderItemUID);
 
       inventoryEntry.Save();
 
-      return InventoryOrderMapper.MapToInventoryEntryDto(inventoryEntry);
+      return GetInventoryOrderByUID(orderUID);
     }
 
 
     public InventoryHolderDto GetInventoryOrderByUID(string orderUID) {
 
       var order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
-      order.Items = InventoryOrderData.GetInventoryOrderItemsByOrder(order.InventoryOrderId);
+      order.Items = GetInventoryOrderItemsByOrder(order.OrderId);
+      InventoryOrderActions actions = GetActions(order);
 
-      return InventoryOrderMapper.MapToHolderDto(order);
+      return InventoryOrderMapper.MapToHolderDto(order, actions);
+    }
+
+
+    private InventoryOrderActions GetActions(InventoryOrder order) {
+
+      return new InventoryOrderActions {
+        CanEditEntries = order.Status == EntityStatus.Active ||
+                         order.Status == EntityStatus.Pending ||
+                         order.Status == EntityStatus.OnReview ?
+                         true : false,
+      };
+    }
+
+    private FixedList<InventoryOrderItem> GetInventoryOrderItemsByOrder(int orderId) {
+
+      FixedList<InventoryOrderItem> orderItems =
+          InventoryOrderData.GetInventoryOrderItemsByOrder(orderId);
+
+      foreach (var item in orderItems) {
+
+        item.Entries = InventoryOrderData.GetInventoryEntriesByOrderItemId(item);
+      }
+
+      return orderItems;
+    }
+
+
+    static public LocationEntry GetLocationEntryById(int locationId) {
+
+      return InventoryOrderData.GetLocationEntryById(locationId);
+    }
+
+
+    static public ProductEntry GetProductEntryById(int productId) {
+
+      return InventoryOrderData.GetProductEntryById(productId);
     }
 
 
