@@ -10,7 +10,6 @@ using Empiria.WebApi;
 
 namespace Empiria.Inventory.WebApi {
 
-  [AllowAnonymous]
   public class InventoryOrderController : WebApiController {
 
     #region Web Apis
@@ -39,6 +38,22 @@ namespace Empiria.Inventory.WebApi {
         return new SingleObjectModel(this.Request, inventoryOrder);
       }
     }
+
+
+    [HttpPost]
+    [Route("v8/order-management/inventory-orders/{orderUID}/items/{itemUID}/entries")]
+    public SingleObjectModel CreateInventoryEntry([FromUri] string orderUID,
+                                                  [FromUri] string itemUID,
+                                                  [FromBody] InventoryEntryFields fields) {
+
+      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
+
+        InventoryHolderDto inventoryOrder = usecases.CreateInventoryEntry(orderUID, itemUID, fields);
+
+        return new SingleObjectModel(this.Request, inventoryOrder);
+      }
+    }
+
 
     #endregion Web Apis
 
