@@ -22,7 +22,9 @@ namespace Empiria.Inventory {
 
     EnProceso = 'E',
 
-    Cerrado = 'C'
+    Cerrado = 'C',
+
+    Deleted = 'X'
 
   }
 
@@ -30,22 +32,22 @@ namespace Empiria.Inventory {
   public class InventoryEntryFields {
 
     public string UID {
-      get; internal set;
+      get; set;
     }
 
 
     public string Location {
-      get; internal set;
+      get; set;
     }
 
 
     public string Product {
-      get; internal set;
+      get; set;
     }
 
 
     public decimal Quantity {
-      get; internal set;
+      get; set;
     }
   }
 
@@ -56,16 +58,15 @@ namespace Empiria.Inventory {
                                        int productId,
                                        string orderItemUID) {
 
-      var orderItem = InventoryOrderData.GetInventoryOrderItemsByUID(orderItemUID);
+      var orderItem = InventoryOrderData.GetInventoryOrderItemByUID(orderItemUID);
       var entries = InventoryOrderData.GetInventoryEntriesByOrderItemId(orderItem);
 
       Assertion.Require((fields.Quantity + entries.Sum(x => x.InputQuantity)) <= orderItem.ProductQuantity,
-                        $"La suma de productos ingresados " +
-                        $"es mayor al registro en la orden de inventario!");
+                        $"La cantidad de productos capturados supera los productos restantes.");
 
-      Assertion.Require(productId == orderItem.ProductId, "El producto que intenta registrar " +
-                        "no es el mismo que está registrado en la orden de inventario!");
+      Assertion.Require(productId == orderItem.ProductId, "El producto no coincide con el seleccionado.");
     }
+
 
 
   }

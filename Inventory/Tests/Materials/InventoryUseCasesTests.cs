@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
+using Empiria.Inventory.Data;
 using Empiria.Inventory.UseCases;
 using Xunit;
 
@@ -30,6 +31,18 @@ namespace Empiria.Tests.Inventory {
 
 
     [Fact]
+    public void CloseInventoryEntryTest() {
+
+      var usecase = InventoryOrderUseCases.UseCaseInteractor();
+      string orderUID = "64a733ea-0e84-410d-a8ba-7662b6f3a23d";
+
+      InventoryHolderDto sut = usecase.CloseInventoryEntries(orderUID);
+
+      Assert.NotNull(sut);
+    }
+
+
+    [Fact]
     public void CreateInventoryEntriesTest() {
 
       var usecase = InventoryOrderUseCases.UseCaseInteractor();
@@ -40,10 +53,26 @@ namespace Empiria.Tests.Inventory {
         
         Location = "A-001-1-23",
         Product = "PPLAN10X212-200",
-        Quantity = 7
+        Quantity = 5
       };
 
+      LocationEntry location = InventoryOrderData.GetLocationEntryByName(fields.Location);
+
       InventoryHolderDto sut = usecase.CreateInventoryEntry(orderUID, orderItemUID, fields);
+
+      Assert.NotNull(sut);
+    }
+
+
+    [Fact]
+    public void DeleteInventoryEntryTest() {
+
+      var usecase = InventoryOrderUseCases.UseCaseInteractor();
+      string orderUID = "64a733ea-0e84-410d-a8ba-7662b6f3a23d";
+      string orderItemUID = "0b2f127a-1aed-486e-b892-98238ae91f4d";
+      string entryUID = "11132bf0-f125-44e5-b89a-075d71811720";
+
+      InventoryHolderDto sut = usecase.DeleteInventoryEntry(orderUID, orderItemUID, entryUID);
 
       Assert.NotNull(sut);
     }

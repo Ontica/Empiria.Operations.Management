@@ -10,11 +10,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
 using Empiria.Orders;
 using Empiria.Services;
 using Empiria.StateEnums;
+using iText.StyledXmlParser.Jsoup.Nodes;
 
 namespace Empiria.Inventory.UseCases {
 
@@ -40,7 +44,7 @@ namespace Empiria.Inventory.UseCases {
                                                     InventoryEntryFields fields) {
 
       var order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
-      var orderItem = InventoryOrderData.GetInventoryOrderItemsByUID(orderItemUID);
+      var orderItem = InventoryOrderData.GetInventoryOrderItemByUID(orderItemUID);
       
       var inventoryEntry = new InventoryEntry(order, orderItem);
 
@@ -54,23 +58,31 @@ namespace Empiria.Inventory.UseCases {
 
     public InventoryHolderDto GetInventoryOrderByUID(string orderUID) {
 
-      var order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
+      InventoryOrder order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
       order.Items = GetInventoryOrderItemsByOrder(order.OrderId);
-      InventoryOrderActions actions = GetActions(order);
+      InventoryOrderActions actions = GetActions(order.Items);
 
       return InventoryOrderMapper.MapToHolderDto(order, actions);
     }
 
 
-    private InventoryOrderActions GetActions(InventoryOrder order) {
+    private InventoryOrderActions GetActions(FixedList<InventoryOrderItem> items) {
+
+      bool existClosedEntries = false;
+
+      foreach (var item in items) {
+        foreach (var entry in item.Entries) {
+          if (entry.Status == InventoryStatus.Cerrado) {
+            existClosedEntries = true;
+          }
+        }
+      }
 
       return new InventoryOrderActions {
-        CanEditEntries = order.Status == EntityStatus.Active ||
-                         order.Status == EntityStatus.Pending ||
-                         order.Status == EntityStatus.OnReview ?
-                         true : false,
+        CanEditEntries = !existClosedEntries ? true : false,
       };
     }
+
 
     private FixedList<InventoryOrderItem> GetInventoryOrderItemsByOrder(int orderId) {
 
@@ -79,7 +91,8 @@ namespace Empiria.Inventory.UseCases {
 
       foreach (var item in orderItems) {
 
-        item.Entries = InventoryOrderData.GetInventoryEntriesByOrderItemId(item);
+        FixedList<InventoryEntry> entries = InventoryOrderData.GetInventoryEntriesByOrderItemId(item);
+        item.Entries = entries;
       }
 
       return orderItems;
@@ -107,6 +120,49 @@ namespace Empiria.Inventory.UseCases {
 
       return InventoryOrderMapper.InventoryOrderDataDto(orders, query);
     }
+
+
+    public InventoryHolderDto DeleteInventoryEntry(string orderUID, string itemUID, string entryUID) {
+
+      InventoryOrder order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
+      InventoryOrderItem orderItem = InventoryOrderData.GetInventoryOrderItemByUID(itemUID);
+      InventoryEntry entry = InventoryOrderData.GetInventoryEntryByUID(entryUID);
+      
+      Assertion.Require(order.OrderId == entry.OrderId && orderItem.OrderId == entry.OrderId,
+                        $"El registro de inventario no coincide con la orden!");
+
+      InventoryOrderData.DeleteEntryStatus(order.OrderId, orderItem.OrderItemId,
+                                           entry.InventoryEntryId, InventoryStatus.Deleted);
+
+      return GetInventoryOrderByUID(orderUID);
+    }
+
+
+    public InventoryHolderDto CloseInventoryEntries(string orderUID) {
+
+      var order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
+      var orderItems = InventoryOrderData.GetInventoryOrderItemsByOrder(order.OrderId);
+
+      EnsureIsValidToClose(orderItems);
+      
+      InventoryOrderData.UpdateEntriesStatusByOrder(order.OrderId, InventoryStatus.Cerrado);
+
+      return GetInventoryOrderByUID(orderUID);
+    }
+
+
+    private void EnsureIsValidToClose(FixedList<InventoryOrderItem> orderItems) {
+
+      foreach (var item in orderItems) {
+
+        var entries = InventoryOrderData.GetInventoryEntriesByOrderItemId(item);
+        var entriesQuantity = entries.Sum(x => x.InputQuantity);
+
+        Assertion.Require(item.ProductQuantity == entriesQuantity, "Faltan productos por asignar.");
+      }
+
+    }
+
 
     #endregion Use cases
 
