@@ -59,8 +59,11 @@ namespace Empiria.Inventory.UseCases {
     public InventoryHolderDto GetInventoryOrderByUID(string orderUID) {
 
       InventoryOrder order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
-      order.Items = GetInventoryOrderItemsByOrder(order.OrderId);
-      InventoryOrderActions actions = GetActions(order.Items);
+      
+      FixedList<InventoryOrderItem> items = GetInventoryOrderItemsByOrder(order.OrderId);
+      order.Items = items;
+
+      InventoryOrderActions actions = GetActions(items);
 
       return InventoryOrderMapper.MapToHolderDto(order, actions);
     }
@@ -78,9 +81,11 @@ namespace Empiria.Inventory.UseCases {
         }
       }
 
-      return new InventoryOrderActions {
-        CanEditEntries = !existClosedEntries ? true : false,
+      InventoryOrderActions actions = new InventoryOrderActions {
+        CanEditEntries = existClosedEntries ? false : true
       };
+
+      return actions;
     }
 
 

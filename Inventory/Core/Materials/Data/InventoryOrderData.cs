@@ -32,6 +32,18 @@ namespace Empiria.Inventory.Data {
     }
 
 
+    internal static FixedList<InventoryEntry> GetInventoryEntryByOrderId(int orderId) {
+
+      var sql = $"SELECT * FROM OMS_Inventory_Entries " +
+                $"WHERE Inv_Entry_Order_Id = {orderId} AND " +
+                $"Inv_Entry_Status != 'X' ";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<InventoryEntry>(op);
+    }
+
+
     internal static InventoryOrder GetInventoryOrderByUID(string orderUID) {
 
       var sql = $"SELECT * FROM OMS_Orders WHERE Order_UID = '{orderUID}'";
@@ -156,7 +168,8 @@ namespace Empiria.Inventory.Data {
 
       string sql = $"UPDATE OMS_Inventory_Entries " +
                    $"SET Inv_Entry_Status = '{(char) status}' " +
-                   $"WHERE Inv_Entry_Order_Id = {orderId}";
+                   $"WHERE Inv_Entry_Order_Id = {orderId} AND " +
+                   $"Inv_Entry_Status != 'X'";
 
       var dataOperation = DataOperation.Parse(sql);
 

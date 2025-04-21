@@ -198,8 +198,7 @@ namespace Empiria.Inventory {
     protected override void OnSave() {
 
       if (IsNew) {
-        this.PostedBy = Party.Parse(4);
-        //this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+        this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         this.PostingTime = DateTime.Now;
         this.EntryTime = DateTime.Now;
       }
@@ -209,8 +208,8 @@ namespace Empiria.Inventory {
 
     internal void Update(InventoryEntryFields fields, string orderItemUID) {
 
-      ProductEntry product = InventoryOrderData.GetProductEntryByName(fields.Product);
-      LocationEntry location = InventoryOrderData.GetLocationEntryByName(fields.Location);
+      ProductEntry product = InventoryOrderData.GetProductEntryByName(fields.Product.Trim());
+      LocationEntry location = InventoryOrderData.GetLocationEntryByName(fields.Location.Trim());
       
       fields.EnsureIsValid(product.ProductId, orderItemUID);
 
