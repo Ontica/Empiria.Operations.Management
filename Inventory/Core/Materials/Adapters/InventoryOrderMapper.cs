@@ -97,9 +97,13 @@ namespace Empiria.Inventory.Adapters {
       if (inventoryOrderTypeId == 4009) {
 
         return new NamedEntityDto("4009", "Orden de devolución de venta");
+      }
+      if (inventoryOrderTypeId == 4301) {
+
+       return new NamedEntityDto("4301", "Orden de inventario físico");
       } else {
 
-        return NamedEntityDto.Empty;
+       return NamedEntityDto.Empty;
       }
     }
 

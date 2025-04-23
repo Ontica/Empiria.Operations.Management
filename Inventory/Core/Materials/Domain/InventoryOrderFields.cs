@@ -61,13 +61,12 @@ namespace Empiria.Inventory {
       var orderItem = InventoryOrderData.GetInventoryOrderItemByUID(orderItemUID);
       var entries = InventoryOrderData.GetInventoryEntriesByOrderItemId(orderItem);
 
-      Assertion.Require((fields.Quantity + entries.Sum(x => x.InputQuantity)) <= orderItem.ProductQuantity,
+      Assertion.Require(orderItem.ItemTypeId == 4311 ||
+                       (fields.Quantity + entries.Sum(x => x.InputQuantity)) <= orderItem.ProductQuantity,
                         $"La cantidad de productos capturados supera los productos restantes.");
 
       Assertion.Require(productId == orderItem.ProductId, "El producto no coincide con el seleccionado.");
     }
-
-
 
   }
 
