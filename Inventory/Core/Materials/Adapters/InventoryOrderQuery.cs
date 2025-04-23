@@ -46,18 +46,17 @@ namespace Empiria.Inventory.Adapters {
 
     static internal string MapToFilterString(this InventoryOrderQuery query) {
 
-      string orderType = "Order_Type_Id = 4008";
       string keywords = BuildKeywordsFilter(query.Keywords);
       string status = BuildStatusFilter(query.Status);
 
-      var filter = new Filter(orderType);
+      var filter = new Filter(status);
+
       filter.AppendAnd(keywords);
-      filter.AppendAnd(status);
 
       return filter.ToString();
     }
 
-    
+
     static internal string MapToSortString(this InventoryOrderQuery query) {
 
       return string.Empty;
