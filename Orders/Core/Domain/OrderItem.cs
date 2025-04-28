@@ -37,9 +37,9 @@ namespace Empiria.Orders {
       this.Order = order;
     }
 
-    static private OrderItem Parse(int id) => ParseId<OrderItem>(id);
+    static public OrderItem Parse(int id) => ParseId<OrderItem>(id);
 
-    static private OrderItem Parse(string uid) => ParseKey<OrderItem>(uid);
+    static public OrderItem Parse(string uid) => ParseKey<OrderItem>(uid);
 
     static internal OrderItem Empty => ParseEmpty<OrderItem>();
 

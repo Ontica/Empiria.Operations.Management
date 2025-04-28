@@ -31,9 +31,9 @@ namespace Empiria.Procurement.Contracts {
       this.ContractItem = contractItem;
     }
 
-    static private ContractOrderItem Parse(int id) => ParseId<ContractOrderItem>(id);
+    static internal new ContractOrderItem Parse(int id) => ParseId<ContractOrderItem>(id);
 
-    static private ContractOrderItem Parse(string uid) => ParseKey<ContractOrderItem>(uid);
+    static internal new ContractOrderItem Parse(string uid) => ParseKey<ContractOrderItem>(uid);
 
     static internal new ContractOrderItem Empty => ParseEmpty<ContractOrderItem>();
 

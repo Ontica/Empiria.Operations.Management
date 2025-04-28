@@ -29,9 +29,9 @@ namespace Empiria.Orders {
       // no-op
     }
 
-    static private PayableOrderItem Parse(int id) => ParseId<PayableOrderItem>(id);
+    static internal new PayableOrderItem Parse(int id) => ParseId<PayableOrderItem>(id);
 
-    static private PayableOrderItem Parse(string uid) => ParseKey<PayableOrderItem>(uid);
+    static internal new PayableOrderItem Parse(string uid) => ParseKey<PayableOrderItem>(uid);
 
     static internal new PayableOrderItem Empty => ParseEmpty<PayableOrderItem>();
 
