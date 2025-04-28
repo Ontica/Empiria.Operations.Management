@@ -17,8 +17,8 @@ namespace Empiria.Inventory.Data {
 
   /// <summary>Provides data read and write methods for inventory order instances.</summary>
   static internal class InventoryOrderData {
-    
-    
+
+
     internal static FixedList<InventoryEntry> GetInventoryEntriesByOrderItemId(InventoryOrderItem orderItem) {
 
       var sql = $"SELECT * FROM OMS_Inventory_Entries " +
@@ -76,17 +76,6 @@ namespace Empiria.Inventory.Data {
     }
 
 
-    internal static LocationEntry GetLocationEntryById(int locationId) {
-
-      var sql = $"SELECT * FROM Common_Storage " +
-                $"WHERE Object_Type_Id = 275 AND Object_Id = '{locationId}'";
-
-      var op = DataOperation.Parse(sql);
-
-      return DataReader.GetPlainObject<LocationEntry>(op);
-    }
-
-
     internal static LocationEntry GetLocationEntryByName(string locationName) {
 
       try {
@@ -105,15 +94,6 @@ namespace Empiria.Inventory.Data {
     }
 
 
-    internal static ProductEntry GetProductEntryById(int productId) {
-      var sql = $"SELECT * FROM OMS_Products WHERE Product_Id = {productId}";
-
-      var op = DataOperation.Parse(sql);
-
-      return DataReader.GetPlainObject<ProductEntry>(op);
-    }
-
-
     internal static ProductEntry GetProductEntryByName(string productName) {
 
       try {
@@ -128,7 +108,7 @@ namespace Empiria.Inventory.Data {
 
         throw new Exception("Producto no coincide con el seleccionado.");
       }
-      
+
     }
 
 
@@ -151,7 +131,7 @@ namespace Empiria.Inventory.Data {
 
     internal static void DeleteEntryStatus(int orderId, int orderItemId,
                                            int inventoryEntryId, InventoryStatus status) {
-      
+
       string sql = $"UPDATE OMS_Inventory_Entries " +
                    $"SET Inv_Entry_Status = '{(char) status}' " +
                    $"WHERE Inv_Entry_Id = {inventoryEntryId} AND " +
@@ -182,12 +162,12 @@ namespace Empiria.Inventory.Data {
           entry.Id, entry.UID,
           entry.InventoryEntryTypeId,
           entry.OrderId,
-          entry.OrderItemId,
-          entry.ProductId,
-          entry.SkuId,
-          entry.LocationId, 
+          entry.OrderItem.Id,
+          entry.Product.Id,
+          entry.Sku.Id,
+          entry.Location.Id,
           entry.Observations,
-          entry.UnitId, entry.InputQuantity,
+          entry.Unit.Id, entry.InputQuantity,
           entry.InputCost, entry.OutputQuantity,
           entry.OutputCost, entry.EntryTime,
           entry.Tags, entry.ExtData,

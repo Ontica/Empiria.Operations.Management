@@ -9,7 +9,6 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
-using Empiria.Inventory.Data;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
@@ -53,7 +52,7 @@ namespace Empiria.Inventory {
 
 
     [DataField("Order_Responsible_Id")]
-    internal int ResponsibleId {
+    internal Party Responsible {
       get; set;
     }
 
@@ -66,7 +65,7 @@ namespace Empiria.Inventory {
 
 
     [DataField("Order_Posted_By_Id")]
-    internal int PostedById {
+    internal Party PostedBy {
       get; set;
     }
 

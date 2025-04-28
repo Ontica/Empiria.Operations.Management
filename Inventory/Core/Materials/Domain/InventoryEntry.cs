@@ -1,7 +1,7 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Material Management                        Component : Domain Layer                            *
-*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Partitioned Type / Information Holder   *
+*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Information Holder                      *
 *  Type     : InventoryEntry                             License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Represents an inventory entry.                                                                 *
@@ -9,13 +9,13 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
-using Empiria.Inventory.Adapters;
-using Empiria.Inventory.Data;
+
 using Empiria.Locations;
 using Empiria.Orders;
 using Empiria.Parties;
 using Empiria.Products;
-using Empiria.Projects;
+
+using Empiria.Inventory.Data;
 
 namespace Empiria.Inventory {
 
@@ -40,28 +40,16 @@ namespace Empiria.Inventory {
       Assertion.Require(orderItem, nameof(orderItem));
 
       this.OrderId = order.OrderId;
-      this.OrderItemId = orderItem.OrderItemId;
+      this.OrderItem = OrderItem.Parse(orderItem.OrderItemId);
       this.InventoryEntryTypeId = orderItem.ItemTypeId;
-      this.UnitId = orderItem.ProductUnitId;
-      this.OrderItemProductId = orderItem.ProductId;
+      this.Unit = ProductUnit.Parse(orderItem.ProductUnitId);
+      this.OrderItemProductId = orderItem.Product.Id;
     }
 
 
     #endregion Constructors and parsers
 
     #region Properties
-
-
-    [DataField("Inv_Entry_Id")]
-    internal int InventoryEntryId {
-      get; set;
-    }
-
-
-    [DataField("Inv_Entry_Uid")]
-    internal string InventoryEntryUID {
-      get; set;
-    }
 
 
     [DataField("Inv_Entry_Type_Id")]
@@ -77,25 +65,25 @@ namespace Empiria.Inventory {
 
 
     [DataField("Inv_Entry_Order_Item_Id")]
-    internal int OrderItemId {
+    internal OrderItem OrderItem {
       get; set;
     }
 
 
     [DataField("Inv_Entry_Product_Id")]
-    internal int ProductId {
+    internal Product Product {
       get; set;
     }
 
 
     [DataField("Inv_Entry_Sku_Id")]
-    internal int SkuId {
+    internal ProductSku Sku {
       get; set;
     }
 
 
     [DataField("Inv_Entry_Location_Id")]
-    internal int LocationId {
+    internal Location Location {
       get; set;
     }
 
@@ -107,7 +95,7 @@ namespace Empiria.Inventory {
 
 
     [DataField("Inv_Entry_Unit_Id")]
-    internal int UnitId {
+    internal ProductUnit Unit {
       get; set;
     }
 
@@ -208,15 +196,10 @@ namespace Empiria.Inventory {
 
     internal void Update(InventoryEntryFields fields, string orderItemUID) {
 
-      ProductEntry product = InventoryOrderData.GetProductEntryByName(fields.Product.Trim());
-      LocationEntry location = InventoryOrderData.GetLocationEntryByName(fields.Location.Trim());
-      
-      fields.EnsureIsValid(product.ProductId, orderItemUID);
-
       this.InputQuantity = fields.Quantity;
-      this.ProductId = product.ProductId;
-      this.LocationId = location.LocationId;
-      this.SkuId = -1;
+      this.Product = PatchField(fields.ProductUID, this.Product);
+      this.Location = PatchField(fields.LocationUID, this.Location);
+      this.Sku = ProductSku.Empty;
       this.InputCost = 0;
       this.OutputQuantity = 0;
       this.OutputCost = 0;

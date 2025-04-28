@@ -8,17 +8,14 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Spreadsheet;
+
+using Empiria.Locations;
+using Empiria.Products;
+using Empiria.Services;
+
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
-using Empiria.Orders;
-using Empiria.Services;
-using Empiria.StateEnums;
-using iText.StyledXmlParser.Jsoup.Nodes;
 
 namespace Empiria.Inventory.UseCases {
 
@@ -39,13 +36,23 @@ namespace Empiria.Inventory.UseCases {
 
     #region Use cases
 
-
     public InventoryHolderDto CreateInventoryEntry(string orderUID, string orderItemUID,
-                                                    InventoryEntryFields fields) {
+                                                   InventoryEntryFields fields) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(orderItemUID, nameof(orderItemUID));
+      Assertion.Require(fields, nameof(fields));
+
+      ProductEntry productEntry = InventoryOrderData.GetProductEntryByName(fields.Product.Trim());
+      LocationEntry locationEntry = InventoryOrderData.GetLocationEntryByName(fields.Location.Trim());
+
+      fields.EnsureIsValid(productEntry.ProductId, orderItemUID);
+
+      fields.ProductUID = Product.Parse(productEntry.ProductId).UID;
+      fields.LocationUID = Location.Parse(locationEntry.LocationId).UID;
 
       var order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
       var orderItem = InventoryOrderData.GetInventoryOrderItemByUID(orderItemUID);
-      
+
       var inventoryEntry = new InventoryEntry(order, orderItem);
 
       inventoryEntry.Update(fields, orderItemUID);
@@ -57,10 +64,12 @@ namespace Empiria.Inventory.UseCases {
 
 
     public InventoryHolderDto GetInventoryOrderByUID(string orderUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
 
       InventoryOrder order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
-      
+
       FixedList<InventoryOrderItem> items = GetInventoryOrderItemsByOrder(order.OrderId);
+
       order.Items = items;
 
       InventoryOrderActions actions = GetActions(items);
@@ -70,7 +79,6 @@ namespace Empiria.Inventory.UseCases {
 
 
     private InventoryOrderActions GetActions(FixedList<InventoryOrderItem> items) {
-
       bool existClosedEntries = false;
 
       foreach (var item in items) {
@@ -104,19 +112,8 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
-    static public LocationEntry GetLocationEntryById(int locationId) {
-
-      return InventoryOrderData.GetLocationEntryById(locationId);
-    }
-
-
-    static public ProductEntry GetProductEntryById(int productId) {
-
-      return InventoryOrderData.GetProductEntryById(productId);
-    }
-
-
     public InventoryOrderDataDto SearchInventoryOrder(InventoryOrderQuery query) {
+      Assertion.Require(query, nameof(query));
 
       var filter = query.MapToFilterString();
       var sort = query.MapToSortString();
@@ -128,36 +125,43 @@ namespace Empiria.Inventory.UseCases {
 
 
     public InventoryHolderDto DeleteInventoryEntry(string orderUID, string itemUID, string entryUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(itemUID, nameof(itemUID));
+      Assertion.Require(entryUID, nameof(entryUID));
 
       InventoryOrder order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
       InventoryOrderItem orderItem = InventoryOrderData.GetInventoryOrderItemByUID(itemUID);
       InventoryEntry entry = InventoryOrderData.GetInventoryEntryByUID(entryUID);
-      
+
       Assertion.Require(order.OrderId == entry.OrderId && orderItem.OrderId == entry.OrderId,
                         $"El registro de inventario no coincide con la orden!");
 
+
       InventoryOrderData.DeleteEntryStatus(order.OrderId, orderItem.OrderItemId,
-                                           entry.InventoryEntryId, InventoryStatus.Deleted);
+                                           entry.Id, InventoryStatus.Deleted);
 
       return GetInventoryOrderByUID(orderUID);
     }
 
 
     public InventoryHolderDto CloseInventoryEntries(string orderUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
 
       var order = InventoryOrderData.GetInventoryOrderByUID(orderUID);
       var orderItems = InventoryOrderData.GetInventoryOrderItemsByOrder(order.OrderId);
 
       EnsureIsValidToClose(orderItems);
-      
+
       InventoryOrderData.UpdateEntriesStatusByOrder(order.OrderId, InventoryStatus.Cerrado);
 
       return GetInventoryOrderByUID(orderUID);
     }
 
+    #endregion Use cases
+
+    #region Helpers
 
     private void EnsureIsValidToClose(FixedList<InventoryOrderItem> orderItems) {
-
       foreach (var item in orderItems) {
 
         var entries = InventoryOrderData.GetInventoryEntriesByOrderItemId(item);
@@ -165,16 +169,9 @@ namespace Empiria.Inventory.UseCases {
 
         Assertion.Require(item.ProductQuantity == entriesQuantity, "Faltan productos por asignar.");
       }
-
     }
 
-
-    #endregion Use cases
-
-    #region Private methods
-
-
-    #endregion Private methods
+    #endregion Helpers
 
   } // class InventoryOrderUseCases
 

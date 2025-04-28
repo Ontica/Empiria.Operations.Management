@@ -8,8 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
 using System.Linq;
+
 using Empiria.Inventory.Data;
 
 namespace Empiria.Inventory {
@@ -33,23 +33,35 @@ namespace Empiria.Inventory {
 
     public string UID {
       get; set;
-    }
+    } = string.Empty;
+
+
+    public string ProductUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string LocationUID {
+      get; set;
+    } = string.Empty;
 
 
     public string Location {
       get; set;
-    }
+    } = string.Empty;
 
 
     public string Product {
       get; set;
-    }
+    } = string.Empty;
 
 
     public decimal Quantity {
       get; set;
     }
-  }
+
+  } // class InventoryEntryFields
+
 
 
   static public class InventoryEntryFieldsExtensions {
@@ -65,7 +77,7 @@ namespace Empiria.Inventory {
                        (fields.Quantity + entries.Sum(x => x.InputQuantity)) <= orderItem.ProductQuantity,
                         $"La cantidad de productos capturados supera los productos restantes.");
 
-      Assertion.Require(productId == orderItem.ProductId, "El producto no coincide con el seleccionado.");
+      Assertion.Require(productId == orderItem.Product.Id, "El producto no coincide con el seleccionado.");
     }
 
   }

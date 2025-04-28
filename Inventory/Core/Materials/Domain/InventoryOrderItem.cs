@@ -10,6 +10,7 @@
 
 using System;
 using Empiria.Parties;
+using Empiria.Products;
 using Empiria.StateEnums;
 
 namespace Empiria.Inventory {
@@ -42,7 +43,7 @@ namespace Empiria.Inventory {
 
 
     [DataField("Order_Item_Product_Id")]
-    internal int ProductId {
+    internal Product Product {
       get; set;
     }
 
@@ -84,7 +85,7 @@ namespace Empiria.Inventory {
 
 
     internal FixedList<InventoryEntry> Entries {
-      get; set; 
+      get; set;
     }
 
   } // class InventoryOrderItem
