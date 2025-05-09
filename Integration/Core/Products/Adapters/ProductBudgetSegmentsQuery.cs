@@ -8,8 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Products;
-
 namespace Empiria.Operations.Integration.Products.Adapters {
 
   /// <summary>Input query DTO used to search product budget segments.</summary>

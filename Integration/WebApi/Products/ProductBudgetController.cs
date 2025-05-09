@@ -66,7 +66,6 @@ namespace Empiria.Operations.Integration.Products.WebApi {
 
 
     [HttpPost]
-    //[Route("v8/product-management/products/{productUID:guid}/budget-segments/available")]
     [Route("v8/product-management/budget-segments/available")]
     public CollectionModel SearchAvailableProductBudgetSegments([FromBody] ProductBudgetSegmentsQuery query) {
 

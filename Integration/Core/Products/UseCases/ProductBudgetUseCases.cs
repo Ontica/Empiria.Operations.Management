@@ -94,7 +94,7 @@ namespace Empiria.Operations.Integration.Products.UseCases {
 
       BudgetAccountSegmentType segmentType = budgetType.ProductProcurementSegmentType;
 
-      FixedList<BudgetAccountSegment> segments = segmentType.SearchInstances(query.Keywords);
+      FixedList<BudgetAccountSegment> segments = segmentType.SearchInstances(string.Empty, query.Keywords);
 
       var current = BudgetAccountSegmentLink.GetBudgetAccountSegmentsForProduct(product);
 
