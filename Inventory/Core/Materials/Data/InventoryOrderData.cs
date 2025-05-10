@@ -18,13 +18,12 @@ namespace Empiria.Inventory.Data {
   /// <summary>Provides data read and write methods for inventory order instances.</summary>
   static internal class InventoryOrderData {
 
-
-    internal static FixedList<InventoryEntry> GetInventoryEntriesByOrderItemId(InventoryOrderItem orderItem) {
+    internal static FixedList<InventoryEntry> GetInventoryEntriesByOrderItem(OrderItem orderItem) {
 
       var sql = $"SELECT * FROM OMS_Inventory_Entries " +
                 $"WHERE Inv_Entry_Status != 'X' " +
-                $"AND Inv_Entry_Order_Id = {orderItem.OrderId} " +
-                $"AND Inv_Entry_Order_Item_Id = {orderItem.OrderItemId} ";
+                $"AND Inv_Entry_Order_Id = {orderItem.Order.Id} " +
+                $"AND Inv_Entry_Order_Item_Id = {orderItem.Id} ";
 
       var op = DataOperation.Parse(sql);
 
@@ -161,7 +160,7 @@ namespace Empiria.Inventory.Data {
       var op = DataOperation.Parse("write_OMS_Inventory_Entry",
           entry.Id, entry.UID,
           entry.InventoryEntryTypeId,
-          entry.OrderId,
+          entry.Order.Id,
           entry.OrderItem.Id,
           entry.Product.Id,
           entry.Sku.Id,
@@ -186,22 +185,6 @@ namespace Empiria.Inventory.Data {
 
       return DataReader.GetPlainObject<InventoryEntry>(op);
     }
-
-
-    //internal static void WriteInventoryOrder(InventoryOrder order) {
-
-    //  var op = DataOperation.Parse("write_OMS_Inventory_Order",
-    //      order.Id, order.UID,
-    //      order.InventoryOrderTypeId, order.InventoryOrderNo,
-    //      order.Reference, order.Responsible,
-    //      order.AssignedTo, order.Notes,
-    //      order.InventoryOrderExtData, order.Keywords,
-    //      order.ScheduledTime, order.ClosingTime,
-    //      order.PostingTime, order.PostedBy,
-    //      (char) order.Status);
-
-    //  DataWriter.Execute(op);
-    //}
 
   } // class InventoryOrderData
 

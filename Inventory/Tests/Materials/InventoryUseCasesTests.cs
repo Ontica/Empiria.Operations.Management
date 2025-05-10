@@ -14,6 +14,7 @@ using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
 using Empiria.Inventory.UseCases;
+using Empiria.Products;
 using Xunit;
 
 namespace Empiria.Tests.Inventory {
@@ -34,7 +35,7 @@ namespace Empiria.Tests.Inventory {
     public void CloseInventoryEntryTest() {
 
       var usecase = InventoryOrderUseCases.UseCaseInteractor();
-      string orderUID = "64a733ea-0e84-410d-a8ba-7662b6f3a23d";
+      string orderUID = "829b237e-354a-4c06-8da9-ac5e23b704e1";
 
       InventoryHolderDto sut = usecase.CloseInventoryEntries(orderUID);
 
@@ -46,17 +47,15 @@ namespace Empiria.Tests.Inventory {
     public void CreateInventoryEntriesTest() {
 
       var usecase = InventoryOrderUseCases.UseCaseInteractor();
-      string orderUID = "64a733ea-0e84-410d-a8ba-7662b6f3a23d";
-      string orderItemUID = "0b2f127a-1aed-486e-b892-98238ae91f4d";
+      string orderUID = "829b237e-354a-4c06-8da9-ac5e23b704e1";
+      string orderItemUID = "3f52c3bc-1a84-4390-9bb4-7850fb79f38e";
 
       InventoryEntryFields fields = new InventoryEntryFields {
-        
-        Location = "A-001-1-23",
-        Product = "PPLAN10X212-200",
+
+        Location = "A-001-01-23",
+        Product = "AOME1",
         Quantity = 5
       };
-
-      LocationEntry location = InventoryOrderData.GetLocationEntryByName(fields.Location);
 
       InventoryHolderDto sut = usecase.CreateInventoryEntry(orderUID, orderItemUID, fields);
 
@@ -68,9 +67,9 @@ namespace Empiria.Tests.Inventory {
     public void DeleteInventoryEntryTest() {
 
       var usecase = InventoryOrderUseCases.UseCaseInteractor();
-      string orderUID = "64a733ea-0e84-410d-a8ba-7662b6f3a23d";
-      string orderItemUID = "0b2f127a-1aed-486e-b892-98238ae91f4d";
-      string entryUID = "11132bf0-f125-44e5-b89a-075d71811720";
+      string orderUID = "829b237e-354a-4c06-8da9-ac5e23b704e1";
+      string orderItemUID = "3f52c3bc-1a84-4390-9bb4-7850fb79f38e";
+      string entryUID = "30dd291d-3d7c-4520-b8a1-11d644d37f80";
 
       InventoryHolderDto sut = usecase.DeleteInventoryEntry(orderUID, orderItemUID, entryUID);
 
@@ -83,7 +82,7 @@ namespace Empiria.Tests.Inventory {
 
       var usecase = InventoryOrderUseCases.UseCaseInteractor();
 
-      InventoryHolderDto sut = usecase.GetInventoryOrderByUID("64a733ea-0e84-410d-a8ba-7662b6f3a23d");
+      InventoryHolderDto sut = usecase.GetInventoryOrder("829b237e-354a-4c06-8da9-ac5e23b704e1");
 
       Assert.NotNull(sut);
     }

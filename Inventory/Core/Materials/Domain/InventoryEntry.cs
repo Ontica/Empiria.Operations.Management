@@ -35,15 +35,21 @@ namespace Empiria.Inventory {
 
     static public InventoryEntry Empty => ParseEmpty<InventoryEntry>();
 
-    public InventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
-      Assertion.Require(order, nameof(order));
+    public InventoryEntry(string orderUID, string orderItemUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(orderItemUID, nameof(orderItemUID));
+
+      this.Order = Order.Parse(orderUID);
+      this.OrderItem = OrderItem.Parse(orderItemUID);
+      this.InventoryEntryTypeId = 4311; // TODO PREGUNTAR A JM COMO JALAR EL TIPO
+      this.Unit = ProductUnit.Parse(OrderItem.ProductUnit.Id);
+    }
+
+
+    static internal FixedList<InventoryEntry> GetListFor(OrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
 
-      this.OrderId = order.OrderId;
-      this.OrderItem = OrderItem.Parse(orderItem.OrderItemId);
-      this.InventoryEntryTypeId = orderItem.ItemTypeId;
-      this.Unit = ProductUnit.Parse(orderItem.ProductUnitId);
-      this.OrderItemProductId = orderItem.Product.Id;
+      return InventoryOrderData.GetInventoryEntriesByOrderItem(orderItem);
     }
 
 
@@ -59,7 +65,7 @@ namespace Empiria.Inventory {
 
 
     [DataField("Inv_Entry_Order_Id")]
-    internal int OrderId {
+    internal Order Order {
       get; set;
     }
 
@@ -186,7 +192,8 @@ namespace Empiria.Inventory {
     protected override void OnSave() {
 
       if (IsNew) {
-        this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+        this.PostedBy = Party.Parse(4);
+        //this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         this.PostingTime = DateTime.Now;
         this.EntryTime = DateTime.Now;
       }

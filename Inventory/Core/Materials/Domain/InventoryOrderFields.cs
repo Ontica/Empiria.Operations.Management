@@ -11,6 +11,7 @@
 using System.Linq;
 
 using Empiria.Inventory.Data;
+using Empiria.Orders;
 
 namespace Empiria.Inventory {
 
@@ -70,11 +71,10 @@ namespace Empiria.Inventory {
                                        int productId,
                                        string orderItemUID) {
 
-      var orderItem = InventoryOrderData.GetInventoryOrderItemByUID(orderItemUID);
-      var entries = InventoryOrderData.GetInventoryEntriesByOrderItemId(orderItem);
+      OrderItem orderItem = OrderItem.Parse(orderItemUID);
+      var entries = InventoryEntry.GetListFor(orderItem);
 
-      Assertion.Require(orderItem.ItemTypeId == 4311 ||
-                       (fields.Quantity + entries.Sum(x => x.InputQuantity)) <= orderItem.ProductQuantity,
+      Assertion.Require((fields.Quantity + entries.Sum(x => x.InputQuantity)) <= orderItem.Quantity,
                         $"La cantidad de productos capturados supera los productos restantes.");
 
       Assertion.Require(productId == orderItem.Product.Id, "El producto no coincide con el seleccionado.");
