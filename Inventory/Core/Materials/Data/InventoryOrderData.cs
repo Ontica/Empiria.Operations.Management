@@ -18,7 +18,7 @@ namespace Empiria.Inventory.Data {
   /// <summary>Provides data read and write methods for inventory order instances.</summary>
   static internal class InventoryOrderData {
 
-    internal static FixedList<InventoryEntry> GetInventoryEntriesByOrderItem(OrderItem orderItem) {
+    internal static FixedList<InventoryEntry> GetInventoryEntriesByOrderItem(InventoryOrderItem orderItem) {
 
       var sql = $"SELECT * FROM OMS_Inventory_Entries " +
                 $"WHERE Inv_Entry_Status != 'X' " +

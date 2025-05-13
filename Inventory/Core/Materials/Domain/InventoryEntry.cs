@@ -46,7 +46,7 @@ namespace Empiria.Inventory {
     }
 
 
-    static internal FixedList<InventoryEntry> GetListFor(OrderItem orderItem) {
+    static internal FixedList<InventoryEntry> GetListFor(InventoryOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
 
       return InventoryOrderData.GetInventoryEntriesByOrderItem(orderItem);
@@ -192,8 +192,7 @@ namespace Empiria.Inventory {
     protected override void OnSave() {
 
       if (IsNew) {
-        this.PostedBy = Party.Parse(4);
-        //this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+        this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         this.PostingTime = DateTime.Now;
         this.EntryTime = DateTime.Now;
       }

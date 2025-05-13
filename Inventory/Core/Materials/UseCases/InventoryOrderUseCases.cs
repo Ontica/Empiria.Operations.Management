@@ -41,9 +41,9 @@ namespace Empiria.Inventory.UseCases {
     public InventoryHolderDto CloseInventoryEntries(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
-      Order order = Order.Parse(orderUID);
+      InventoryOrder order = InventoryOrder.Parse(orderUID);
 
-      FixedList<InventoryOrderItem> orderItems = InventoryOrderData.GetInventoryOrderItemsByOrder(order.Id);
+      FixedList<InventoryOrderItem> orderItems = InventoryOrderItem.GetListFor(order);
 
       InventoryUtility.EnsureIsValidToClose(orderItems);
 
@@ -81,8 +81,8 @@ namespace Empiria.Inventory.UseCases {
       Assertion.Require(itemUID, nameof(itemUID));
       Assertion.Require(entryUID, nameof(entryUID));
 
-      Order order = Order.Parse(orderUID);
-      OrderItem orderItem = OrderItem.Parse(itemUID);
+      InventoryOrder order = InventoryOrder.Parse(orderUID);
+      InventoryOrderItem orderItem = InventoryOrderItem.Parse(itemUID);
       InventoryEntry entry = InventoryEntry.Parse(entryUID);
 
       Assertion.Require(order.Id == entry.Order.Id && orderItem.Order.Id == entry.Order.Id,
@@ -98,15 +98,9 @@ namespace Empiria.Inventory.UseCases {
     public InventoryHolderDto GetInventoryOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
-      Order order = Order.Parse(orderUID);
+      InventoryOrder inventoryOrder = InventoryUtility.GetInventoryOrder(orderUID);
 
-      var utility = new InventoryUtility();
-
-      InventoryOrder inventoryOrder = utility.MapToInventoryOrder(order);
-
-      utility.GetInventoryEntriesByItem(inventoryOrder.Items);
-
-      InventoryOrderActions actions = utility.GetActions(inventoryOrder.Items);
+      InventoryOrderActions actions = InventoryUtility.GetActions(inventoryOrder.Items);
 
       return InventoryOrderMapper.MapToHolderDto(inventoryOrder, actions);
     }

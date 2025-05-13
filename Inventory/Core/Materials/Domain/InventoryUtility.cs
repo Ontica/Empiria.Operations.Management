@@ -20,20 +20,8 @@ namespace Empiria.Inventory {
 
     #region Public methods
 
-    static internal void EnsureIsValidToClose(FixedList<InventoryOrderItem> orderItems) {
-      foreach (var item in orderItems) {
+    static internal InventoryOrderActions GetActions(FixedList<InventoryOrderItem> items) {
 
-        OrderItem orderItem = OrderItem.Parse(item.OrderItemId);
-        var entries = InventoryEntry.GetListFor(orderItem);
-
-        var entriesQuantity = entries.Sum(x => x.InputQuantity);
-
-        Assertion.Require(orderItem.Quantity == entriesQuantity, "Faltan productos por asignar.");
-      }
-    }
-
-
-    internal InventoryOrderActions GetActions(FixedList<InventoryOrderItem> items) {
       bool existClosedEntries = false;
 
       foreach (var item in items) {
@@ -52,58 +40,41 @@ namespace Empiria.Inventory {
     }
 
 
-    internal void GetInventoryEntriesByItem(FixedList<InventoryOrderItem> items) {
+    static internal void EnsureIsValidToClose(FixedList<InventoryOrderItem> orderItems) {
+      foreach (var item in orderItems) {
 
-      foreach (var item in items) {
-        OrderItem orderItem = OrderItem.Parse(item.OrderItemId);
-        item.Entries = InventoryEntry.GetListFor(orderItem);
+        InventoryOrderItem orderItem = InventoryOrderItem.Parse(item.Id);
+        var entries = InventoryEntry.GetListFor(orderItem);
+
+        var entriesQuantity = entries.Sum(x => x.InputQuantity);
+
+        Assertion.Require(orderItem.Quantity == entriesQuantity, "Faltan productos por asignar.");
       }
     }
 
 
-    internal InventoryOrder MapToInventoryOrder(Order order) {
+    static internal InventoryOrder GetInventoryOrder(string orderUID) {
 
-      return new InventoryOrder {
-        ClosingTime = order.ClosingTime,
-        InventoryOrderNo = order.OrderNo,
-        InventoryOrderUID = order.UID,
-        InventoryOrderTypeId = order.OrderType.Id,
-        OrderId = order.Id,
-        Order_Description = order.Description,
-        PostedBy = order.PostedBy,
-        PostingTime = order.PostingTime,
-        Responsible = order.Responsible,
-        Status = order.Status,
-        Items = MapToInventoryItems(order.GetItems<OrderItem>())
-      };
+      InventoryOrder inventoryOrder = InventoryOrder.Parse(orderUID);
+
+      inventoryOrder.Items = inventoryOrder.GetItems<InventoryOrderItem>();
+
+      GetInventoryEntriesByItem(inventoryOrder.Items);
+
+      return inventoryOrder;
     }
+
 
     #endregion Public methods
 
     #region Private methods
 
-    private InventoryOrderItem MapToInventoryItem(OrderItem x) {
+    static private void GetInventoryEntriesByItem(FixedList<InventoryOrderItem> items) {
 
-      return new InventoryOrderItem {
-        Description = x.Description,
-        InventoryOrderItemUID = x.UID,
-        ItemTypeId = x.OrderItemType.Id,
-        OrderId = x.Order.Id,
-        OrderItemId = x.Id,
-        PostedBy = x.PostedBy,
-        PostingTime = x.PostingTime,
-        Product = x.Product,
-        ProductQuantity = x.Quantity,
-        ProductUnitId = x.ProductUnit.Id,
-        Status = x.Status
-      };
-    }
+      foreach (var item in items) {
 
-
-    private FixedList<InventoryOrderItem> MapToInventoryItems(FixedList<OrderItem> orderItems) {
-
-      return orderItems.Select(x => MapToInventoryItem(x))
-                   .ToFixedList();
+        item.Entries = InventoryEntry.GetListFor(item);
+      }
     }
 
     #endregion Private methods

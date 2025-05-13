@@ -10,6 +10,7 @@
 
 using System;
 using Empiria.Inventory.Data;
+using Empiria.Orders;
 using Empiria.Parties;
 using Empiria.Products;
 using Empiria.StateEnums;
@@ -17,77 +18,39 @@ using Empiria.StateEnums;
 namespace Empiria.Inventory {
 
   /// <summary>Represents an inventory order item.</summary>
-  public class InventoryOrderItem {
+  public class InventoryOrderItem : OrderItem {
 
-    [DataField("Order_Item_Id")]
-    internal int OrderItemId {
-      get; set;
+    #region Constructors and parsers
+
+    protected InventoryOrderItem(OrderItemType powertype) : base(powertype) {
+      // Required by Empiria Framework for all partitioned types.
     }
 
-
-    [DataField("Order_Item_UID")]
-    internal string InventoryOrderItemUID {
-      get; set;
+    internal InventoryOrderItem() {
+      //no-op
     }
 
+    static public new InventoryOrderItem Parse(int id) => ParseId<InventoryOrderItem>(id);
 
-    [DataField("Order_Item_Type_Id")]
-    internal int ItemTypeId {
-      get; set;
+    static public new InventoryOrderItem Parse(string uid) => ParseKey<InventoryOrderItem>(uid);
+
+    static public InventoryOrderItem Empty => ParseEmpty<InventoryOrderItem>();
+
+    static internal FixedList<InventoryOrderItem> GetListFor(InventoryOrder order) {
+      Assertion.Require(order, nameof(order));
+
+      return InventoryOrderData.GetInventoryOrderItemsByOrder(order.Id);
     }
 
+    #endregion Constructors and parsers
 
-    [DataField("Order_Item_Order_Id")]
-    internal int OrderId {
-      get; set;
-    }
-
-
-    [DataField("Order_Item_Product_Id")]
-    internal Product Product {
-      get; set;
-    }
-
-
-    [DataField("Order_Item_Description")]
-    internal string Description {
-      get; set;
-    }
-
-
-    [DataField("Order_Item_Product_Unit_Id")]
-    internal int ProductUnitId {
-      get; set;
-    }
-
-
-    [DataField("Order_Item_Product_Qty")]
-    internal decimal ProductQuantity {
-      get; set;
-    }
-
-
-    [DataField("Order_Item_Posted_By_Id")]
-    internal Party PostedBy {
-      get; set;
-    }
-
-
-    [DataField("Order_Item_Posting_Time")]
-    internal DateTime PostingTime {
-      get; set;
-    }
-
-
-    [DataField("Order_Item_Status", Default = EntityStatus.Active)]
-    public EntityStatus Status {
-      get; set;
-    }
-
+    #region Properties
 
     internal FixedList<InventoryEntry> Entries {
       get; set;
     }
+
+    #endregion Properties
 
   } // class InventoryOrderItem
 

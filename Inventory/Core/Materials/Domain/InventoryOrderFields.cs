@@ -71,7 +71,7 @@ namespace Empiria.Inventory {
                                        int productId,
                                        string orderItemUID) {
 
-      OrderItem orderItem = OrderItem.Parse(orderItemUID);
+      InventoryOrderItem orderItem = InventoryOrderItem.Parse(orderItemUID);
       var entries = InventoryEntry.GetListFor(orderItem);
 
       Assertion.Require((fields.Quantity + entries.Sum(x => x.InputQuantity)) <= orderItem.Quantity,
