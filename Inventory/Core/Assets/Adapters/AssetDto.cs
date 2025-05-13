@@ -29,7 +29,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public FixedList<HistoryDto> History {
+    public FixedList<HistoryEntryDto> History {
       get; internal set;
     }
 

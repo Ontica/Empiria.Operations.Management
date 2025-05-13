@@ -31,7 +31,7 @@ namespace Empiria.Orders.Adapters {
       get; set;
     }
 
-    public FixedList<HistoryDto> History {
+    public FixedList<HistoryEntryDto> History {
       get; set;
     }
 
