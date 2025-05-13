@@ -8,13 +8,9 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
-using System.Collections.Generic;
 using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
-using Empiria.Inventory.Data;
 using Empiria.Inventory.UseCases;
-using Empiria.Products;
 using Xunit;
 
 namespace Empiria.Tests.Inventory {
@@ -56,7 +52,7 @@ namespace Empiria.Tests.Inventory {
         Product = "AOME1",
         Quantity = 5
       };
-
+      
       InventoryHolderDto sut = usecase.CreateInventoryEntry(orderUID, orderItemUID, fields);
 
       Assert.NotNull(sut);
@@ -78,12 +74,27 @@ namespace Empiria.Tests.Inventory {
 
 
     [Fact]
-    public void GetInventoryOrderItemByOrderUIDTest() {
+    public void GetInventoryHolderTest() {
 
       var usecase = InventoryOrderUseCases.UseCaseInteractor();
-
       InventoryHolderDto sut = usecase.GetInventoryOrder("829b237e-354a-4c06-8da9-ac5e23b704e1");
+      Assert.NotNull(sut);
+    }
 
+
+    [Fact]
+    public void GetInventoryOrderItemTest() {
+
+      InventoryOrderItem sut = InventoryOrderItem.Parse("3f52c3bc-1a84-4390-9bb4-7850fb79f38e");
+
+      Assert.NotNull(sut);
+    }
+
+
+    [Fact]
+    public void GetInventoryOrderTest() {
+
+      InventoryOrder sut = InventoryOrder.Parse("829b237e-354a-4c06-8da9-ac5e23b704e1");
       Assert.NotNull(sut);
     }
 
