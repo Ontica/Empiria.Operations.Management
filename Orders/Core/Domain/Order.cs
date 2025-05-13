@@ -38,6 +38,10 @@ namespace Empiria.Orders {
       // Required by Empiria Framework for all partitioned types.
     }
 
+    public Order() {
+      //no-op
+    }
+
     static public Order Parse(int id) => ParseId<Order>(id);
 
     static public Order Parse(string uid) => ParseKey<Order>(uid);
