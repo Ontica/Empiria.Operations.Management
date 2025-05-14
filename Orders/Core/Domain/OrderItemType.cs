@@ -44,6 +44,10 @@ namespace Empiria.Orders {
 
     static public OrderItemType ReimbursementOrderItemType => Parse("ObjectTypeInfo.OrderItem.PayableOrderItem.ReimbursementOrderItem");
 
+    static public OrderItemType InventoryOrderItemType => Parse("ObjectTypeInfo.OrderItem.InventoryOrderItem");
+
+    static public OrderItemType SalesOrderItemType => Parse("ObjectTypeInfo.OrderItem.SalesOrderItem");
+
     #endregion Constructors and parsers
 
   } // class OrderItemType
