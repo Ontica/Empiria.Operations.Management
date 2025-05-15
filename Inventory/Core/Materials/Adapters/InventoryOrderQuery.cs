@@ -8,26 +8,12 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
-using Empiria.Orders.Adapters;
 using Empiria.StateEnums;
-using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace Empiria.Inventory.Adapters {
 
   /// <summary>Input query DTO used to retrieve inventory orders.</summary>
   public class InventoryOrderQuery {
-
-
-    //public string InventoryOrderTypeUID {
-    //  get; set;
-    //} = string.Empty;
-
-
-    //public string AssignedToUID {
-    //  get; set;
-    //} = string.Empty;
-
 
     public string Keywords {
       get; set;

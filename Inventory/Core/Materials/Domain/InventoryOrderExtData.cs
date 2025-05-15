@@ -8,8 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
-
 namespace Empiria.Inventory {
 
   /// <summary>Holds inventory order information.</summary>

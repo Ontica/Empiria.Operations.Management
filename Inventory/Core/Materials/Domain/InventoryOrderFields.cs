@@ -10,9 +10,6 @@
 
 using System.Linq;
 
-using Empiria.Inventory.Data;
-using Empiria.Orders;
-
 namespace Empiria.Inventory {
 
   public enum InventoryStatus {

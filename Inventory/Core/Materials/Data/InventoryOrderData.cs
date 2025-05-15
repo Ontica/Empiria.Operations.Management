@@ -10,8 +10,6 @@
 
 using System;
 using Empiria.Data;
-using Empiria.Inventory.Adapters;
-using Empiria.Orders;
 
 namespace Empiria.Inventory.Data {
 

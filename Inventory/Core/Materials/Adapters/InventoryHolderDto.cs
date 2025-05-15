@@ -8,8 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
-
 namespace Empiria.Inventory.Adapters {
 
   /// <summary>Output DTO used to return inventory data.</summary>
