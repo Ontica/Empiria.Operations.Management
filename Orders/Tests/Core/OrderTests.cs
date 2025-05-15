@@ -20,6 +20,16 @@ namespace Empiria.Tests.Orders {
     #region Facts
 
     [Fact]
+    public void Should_Get_SalesOrders() {
+      SalesOrder order = SalesOrder.Parse(30);
+      var orderItems = order.GetItems<SalesOrderItem>();
+      Assert.True(orderItems.Count > 0);
+      Assert.NotNull(order);
+
+    }
+
+
+    [Fact]
     public void Should_Read_All_Orders() {
       var orders = BaseObject.GetFullList<Order>();
 
