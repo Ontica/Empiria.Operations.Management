@@ -16,6 +16,21 @@ namespace Empiria.Inventory.Data {
   /// <summary>Provides data read and write methods for inventory order instances.</summary>
   static internal class InventoryOrderData {
 
+    internal static void DeleteEntryStatus(int orderId, int orderItemId,
+                                           int inventoryEntryId, InventoryStatus status) {
+
+      string sql = $"UPDATE OMS_Inventory_Entries " +
+                   $"SET Inv_Entry_Status = '{(char) status}' " +
+                   $"WHERE Inv_Entry_Id = {inventoryEntryId} AND " +
+                   $"Inv_Entry_Order_Id = {orderId} AND " +
+                   $"Inv_Entry_Order_Item_Id = {orderItemId}";
+
+      var dataOperation = DataOperation.Parse(sql);
+
+      DataWriter.Execute(dataOperation);
+    }
+
+
     internal static FixedList<InventoryEntry> GetInventoryEntriesByOrderItem(InventoryOrderItem orderItem) {
 
       var sql = $"SELECT * FROM OMS_Inventory_Entries " +
@@ -26,50 +41,6 @@ namespace Empiria.Inventory.Data {
       var op = DataOperation.Parse(sql);
 
       return DataReader.GetFixedList<InventoryEntry>(op);
-    }
-
-
-    internal static FixedList<InventoryEntry> GetInventoryEntryByOrderId(int orderId) {
-
-      var sql = $"SELECT * FROM OMS_Inventory_Entries " +
-                $"WHERE Inv_Entry_Order_Id = {orderId} AND " +
-                $"Inv_Entry_Status != 'X' ";
-
-      var op = DataOperation.Parse(sql);
-
-      return DataReader.GetFixedList<InventoryEntry>(op);
-    }
-
-
-    internal static InventoryOrder GetInventoryOrderByUID(string orderUID) {
-
-      var sql = $"SELECT * FROM OMS_Orders WHERE Order_UID = '{orderUID}'";
-
-      var op = DataOperation.Parse(sql);
-
-      return DataReader.GetPlainObject<InventoryOrder>(op);
-    }
-
-
-    internal static FixedList<InventoryOrderItem> GetInventoryOrderItemsByOrder(int orderId) {
-
-      var sql = $"SELECT * FROM OMS_Order_Items " +
-                $"WHERE Order_Item_Status != 'X' " +
-                $"AND Order_Item_Order_Id = {orderId}";
-
-      var op = DataOperation.Parse(sql);
-
-      return DataReader.GetPlainObjectFixedList<InventoryOrderItem>(op);
-    }
-
-
-    internal static InventoryOrderItem GetInventoryOrderItemByUID(string itemUID) {
-
-      var sql = $"SELECT * FROM OMS_Order_Items WHERE Order_Item_UID = '{itemUID}'";
-
-      var op = DataOperation.Parse(sql);
-
-      return DataReader.GetPlainObject<InventoryOrderItem>(op);
     }
 
 
@@ -126,21 +97,6 @@ namespace Empiria.Inventory.Data {
     }
 
 
-    internal static void DeleteEntryStatus(int orderId, int orderItemId,
-                                           int inventoryEntryId, InventoryStatus status) {
-
-      string sql = $"UPDATE OMS_Inventory_Entries " +
-                   $"SET Inv_Entry_Status = '{(char) status}' " +
-                   $"WHERE Inv_Entry_Id = {inventoryEntryId} AND " +
-                   $"Inv_Entry_Order_Id = {orderId} AND " +
-                   $"Inv_Entry_Order_Item_Id = {orderItemId}";
-
-      var dataOperation = DataOperation.Parse(sql);
-
-      DataWriter.Execute(dataOperation);
-    }
-
-
     internal static void UpdateEntriesStatusByOrder(int orderId, InventoryStatus status) {
 
       string sql = $"UPDATE OMS_Inventory_Entries " +
@@ -152,6 +108,7 @@ namespace Empiria.Inventory.Data {
 
       DataWriter.Execute(dataOperation);
     }
+
 
     internal static void WriteInventoryEntry(InventoryEntry entry) {
 
@@ -172,16 +129,6 @@ namespace Empiria.Inventory.Data {
           entry.PostingTime, (char) entry.Status);
 
       DataWriter.Execute(op);
-    }
-
-
-    internal static InventoryEntry GetInventoryEntryByUID(string entryUID) {
-
-      var sql = $"SELECT * FROM OMS_Inventory_Entries WHERE Inv_Entry_Uid = '{entryUID}'";
-
-      var op = DataOperation.Parse(sql);
-
-      return DataReader.GetPlainObject<InventoryEntry>(op);
     }
 
   } // class InventoryOrderData

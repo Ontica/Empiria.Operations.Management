@@ -41,12 +41,11 @@ namespace Empiria.Inventory {
     static internal void EnsureIsValidToClose(FixedList<InventoryOrderItem> orderItems) {
       foreach (var item in orderItems) {
 
-        InventoryOrderItem orderItem = InventoryOrderItem.Parse(item.Id);
-        var entries = InventoryEntry.GetListFor(orderItem);
+        var entries = InventoryEntry.GetListFor(item);
 
         var entriesQuantity = entries.Sum(x => x.InputQuantity);
 
-        Assertion.Require(orderItem.Quantity == entriesQuantity, "Faltan productos por asignar.");
+        Assertion.Require(item.Quantity == entriesQuantity, "Faltan productos por asignar.");
       }
     }
 

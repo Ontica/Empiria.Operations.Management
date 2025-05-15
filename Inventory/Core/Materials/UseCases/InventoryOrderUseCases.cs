@@ -43,7 +43,7 @@ namespace Empiria.Inventory.UseCases {
 
       InventoryOrder order = InventoryOrder.Parse(orderUID);
 
-      FixedList<InventoryOrderItem> orderItems = InventoryOrderItem.GetListFor(order);
+      FixedList<InventoryOrderItem> orderItems = order.GetItems<InventoryOrderItem>();
 
       InventoryUtility.EnsureIsValidToClose(orderItems);
 
