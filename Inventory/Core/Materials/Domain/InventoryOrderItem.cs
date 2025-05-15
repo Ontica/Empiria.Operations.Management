@@ -32,12 +32,6 @@ namespace Empiria.Inventory {
 
     static public InventoryOrderItem Empty => ParseEmpty<InventoryOrderItem>();
 
-    static internal FixedList<InventoryOrderItem> GetListFor(InventoryOrder order) {
-      Assertion.Require(order, nameof(order));
-
-      return InventoryOrderData.GetInventoryOrderItemsByOrder(order.Id);
-    }
-
     #endregion Constructors and parsers
 
     #region Properties
