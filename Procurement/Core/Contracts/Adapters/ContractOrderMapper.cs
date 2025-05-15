@@ -8,7 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Documents.Services;
+using Empiria.Documents;
 using Empiria.History.Services;
 
 using Empiria.Budgeting.Transactions.Adapters;
@@ -26,7 +26,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         Order = new ContractOrderDto(order),
         Items = Map(order.GetItems<ContractOrderItem>()),
         BudgetTransactions = MapBudgetTransactions(order),
-        Documents = DocumentServices.GetEntityDocuments(order),
+        Documents = DocumentServices.GetAllEntityDocuments(order),
         History = HistoryServices.GetEntityHistory(order),
         Actions = MapActions(order),
       };

@@ -11,7 +11,7 @@
 using Empiria.Parties;
 using Empiria.StateEnums;
 
-using Empiria.Documents.Services;
+using Empiria.Documents;
 using Empiria.History.Services;
 using Empiria.Financial.Services;
 
@@ -24,7 +24,7 @@ namespace Empiria.Procurement.Suppliers.Adapters {
       return new SupplierHolderDto {
          Supplier = MapToDescriptor(supplier),
          PaymentAccounts = PaymentAccountServices.GetPaymentAccounts(supplier.UID),
-         Documents = DocumentServices.GetEntityDocuments(supplier),
+         Documents = DocumentServices.GetAllEntityDocuments(supplier),
          History = HistoryServices.GetEntityHistory(supplier),
       };
     }

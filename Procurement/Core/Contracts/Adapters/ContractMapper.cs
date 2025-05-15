@@ -10,7 +10,7 @@
 
 using Empiria.StateEnums;
 
-using Empiria.Documents.Services;
+using Empiria.Documents;
 using Empiria.History.Services;
 
 using Empiria.Budgeting.Transactions;
@@ -27,7 +27,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         Items = ContractItemMapper.Map(contract.GetItems()),
         BudgetTransactions = MapBudgetTransactions(contract),
         Orders = ContractOrderMapper.MapToDescriptor(ContractOrder.GetListFor(contract)),
-        Documents = DocumentServices.GetEntityDocuments(contract),
+        Documents = DocumentServices.GetAllEntityDocuments(contract),
         History = HistoryServices.GetEntityHistory(contract),
         Actions = MapActions(contract)
       };

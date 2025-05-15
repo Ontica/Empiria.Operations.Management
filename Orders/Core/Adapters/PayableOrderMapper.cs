@@ -11,7 +11,7 @@
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 
-using Empiria.Documents.Services;
+using Empiria.Documents;
 using Empiria.History.Services;
 
 namespace Empiria.Orders.Adapters {
@@ -30,7 +30,7 @@ namespace Empiria.Orders.Adapters {
         Order = new PayableOrderDto(order),
         Items = Map(order.GetItems<PayableOrderItem>()),
         BudgetTransactions = MapBudgetTransactions(order),
-        Documents = DocumentServices.GetEntityDocuments(order),
+        Documents = DocumentServices.GetAllEntityDocuments(order),
         History = HistoryServices.GetEntityHistory(order),
         Actions = MapActions(order),
       };

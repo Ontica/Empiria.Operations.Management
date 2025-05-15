@@ -8,7 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Documents.Services;
+using Empiria.Documents;
 using Empiria.History.Services;
 
 using Empiria.StateEnums;
@@ -22,7 +22,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       return new AssetTransactionHolderDto {
         Transaction = MapAssetTransaction(transaction),
         Entries = Map(transaction.Entries),
-        Documents = DocumentServices.GetEntityDocuments(transaction),
+        Documents = DocumentServices.GetAllEntityDocuments(transaction),
         History = HistoryServices.GetEntityHistory(transaction),
         Actions = MapActions(transaction)
       };

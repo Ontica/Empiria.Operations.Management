@@ -14,7 +14,6 @@ using Empiria.Storage;
 using Empiria.WebApi;
 
 using Empiria.Documents;
-using Empiria.Documents.Services;
 
 namespace Empiria.Procurement.Contracts.WebApi {
 
@@ -29,7 +28,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
                                               [FromUri] string documentUID) {
 
       var contract = Contract.Parse(contractUID);
-      var document = Document.Parse(documentUID);
+      var document = DocumentServices.GetDocument(documentUID);
 
       DocumentServices.RemoveDocument(contract, document);
 
@@ -61,7 +60,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
       base.RequireBody(fields);
 
       var contract = Contract.Parse(contractUID);
-      var document = Document.Parse(documentUID);
+      var document = DocumentServices.GetDocument(documentUID);
 
       var documentDto = DocumentServices.UpdateDocument(contract, document, fields);
 

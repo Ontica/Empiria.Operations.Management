@@ -14,7 +14,6 @@ using Empiria.Storage;
 using Empiria.WebApi;
 
 using Empiria.Documents;
-using Empiria.Documents.Services;
 
 namespace Empiria.Inventory.Assets.WebApi {
 
@@ -29,7 +28,7 @@ namespace Empiria.Inventory.Assets.WebApi {
                                                       [FromUri] string documentUID) {
 
       var transaction = AssetTransaction.Parse(transactionUID);
-      var document = Document.Parse(documentUID);
+      var document = DocumentServices.GetDocument(documentUID);
 
       DocumentServices.RemoveDocument(transaction, document);
 
@@ -61,7 +60,7 @@ namespace Empiria.Inventory.Assets.WebApi {
       base.RequireBody(fields);
 
       var transaction = AssetTransaction.Parse(transactionUID);
-      var document = Document.Parse(documentUID);
+      var document = DocumentServices.GetDocument(documentUID);
 
       var documentDto = DocumentServices.UpdateDocument(transaction, document, fields);
 

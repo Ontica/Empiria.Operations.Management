@@ -11,7 +11,8 @@
 using System;
 
 using Empiria.StateEnums;
-using Empiria.Documents.Services.Adapters;
+
+using Empiria.Documents;
 using Empiria.History.Services.Adapters;
 
 namespace Empiria.Orders.Adapters {
