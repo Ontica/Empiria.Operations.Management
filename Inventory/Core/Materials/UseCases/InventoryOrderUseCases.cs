@@ -106,6 +106,15 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
+    public InventoryEntryDto GetInventoryEntryByUID(string inventoryEntryUID) {
+      Assertion.Require(inventoryEntryUID, nameof(inventoryEntryUID));
+
+      InventoryEntry entry = InventoryEntry.Parse(inventoryEntryUID);
+
+      return InventoryOrderMapper.MapToInventoryEntryDto(entry);
+    }
+
+
     public InventoryOrderDataDto SearchInventoryOrder(InventoryOrderQuery query) {
       Assertion.Require(query, nameof(query));
 

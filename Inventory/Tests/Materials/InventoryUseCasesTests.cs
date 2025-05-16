@@ -26,6 +26,18 @@ namespace Empiria.Tests.Inventory {
 
     #endregion Initialization
 
+    [Fact]
+    public void GetInventoryEntryByUIDTest() {
+
+      var usecase = InventoryOrderUseCases.UseCaseInteractor();
+      
+      string inventoryEntryUID = "0986119b-d72a-4107-902d-f70199554ec6";
+
+      InventoryEntryDto sut = usecase.GetInventoryEntryByUID(inventoryEntryUID);
+
+      Assert.NotNull(sut);
+    }
+
 
     [Fact]
     public void CloseInventoryEntryTest() {
