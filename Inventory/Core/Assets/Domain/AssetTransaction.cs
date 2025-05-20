@@ -260,7 +260,7 @@ namespace Empiria.Inventory.Assets {
 
 
     internal bool CanOpen() {
-      return this.Status == TransactionStatus.Completed;
+      return this.Status == TransactionStatus.Closed;
     }
 
 
@@ -296,7 +296,7 @@ namespace Empiria.Inventory.Assets {
                         $"Entries = {Entries.Count}.");
 
       AppliedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
-      Status = TransactionStatus.Completed;
+      Status = TransactionStatus.Closed;
       TransactionNo = AssetsTransactionsData.GenerateNextTransactionNo(this);
       if (OperationSource.IsEmptyInstance) {
         OperationSource = OperationSource.Parse(11);
