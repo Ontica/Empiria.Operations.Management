@@ -12,7 +12,8 @@ using Empiria.Parties;
 using Empiria.StateEnums;
 
 using Empiria.Documents;
-using Empiria.History.Services;
+using Empiria.History;
+
 using Empiria.Financial.Services;
 
 namespace Empiria.Procurement.Suppliers.Adapters {

@@ -12,7 +12,7 @@ using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 
 using Empiria.Documents;
-using Empiria.History.Services;
+using Empiria.History;
 
 namespace Empiria.Orders.Adapters {
 

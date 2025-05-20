@@ -13,7 +13,7 @@ using System;
 using Empiria.StateEnums;
 
 using Empiria.Documents;
-using Empiria.History.Services.Adapters;
+using Empiria.History;
 
 namespace Empiria.Orders.Adapters {
 
