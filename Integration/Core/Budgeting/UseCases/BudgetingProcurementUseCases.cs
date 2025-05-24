@@ -73,6 +73,8 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
       var orgUnit = OrganizationalUnit.Parse(query.OrganizationalUnitUID);
 
       filter.AppendAnd($"CONTRACT_MGMT_ORG_UNIT_ID = {orgUnit.Id}");
+      filter.AppendAnd($"CONTRACT_STATUS <> 'X'");
+
       if (query.Keywords.Length != 0) {
         filter.AppendAnd(SearchExpression.ParseAndLikeKeywords("CONTRACT_KEYWORDS", query.Keywords));
       }
@@ -107,8 +109,6 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
     static private BudgetTransactionFields TransformToBudgetTransactionFields(IPayableEntity payableEntity,
                                                                               BudgetTransactionType transactionType) {
 
-      var SISTEMA_DE_ADQUISICIONES = OperationSource.Parse(10);
-
       int contractId = -1;
 
       if (payableEntity is Contract contract) {
@@ -121,12 +121,12 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
         TransactionTypeUID = transactionType.UID,
         ContractId = contractId,
         BaseBudgetUID = payableEntity.Budget.UID,
-        OperationSourceUID = SISTEMA_DE_ADQUISICIONES.UID,
+        OperationSourceUID = OperationSource.ParseNamedKey("SISTEMA_DE_ADQUISICIONES").UID,
         Description = payableEntity.Name,
         BasePartyUID = payableEntity.OrganizationalUnit.UID,
         RequestedByUID = Party.ParseWithContact(ExecutionServer.CurrentContact).UID,
         ApplicationDate = DateTime.Today
-      };
+      }
     }
 
     #endregion Helpers

@@ -299,7 +299,7 @@ namespace Empiria.Inventory.Assets {
       Status = TransactionStatus.Closed;
       TransactionNo = AssetsTransactionsData.GenerateNextTransactionNo(this);
       if (OperationSource.IsEmptyInstance) {
-        OperationSource = OperationSource.Parse(11);
+        OperationSource = OperationSource.Default;
       }
     }
 
