@@ -126,7 +126,7 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
         BasePartyUID = payableEntity.OrganizationalUnit.UID,
         RequestedByUID = Party.ParseWithContact(ExecutionServer.CurrentContact).UID,
         ApplicationDate = DateTime.Today
-      }
+      };
     }
 
     #endregion Helpers
