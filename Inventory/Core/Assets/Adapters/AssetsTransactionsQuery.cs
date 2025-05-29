@@ -97,9 +97,9 @@ namespace Empiria.Inventory.Assets.Adapters {
     } = ExecutionServer.DateMaxValue;
 
 
-    public TransactionPartyType PartyType {
+    public TransactionPartyRole PartyType {
       get; set;
-    } = TransactionPartyType.None;
+    } = TransactionPartyRole.None;
 
 
     public string PartyUID {
