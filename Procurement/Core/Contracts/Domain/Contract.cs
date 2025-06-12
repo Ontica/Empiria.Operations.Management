@@ -446,7 +446,7 @@ namespace Empiria.Procurement.Contracts {
       Description = EmpiriaString.Clean(fields.Description);
       ManagedByOrgUnit = PatchField(fields.ManagedByOrgUnitUID, ManagedByOrgUnit);
       IsForMultipleOrgUnits = fields.IsForMultipleOrgUnits;
-      Customer = fields.CustomerUID.Length != 0 ? Party.Parse(fields.CustomerUID) : Party.Primary;
+      Customer = fields.CustomerUID.Length != 0 ? Party.Parse(fields.CustomerUID) : Organization.Primary;
       Supplier = fields.SupplierUID.Length != 0 ? Party.Parse(fields.SupplierUID) : Party.Empty;
       FromDate = fields.FromDate;
       ToDate = fields.ToDate;
