@@ -20,7 +20,7 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
-    internal override void EnsureValid() {
+    public override void EnsureValid() {
       base.EnsureValid();
 
       Assertion.Require(ContractUID, nameof(ContractUID));
