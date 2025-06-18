@@ -21,8 +21,8 @@ namespace Empiria.Inventory.Data {
 
       var op = DataOperation.Parse("WRITE_OMS_PRODUCT_SKU", o.Id, o.UID, o.SkuType.Id,
         o.Product.Id, o.SkuNo, o.Name, o.Description, o.Unit.Id, o.Quantity, o.ExpirationDate,
-        o.Brand, o.Model, o.SerialNo, variantAttrs, string.Join(" ", o.Identificators),
-        string.Join(" ", o.Tags), extensionData, o.Keywords, o.StartDate, o.EndDate, o.LastUpdate,
+        o.Brand, o.Model, o.SerialNo, variantAttrs, EmpiriaString.Tagging(o.Identificators),
+        EmpiriaString.Tagging(o.Tags), extensionData, o.Keywords, o.StartDate, o.EndDate, o.LastUpdate,
         o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);

@@ -140,7 +140,7 @@ namespace Empiria.Inventory.Assets.Data {
     static internal void WriteAssetTransaction(AssetTransaction o, string extensionData) {
 
       var op = DataOperation.Parse("write_OMS_Asset_Transaction", o.Id, o.UID, o.AssetTransactionType.Id,
-        o.TransactionNo, o.Description, string.Join(" ", o.Identificators), string.Join(" ", o.Tags),
+        o.TransactionNo, o.Description, EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
         o.Manager.Id, o.ManagerOrgUnit.Id, o.AssignedTo.Id, o.AssignedToOrgUnit.Id,
         o.Location.Id, o.OperationSource.Id, o.RequestedTime, o.RequestedBy.Id,
         o.ApplicationTime, o.AppliedBy.Id, o.RecordingTime, o.RecordedBy.Id,

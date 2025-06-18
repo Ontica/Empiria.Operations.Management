@@ -295,8 +295,7 @@ namespace Empiria.Orders {
 
       Category = PatchField(fields.CategoryUID, Category);
       Description = PatchCleanField(fields.Description, Description);
-      _identificators = string.Join(" ", fields.Identificators);
-      _tags = string.Join(" ", fields.Tags);
+      _tags = EmpiriaString.Tagging(fields.Tags);
       Responsible = PatchField(fields.ResponsibleUID, Responsible);
       Beneficiary = PatchField(fields.BeneficiaryUID, Beneficiary);
       IsForMultipleBeneficiaries = fields.IsForMultipleBeneficiaries;

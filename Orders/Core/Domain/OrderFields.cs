@@ -34,14 +34,9 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
-    public FixedList<string> Identificators {
+    public string[] Tags {
       get; set;
-    } = new FixedList<string>();
-
-
-    public FixedList<string> Tags {
-      get; set;
-    } = new FixedList<string>();
+    } = new string[0];
 
 
     public string ResponsibleUID {

@@ -58,7 +58,7 @@ namespace Empiria.Procurement.Contracts.Data {
     static internal void WriteOrder(ContractOrder o, string extensionData) {
       var op = DataOperation.Parse("write_OMS_Order",
                      o.Id, o.UID, o.OrderType.Id, o.Category.Id, o.OrderNo, o.Description,
-                     string.Join(" ", o.Identificators), string.Join(" ", o.Tags),
+                     EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
                      o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
                      o.Budget.Id, o.RequisitionId, o.Contract.Id, o.Project.Id, o.Currency.Id,
                      o.Source.Id, (char) o.Priority, o.AuthorizationTime, o.AuthorizedBy.Id,
