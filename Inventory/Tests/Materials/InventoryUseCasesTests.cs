@@ -11,6 +11,8 @@
 using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.UseCases;
+using Empiria.Ontology;
+using Empiria.Orders;
 using Xunit;
 
 namespace Empiria.Tests.Inventory {
@@ -124,6 +126,34 @@ namespace Empiria.Tests.Inventory {
       InventoryOrderDataDto sut = usecase.SearchInventoryOrder(query);
 
       Assert.NotNull(sut);
+    }
+
+
+    [Fact]
+    public void CreateInventoryOrder() {
+      var usecase = InventoryOrderUseCases.UseCaseInteractor();
+
+      //int wareHouseId = 1;
+
+      TestsCommonMethods.Authenticate();
+
+      InventoryOrderFields fields = new InventoryOrderFields();
+      fields.CategoryUID = "Empty";
+      fields.OrderTypeUID = "ObjectTypeInfo.Order.InventoryOrder";
+      fields.Description = "Primera orden de prueba";
+      fields.Tags = new string[] { "prueba", "mas pruebas" };
+      fields.ResponsibleUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1";
+      fields.BeneficiaryUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd";
+
+      var orderType = Orders.OrderType.Parse(4010);
+
+      InventoryOrder order = new InventoryOrder(orderType);
+
+      order.Update(fields);
+
+      order.Save();
+
+      Assert.NotNull(order);
     }
 
 

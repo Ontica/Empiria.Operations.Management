@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System.Linq;
+using Empiria.Orders;
 
 namespace Empiria.Inventory {
 
@@ -78,6 +79,22 @@ namespace Empiria.Inventory {
     }
 
   }
+
+  public class InventoryOrderFields : OrderFields {
+    
+   public int WareHouseId { 
+              get; set; 
+   }
+
+
+   public override void EnsureValid() { 
+      base.EnsureValid();
+
+      Assertion.Require(WareHouseId, nameof(WareHouseId));
+   }
+
+
+  } // class InventoryEntryFields
 
 
 } // namespace Empiria.Inventory

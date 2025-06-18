@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System.Linq;
 
 using Empiria.Locations;
 using Empiria.Products;
@@ -16,8 +15,7 @@ using Empiria.Services;
 
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
-using Empiria.Orders;
-using System;
+
 
 namespace Empiria.Inventory.UseCases {
 
@@ -76,6 +74,21 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
+    public InventoryHolderDto CreateInventoryOrder(InventoryOrderFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      var orderType = Orders.OrderType.Parse(4010);
+
+      InventoryOrder order = new InventoryOrder(orderType);
+
+      order.Update(fields);
+
+      order.Save();
+
+      return GetInventoryOrder(order.UID);
+    }
+
+
     public InventoryHolderDto DeleteInventoryEntry(string orderUID, string itemUID, string entryUID) {
       Assertion.Require(orderUID, nameof(orderUID));
       Assertion.Require(itemUID, nameof(itemUID));
@@ -125,14 +138,12 @@ namespace Empiria.Inventory.UseCases {
 
       return InventoryOrderMapper.InventoryOrderDataDto(orders, query);
     }
-
-
-
+    
     #endregion Use cases
 
     #region Helpers
 
-    
+
     #endregion Helpers
 
   } // class InventoryOrderUseCases
