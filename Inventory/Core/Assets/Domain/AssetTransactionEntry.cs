@@ -152,8 +152,8 @@ namespace Empiria.Inventory.Assets {
 
       fields.EnsureValid();
 
-      Asset = PatchField(fields.AssetUID, Asset);
-      Description = EmpiriaString.Clean(fields.Description);
+      Asset = Patcher.Patch(fields.AssetUID, Asset);
+      Description = Patcher.PatchClean(fields.Description, Description);
 
       MarkAsDirty();
     }

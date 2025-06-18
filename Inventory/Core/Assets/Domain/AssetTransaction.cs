@@ -346,18 +346,18 @@ namespace Empiria.Inventory.Assets {
 
       fields.EnsureValid();
 
-      Description = PatchCleanField(fields.Description, Description);
-      _identificators = string.Join(" ", fields.Identificators);
-      _tags = string.Join(" ", fields.Tags);
-      Manager = PatchField(fields.ManagerUID, Manager);
-      ManagerOrgUnit = PatchField(fields.ManagerOrgUnitUID, ManagerOrgUnit);
-      AssignedTo = PatchField(fields.AssignedToUID, AssignedTo);
-      AssignedToOrgUnit = PatchField(fields.AssignedToOrgUnitUID, AssignedToOrgUnit);
-      Location = PatchField(fields.LocationUID, Location);
-      RequestedTime = PatchField(fields.RequestedTime, RequestedTime);
-      ApplicationTime = PatchField(fields.ApplicationTime, ApplicationTime);
-    }
+      Description = Patcher.PatchClean(fields.Description, Description);
+      Manager = Patcher.Patch(fields.ManagerUID, Manager);
+      ManagerOrgUnit = Patcher.Patch(fields.ManagerOrgUnitUID, ManagerOrgUnit);
+      AssignedTo = Patcher.Patch(fields.AssignedToUID, AssignedTo);
+      AssignedToOrgUnit = Patcher.Patch(fields.AssignedToOrgUnitUID, AssignedToOrgUnit);
+      Location = Patcher.Patch(fields.LocationUID, Location);
+      RequestedTime = Patcher.Patch(fields.RequestedTime, RequestedTime);
+      ApplicationTime = Patcher.Patch(fields.ApplicationTime, ApplicationTime);
 
+      _identificators = EmpiriaString.Tagging(fields.Identificators);
+      _tags = EmpiriaString.Tagging(fields.Tags);
+    }
 
     #endregion Methods
 

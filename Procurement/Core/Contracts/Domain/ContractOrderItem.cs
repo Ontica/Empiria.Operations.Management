@@ -72,8 +72,8 @@ namespace Empiria.Procurement.Contracts {
       fields.ProductUnitUID = contractItem.ProductUnit.UID;
       fields.CurrencyUID = contractItem.Currency.UID;
       fields.BudgetAccountUID = contractItem.BudgetAccount.UID;
-      fields.Description = PatchCleanField(fields.Description, contractItem.Description);
-      fields.ProjectUID = PatchCleanField(fields.ProjectUID, contractItem.Project.UID);
+      fields.Description = Patcher.PatchClean(fields.Description, contractItem.Description);
+      fields.ProjectUID = Patcher.Patch(fields.ProjectUID, contractItem.Project.UID);
 
       base.Update(fields);
     }

@@ -203,8 +203,8 @@ namespace Empiria.Inventory {
     internal void Update(InventoryEntryFields fields, string orderItemUID) {
 
       this.InputQuantity = fields.Quantity;
-      this.Product = PatchField(fields.ProductUID, this.Product);
-      this.Location = PatchField(fields.LocationUID, this.Location);
+      this.Product = Patcher.Patch(fields.ProductUID, this.Product);
+      this.Location = Patcher.Patch(fields.LocationUID, this.Location);
       this.Sku = ProductSku.Empty;
       this.InputCost = 0;
       this.OutputQuantity = 0;
@@ -213,7 +213,6 @@ namespace Empiria.Inventory {
       this.ExtData = string.Empty;
       this.Status = InventoryStatus.Abierto;
     }
-
 
     #endregion Private methods
 

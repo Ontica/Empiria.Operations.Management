@@ -440,11 +440,11 @@ namespace Empiria.Procurement.Contracts {
       Party lastSupplier = Supplier;
       bool lastIsForMultipleOrgUnits = IsForMultipleOrgUnits;
 
-      ContractCategory = PatchField(fields.ContractCategoryUID, ContractCategory);
+      ContractCategory = Patcher.Patch(fields.ContractCategoryUID, ContractCategory);
       ContractNo = EmpiriaString.Clean(fields.ContractNo);
-      Name = PatchCleanField(fields.Name, Name);
+      Name = Patcher.PatchClean(fields.Name, Name);
       Description = EmpiriaString.Clean(fields.Description);
-      ManagedByOrgUnit = PatchField(fields.ManagedByOrgUnitUID, ManagedByOrgUnit);
+      ManagedByOrgUnit = Patcher.Patch(fields.ManagedByOrgUnitUID, ManagedByOrgUnit);
       IsForMultipleOrgUnits = fields.IsForMultipleOrgUnits;
       Customer = fields.CustomerUID.Length != 0 ? Party.Parse(fields.CustomerUID) : Organization.Primary;
       Supplier = fields.SupplierUID.Length != 0 ? Party.Parse(fields.SupplierUID) : Party.Empty;
@@ -453,7 +453,7 @@ namespace Empiria.Procurement.Contracts {
       SignDate = fields.SignDate;
       BudgetType = BudgetType.Parse(fields.BudgetTypeUID);
       Budgets = fields.BudgetsUIDs.Select(x => Budget.Parse(x)).ToFixedList();
-      Currency = PatchField(fields.CurrencyUID, Currency);
+      Currency = Patcher.Patch(fields.CurrencyUID, Currency);
 
       if (Supplier.Distinct(lastSupplier)) {
         UpdateSupplierForAllItems();

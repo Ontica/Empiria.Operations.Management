@@ -123,7 +123,7 @@ namespace Empiria.Orders {
 
       UnitPrice = fields.UnitPrice;
       Discount = fields.Discount;
-      Currency = PatchField(fields.CurrencyUID, Order.Currency);
+      Currency = Patcher.Patch(fields.CurrencyUID, Order.Currency);
 
       BudgetAccount = BudgetAccount.Parse(fields.BudgetAccountUID);
 

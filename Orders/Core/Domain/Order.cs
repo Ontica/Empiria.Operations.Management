@@ -293,15 +293,15 @@ namespace Empiria.Orders {
 
       fields.EnsureValid();
 
-      Category = PatchField(fields.CategoryUID, Category);
-      Description = PatchCleanField(fields.Description, Description);
+      Category = Patcher.Patch(fields.CategoryUID, Category);
+      Description = Patcher.PatchClean(fields.Description, Description);
       _tags = EmpiriaString.Tagging(fields.Tags);
-      Responsible = PatchField(fields.ResponsibleUID, Responsible);
-      Beneficiary = PatchField(fields.BeneficiaryUID, Beneficiary);
+      Responsible = Patcher.Patch(fields.ResponsibleUID, Responsible);
+      Beneficiary = Patcher.Patch(fields.BeneficiaryUID, Beneficiary);
       IsForMultipleBeneficiaries = fields.IsForMultipleBeneficiaries;
-      Provider = PatchField(fields.ProviderUID, Provider);
-      RequestedBy = PatchField(fields.RequestedByUID, RequestedBy);
-      Project = PatchField(fields.ProjectUID, Project);
+      Provider = Patcher.Patch(fields.ProviderUID, Provider);
+      RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);
+      Project = Patcher.Patch(fields.ProjectUID, Project);
       Priority = fields.Priority;
     }
 

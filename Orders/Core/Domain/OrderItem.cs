@@ -196,13 +196,13 @@ namespace Empiria.Orders {
 
       fields.EnsureValid();
 
-      Product = PatchField(fields.ProductUID, Product);
+      Product = Patcher.Patch(fields.ProductUID, Product);
       Description = EmpiriaString.Clean(fields.Description);
-      ProductUnit = PatchField(fields.ProductUnitUID, ProductUnit);
+      ProductUnit = Patcher.Patch(fields.ProductUnitUID, ProductUnit);
       Quantity = fields.Quantity;
-      RequestedBy = PatchField(fields.RequestedByUID, Order.RequestedBy);
-      Project = PatchField(fields.ProjectUID, Order.Project);
-      Provider = PatchField(fields.ProviderUID, Order.Provider);
+      RequestedBy = Patcher.Patch(fields.RequestedByUID, Order.RequestedBy);
+      Project = Patcher.Patch(fields.ProjectUID, Order.Project);
+      Provider = Patcher.Patch(fields.ProviderUID, Order.Provider);
 
       MarkAsDirty();
     }

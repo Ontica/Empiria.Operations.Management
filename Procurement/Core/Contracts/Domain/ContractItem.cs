@@ -312,20 +312,20 @@ namespace Empiria.Procurement.Contracts {
 
       fields.EnsureValid();
 
-      this.Description = PatchCleanField(fields.Description, Description);
-      this.Product = PatchField(fields.ProductUID, Product);
-      this.ProductUnit = PatchField(fields.ProductUnitUID, ProductUnit);
+      this.Description = Patcher.PatchClean(fields.Description, Description);
+      this.Product = Patcher.Patch(fields.ProductUID, Product);
+      this.ProductUnit = Patcher.Patch(fields.ProductUnitUID, ProductUnit);
       this.MinQuantity = fields.MinQuantity;
       this.MaxQuantity = fields.MaxQuantity;
       this.UnitPrice = fields.UnitPrice;
-      this.Currency = PatchField(fields.CurrencyUID, Contract.Currency);
+      this.Currency = Patcher.Patch(fields.CurrencyUID, Contract.Currency);
       this.RequisitionItemId = -1;
-      this.RequesterOrgUnit = PatchField(fields.RequesterOrgUnitUID, Contract.ManagedByOrgUnit);
-      this.Budget = PatchField(fields.BudgetUID, Budget);
-      this.BudgetAccount = PatchField(fields.BudgetAccountUID, BudgetAccount);
-      this.Project = PatchField(fields.ProjectUID, Project.Empty);
-      this.Supplier = PatchField(fields.SupplierUID, Contract.Supplier);
-      this.PeriodicityType = PatchField(fields.PeriodicityTypeUID, PeriodicityType);
+      this.RequesterOrgUnit = Patcher.Patch(fields.RequesterOrgUnitUID, Contract.ManagedByOrgUnit);
+      this.Budget = Patcher.Patch(fields.BudgetUID, Budget);
+      this.BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, BudgetAccount);
+      this.Project = Patcher.Patch(fields.ProjectUID, Project.Empty);
+      this.Supplier = Patcher.Patch(fields.SupplierUID, Contract.Supplier);
+      this.PeriodicityType = Patcher.Patch(fields.PeriodicityTypeUID, PeriodicityType);
 
       MarkAsDirty();
     }
