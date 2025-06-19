@@ -11,6 +11,7 @@
 using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.UseCases;
+using Empiria.Locations;
 using Empiria.Ontology;
 using Empiria.Orders;
 using Xunit;
@@ -77,7 +78,7 @@ namespace Empiria.Tests.Inventory {
     public void DeleteInventoryEntryTest() {
 
       var usecase = InventoryOrderUseCases.UseCaseInteractor();
-      string orderUID = "829b237e-354a-4c06-8da9-ac5e23b704e1";
+      string orderUID =  "829b237e-354a-4c06-8da9-ac5e23b704e1";
       string orderItemUID = "3f52c3bc-1a84-4390-9bb4-7850fb79f38e";
       string entryUID = "30dd291d-3d7c-4520-b8a1-11d644d37f80";
 
@@ -132,30 +133,38 @@ namespace Empiria.Tests.Inventory {
     [Fact]
     public void CreateInventoryOrder() {
       var usecase = InventoryOrderUseCases.UseCaseInteractor();
-
-      //int wareHouseId = 1;
-
+           
       TestsCommonMethods.Authenticate();
-
-      InventoryOrderFields fields = new InventoryOrderFields();
-      fields.CategoryUID = "Empty";
-      fields.OrderTypeUID = "ObjectTypeInfo.Order.InventoryOrder";
-      fields.Description = "Primera orden de prueba";
-      fields.Tags = new string[] { "prueba", "mas pruebas" };
-      fields.ResponsibleUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1";
-      fields.BeneficiaryUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd";
+      
+      InventoryOrderFields fields = new InventoryOrderFields {
+        WareHouseId = 1,
+        CategoryUID = "Empty",
+        OrderTypeUID = "ObjectTypeInfo.Order.InventoryOrder",
+        Description = "Prueba 19 de Junio",
+        Tags = new string[] { "prueba", "mas pruebas" },
+        ResponsibleUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1",
+        BeneficiaryUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd",
+      };
 
       var orderType = Orders.OrderType.Parse(4010);
 
-      InventoryOrder order = new InventoryOrder(orderType);
+      InventoryOrder order = new InventoryOrder(fields.WareHouseId, orderType);
 
       order.Update(fields);
 
       order.Save();
-
+     
       Assert.NotNull(order);
     }
 
+
+    [Fact]
+    public void GetWareHouses() {
+
+      var commonStorage = CommonStorage.GetList<Location>().FindAll(x => x.Level == 1).MapToNamedEntityList();
+
+      Assert.NotNull(commonStorage);
+    }
 
   } // class InventoryUseCasesTests
 

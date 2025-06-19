@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Empiria.DynamicData;
+using Empiria.Orders.Adapters;
 using Empiria.StateEnums;
 
 namespace Empiria.Inventory.Adapters {
@@ -68,17 +69,17 @@ namespace Empiria.Inventory.Adapters {
 
     #region Private methods
 
-    static private InventoryOrderDescriptorDto MapToDescriptor(InventoryOrder x) {
+    static private InventoryOrderDescriptorDto MapToDescriptor(InventoryOrder order) {
 
       return new InventoryOrderDescriptorDto() {
-        UID = x.UID,
-        OrderTypeName = x.OrderType.Name,
-        OrderNo = x.OrderNo,
-        Description = x.Description,
-        ResponsibleName = x.Responsible.IsEmptyInstance ? "Sin Asignar" : x.Responsible.Name,
-        PostedByName = x.PostedBy.Name,
-        PostingTime = x.PostingTime,
-        Status = x.Status.GetName()
+        UID = order.UID,
+        OrderTypeName = order.OrderType.DisplayName,
+        OrderNo = order.OrderNo,
+        Description = order.Description,
+        ResponsibleName = order.Responsible.IsEmptyInstance ? "Sin Asignar" : order.Responsible.Name,
+        PostedByName = order.PostedBy.Name,
+        PostingTime = order.PostingTime,
+        Status = order.Status.GetName()
       };
     }
 

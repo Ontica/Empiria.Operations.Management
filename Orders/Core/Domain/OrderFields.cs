@@ -78,7 +78,6 @@ namespace Empiria.Orders {
       Assertion.Require(OrderTypeUID, nameof(OrderTypeUID));
       Assertion.Require(CategoryUID, nameof(CategoryUID));
       Assertion.Require(Description, nameof(Description));
-      Assertion.Require(Description, nameof(Description));
       Assertion.Require(ResponsibleUID, nameof(ResponsibleUID));
       Assertion.Require(BeneficiaryUID, nameof(BeneficiaryUID));
     }

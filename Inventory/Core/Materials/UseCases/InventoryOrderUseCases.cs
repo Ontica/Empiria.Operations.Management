@@ -22,6 +22,8 @@ namespace Empiria.Inventory.UseCases {
   /// <summary>Use cases to manage inventory order.</summary>
   public class InventoryOrderUseCases : UseCase {
 
+    private const int INVENTORYORDERTYPEID = 4010;
+
     #region Constructors and parsers
 
     protected InventoryOrderUseCases() {
@@ -74,12 +76,13 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
-    public InventoryHolderDto CreateInventoryOrder(InventoryOrderFields fields) {
+    public InventoryHolderDto CreateInventoryOrder(int wareHouse, InventoryOrderFields fields) {
+      Assertion.Require(wareHouse, nameof(wareHouse));
       Assertion.Require(fields, nameof(fields));
+            
+      var orderType = Orders.OrderType.Parse(INVENTORYORDERTYPEID);
 
-      var orderType = Orders.OrderType.Parse(4010);
-
-      InventoryOrder order = new InventoryOrder(orderType);
+      InventoryOrder order = new InventoryOrder(wareHouse, orderType);
 
       order.Update(fields);
 

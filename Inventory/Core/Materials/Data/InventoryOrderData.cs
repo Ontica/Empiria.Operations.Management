@@ -93,7 +93,7 @@ namespace Empiria.Inventory.Data {
 
       var op = DataOperation.Parse(sql);
 
-      return DataReader.GetPlainObjectFixedList<InventoryOrder>(op);
+      return DataReader.GetFixedList<InventoryOrder>(op);
     }
 
 

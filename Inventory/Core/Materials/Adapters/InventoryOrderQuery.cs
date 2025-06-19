@@ -38,6 +38,7 @@ namespace Empiria.Inventory.Adapters {
       var filter = new Filter(status);
 
       filter.AppendAnd(keywords);
+      filter.AppendAnd("Order_Type_Id = 4010");
 
       return filter.ToString();
     }
@@ -64,12 +65,10 @@ namespace Empiria.Inventory.Adapters {
     private static string BuildStatusFilter(EntityStatus status) {
 
       if (status == EntityStatus.All) {
-        return $"Order_Status != '{(char) EntityStatus.Discontinued}' AND " +
-               $"Order_Status != '{(char) EntityStatus.Suspended}' AND " +
-               $"Order_Status != '{(char) EntityStatus.Deleted}' ";
+        return $"Order_Status <> 'X'";
       }
 
-      return $"Order_Status = '{(char) status}'";
+      return $"(Order_Status = '{(char) status}' AND Order_Id <> -1)";
     }
 
 
