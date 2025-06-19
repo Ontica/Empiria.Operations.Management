@@ -9,7 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.Inventory;
-
+using Empiria.Locations;
 using Xunit;
 
 namespace Empiria.Tests.Inventory {
@@ -54,6 +54,13 @@ namespace Empiria.Tests.Inventory {
       Assert.Equal(-1, sut.Id);
     }
 
+
+    [Fact]
+    public void GetWareHouses() {
+
+      var commonStorage = CommonStorage.GetList<Location>().FindAll(x => x.Level == 1).MapToNamedEntityList();
+      Assert.NotNull(commonStorage);
+    }
 
   } // class InventoryTests
 

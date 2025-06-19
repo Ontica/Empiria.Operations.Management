@@ -15,6 +15,7 @@ using Empiria.Services;
 
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
+using System;
 
 
 namespace Empiria.Inventory.UseCases {
@@ -141,7 +142,12 @@ namespace Empiria.Inventory.UseCases {
 
       return InventoryOrderMapper.InventoryOrderDataDto(orders, query);
     }
-    
+
+    public FixedList<NamedEntityDto> GetWareHouses() {
+
+      return CommonStorage.GetList<Location>().FindAll(x => x.Level == 1).MapToNamedEntityList();
+    }
+
     #endregion Use cases
 
     #region Helpers

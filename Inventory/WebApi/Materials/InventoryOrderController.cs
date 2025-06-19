@@ -36,6 +36,19 @@ namespace Empiria.Inventory.WebApi {
     }
 
 
+    [HttpGet]
+    [Route("v8/order-management/wareHouses")]
+    public CollectionModel GetWareHouses() {
+
+      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
+
+        FixedList<NamedEntityDto> wareHouses = usecases.GetWareHouses();
+
+        return new CollectionModel(this.Request, wareHouses);
+      }
+    }
+
+
     [HttpPost]
     [Route("v8/order-management/inventory-orders/{orderUID}/items/{itemUID}/entries")]
     public SingleObjectModel CreateInventoryEntry([FromUri] string orderUID,

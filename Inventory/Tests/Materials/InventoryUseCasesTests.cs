@@ -158,13 +158,7 @@ namespace Empiria.Tests.Inventory {
     }
 
 
-    [Fact]
-    public void GetWareHouses() {
-
-      var commonStorage = CommonStorage.GetList<Location>().FindAll(x => x.Level == 1).MapToNamedEntityList();
-
-      Assert.NotNull(commonStorage);
-    }
+   
 
   } // class InventoryUseCasesTests
 
