@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using System.Web.Http;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.UseCases;
@@ -49,6 +45,19 @@ namespace Empiria.Inventory.WebApi {
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
         InventoryHolderDto inventoryOrder = usecases.CreateInventoryEntry(orderUID, itemUID, fields);
+
+        return new SingleObjectModel(this.Request, inventoryOrder);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v8/order-management/inventory-orders")]
+    public SingleObjectModel CreateInventoryOrder([FromBody] InventoryOrderFields fields) {
+
+      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
+
+        InventoryHolderDto inventoryOrder = usecases.CreateInventoryOrder(fields.WareHouseId, fields);
 
         return new SingleObjectModel(this.Request, inventoryOrder);
       }
