@@ -37,6 +37,19 @@ namespace Empiria.Inventory.WebApi {
 
 
     [HttpGet]
+    [Route("v8/order-management/inventory-types")]
+    public CollectionModel GetInventoryOrder() {
+
+      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
+
+        FixedList<NamedEntityDto> orderTypes = usecases.GetOrderTypes();
+
+        return new CollectionModel(this.Request, orderTypes);
+      }
+    }
+
+
+    [HttpGet]
     [Route("v8/order-management/wareHouses")]
     public CollectionModel GetWareHouses() {
 
@@ -70,7 +83,7 @@ namespace Empiria.Inventory.WebApi {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
-        InventoryHolderDto inventoryOrder = usecases.CreateInventoryOrder(fields.WareHouseId, fields);
+        InventoryHolderDto inventoryOrder = usecases.CreateInventoryOrder(fields.WareHouseUID, fields);
 
         return new SingleObjectModel(this.Request, inventoryOrder);
       }
