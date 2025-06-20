@@ -54,14 +54,10 @@ namespace Empiria.Inventory {
       private set;
     } = Currency.Default;
 
-    
+    [DataField("ORDER_LOCATION_ID")]
     public Location Warehouse {
-      get {
-        return base.ExtData.Get("warehouseId", Location.Empty);
-      }
-      private set {
-        base.ExtData.SetIfValue("warehouseId", value.Id);
-      }
+      get;
+      private set;
     }
 
 

@@ -61,9 +61,9 @@ namespace Empiria.Tests.Inventory {
       TestsCommonMethods.Authenticate();
 
       InventoryOrderFields fields = new InventoryOrderFields {
-        WarehouseUID = "6257B2E0-201D-4E9A-8EC5-F2EF3EC6D627",
-        InventoryTypeUID = "92A928AD-CBA9-4F0E-BAD5-E36C7BBB8578",
-        Description = "Prueba 19 de Junio antes del basket",
+        WarehouseUID = "35EA9626-332F-4234-B62C-053A8E81350C",
+        InventoryTypeUID = "68AC65E2-4122-42B2-BEC6-48E9417086AD",
+        Description = "Prueba 20 de Junio antes de ir por las memelas",
         RequestedByUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd",
         ResponsibleUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1",        
       };

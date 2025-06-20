@@ -137,9 +137,9 @@ namespace Empiria.Inventory.Data {
                      o.Id, o.UID, o.OrderType.Id, o.Category.Id, o.OrderNo, o.Description,
                      EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
                      o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
-                     -1, o.RequisitionId, -1, o.Project.Id, o.currency.Id,
+                     -1, o.RequisitionId, -1, o.Project.Id, o.Currency.Id,
                      o.Source.Id, (char) o.Priority, o.AuthorizationTime, o.AuthorizedBy.Id,
-                     o.ClosingTime, o.ClosedBy.Id, extensionData, o.Keywords,
+                     o.ClosingTime, o.ClosedBy.Id, extensionData, o.Keywords, o.Warehouse.Id, 
                      o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);

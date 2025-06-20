@@ -83,7 +83,7 @@ namespace Empiria.Inventory.WebApi {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
-        InventoryHolderDto inventoryOrder = usecases.CreateInventoryOrder(fields.WareHouseUID, fields);
+        InventoryHolderDto inventoryOrder = usecases.CreateInventoryOrder(fields.WarehouseUID, fields);
 
         return new SingleObjectModel(this.Request, inventoryOrder);
       }
