@@ -77,13 +77,13 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
-    public InventoryHolderDto CreateInventoryOrder(int wareHouse, InventoryOrderFields fields) {
-      Assertion.Require(wareHouse, nameof(wareHouse));
+    public InventoryHolderDto CreateInventoryOrder(string warehouseUID, InventoryOrderFields fields) {
+      Assertion.Require(warehouseUID, nameof(warehouseUID));
       Assertion.Require(fields, nameof(fields));
             
       var orderType = Orders.OrderType.Parse(INVENTORYORDERTYPEID);
 
-      InventoryOrder order = new InventoryOrder(wareHouse, orderType);
+      InventoryOrder order = new InventoryOrder(warehouseUID, orderType);
 
       order.Update(fields);
 
@@ -132,6 +132,16 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
+    public FixedList<NamedEntityDto> GetOrderTypes() {
+      return InventoryType.GetList().MapToNamedEntityList();
+    }
+
+
+    public FixedList<NamedEntityDto> GetWareHouses() {
+      return CommonStorage.GetList<Location>().FindAll(x => x.Level == 1).MapToNamedEntityList();
+    }
+
+
     public InventoryOrderDataDto SearchInventoryOrder(InventoryOrderQuery query) {
       Assertion.Require(query, nameof(query));
 
@@ -142,12 +152,7 @@ namespace Empiria.Inventory.UseCases {
 
       return InventoryOrderMapper.InventoryOrderDataDto(orders, query);
     }
-
-    public FixedList<NamedEntityDto> GetWareHouses() {
-
-      return CommonStorage.GetList<Location>().FindAll(x => x.Level == 1).MapToNamedEntityList();
-    }
-
+   
     #endregion Use cases
 
     #region Helpers

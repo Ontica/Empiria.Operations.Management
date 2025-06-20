@@ -10,6 +10,7 @@
 
 using System.Linq;
 using Empiria.Orders;
+using Empiria.Parties;
 
 namespace Empiria.Inventory {
 
@@ -81,17 +82,31 @@ namespace Empiria.Inventory {
   }
 
   public class InventoryOrderFields : OrderFields {
-    
-   public int WareHouseId { 
-              get; set; 
-   }
+
+    public string WarehouseUID {
+      get; set;
+    } = string.Empty;
 
 
-   public override void EnsureValid() { 
-      base.EnsureValid();
+    public string InventoryTypeUID {
+      get; set;
+    } = string.Empty;
+          
 
-      Assertion.Require(WareHouseId, nameof(WareHouseId));
-   }
+    public override void EnsureValid() {
+      Assertion.Require(WarehouseUID, nameof(WarehouseUID));
+
+      Assertion.Require(InventoryTypeUID, nameof(InventoryTypeUID));
+      _ = InventoryType.Parse(InventoryTypeUID);
+
+      Assertion.Require(ResponsibleUID, nameof(ResponsibleUID));
+      _ = Party.Parse(ResponsibleUID);
+
+      Assertion.Require(RequestedByUID, nameof(RequestedByUID));
+      _ = Party.Parse(RequestedByUID);
+
+      Assertion.Require(Description, nameof(Description));
+    }
 
 
   } // class InventoryEntryFields

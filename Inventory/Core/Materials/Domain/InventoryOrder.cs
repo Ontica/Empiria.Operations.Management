@@ -10,6 +10,7 @@
 
 using Empiria.Financial;
 using Empiria.Inventory.Data;
+using Empiria.Locations;
 using Empiria.Orders;
 
 
@@ -24,10 +25,10 @@ namespace Empiria.Inventory {
      //Requeired by Empiria Framework
     }
 
-    internal InventoryOrder(int warehouseId ,OrderType orderType) : base(orderType) {
-      Assertion.Require(warehouseId, nameof(warehouseId));
+    internal InventoryOrder(string warehouseUID ,OrderType orderType) : base(orderType) {
+      Assertion.Require(warehouseUID, nameof(warehouseUID));
 
-      this.WarehouseId = warehouseId;
+      this.Warehouse = Location.Parse(warehouseUID);
 
       base.OrderNo = EmpiriaString.BuildRandomString(8)
                                   .ToUpperInvariant();
@@ -48,18 +49,18 @@ namespace Empiria.Inventory {
 
     #region Properties
 
-    public Currency currency {
+    public Currency Currency {
       get;
-      set;
+      private set;
     } = Currency.Default;
 
-
-    public int WarehouseId {
+    
+    public Location Warehouse {
       get {
-        return base.ExtData.Get("warehouseId", 0);
+        return base.ExtData.Get("warehouseId", Location.Empty);
       }
       private set {
-        base.ExtData.SetIfValue("warehouseId", value);
+        base.ExtData.SetIfValue("warehouseId", value.Id);
       }
     }
 
