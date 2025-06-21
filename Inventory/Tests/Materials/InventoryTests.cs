@@ -81,6 +81,39 @@ namespace Empiria.Tests.Inventory {
 
 
     [Fact]
+    public void Should_Create_Inventory_Order_Item() {
+
+      TestsCommonMethods.Authenticate();
+      //TG5F38X34
+      InventoryOrderItemFields fields = new InventoryOrderItemFields {
+        LocationUID = "7BDE8202-AA48-4883-9624-BA596893F9E8",
+        ProductUID = "85fa3371-929b-43bf-86e4-85644db76473",
+        Description = "Producto X",
+        ProductUnitUID = "46926354-cc5a-4863-8790-e870ce33adcf",
+        Quantity = 5,
+        RequestedByUID = "55278637-91d5-4ea1-997c-668e32d73080",
+        ProviderUID = "237878be-8df0-4da1-9289-88ea47d6c875",
+        UnitPrice =  20.25m,
+        Discount = 0
+      };
+
+     var orderItemType = Orders.OrderItemType.Parse(4059);
+
+      var order = InventoryOrder.Parse("47893b38-c6e2-4317-af99-2c5baef49e2f");
+      var location = Location.Parse(fields.LocationUID);
+
+
+      InventoryOrderItem orderItem = new InventoryOrderItem(order, location, orderItemType);
+
+      orderItem.Update(fields);
+
+      orderItem.Save();
+
+      Assert.NotNull(order);
+    }
+
+
+    [Fact]
     public void GetInventoryTypes() {
 
       var sut = InventoryType.GetList().MapToNamedEntityList();

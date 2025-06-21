@@ -31,7 +31,7 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
-    internal override void EnsureValid() {
+    public override void EnsureValid() {
       base.EnsureValid();
 
       Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");

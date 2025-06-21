@@ -8,14 +8,16 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Inventory.Data;
+using Empiria.Financial;
+using Empiria.Locations;
 using Empiria.Orders;
+using Empiria.Inventory.Data;
 
 namespace Empiria.Inventory {
 
   /// <summary>Represents an inventory order item.</summary>
   public class InventoryOrderItem : OrderItem {
-
+    
     #region Constructors and parsers
 
     protected InventoryOrderItem(OrderItemType powertype) : base(powertype) {
@@ -26,9 +28,16 @@ namespace Empiria.Inventory {
       //no-op
     }
 
+    internal InventoryOrderItem(InventoryOrder Order, Location location, OrderItemType orderItemType) : base(orderItemType) {
+      this.Location = location;
+    }
+
+
     static public new InventoryOrderItem Parse(int id) => ParseId<InventoryOrderItem>(id);
 
     static public new InventoryOrderItem Parse(string uid) => ParseKey<InventoryOrderItem>(uid);
+
+    
 
     static public InventoryOrderItem Empty => ParseEmpty<InventoryOrderItem>();
 
@@ -36,11 +45,52 @@ namespace Empiria.Inventory {
 
     #region Properties
 
+    [DataField("ORDER_ITEM_LOCATION_ID")]
+    public Location Location {
+      get; private set; 
+    }
+
+
+    [DataField("ORDER_ITEM_UNIT_PRICE")]
+    public decimal UnitPrice {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_DISCOUNT")]
+    public decimal Discount {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_CURRENCY_ID")]
+    public Currency Currency {
+      get; private set;
+    } = Currency.Default;
+
+
     internal FixedList<InventoryEntry> Entries {
       get; set;
     }
 
     #endregion Properties
+
+    #region Methods
+
+    protected override void OnSave() {
+      InventoryOrderData.WriteOrderItem(this, this.ExtData.ToString());
+    }
+
+
+    internal void Update(InventoryOrderItemFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      base.Update(fields);
+    }
+
+    #endregion Methods
 
   } // class InventoryOrderItem
 

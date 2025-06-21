@@ -3,6 +3,7 @@ using System.Web.Http;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.UseCases;
 using Empiria.WebApi;
+using Empiria.Inventory;
 
 namespace Empiria.Inventory.WebApi {
 
@@ -84,6 +85,19 @@ namespace Empiria.Inventory.WebApi {
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
         InventoryHolderDto inventoryOrder = usecases.CreateInventoryOrder(fields.WarehouseUID, fields);
+
+        return new SingleObjectModel(this.Request, inventoryOrder);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v8/order-management/inventory-orders/{orderUID}/items")]
+    public SingleObjectModel CreateInventoryOrderItem([FromUri] string orderUID, [FromBody] InventoryOrderItemFields fields) {
+
+      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
+
+        InventoryHolderDto inventoryOrder = usecases.CreateInventoryOrderItem(orderUID, fields);
 
         return new SingleObjectModel(this.Request, inventoryOrder);
       }

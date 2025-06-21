@@ -191,7 +191,7 @@ namespace Empiria.Orders {
     }
 
 
-    internal void Update(OrderItemFields fields) {
+    internal protected virtual void Update(OrderItemFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();

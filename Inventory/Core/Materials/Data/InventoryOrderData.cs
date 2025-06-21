@@ -10,6 +10,7 @@
 
 using System;
 using Empiria.Data;
+using Empiria.Orders;
 
 namespace Empiria.Inventory.Data {
 
@@ -145,6 +146,17 @@ namespace Empiria.Inventory.Data {
       DataWriter.Execute(op);
     }
 
+
+    static internal void WriteOrderItem(InventoryOrderItem o, string extensionData) {
+      var op = DataOperation.Parse("write_OMS_Order_Item",
+                     o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Product.Id,
+                     o.Description, o.ProductUnit.Id, o.Quantity, o.UnitPrice, o.Discount,
+                     o.Currency.Id, -1, -1, o.RequestedBy.Id,
+                     -1, o.Project.Id, o.Provider.Id, -1, extensionData,
+                     o.Keywords, o.Location.Id, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+
+      DataWriter.Execute(op);
+    }
 
   } // class InventoryOrderData
 

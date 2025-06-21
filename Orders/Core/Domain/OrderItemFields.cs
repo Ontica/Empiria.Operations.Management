@@ -47,7 +47,7 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
-    internal virtual void EnsureValid() {
+    public virtual void EnsureValid() {
       Assertion.Require(ProductUID, "Necesito se proporcione el producto.");
       Assertion.Require(ProductUnitUID, "Necesito la unidad de medida del producto.");
       Assertion.Require(Quantity > 0, "Necesito se proporcione la cantidad mínima.");

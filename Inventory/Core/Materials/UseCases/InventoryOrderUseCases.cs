@@ -152,7 +152,26 @@ namespace Empiria.Inventory.UseCases {
 
       return InventoryOrderMapper.InventoryOrderDataDto(orders, query);
     }
-   
+
+    public InventoryHolderDto CreateInventoryOrderItem(string orderUID, InventoryOrderItemFields fields) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(fields, nameof(fields));
+
+      var orderItemType = Orders.OrderItemType.Parse(4059);
+
+      var order = InventoryOrder.Parse(orderUID);
+      var location = Location.Parse(fields.LocationUID);
+
+
+      InventoryOrderItem orderItem = new InventoryOrderItem(order, location, orderItemType);
+
+      orderItem.Update(fields);
+
+      orderItem.Save();
+
+      return GetInventoryOrder(order.UID);
+    }
+
     #endregion Use cases
 
     #region Helpers
