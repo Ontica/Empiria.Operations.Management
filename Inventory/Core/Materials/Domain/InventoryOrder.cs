@@ -25,6 +25,7 @@ namespace Empiria.Inventory {
      //Requeired by Empiria Framework
     }
 
+
     internal InventoryOrder(string warehouseUID ,OrderType orderType) : base(orderType) {
       Assertion.Require(warehouseUID, nameof(warehouseUID));
 
@@ -54,6 +55,7 @@ namespace Empiria.Inventory {
       private set;
     } = Currency.Default;
 
+
     [DataField("ORDER_LOCATION_ID")]
     public Location Warehouse {
       get;
@@ -61,17 +63,38 @@ namespace Empiria.Inventory {
     }
 
 
+    private FixedList<InventoryOrderItem> _items;
+
     public FixedList<InventoryOrderItem> Items {
-      get; internal set;
+      get {
+        return _items ?? (_items = InventoryOrderData.GetInventoryOrderItems(this));
+      }
+      set {
+        _items = value;
+      }
     }
+
 
     #endregion Properties
 
     #region Methods
 
     protected override void OnSave() {
-    
      InventoryOrderData.WriteOrder(this, this.ExtData.ToString());
+    }
+
+
+    internal void AddItem(Location location, InventoryOrderItemFields fields) {
+
+      var orderItemType = Orders.OrderItemType.Parse(4059);
+
+      InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, this, location);
+
+      orderItem.Update(fields);
+
+      orderItem.Save();
+
+      _items = InventoryOrderData.GetInventoryOrderItems(this);
     }
 
 
@@ -82,6 +105,7 @@ namespace Empiria.Inventory {
 
       base.Update(fields);
     }
+
 
     #endregion Methods
 

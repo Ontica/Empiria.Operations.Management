@@ -17,7 +17,7 @@ namespace Empiria.Inventory {
 
   /// <summary>Represents an inventory order item.</summary>
   public class InventoryOrderItem : OrderItem {
-    
+
     #region Constructors and parsers
 
     protected InventoryOrderItem(OrderItemType powertype) : base(powertype) {
@@ -28,8 +28,14 @@ namespace Empiria.Inventory {
       //no-op
     }
 
-    internal InventoryOrderItem(InventoryOrder Order, Location location, OrderItemType orderItemType) : base(orderItemType) {
+    protected internal InventoryOrderItem(OrderItemType powertype,
+                                        InventoryOrder order, Location location) : base(powertype, order) {
+
+      Assertion.Require(location, nameof(location));
+      Assertion.Require(!location.IsEmptyInstance, nameof(location));
+
       this.Location = location;
+      // no-op
     }
 
 
@@ -44,6 +50,8 @@ namespace Empiria.Inventory {
     #endregion Constructors and parsers
 
     #region Properties
+    
+
 
     [DataField("ORDER_ITEM_LOCATION_ID")]
     public Location Location {

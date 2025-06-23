@@ -16,25 +16,20 @@ namespace Empiria.Inventory {
   /// <summary>Represents an inventory order item.</summary>
   public class InventoryOrderItemFields : OrderItemFields {
     
-    public string LocationUID { 
+    public string Location { 
       get; set; 
     }
 
-    public decimal UnitPrice {
+    public string Product {
       get; set;
     }
-
-
-    public decimal Discount {
-      get; set;
-    }
-
 
     public override void EnsureValid() {
       base.EnsureValid(); 
 
-      Assertion.Require(LocationUID, "Necesito la localizacion del producto.");
-      _ = Location.Parse(LocationUID);
+      Assertion.Require(Location, "Necesito la localizacion del producto.");
+    
+      //_ = Location.Parse(Location);
 
     }
 

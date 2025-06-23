@@ -31,6 +31,17 @@ namespace Empiria.Inventory.Data {
       DataWriter.Execute(dataOperation);
     }
 
+    internal static FixedList<InventoryOrderItem> GetInventoryOrderItems(InventoryOrder order) {
+
+      string sql = $"SELECT * FROM OMS_Order_Items " +
+                   $"WHERE Order_Item_Order_Id = {order.Id} AND " +
+                   $"Order_Item_Status <> 'X' ";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<InventoryOrderItem>(op);
+    }
+
 
     internal static FixedList<InventoryEntry> GetInventoryEntriesByOrderItem(InventoryOrderItem orderItem) {
 

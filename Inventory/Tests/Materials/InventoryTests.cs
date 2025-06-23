@@ -9,7 +9,9 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.Inventory;
+using Empiria.Inventory.Adapters;
 using Empiria.Locations;
+using Empiria.Products;
 using Xunit;
 
 namespace Empiria.Tests.Inventory {
@@ -86,32 +88,37 @@ namespace Empiria.Tests.Inventory {
       TestsCommonMethods.Authenticate();
       //TG5F38X34
       InventoryOrderItemFields fields = new InventoryOrderItemFields {
-        LocationUID = "7BDE8202-AA48-4883-9624-BA596893F9E8",
-        ProductUID = "85fa3371-929b-43bf-86e4-85644db76473",
-        Description = "Producto X",
-        ProductUnitUID = "46926354-cc5a-4863-8790-e870ce33adcf",
+        Location = "A-025-03-27",
+        Product= "ASF24",
         Quantity = 5,
-        RequestedByUID = "55278637-91d5-4ea1-997c-668e32d73080",
-        ProviderUID = "237878be-8df0-4da1-9289-88ea47d6c875",
-        UnitPrice =  20.25m,
-        Discount = 0
       };
 
-     var orderItemType = Orders.OrderItemType.Parse(4059);
+      var order = InventoryOrder.Parse("3e79e15e-c6a3-4be2-a1b1-5c68b6fc8664");
+      var location = CommonStorage.ParseNamedKey<Location>(fields.Location);
 
-      var order = InventoryOrder.Parse("47893b38-c6e2-4317-af99-2c5baef49e2f");
-      var location = Location.Parse(fields.LocationUID);
+      var product = Product.TryParseWithCode(fields.Product);     
+      Assertion.Require(product, "El producto no existe");
+     
+      fields.ProductUID = product.UID;
+      fields.Description  = product.Description;
+      fields.ProductUnitUID = product.BaseUnit.UID;
 
+      order.AddItem(location, fields);
 
-      InventoryOrderItem orderItem = new InventoryOrderItem(order, location, orderItemType);
+      var sut = GetInventoryOrder(order.UID);
 
-      orderItem.Update(fields);
-
-      orderItem.Save();
-
-      Assert.NotNull(order);
+      Assert.NotNull(sut);
     }
 
+    public InventoryHolderDto GetInventoryOrder(string orderUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+
+      InventoryOrder inventoryOrder = InventoryUtility.GetInventoryOrder(orderUID);
+
+      InventoryOrderActions actions = InventoryUtility.GetActions(inventoryOrder.Items);
+
+      return InventoryOrderMapper.MapToHolderDto(inventoryOrder, actions);
+    }
 
     [Fact]
     public void GetInventoryTypes() {

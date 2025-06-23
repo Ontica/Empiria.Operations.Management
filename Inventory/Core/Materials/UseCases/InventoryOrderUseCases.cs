@@ -15,7 +15,6 @@ using Empiria.Services;
 
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
-using System;
 
 
 namespace Empiria.Inventory.UseCases {
@@ -93,6 +92,27 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
+    public InventoryHolderDto CreateInventoryOrderItem(string orderUID, InventoryOrderItemFields fields) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(fields, nameof(fields));
+           
+      var order = InventoryOrder.Parse(orderUID);
+
+      var location = CommonStorage.ParseNamedKey<Location>(fields.Location);
+
+      var product = Product.TryParseWithCode(fields.Product);
+      Assertion.Require(product, $"El producto con clave {fields.Product} no existe");
+
+      fields.ProductUID = product.UID;
+      fields.Description = product.Description;
+      fields.ProductUnitUID = product.BaseUnit.UID;
+
+      order.AddItem(location,fields);
+    
+      return GetInventoryOrder(order.UID);
+    }
+
+
     public InventoryHolderDto DeleteInventoryEntry(string orderUID, string itemUID, string entryUID) {
       Assertion.Require(orderUID, nameof(orderUID));
       Assertion.Require(itemUID, nameof(itemUID));
@@ -137,7 +157,7 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
-    public FixedList<NamedEntityDto> GetWareHouses() {
+    public FixedList<NamedEntityDto> GetWarehouses() {
       return CommonStorage.GetList<Location>().FindAll(x => x.Level == 1).MapToNamedEntityList();
     }
 
@@ -153,24 +173,7 @@ namespace Empiria.Inventory.UseCases {
       return InventoryOrderMapper.InventoryOrderDataDto(orders, query);
     }
 
-    public InventoryHolderDto CreateInventoryOrderItem(string orderUID, InventoryOrderItemFields fields) {
-      Assertion.Require(orderUID, nameof(orderUID));
-      Assertion.Require(fields, nameof(fields));
-
-      var orderItemType = Orders.OrderItemType.Parse(4059);
-
-      var order = InventoryOrder.Parse(orderUID);
-      var location = Location.Parse(fields.LocationUID);
-
-
-      InventoryOrderItem orderItem = new InventoryOrderItem(order, location, orderItemType);
-
-      orderItem.Update(fields);
-
-      orderItem.Save();
-
-      return GetInventoryOrder(order.UID);
-    }
+    
 
     #endregion Use cases
 
