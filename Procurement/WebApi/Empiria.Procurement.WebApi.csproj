@@ -69,12 +69,4 @@
     <ProjectReference Include="..\..\..\extensions\WebApi\Empiria.WebApi.csproj" />
     <ProjectReference Include="..\Core\Empiria.Procurement.Core.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Update="empiria.config.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="empiria.environment.vars.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 </Project>
