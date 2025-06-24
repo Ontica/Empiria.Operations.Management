@@ -205,6 +205,17 @@ namespace Empiria.Inventory.UseCases {
       return GetInventoryOrder(order.UID);
     }
 
+    public InventoryHolderDto CloseInventoryOrder(string orderUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+
+      InventoryOrder order = InventoryOrder.Parse(orderUID);
+
+      order.Close();
+      order.Save();
+
+      return GetInventoryOrder(order.UID);
+    }
+
     #endregion Use cases
 
     #region Helpers

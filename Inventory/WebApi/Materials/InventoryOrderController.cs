@@ -142,6 +142,19 @@ namespace Empiria.Inventory.WebApi {
     }
 
 
+    [HttpPut]
+    [Route("v8/order-management/inventory-orders/{orderUID:guid}/close")]
+    public SingleObjectModel CloseInventoryOrder([FromUri] string orderUID) {
+
+      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
+
+        InventoryHolderDto inventoryOrder = usecases.CloseInventoryOrder(orderUID);
+
+        return new SingleObjectModel(this.Request, inventoryOrder);
+      }
+    }
+
+
     [HttpDelete]
     [Route("v8/order-management/inventory-orders/{orderUID}/items/{itemUID}/entries/{entryUID}")]
     public SingleObjectModel DeleteInventoryEntry([FromUri] string orderUID,

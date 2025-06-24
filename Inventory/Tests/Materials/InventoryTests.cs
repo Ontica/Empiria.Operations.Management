@@ -111,6 +111,23 @@ namespace Empiria.Tests.Inventory {
 
 
     [Fact]
+    public void Should_Close_Inventory_Order() {
+      var orderUID = "ee38424a-be8f-41bb-aca8-e8599cb9a1c6";
+
+      TestsCommonMethods.Authenticate();
+
+      Assertion.Require(orderUID, nameof(orderUID));
+
+      InventoryOrder order = InventoryOrder.Parse(orderUID);
+
+      order.Close();
+      order.Save();
+
+      Assert.NotNull(order);
+    }
+
+
+    [Fact]
     public void Should_Delete_Inventory_Order() {
       var orderUID = "397d9db7-1367-47da-9f9f-9d11b535d508";
 
