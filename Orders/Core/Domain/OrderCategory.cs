@@ -13,7 +13,7 @@ using System;
 namespace Empiria.Orders {
 
   /// <summary>Represents an order category which holds orders of the same kind or order type.</summary>
-  public class OrderCategory : GeneralObject {
+  public class OrderCategory : CommonStorage {
 
     #region Constructors and parsers
 
@@ -45,28 +45,21 @@ namespace Empiria.Orders {
 
     public OrderType OrderType {
       get {
-        return base.ExtendedDataField.Get("orderTypeId", OrderType.Empty);
+        return base.ExtData.Get("orderTypeId", OrderType.Empty);
       }
     }
 
-
-    public string Description {
-      get {
-        return base.ExtendedDataField.Get("description", string.Empty);
-      }
-    }
-
-
+    
     public bool IsAssignable {
       get {
-        return base.ExtendedDataField.Get("isAssignable", true);
+        return base.ExtData.Get("isAssignable", true);
       }
     }
 
 
     public OrderCategory Parent {
       get {
-        return base.ExtendedDataField.Get("parentCategoryId", OrderCategory.Empty);
+        return base.GetParent<OrderCategory>();
       }
     }
 
