@@ -31,7 +31,22 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
+    public string InventoryTypeName {
+      get; set;
+    }
+
+
+    public string WarehouseName {
+      get; set;
+    }
+      
+
     public string ResponsibleName {
+      get; set;
+    }
+
+
+    public string RequestedByName {
       get; set;
     }
 

@@ -32,12 +32,27 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    public string Description {
+    public NamedEntityDto InventoryType {
+      get; internal set;
+    }
+
+
+    public NamedEntityDto Warehouse {
       get; internal set;
     }
 
 
     public NamedEntityDto Responsible {
+      get; internal set;
+    }
+
+
+    public NamedEntityDto RequestedBy {
+      get; internal set;
+    }
+
+
+    public string Description {
       get; internal set;
     }
 

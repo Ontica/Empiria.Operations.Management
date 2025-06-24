@@ -75,8 +75,11 @@ namespace Empiria.Inventory.Adapters {
         UID = order.UID,
         OrderTypeName = order.OrderType.DisplayName,
         OrderNo = order.OrderNo,
-        Description = order.Description,
+        InventoryTypeName = order.InventoryType.Name,
+        WarehouseName = order.Warehouse.Name,
         ResponsibleName = order.Responsible.IsEmptyInstance ? "Sin Asignar" : order.Responsible.Name,
+        RequestedByName = order.RequestedBy.Name,
+        Description = order.Description,
         PostedByName = order.PostedBy.Name,
         PostingTime = order.PostingTime,
         Status = order.Status.GetName()
@@ -130,10 +133,13 @@ namespace Empiria.Inventory.Adapters {
 
       return new InventoryOrderDto {
         UID = order.UID,
-        OrderType = new NamedEntityDto("X","Orden de inventario"), //order.OrderType.MapToNamedEntity(),
-        Description = order.Description,
         OrderNo = order.OrderNo,
+        OrderType = new NamedEntityDto("X","Orden de inventario"), //order.OrderType.MapToNamedEntity(),
+        InventoryType = order.InventoryType.MapToNamedEntity(),
+        Warehouse = order.Warehouse.MapToNamedEntity(),
         Responsible = order.Responsible.MapToNamedEntity(),
+        RequestedBy = order.RequestedBy.MapToNamedEntity(),
+        Description = order.Description,
         PostedBy = order.PostedBy.MapToNamedEntity(),
         PostingTime = order.PostingTime,
         ClosingTime = order.ClosingTime,
