@@ -175,8 +175,8 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
-    public FixedList<NamedEntityDto> GetParties() {
-      return Party.GetPartiesInRole("User").MapToNamedEntityList();
+    public FixedList<NamedEntityDto> GetPartiesByRol(string rol) {
+      return Party.GetPartiesInRole(rol).MapToNamedEntityList();
 
     }
 

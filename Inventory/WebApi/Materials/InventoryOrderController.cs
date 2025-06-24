@@ -69,7 +69,7 @@ namespace Empiria.Inventory.WebApi {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
-        FixedList<NamedEntityDto> parties = usecases.GetParties();
+        FixedList<NamedEntityDto> parties = usecases.GetPartiesByRol("User");
 
         return new CollectionModel(this.Request, parties);
       }
@@ -81,7 +81,7 @@ namespace Empiria.Inventory.WebApi {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
-        FixedList<NamedEntityDto> parties = usecases.GetParties();
+        FixedList<NamedEntityDto> parties = usecases.GetPartiesByRol("User");
 
         return new CollectionModel(this.Request, parties);
       }
