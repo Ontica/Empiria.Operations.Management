@@ -188,7 +188,21 @@ namespace Empiria.Inventory.UseCases {
 
     public FixedList<NamedEntityDto> GetPartiesByRol(string rol) {
       return Party.GetPartiesInRole(rol).MapToNamedEntityList();
+    }
 
+
+    public InventoryHolderDto UpdateInventoryOrder(string orderUID, InventoryOrderFields fields) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      var order = InventoryOrder.Parse(orderUID);
+      order.Update(fields);
+
+      order.Save();
+
+      return GetInventoryOrder(order.UID);
     }
 
     #endregion Use cases

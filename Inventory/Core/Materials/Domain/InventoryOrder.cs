@@ -106,6 +106,8 @@ namespace Empiria.Inventory {
 
       fields.CategoryUID = fields.InventoryTypeUID;
 
+      Warehouse = Patcher.Patch(fields.WarehouseUID, Warehouse);
+
       base.Update(fields);
     }
 

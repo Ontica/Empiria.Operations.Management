@@ -169,6 +169,21 @@ namespace Empiria.Inventory.WebApi {
       }
     }
 
+
+    [HttpPut]
+    [Route("v8/order-management/inventory-orders/{orderUID:guid}")]
+
+    public SingleObjectModel UpdateInventoryOrder([FromUri] string orderUID,
+                                                  [FromBody] InventoryOrderFields fields) {
+
+      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
+
+        InventoryHolderDto inventoryOrder = usecases.UpdateInventoryOrder(orderUID, fields);
+
+        return new SingleObjectModel(this.Request, inventoryOrder);
+      }
+    }
+
     #endregion Web Apis
 
   }

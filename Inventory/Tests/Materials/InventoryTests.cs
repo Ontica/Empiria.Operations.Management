@@ -163,6 +163,35 @@ namespace Empiria.Tests.Inventory {
     }
 
 
+    [Fact]
+    public void Should_Update_Inventory_Order() {
+      var orderUID = "e4c7b65f-fd7c-4e43-b5e6-505015dbb22b";
+
+      InventoryOrderFields fields = new InventoryOrderFields {
+        WarehouseUID = "6E18F039-291D-43D9-9660-9C206326F01E",
+        InventoryTypeUID = "0691ACCC-7787-444B-930C-A07035A6DE09",
+        Description = "24 de junio prueba update cambiado por Chris Y Hugo v2",
+        RequestedByUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1",
+        ResponsibleUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd",
+      };
+
+      TestsCommonMethods.Authenticate();
+
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      var order = InventoryOrder.Parse(orderUID);
+      order.Update(fields);
+
+      order.Save();
+
+
+      Assert.NotNull(order);
+    }
+
+
   } // class InventoryTests
 
 } // namespace Empiria.Tests.Inventory
