@@ -8,20 +8,22 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Orders;
+
 namespace Empiria.Inventory {
 
   /// <summary>Describes inventory type.</summary>
-  public class InventoryType : CommonStorage {
+  public class InventoryType : OrderCategory {
 
     #region Constructors and parsers
 
-    static public InventoryType Parse(int id) => ParseId<InventoryType>(id);
+    static public new InventoryType Parse(int id) => ParseId<InventoryType>(id);
 
-    static public InventoryType Parse(string uid) => ParseKey<InventoryType>(uid);
+    static public new InventoryType Parse(string uid) => ParseKey<InventoryType>(uid);
 
-    static public InventoryType Empty => ParseEmpty<InventoryType>();
+    static public new InventoryType Empty => ParseEmpty<InventoryType>();
 
-    static public FixedList<InventoryType> GetList() {
+    static public new FixedList<InventoryType> GetList() {
       return GetStorageObjects<InventoryType>();
     }
 
