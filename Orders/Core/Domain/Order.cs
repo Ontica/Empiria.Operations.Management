@@ -241,6 +241,14 @@ namespace Empiria.Orders {
     }
 
 
+    public virtual void Close() {
+      Assertion.Require(this.Status == EntityStatus.Pending,
+                  $"No se puede cerrar una orden que está en estado {this.Status.GetName()}.");
+
+      this.Status = EntityStatus.Closed;
+    }
+
+
     public virtual void Delete() {
       Assertion.Require(this.Status == EntityStatus.Pending,
                   $"No se puede eliminar una orden que está en estado {this.Status.GetName()}.");
