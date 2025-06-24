@@ -22,7 +22,7 @@ namespace Empiria.Inventory.Adapters {
     } = string.Empty;
 
 
-    public string InvetoryTypeUID {
+    public string InventoryTypeUID {
       get; set;
     } = string.Empty;
 
@@ -46,7 +46,7 @@ namespace Empiria.Inventory.Adapters {
 
       string keywords = BuildKeywordsFilter(query.Keywords);
       string warehouse = BuildWarehouseFilter(query.WarehouseUID);
-      string inventoryType = BuildInventoryTypeFilter(query.InvetoryTypeUID);
+      string inventoryType = BuildInventoryTypeFilter(query.InventoryTypeUID);
       string status = BuildStatusFilter(query.Status);
 
       var filter = new Filter(status);

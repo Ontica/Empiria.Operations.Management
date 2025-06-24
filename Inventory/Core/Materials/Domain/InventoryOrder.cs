@@ -31,7 +31,7 @@ namespace Empiria.Inventory {
 
       this.Warehouse = Location.Parse(warehouseUID);
 
-      base.OrderNo = EmpiriaString.BuildRandomString(8)
+      base.OrderNo = "INV-" + EmpiriaString.BuildRandomString(8)
                                   .ToUpperInvariant();
     }
 
@@ -108,7 +108,6 @@ namespace Empiria.Inventory {
 
       base.Update(fields);
     }
-
 
     #endregion Methods
 
