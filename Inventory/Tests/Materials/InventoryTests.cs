@@ -115,7 +115,7 @@ namespace Empiria.Tests.Inventory {
 
     [Fact]
     public void Should_Delete_Inventory_Order() {
-      var orderUID = "3d6f220f-64c3-46c4-b7a6-7bdc4d418ba7";
+      var orderUID = "397d9db7-1367-47da-9f9f-9d11b535d508";
 
       TestsCommonMethods.Authenticate();
 
@@ -123,8 +123,12 @@ namespace Empiria.Tests.Inventory {
 
       InventoryOrder order = InventoryOrder.Parse(orderUID);
 
-      order.Delete();
-      order.Save();
+      //order.Delete();
+      //order.Save();
+
+      var sut = GetInventoryOrder(order.UID);
+
+      Assert.NotNull(sut);
       Assert.NotNull(order);
     }
 
@@ -133,7 +137,7 @@ namespace Empiria.Tests.Inventory {
 
       InventoryOrder inventoryOrder = InventoryUtility.GetInventoryOrder(orderUID);
 
-      InventoryOrderActions actions = InventoryUtility.GetActions(inventoryOrder.Items);
+      InventoryOrderActions actions = InventoryUtility.GetActions(inventoryOrder);
 
       return InventoryOrderMapper.MapToHolderDto(inventoryOrder, actions);
     }

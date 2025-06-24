@@ -149,7 +149,7 @@ namespace Empiria.Inventory.UseCases {
 
       InventoryOrder inventoryOrder = InventoryUtility.GetInventoryOrder(orderUID);
 
-      InventoryOrderActions actions = InventoryUtility.GetActions(inventoryOrder.Items);
+      InventoryOrderActions actions = InventoryUtility.GetActions(inventoryOrder);
 
       return InventoryOrderMapper.MapToHolderDto(inventoryOrder, actions);
     }

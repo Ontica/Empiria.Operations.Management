@@ -10,6 +10,7 @@
 
 using System.Linq;
 using Empiria.Inventory.Adapters;
+using Empiria.StateEnums;
 
 namespace Empiria.Inventory {
 
@@ -31,6 +32,32 @@ namespace Empiria.Inventory {
       }
 
       InventoryOrderActions actions = new InventoryOrderActions {
+
+
+        CanEditEntries = existClosedEntries ? false : true
+      };
+
+      return actions;
+    }
+
+
+    static internal InventoryOrderActions GetActions(InventoryOrder order) {
+
+      bool existClosedEntries = false;
+
+      foreach (var item in order.Items) {
+        foreach (var entry in item.Entries) {
+          if (entry.Status == InventoryStatus.Cerrado) {
+            existClosedEntries = true;
+          }
+        }
+      }
+
+      InventoryOrderActions actions = new InventoryOrderActions {
+        CanEdit = order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active,
+        CanEditItems = order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active,
+        CanDelete = order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active,
+        CanClose = order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active,
         CanEditEntries = existClosedEntries ? false : true
       };
 
