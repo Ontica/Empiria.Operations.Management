@@ -49,11 +49,12 @@ namespace Empiria.Inventory {
     #endregion Constructors and parsers
 
     #region Properties
-
-    public Currency Currency {
-      get;
-      private set;
-    } = Currency.Default;
+   
+    public InventoryType InventoryType {
+     get {
+        return (InventoryType) base.Category;
+      }
+    }
 
 
     [DataField("ORDER_LOCATION_ID")]
@@ -102,6 +103,8 @@ namespace Empiria.Inventory {
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();
+
+      fields.CategoryUID = fields.InventoryTypeUID;
 
       base.Update(fields);
     }
