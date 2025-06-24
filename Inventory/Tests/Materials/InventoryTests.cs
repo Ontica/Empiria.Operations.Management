@@ -11,6 +11,7 @@
 using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
 using Empiria.Locations;
+using Empiria.Parties;
 using Empiria.Products;
 using Xunit;
 
@@ -33,13 +34,14 @@ namespace Empiria.Tests.Inventory {
 
       foreach (var sut in orders) {
         Assert.NotEmpty(sut.OrderNo);
-        Assert.NotEmpty(sut.Description);        
+        Assert.NotEmpty(sut.Description);
+        Assert.NotNull(sut.InventoryType);
       }
     }
 
 
     [Fact]
-    public void Should_Read_All_Inventory_orders() {
+    public void Should_Read_All_Inventory_Orders() {
       var sut = BaseObject.GetList<InventoryOrder>();
 
       Assert.NotNull(sut);
@@ -64,7 +66,7 @@ namespace Empiria.Tests.Inventory {
 
       InventoryOrderFields fields = new InventoryOrderFields {
         WarehouseUID = "35EA9626-332F-4234-B62C-053A8E81350C",
-        InventoryTypeUID = "68AC65E2-4122-42B2-BEC6-48E9417086AD",
+        InventoryTypeUID = "68AC65E2-4122-42B2-BEC6-48E9417086AD", 
         Description = "Prueba 20 de Junio antes de ir por las memelas",
         RequestedByUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd",
         ResponsibleUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1",        
@@ -93,7 +95,7 @@ namespace Empiria.Tests.Inventory {
         Quantity = 5,
       };
 
-      var order = InventoryOrder.Parse("3e79e15e-c6a3-4be2-a1b1-5c68b6fc8664");
+      var order = InventoryOrder.Parse("611d5a4e-9cb4-4006-86a0-85dc302fb5b0");
       var location = CommonStorage.ParseNamedKey<Location>(fields.Location);
 
       var product = Product.TryParseWithCode(fields.Product);     
@@ -135,6 +137,15 @@ namespace Empiria.Tests.Inventory {
       var commonStorage = CommonStorage.GetList<Location>().FindAll(x => x.Level == 1).MapToNamedEntityList();
       Assert.NotNull(commonStorage);
     }
+
+
+    [Fact]
+    public void GetParties() {
+
+      var sut = Party.GetPartiesInRole("User").MapToNamedEntityList();
+      Assert.NotNull(sut);
+    }
+
 
   } // class InventoryTests
 

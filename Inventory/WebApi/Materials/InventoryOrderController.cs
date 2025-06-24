@@ -51,14 +51,39 @@ namespace Empiria.Inventory.WebApi {
 
 
     [HttpGet]
-    [Route("v8/order-management/wareHouses")]
-    public CollectionModel GetWareHouses() {
+    [Route("v8/order-management/warehouses")]
+    public CollectionModel GetWarehouses() {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
-        FixedList<NamedEntityDto> wareHouses = usecases.GetWareHouses();
+        FixedList<NamedEntityDto> warehouses = usecases.GetWarehouses();
 
-        return new CollectionModel(this.Request, wareHouses);
+        return new CollectionModel(this.Request, warehouses);
+      }
+    }
+
+
+    [HttpGet]
+    [Route("v8/order-management/inventory-orders/inventory-supervisor")]
+    public CollectionModel GetResponsibles() {
+
+      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
+
+        FixedList<NamedEntityDto> parties = usecases.GetParties();
+
+        return new CollectionModel(this.Request, parties);
+      }
+    }
+
+    [HttpGet]
+    [Route("v8/order-management/inventory-orders/warehousemen")]
+    public CollectionModel GetParties() {
+
+      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
+
+        FixedList<NamedEntityDto> parties = usecases.GetParties();
+
+        return new CollectionModel(this.Request, parties);
       }
     }
 

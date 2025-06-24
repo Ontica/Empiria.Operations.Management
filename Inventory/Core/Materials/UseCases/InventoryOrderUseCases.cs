@@ -15,6 +15,7 @@ using Empiria.Services;
 
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
+using Empiria.Parties;
 
 
 namespace Empiria.Inventory.UseCases {
@@ -173,7 +174,11 @@ namespace Empiria.Inventory.UseCases {
       return InventoryOrderMapper.InventoryOrderDataDto(orders, query);
     }
 
-    
+
+    public FixedList<NamedEntityDto> GetParties() {
+      return Party.GetPartiesInRole("User").MapToNamedEntityList();
+
+    }
 
     #endregion Use cases
 
