@@ -121,6 +121,8 @@ namespace Empiria.Tests.Inventory {
       
       InventoryOrderQuery query = new InventoryOrderQuery {
         Keywords = "",
+        WarehouseUID = "",
+        InvetoryTypeUID = "5ECC7A4B-9CA0-48E8-9C44-7B16F3E1E9CB",
         Status = StateEnums.EntityStatus.All
       };
 
