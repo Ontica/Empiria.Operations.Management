@@ -144,6 +144,18 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
+    public InventoryHolderDto DeleteInventoryOrderItem(string orderUID, string orderItemUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(orderItemUID, nameof(orderItemUID));
+
+      InventoryOrder order = InventoryOrder.Parse(orderUID);
+
+      order.DeleteItem(orderItemUID);
+
+      return GetInventoryOrder(orderUID);
+    }
+
+
     public InventoryHolderDto GetInventoryOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 

@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
 using Empiria.Financial;
 using Empiria.Inventory.Data;
 using Empiria.Locations;
@@ -99,6 +100,24 @@ namespace Empiria.Inventory {
     }
 
 
+    internal protected new void Delete() {
+      base.Delete();
+
+      this.DeleteItems();
+    }
+       
+
+    internal void DeleteItem(string orderItemUID) {
+       var orderItem = InventoryOrderItem.Parse(orderItemUID);
+
+      orderItem.DelItem();
+
+      orderItem.Save();
+
+      _items = InventoryOrderData.GetInventoryOrderItems(this);
+    }
+
+
     internal protected void Update(InventoryOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
@@ -112,6 +131,19 @@ namespace Empiria.Inventory {
     }
 
     #endregion Methods
+
+    #region Helpers
+
+    private void DeleteItems() {
+
+      foreach (var item in this.Items) {
+        item.DelItem();
+        item.Save();
+      }
+
+    }
+
+    #endregion Helpers
 
   } // class InventoryOrder
 

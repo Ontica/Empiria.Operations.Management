@@ -90,6 +90,11 @@ namespace Empiria.Inventory {
     }
 
 
+    internal void DelItem() {
+      base.Delete();
+    }
+
+
     internal void Update(InventoryOrderItemFields fields) {
       Assertion.Require(fields, nameof(fields));
 
