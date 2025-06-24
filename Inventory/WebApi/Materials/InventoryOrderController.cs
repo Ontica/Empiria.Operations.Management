@@ -156,6 +156,19 @@ namespace Empiria.Inventory.WebApi {
       }
     }
 
+
+    [HttpDelete]
+    [Route("v8/order-management/inventory-orders/{orderUID:guid}")]
+    public NoDataModel DeleteInventoryOrder([FromUri] string orderUID) {
+
+      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
+
+        usecases.DeleteInventoryOrder(orderUID);
+
+        return new NoDataModel(this.Request);
+      }
+    }
+
     #endregion Web Apis
 
   }

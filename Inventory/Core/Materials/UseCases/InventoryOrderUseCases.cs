@@ -16,6 +16,7 @@ using Empiria.Services;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
 using Empiria.Parties;
+using System;
 
 
 namespace Empiria.Inventory.UseCases {
@@ -130,6 +131,16 @@ namespace Empiria.Inventory.UseCases {
                                            entry.Id, InventoryStatus.Deleted);
 
       return GetInventoryOrder(orderUID);
+    }
+
+
+    public void DeleteInventoryOrder(string orderUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+
+      InventoryOrder order = InventoryOrder.Parse(orderUID);
+
+      order.Delete();
+      order.Save();
     }
 
 
