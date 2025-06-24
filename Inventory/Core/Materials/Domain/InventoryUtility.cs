@@ -19,28 +19,6 @@ namespace Empiria.Inventory {
 
     #region Public methods
 
-    static internal InventoryOrderActions GetActions(FixedList<InventoryOrderItem> items) {
-
-      bool existClosedEntries = false;
-
-      foreach (var item in items) {
-        foreach (var entry in item.Entries) {
-          if (entry.Status == InventoryStatus.Cerrado) {
-            existClosedEntries = true;
-          }
-        }
-      }
-
-      InventoryOrderActions actions = new InventoryOrderActions {
-
-
-        CanEditEntries = existClosedEntries ? false : true
-      };
-
-      return actions;
-    }
-
-
     static internal InventoryOrderActions GetActions(InventoryOrder order) {
 
       bool existClosedEntries = false;
