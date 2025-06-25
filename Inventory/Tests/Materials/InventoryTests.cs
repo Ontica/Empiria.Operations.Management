@@ -91,7 +91,7 @@ namespace Empiria.Tests.Inventory {
       InventoryOrderItemFields fields = new InventoryOrderItemFields {
         Location = "A-025-03-27",
         Product= "ASF24",
-        Quantity = 5,
+        Quantity = 13,
       };
 
       var order = InventoryOrder.Parse("611d5a4e-9cb4-4006-86a0-85dc302fb5b0");
@@ -146,8 +146,8 @@ namespace Empiria.Tests.Inventory {
 
     [Fact]
     public void Should_Delete_Inventory_Order_Item() {
-      var orderUID = "397d9db7-1367-47da-9f9f-9d11b535d508";
-      var orderItemUID = "7bfd5942-bbd1-4078-a61f-ba3d4e5576ed"; 
+      var orderUID = "bedf1014-f49d-47a8-a1da-3e56f712ec47";
+      var orderItemUID = "504e14a9-6158-42a6-8054-17cd1f5cacf3"; 
 
       TestsCommonMethods.Authenticate();
 
@@ -172,7 +172,9 @@ namespace Empiria.Tests.Inventory {
 
       InventoryOrderActions actions = InventoryUtility.GetActions(inventoryOrder);
 
-      Assert.NotNull(inventoryOrder);
+      var sut = InventoryOrderMapper.MapToHolderDto(inventoryOrder, actions);
+
+      Assert.NotNull(sut);
     }
 
 

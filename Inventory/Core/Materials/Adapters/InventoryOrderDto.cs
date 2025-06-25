@@ -108,6 +108,11 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
+    public NamedEntityDto Location {
+      get; internal set;
+    }
+
+
     public decimal AssignedQuantity {
       get; internal set;
     }

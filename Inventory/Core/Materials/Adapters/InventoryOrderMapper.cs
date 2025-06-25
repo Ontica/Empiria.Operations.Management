@@ -120,6 +120,7 @@ namespace Empiria.Inventory.Adapters {
         UID = item.UID,
         ProductName = item.Product.Name,
         Quantity = item.Quantity,
+        Location = item.Location.MapToNamedEntity(),
         AssignedQuantity = item.Entries.Sum(x => x.InputQuantity),
         PostedBy = item.PostedBy.MapToNamedEntity(),
         PostingTime = item.PostingTime,
