@@ -130,7 +130,7 @@ namespace Empiria.Inventory.WebApi {
 
 
     [HttpPost]
-    [Route("v8/order-management/inventory-orders/{orderUID}/close")]
+    [Route("v8/order-management/inventory-orders/{orderUID}/close-entries")]
     public SingleObjectModel CloseInventoryEntry([FromUri] string orderUID) {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
