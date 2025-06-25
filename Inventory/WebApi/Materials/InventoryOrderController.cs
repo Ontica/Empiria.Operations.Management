@@ -142,7 +142,7 @@ namespace Empiria.Inventory.WebApi {
     }
 
 
-    [HttpPut]
+    [HttpPost]
     [Route("v8/order-management/inventory-orders/{orderUID:guid}/close")]
     public SingleObjectModel CloseInventoryOrder([FromUri] string orderUID) {
 
