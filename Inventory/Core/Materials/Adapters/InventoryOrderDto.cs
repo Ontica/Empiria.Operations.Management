@@ -13,6 +13,38 @@ using Empiria.StateEnums;
 
 namespace Empiria.Inventory.Adapters {
 
+  /// <summary>Output DTO used to return inventory type.</summary>
+  public class InventoryTypeDto {
+
+    public string UID {
+      get; internal set;
+    }
+
+    public string Name {
+      get; internal set;
+    }
+
+    public InventoryTypeRulesDto Rules {
+      get; internal set;
+    }
+
+  } // class InventoryType
+
+  /// <summary>Output DTO used to return inventory display rules.</summary>
+  public class InventoryTypeRulesDto {
+
+    public Boolean EntriesRequired {
+      get; internal set;
+    }
+
+
+    public Boolean ItemsRequired {
+      get; internal set;
+    }
+
+  } //  class InventoryTypeRules
+
+
   /// <summary>Output DTO used to return inventory order data.</summary>
   public class InventoryOrderDto {
 
@@ -32,7 +64,7 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    public NamedEntityDto InventoryType {
+    public InventoryTypeDto InventoryType {
       get; internal set;
     }
 
@@ -108,7 +140,7 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    public NamedEntityDto Location {
+    public string Location {
       get; internal set;
     }
 
@@ -136,7 +168,7 @@ namespace Empiria.Inventory.Adapters {
     public FixedList<InventoryEntryDto> Entries {
       get; internal set;
     }
-    
+
   } // class InventoryOrderItemDto
 
 } // namespace Empiria.Inventory.Adapters

@@ -36,7 +36,7 @@ namespace Empiria.Inventory {
         CanEditItems = order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active,
         CanDelete = order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active,
         CanClose = order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active,
-        CanEditEntries = order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active || existClosedEntries
+        CanEditEntries = (order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active || existClosedEntries) && order.InventoryType.Id == 12756
       };
 
       return actions;
