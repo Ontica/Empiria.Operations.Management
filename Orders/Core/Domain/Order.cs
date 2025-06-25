@@ -246,6 +246,8 @@ namespace Empiria.Orders {
                   $"No se puede cerrar una orden que está en estado {this.Status.GetName()}.");
 
       this.Status = EntityStatus.Closed;
+      this.ClosedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+      this.ClosingTime = DateTime.Now;
     }
 
 
