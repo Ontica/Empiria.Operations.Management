@@ -7,13 +7,10 @@
 *  Summary  : Mapping methods for inventory order.                                                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using Empiria.DynamicData;
-using Empiria.Orders.Adapters;
 using Empiria.StateEnums;
 
 namespace Empiria.Inventory.Adapters {
@@ -120,7 +117,7 @@ namespace Empiria.Inventory.Adapters {
         UID = item.UID,
         ProductName = item.Product.Name,
         Quantity = item.Quantity,
-        Location = item.Location.MapToNamedEntity(),
+        Location = item.Location.Name,
         AssignedQuantity = item.Entries.Sum(x => x.InputQuantity),
         PostedBy = item.PostedBy.MapToNamedEntity(),
         PostingTime = item.PostingTime,
@@ -135,8 +132,8 @@ namespace Empiria.Inventory.Adapters {
       return new InventoryOrderDto {
         UID = order.UID,
         OrderNo = order.OrderNo,
-        OrderType = new NamedEntityDto("X","Orden de inventario"), //order.OrderType.MapToNamedEntity(),
-        InventoryType = order.InventoryType.MapToNamedEntity(),
+        OrderType = order.OrderType.MapToNamedEntity(), // new NamedEntityDto("X","Orden de inventario"),
+        InventoryType = MapToInventoryTypeDto(order.InventoryType),
         Warehouse = order.Warehouse.MapToNamedEntity(),
         Responsible = order.Responsible.MapToNamedEntity(),
         RequestedBy = order.RequestedBy.MapToNamedEntity(),
@@ -146,6 +143,33 @@ namespace Empiria.Inventory.Adapters {
         ClosingTime = order.ClosingTime,
         Status = order.Status.MapToDto()
       };
+    }
+
+
+    private static InventoryTypeDto MapToInventoryTypeDto(InventoryType inventoryType) {
+
+      return new InventoryTypeDto {
+        UID = inventoryType.UID,
+        Name = inventoryType.Name,
+        Rules = MapInventoryTypeRules(inventoryType),
+      };
+    }
+
+
+    private static InventoryTypeRulesDto MapInventoryTypeRules(InventoryType inventoryType) {
+      
+      if (inventoryType.Id == 12756) {
+        return new InventoryTypeRulesDto {
+          EntriesRequired = true,
+          ItemsRequired = false,
+        };
+      }
+
+      return new InventoryTypeRulesDto {
+        EntriesRequired = false,
+        ItemsRequired = true,
+      };
+
     }
 
     #endregion Private methods
