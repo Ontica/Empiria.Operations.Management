@@ -92,13 +92,16 @@ namespace Empiria.Inventory {
 
       InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, this, location);
 
+      var position = GetItemPosition();
+      fields.Position = position;
+
       orderItem.Update(fields);
 
       orderItem.Save();
 
       _items = InventoryOrderData.GetInventoryOrderItems(this);
     }
-
+       
 
     internal protected new void Delete() {
       base.Delete();
@@ -139,6 +142,17 @@ namespace Empiria.Inventory {
       foreach (var item in this.Items) {
         item.DelItem();
         item.Save();
+      }
+
+    }
+
+
+    private int GetItemPosition() {
+
+      if (this.Items.Count == 0) {
+        return 1;
+      } else {
+        return this.Items.Count + 1;
       }
 
     }

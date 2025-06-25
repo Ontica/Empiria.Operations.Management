@@ -203,6 +203,7 @@ namespace Empiria.Orders {
       RequestedBy = Patcher.Patch(fields.RequestedByUID, Order.RequestedBy);
       Project = Patcher.Patch(fields.ProjectUID, Order.Project);
       Provider = Patcher.Patch(fields.ProviderUID, Order.Provider);
+      Position = Patcher.Patch(fields.Position, Position);
 
       MarkAsDirty();
     }
