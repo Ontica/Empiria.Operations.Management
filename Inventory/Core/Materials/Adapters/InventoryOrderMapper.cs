@@ -34,12 +34,12 @@ namespace Empiria.Inventory.Adapters {
 
       List<DataTableColumn> columns = new List<DataTableColumn>();
 
-      columns.Add(new DataTableColumn("inventoryTypeName", "Tipo de inventario", "text"));
-      columns.Add(new DataTableColumn("orderNo", "Número de orden", "text-link"));
-      columns.Add(new DataTableColumn("warehouseName", "Almacen", "text"));
+      columns.Add(new DataTableColumn("inventoryTypeName", "Tipo", "text"));
+      columns.Add(new DataTableColumn("orderNo", "Orden", "text-link"));
+      columns.Add(new DataTableColumn("warehouseName", "Almacén", "text"));
       columns.Add(new DataTableColumn("responsibleName", "Responsable", "text"));
       //columns.Add(new DataTableColumn("description", "Descripción", "text"));
-      columns.Add(new DataTableColumn("postingTime", "Fecha registro", "date"));
+      columns.Add(new DataTableColumn("postingTime", "Registro", "date"));
       columns.Add(new DataTableColumn("status", "Estatus", "text-tag"));
 
       return columns.ToFixedList();
@@ -157,18 +157,23 @@ namespace Empiria.Inventory.Adapters {
 
 
     private static InventoryTypeRulesDto MapInventoryTypeRules(InventoryType inventoryType) {
-      
-      if (inventoryType.Id == 12756) {
-        return new InventoryTypeRulesDto {
-          EntriesRequired = true,
-          ItemsRequired = false,
-        };
-      }
 
       return new InventoryTypeRulesDto {
-        EntriesRequired = false,
-        ItemsRequired = true,
+        EntriesRequired = inventoryType.EntriesRequired,
+        ItemsRequired = inventoryType.ItemsRequired,
       };
+
+      //if (inventoryType.Id == 12756) {
+      //  return new InventoryTypeRulesDto {
+      //    EntriesRequired = true,
+      //    ItemsRequired = false,
+      //  };
+      //}
+
+      //return new InventoryTypeRulesDto {
+      //  EntriesRequired = false,
+      //  ItemsRequired = true,
+      //};
 
     }
 
