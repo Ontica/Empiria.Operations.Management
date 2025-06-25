@@ -69,7 +69,7 @@ namespace Empiria.Inventory.WebApi {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
-        FixedList<NamedEntityDto> parties = usecases.GetPartiesByRol("User");
+        FixedList<NamedEntityDto> parties = usecases.GetPartiesByRol("Inventory-manager");
 
         return new CollectionModel(this.Request, parties);
       }
@@ -77,11 +77,11 @@ namespace Empiria.Inventory.WebApi {
 
     [HttpGet]
     [Route("v8/order-management/inventory-orders/warehousemen")]
-    public CollectionModel GetParties() {
+    public CollectionModel GetWarehouseman() {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
-        FixedList<NamedEntityDto> parties = usecases.GetPartiesByRol("User");
+        FixedList<NamedEntityDto> parties = usecases.GetPartiesByRol("Warehouseman");
 
         return new CollectionModel(this.Request, parties);
       }
