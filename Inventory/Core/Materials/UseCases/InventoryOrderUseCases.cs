@@ -100,10 +100,11 @@ namespace Empiria.Inventory.UseCases {
            
       var order = InventoryOrder.Parse(orderUID);
 
-      var location = CommonStorage.ParseNamedKey<Location>(fields.Location);
+      var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
+      Assertion.Require(location, $"La ubiacacion {fields.Location} no existe.");
 
       var product = Product.TryParseWithCode(fields.Product);
-      Assertion.Require(product, $"El producto con clave {fields.Product} no existe");
+      Assertion.Require(product, $"El producto con clave {fields.Product} no existe.");
 
       fields.ProductUID = product.UID;
       fields.Description = product.Description;
