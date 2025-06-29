@@ -81,7 +81,7 @@ namespace Empiria.Inventory.UseCases {
     public InventoryHolderDto CreateInventoryOrder(string warehouseUID, InventoryOrderFields fields) {
       Assertion.Require(warehouseUID, nameof(warehouseUID));
       Assertion.Require(fields, nameof(fields));
-            
+
       var orderType = Orders.OrderType.Parse(INVENTORYORDERTYPEID);
 
       InventoryOrder order = new InventoryOrder(warehouseUID, orderType);
@@ -97,7 +97,7 @@ namespace Empiria.Inventory.UseCases {
     public InventoryHolderDto CreateInventoryOrderItem(string orderUID, InventoryOrderItemFields fields) {
       Assertion.Require(orderUID, nameof(orderUID));
       Assertion.Require(fields, nameof(fields));
-           
+
       var order = InventoryOrder.Parse(orderUID);
 
       var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
@@ -111,7 +111,7 @@ namespace Empiria.Inventory.UseCases {
       fields.ProductUnitUID = product.BaseUnit.UID;
 
       order.AddItem(location,fields);
-    
+
       return GetInventoryOrder(order.UID);
     }
 
@@ -232,7 +232,6 @@ namespace Empiria.Inventory.UseCases {
     #endregion Use cases
 
     #region Helpers
-
 
     #endregion Helpers
 

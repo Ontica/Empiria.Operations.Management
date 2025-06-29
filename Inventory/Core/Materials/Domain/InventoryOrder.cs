@@ -8,12 +8,11 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
-using Empiria.Financial;
-using Empiria.Inventory.Data;
 using Empiria.Locations;
+
 using Empiria.Orders;
 
+using Empiria.Inventory.Data;
 
 namespace Empiria.Inventory {
 
@@ -50,7 +49,7 @@ namespace Empiria.Inventory {
     #endregion Constructors and parsers
 
     #region Properties
-   
+
     public InventoryType InventoryType {
      get {
         return (InventoryType) base.Category;
@@ -101,14 +100,14 @@ namespace Empiria.Inventory {
 
       _items = InventoryOrderData.GetInventoryOrderItems(this);
     }
-       
+
 
     internal protected new void Delete() {
       base.Delete();
 
       this.DeleteItems();
     }
-       
+
 
     internal void DeleteItem(string orderItemUID) {
        var orderItem = InventoryOrderItem.Parse(orderItemUID);

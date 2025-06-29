@@ -10,10 +10,8 @@
 
 using Empiria.Services;
 
-using Empiria.HumanResources;
-
-using Empiria.Inventory.Assets.Data;
 using Empiria.Inventory.Assets.Adapters;
+using Empiria.Inventory.Assets.Data;
 
 namespace Empiria.Inventory.Assets.UseCases {
 

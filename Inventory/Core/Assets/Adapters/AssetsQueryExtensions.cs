@@ -27,21 +27,13 @@ namespace Empiria.Inventory.Assets.Adapters {
     static internal string MapToFilterString(this AssetsQuery query) {
 
       string assignedToFilter = BuildAssignedToFilter(query.AssignedToUID);
-
       string assignedToOrgUnitFilter = BuildAssignedToOrgUnitFilter(query.AssignedToOrgUnitUID);
-
       string locationFilter = BuildLocationFilter(query);
-
       string managerFilter = BuildManagerFilter(query.ManagerUID);
-
-      string assetTypeFilter = BuildAssetTypeFilter(query.AssetTypeUID);
-
       string managerOrgUnitFilter = BuildManagerOrgUnitFilter(query.ManagerOrgUnitUID);
-
       string statusFilter = BuildStatusFilter(query.Status);
-
+      string assetTypeFilter = BuildAssetTypeFilter(query.AssetTypeUID);
       string assetNoFilter = BuildAssetNoFilter(query.AssetNo);
-
       string keywordsFilter = BuildKeywordsFilter(query.Keywords);
 
       var filter = new Filter(assignedToFilter);
@@ -50,8 +42,8 @@ namespace Empiria.Inventory.Assets.Adapters {
       filter.AppendAnd(locationFilter);
       filter.AppendAnd(managerFilter);
       filter.AppendAnd(managerOrgUnitFilter);
-      filter.AppendAnd(assetTypeFilter);
       filter.AppendAnd(statusFilter);
+      filter.AppendAnd(assetTypeFilter);
       filter.AppendAnd(assetNoFilter);
       filter.AppendAnd(keywordsFilter);
 
