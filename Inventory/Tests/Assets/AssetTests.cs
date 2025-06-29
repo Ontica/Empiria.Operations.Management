@@ -20,6 +20,17 @@ namespace Empiria.Tests.Inventory.Assets {
 
     #region Facts
 
+
+    [Fact]
+    public void Clean_Imported_Assets() {
+      var assets = ImportedAsset.GetList();
+
+      foreach (var asset in assets) {
+        ImportedAsset.Clean(asset);
+      }
+    }
+
+
     [Fact]
     public void Should_Get_All_Assets() {
       var sut = BaseObject.GetList<Asset>();
