@@ -33,6 +33,15 @@ namespace Empiria.Inventory.Assets.UseCases {
 
     #region Use cases
 
+    public AssetAssignationHolder GetAssetAssignation(string assignationUID) {
+      Assertion.Require(assignationUID, nameof(assignationUID));
+
+      var assignation = AssetAssignation.Parse(assignationUID);
+
+      return AssetAssignationMapper.Map(assignation);
+    }
+
+
     public FixedList<AssetAssignationDescriptor> SearchAssetAssignations(AssetsAssignationsQuery query) {
       Assertion.Require(query, nameof(query));
 

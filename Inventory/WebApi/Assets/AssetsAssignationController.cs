@@ -22,11 +22,21 @@ namespace Empiria.Inventory.Assets.WebApi {
 
     #region Web Apis
 
+    [HttpGet]
+    [Route("v2/assets/assignations/{assignationUID}")]
+    public SingleObjectModel GetAssetAssignation([FromUri] string assignationUID) {
+
+      using (var usecases = AssetAssignationUseCases.UseCaseInteractor()) {
+        AssetAssignationHolder assignation = usecases.GetAssetAssignation(assignationUID);
+
+        return new SingleObjectModel(base.Request, assignation);
+      }
+    }
+
+
     [HttpPost]
     [Route("v2/assets/assignations/search")]
     public CollectionModel SearchAssetsAssignations([FromBody] AssetsAssignationsQuery query) {
-
-      base.RequireBody(query);
 
       using (var usecases = AssetAssignationUseCases.UseCaseInteractor()) {
         FixedList<AssetAssignationDescriptor> assignations = usecases.SearchAssetAssignations(query);

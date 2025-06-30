@@ -17,6 +17,21 @@ namespace Empiria.Inventory.Assets.Data {
 
     #region Methods
 
+    static internal FixedList<Asset> GetAssets(AssetAssignation assignation) {
+      var sql = "SELECT OMS_Assets.* FROM OMS_Assets INNER JOIN OMS_Products_SKUS " +
+                "ON OMS_Assets.Asset_SKU_ID = OMS_Products_SKUS.SKU_ID " +
+                $"WHERE Asset_Assigned_To_Id = {assignation.AssignedTo.Id} AND " +
+                $"Asset_Assigned_To_Org_Unit_Id = {assignation.AssignedToOrgUnit.Id} AND " +
+                $"Asset_Location_Id = {assignation.Location.Id} AND " +
+                $"Asset_Status <> 'X' " +
+                "ORDER BY SKU_NO";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<Asset>(op);
+    }
+
+
     static internal FixedList<AssetAssignation> SearchAssignations(string filter, string sortBy) {
       var sql = "SELECT DISTINCT Asset_Assigned_To_Id, Party_Name Asset_Assigned_To, " +
                   "Asset_Assigned_To_Org_Unit_Id, Asset_Location_Id " +

@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Inventory.Assets.Data;
 using Empiria.Locations;
 using Empiria.Parties;
 
@@ -15,6 +16,24 @@ namespace Empiria.Inventory.Assets {
 
   /// <summary>Represents an asset assignation.</summary>
   public class AssetAssignation {
+
+    #region Constructors and parsers
+
+    internal static AssetAssignation Parse(string assignationUID) {
+      Assertion.Require(assignationUID, nameof(assignationUID));
+
+      string[] parts = assignationUID.Split('|');
+
+      Assertion.Require(parts.Length == 3, "Unrecognized asset assignation UID.");
+
+      return new AssetAssignation {
+         AssignedTo = Person.Parse(int.Parse(parts[0])),
+         AssignedToOrgUnit = OrganizationalUnit.Parse(int.Parse(parts[1])),
+         Location = Location.Parse(int.Parse(parts[2]))
+      };
+    }
+
+    #endregion Constructors and parsers
 
     #region Properties
 
@@ -64,6 +83,14 @@ namespace Empiria.Inventory.Assets {
     }
 
     #endregion Properties
+
+    #region Methods
+
+    internal FixedList<Asset> GetAssets() {
+      return AssetsAssignationsData.GetAssets(this);
+    }
+
+    #endregion Methods
 
   }  // class AssetAssignation
 
