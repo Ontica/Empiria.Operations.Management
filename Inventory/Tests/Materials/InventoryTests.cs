@@ -89,13 +89,15 @@ namespace Empiria.Tests.Inventory {
       TestsCommonMethods.Authenticate();
       //TG5F38X34
       InventoryOrderItemFields fields = new InventoryOrderItemFields {
-        Location = "A-025-03-27",
+        Location = "A-0deedeed",
         Product= "ASF24",
         Quantity = 13,
       };
 
-      var order = InventoryOrder.Parse("611d5a4e-9cb4-4006-86a0-85dc302fb5b0");
-      var location = CommonStorage.ParseNamedKey<Location>(fields.Location);
+      var order = InventoryOrder.Parse("a7a99924-0efc-41b9-9b65-5b78d31bf329");
+
+      var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
+      Assertion.Require(location, $"La ubiacacion {fields.Location} no existe.");
 
       var product = Product.TryParseWithCode(fields.Product);     
       Assertion.Require(product, "El producto no existe");
@@ -164,7 +166,7 @@ namespace Empiria.Tests.Inventory {
 
     [Fact]
     public void Should_Get_InventoryOrder() {
-      var orderUID = "611d5a4e-9cb4-4006-86a0-85dc302fb5b0";
+      var orderUID = "17f8f807-1dc1-414c-aaa9-bda2f65711b1";
 
       Assertion.Require(orderUID, nameof(orderUID));
 
@@ -174,14 +176,14 @@ namespace Empiria.Tests.Inventory {
 
       var sut = InventoryOrderMapper.MapToHolderDto(inventoryOrder, actions);
 
-      Assert.NotNull(sut);
+       Assert.NotNull(sut);
     }
 
 
     [Fact]
     public void Should_Get_InventoryTypes() {
 
-      var sut = InventoryType.GetList().MapToNamedEntityList();
+      var sut = InventoryType.GetList();
       Assert.NotNull(sut);
       Assert.NotEmpty(sut);
     }

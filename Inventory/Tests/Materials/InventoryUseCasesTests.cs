@@ -11,9 +11,7 @@
 using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.UseCases;
-using Empiria.Locations;
-using Empiria.Ontology;
-using Empiria.Orders;
+
 using Xunit;
 
 namespace Empiria.Tests.Inventory {

@@ -38,7 +38,6 @@ namespace Empiria.Inventory.Adapters {
       columns.Add(new DataTableColumn("orderNo", "Orden", "text-link"));
       columns.Add(new DataTableColumn("warehouseName", "Almacén", "text"));
       columns.Add(new DataTableColumn("responsibleName", "Responsable", "text"));
-      //columns.Add(new DataTableColumn("description", "Descripción", "text"));
       columns.Add(new DataTableColumn("postingTime", "Registro", "date"));
       columns.Add(new DataTableColumn("status", "Estatus", "text-tag"));
 

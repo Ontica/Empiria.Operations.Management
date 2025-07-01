@@ -31,6 +31,24 @@ namespace Empiria.Inventory.Data {
       DataWriter.Execute(dataOperation);
     }
 
+
+    internal static FixedList<InventoryEntry> FinderInventory(string filter, string sort) {
+
+      var sql = "SELECT * FROM VW_Inventory_Entries";
+
+      if (!string.IsNullOrWhiteSpace(filter)) {
+        sql += $" WHERE {filter}";
+      }
+      if (!string.IsNullOrWhiteSpace(sort)) {
+        sql += $" ORDER BY {sort}";
+      }
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<InventoryEntry>(op);
+    }
+
+
     internal static FixedList<InventoryOrderItem> GetInventoryOrderItems(InventoryOrder order) {
 
       string sql = $"SELECT * FROM OMS_Order_Items " +
