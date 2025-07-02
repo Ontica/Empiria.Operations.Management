@@ -85,7 +85,7 @@ namespace Empiria.Inventory {
     }
 
 
-    internal void AddItem(Location location, InventoryOrderItemFields fields) {
+    internal InventoryOrderItem AddItem(Location location, InventoryOrderItemFields fields) {
 
       var orderItemType = Orders.OrderItemType.Parse(4059);
 
@@ -99,6 +99,8 @@ namespace Empiria.Inventory {
       orderItem.Save();
 
       _items = InventoryOrderData.GetInventoryOrderItems(this);
+
+      return orderItem;
     }
 
 

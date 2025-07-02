@@ -56,13 +56,13 @@ namespace Empiria.Tests.Inventory {
     public void CreateInventoryEntriesTest() {
 
       var usecase = InventoryOrderUseCases.UseCaseInteractor();
-      string orderUID = "829b237e-354a-4c06-8da9-ac5e23b704e1";
-      string orderItemUID = "3f52c3bc-1a84-4390-9bb4-7850fb79f38e";
+      string orderUID = "a7a99924-0efc-41b9-9b65-5b78d31bf329";
+      string orderItemUID = "f4874ac2-52f4-4061-87f4-28a554a5a0d7";
 
       InventoryEntryFields fields = new InventoryEntryFields {
 
         Location = "A-001-01-23",
-        Product = "AOME1",
+        Product = "ASF24",
         Quantity = 5
       };
       

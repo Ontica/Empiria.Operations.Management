@@ -110,7 +110,15 @@ namespace Empiria.Inventory.UseCases {
       fields.Description = product.Description;
       fields.ProductUnitUID = product.BaseUnit.UID;
 
-      order.AddItem(location,fields);
+      var orderItem = order.AddItem(location,fields);
+
+      InventoryEntryFields entryFields = new InventoryEntryFields();
+
+      entryFields.Product = fields.Product;
+      entryFields.Quantity = fields.Quantity;
+      entryFields.Location = fields.Location;
+
+      CreateInventoryEntry(orderUID, orderItem.UID, entryFields);
 
       return GetInventoryOrder(order.UID);
     }

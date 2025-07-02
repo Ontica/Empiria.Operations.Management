@@ -10,6 +10,7 @@
 
 using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
+using Empiria.Inventory.Data;
 using Empiria.Locations;
 using Empiria.Parties;
 using Empiria.Products;
@@ -89,7 +90,7 @@ namespace Empiria.Tests.Inventory {
       TestsCommonMethods.Authenticate();
       //TG5F38X34
       InventoryOrderItemFields fields = new InventoryOrderItemFields {
-        Location = "A-0deedeed",
+        Location = "A-001-01-23",
         Product= "ASF24",
         Quantity = 13,
       };
@@ -106,9 +107,57 @@ namespace Empiria.Tests.Inventory {
       fields.Description  = product.Description;
       fields.ProductUnitUID = product.BaseUnit.UID;
 
-      order.AddItem(location, fields);
+      var orderItem = order.AddItem(location, fields);
+
+      var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
+
+      InventoryEntryFields entryFields = new InventoryEntryFields();
+      
+      entryFields.Product = fields.Product;
+      entryFields.Quantity = fields.Quantity;
+      entryFields.Location = fields.Location;
+
+      inventoryEntry.Update(entryFields, orderItem.UID);
+
+      inventoryEntry.Save();
 
       Assert.NotNull(order);
+    }
+
+
+    [Fact]
+    public void CreateInventoryEntriesTest() {
+
+      TestsCommonMethods.Authenticate();
+
+      string orderUID = "a7a99924-0efc-41b9-9b65-5b78d31bf329";
+      string orderItemUID = "f4874ac2-52f4-4061-87f4-28a554a5a0d7";
+
+      InventoryEntryFields fields = new InventoryEntryFields {
+
+        Location = "A-001-01-23",
+        Product = "ASF24",
+        Quantity = 5
+      };
+
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(orderItemUID, nameof(orderItemUID));
+      Assertion.Require(fields, nameof(fields));
+
+      ProductEntry productEntry = InventoryOrderData.GetProductEntryByName(fields.Product.Trim());
+      LocationEntry locationEntry = InventoryOrderData.GetLocationEntryByName(fields.Location.Trim());
+
+      fields.EnsureIsValid(productEntry.ProductId, orderItemUID);
+      fields.ProductUID = Product.Parse(productEntry.ProductId).UID;
+      fields.LocationUID = Location.Parse(locationEntry.LocationId).UID;
+
+      var inventoryEntry = new InventoryEntry(orderUID, orderItemUID);
+
+      inventoryEntry.Update(fields, orderItemUID);
+
+      inventoryEntry.Save();    
+     
+      Assert.NotNull(inventoryEntry);
     }
 
 
