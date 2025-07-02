@@ -2,16 +2,16 @@
 *                                                                                                            *
 *  Module   : Assets Management                          Component : Adapters Layer                          *
 *  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Query DTO                               *
-*  Type     : AssetsAssignationsQuery                    License   : Please read LICENSE.txt file            *
+*  Type     : AssetsAssignmentsQuery                     License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Query data transfer object used to search assets assignations.                                 *
+*  Summary  : Query data transfer object used to search assets assignments.                                  *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 namespace Empiria.Inventory.Assets.Adapters {
 
-  /// <summary>Query data transfer object used to search assets assignations.</summary>
-  public class AssetsAssignationsQuery {
+  /// <summary>Query data transfer object used to search assets assignments.</summary>
+  public class AssetsAssignmentsQuery {
 
     public string AssignedToUID {
       get; set;
@@ -72,6 +72,6 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; set;
     } = string.Empty;
 
-  }  // class AssetsAssignationsQuery
+  }  // class AssetsAssignmentsQuery
 
 }  // namespace Empiria.Inventory.Assets.Adapters

@@ -2,18 +2,18 @@
 *                                                                                                            *
 *  Module   : Assets Management                                 Component : Adapters Layer                   *
 *  Assembly : Empiria.Inventory.Core.dll                        Pattern   : Data Transfer Object             *
-*  Type     : AssetAssignationDto, AssetAssignationHolderDto    License   : Please read LICENSE.txt file     *
+*  Type     : AssetAssignmentDto, AssetAssignmentHolderDto      License   : Please read LICENSE.txt file     *
 *                                                                                                            *
-*  Summary  : Data transfer object used to return assets assignations data.                                  *
+*  Summary  : Data transfer object used to return assets assignment data.                                    *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 namespace Empiria.Inventory.Assets.Adapters {
 
-  /// <summary>Data transfer object used to return assets assignations data.</summary>
-  public class AssetAssignationHolder {
+  /// <summary>Data transfer object used to return assets assignment data.</summary>
+  public class AssetAssignmentHolder {
 
-    public AssetAssignationDto Assignation {
+    public AssetAssignmentDto Assignment {
       get; internal set;
     }
 
@@ -21,12 +21,12 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-  }  // class AssetAssignationHolderDto
+  }  // class AssetAssignmentHolder
 
 
 
-  /// <summary>Data transfer object used to return an asset assgination data.</summary>
-  public class AssetAssignationDto {
+  /// <summary>Data transfer object used to return an asset assignment data.</summary>
+  public class AssetAssignmentDto {
 
     public string UID {
       get; internal set;
@@ -56,12 +56,12 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-  }  // class AssetAssignationDto
+  }  // class AssetAssignmentDto
 
 
 
-  /// <summary>Output Dto used to return minimal data for an asset assignation.</summary>
-  public class AssetAssignationDescriptor {
+  /// <summary>Output Dto used to return minimal data for an asset assignment.</summary>
+  public class AssetAssignmentDescriptor {
 
     public string UID {
       get; internal set;
@@ -79,6 +79,6 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-  } // class AssetAssignationDescriptor
+  } // class AssetAssignmentDescriptor
 
 }  // namespace Empiria.Inventory.Assets.Adapters

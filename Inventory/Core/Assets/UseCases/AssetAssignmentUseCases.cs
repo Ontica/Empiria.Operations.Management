@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Module   : Assets Management                          Component : Use cases Layer                         *
 *  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Use case interactor class               *
-*  Type     : AssetAssignationUseCases                   License   : Please read LICENSE.txt file            *
+*  Type     : AssetAssignmentUseCases                    License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Use cases for assets assignations.                                                             *
+*  Summary  : Use cases for assets assignments.                                                              *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -15,17 +15,17 @@ using Empiria.Inventory.Assets.Data;
 
 namespace Empiria.Inventory.Assets.UseCases {
 
-  /// <summary>Use cases for assets assignations.</summary>
-  public class AssetAssignationUseCases : UseCase {
+  /// <summary>Use cases for assets assignments.</summary>
+  public class AssetAssignmentUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected AssetAssignationUseCases() {
+    protected AssetAssignmentUseCases() {
       // no-op
     }
 
-    static public AssetAssignationUseCases UseCaseInteractor() {
-      return UseCase.CreateInstance<AssetAssignationUseCases>();
+    static public AssetAssignmentUseCases UseCaseInteractor() {
+      return UseCase.CreateInstance<AssetAssignmentUseCases>();
     }
 
 
@@ -33,29 +33,29 @@ namespace Empiria.Inventory.Assets.UseCases {
 
     #region Use cases
 
-    public AssetAssignationHolder GetAssetAssignation(string assignationUID) {
-      Assertion.Require(assignationUID, nameof(assignationUID));
+    public AssetAssignmentHolder GetAssetAssignment(string assignmentUID) {
+      Assertion.Require(assignmentUID, nameof(assignmentUID));
 
-      var assignation = AssetAssignation.Parse(assignationUID);
+      var assignment = AssetAssignment.Parse(assignmentUID);
 
-      return AssetAssignationMapper.Map(assignation);
+      return AssetAssignmentMapper.Map(assignment);
     }
 
 
-    public FixedList<AssetAssignationDescriptor> SearchAssetAssignations(AssetsAssignationsQuery query) {
+    public FixedList<AssetAssignmentDescriptor> SearchAssetsAssignments(AssetsAssignmentsQuery query) {
       Assertion.Require(query, nameof(query));
 
       string filter = query.MapToFilterString();
 
       string sort = query.MapToSortString();
 
-      FixedList<AssetAssignation> assignations = AssetsAssignationsData.SearchAssignations(filter, sort);
+      FixedList<AssetAssignment> assignments = AssetsAssignmentsData.SearchAssignments(filter, sort);
 
-      return AssetAssignationMapper.Map(assignations);
+      return AssetAssignmentMapper.Map(assignments);
     }
 
     #endregion Use cases
 
-  }  // class AssetAssignationUseCases
+  }  // class AssetAssignmentUseCases
 
 }  // namespace Empiria.Inventory.Assets.UseCases

@@ -2,31 +2,32 @@
 *                                                                                                            *
 *  Module   : Assets Management                          Component : Domain Layer                            *
 *  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Information Holder                      *
-*  Type     : AssetAssignation                           License   : Please read LICENSE.txt file            *
+*  Type     : AssetAssignment                            License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Represents an asset assignation.                                                               *
+*  Summary  : Represents an asset assignment.                                                                *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Inventory.Assets.Data;
 using Empiria.Locations;
 using Empiria.Parties;
 
+using Empiria.Inventory.Assets.Data;
+
 namespace Empiria.Inventory.Assets {
 
-  /// <summary>Represents an asset assignation.</summary>
-  public class AssetAssignation {
+  /// <summary>Represents an asset assignment.</summary>
+  public class AssetAssignment {
 
     #region Constructors and parsers
 
-    internal static AssetAssignation Parse(string assignationUID) {
-      Assertion.Require(assignationUID, nameof(assignationUID));
+    internal static AssetAssignment Parse(string assignmentUID) {
+      Assertion.Require(assignmentUID, nameof(assignmentUID));
 
-      string[] parts = assignationUID.Split('|');
+      string[] parts = assignmentUID.Split('|');
 
-      Assertion.Require(parts.Length == 3, "Unrecognized asset assignation UID.");
+      Assertion.Require(parts.Length == 3, "Unrecognized asset assignment UID.");
 
-      return new AssetAssignation {
+      return new AssetAssignment {
          AssignedTo = Person.Parse(int.Parse(parts[0])),
          AssignedToOrgUnit = OrganizationalUnit.Parse(int.Parse(parts[1])),
          Location = Location.Parse(int.Parse(parts[2]))
@@ -87,11 +88,11 @@ namespace Empiria.Inventory.Assets {
     #region Methods
 
     internal FixedList<Asset> GetAssets() {
-      return AssetsAssignationsData.GetAssets(this);
+      return AssetsAssignmentsData.GetAssets(this);
     }
 
     #endregion Methods
 
-  }  // class AssetAssignation
+  }  // class AssetAssignment
 
 }  // namespace Empiria.Inventory.Assets
