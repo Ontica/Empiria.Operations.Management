@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
 using System.Collections.Generic;
 
 using Empiria.Data;
@@ -19,6 +20,38 @@ namespace Empiria.Inventory.Assets.Data {
   static internal class AssetsTransactionsData {
 
     #region Methods
+
+    static internal void Clean(AssetTransaction txn) {
+      if (txn.IsEmptyInstance) {
+        return;
+      }
+      var sql = "UPDATE OMS_ASSETS_TRANSACTIONS " +
+                $"SET ASSET_TXN_UID = '{Guid.NewGuid().ToString()}', " +
+                $"ASSET_TXN_KEYWORDS = '{txn.Keywords}', " +
+                $"ASSET_TXN_POSTED_BY_ID = 152 " +
+                $"WHERE ASSET_TXN_ID = {txn.Id}";
+
+      var op = DataOperation.Parse(sql);
+
+      DataWriter.Execute(op);
+    }
+
+
+    static internal void Clean(AssetTransactionEntry entry) {
+      if (entry.IsEmptyInstance) {
+        return;
+      }
+      var sql = "UPDATE OMS_ASSETS_ENTRIES " +
+                $"SET ASSET_ENTRY_UID = '{Guid.NewGuid().ToString()}', " +
+                $"ASSET_ENTRY_KEYWORDS = '{entry.Keywords}', " +
+                $"ASSET_ENTRY_POSTED_BY_ID = 152 " +
+                $"WHERE ASSET_ENTRY_ID = {entry.Id}";
+
+      var op = DataOperation.Parse(sql);
+
+      DataWriter.Execute(op);
+    }
+
 
     static internal string GenerateNextTransactionNo(AssetTransaction transaction) {
       Assertion.Require(transaction, nameof(transaction));
@@ -161,6 +194,7 @@ namespace Empiria.Inventory.Assets.Data {
 
       DataWriter.Execute(op);
     }
+
 
     #endregion Methods
 

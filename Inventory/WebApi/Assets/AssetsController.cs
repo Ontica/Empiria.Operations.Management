@@ -14,6 +14,7 @@ using Empiria.WebApi;
 
 using Empiria.Inventory.Assets.Adapters;
 using Empiria.Inventory.Assets.UseCases;
+using Empiria.Inventory.Assets.Data;
 
 namespace Empiria.Inventory.Assets.WebApi {
 
@@ -31,6 +32,18 @@ namespace Empiria.Inventory.Assets.WebApi {
 
         return new SingleObjectModel(base.Request, asset);
       }
+    }
+
+    [HttpPost]
+    [Route("v2/assets/clean")]
+    public NoDataModel Clean() {
+      var assets = BaseObject.GetFullList<Asset>();
+
+      foreach (var asset in assets) {
+        AssetsData.Clean(asset);
+      }
+
+      return new NoDataModel(base.Request);
     }
 
 

@@ -8,20 +8,40 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Parties;
-
+using System;
 using Empiria.Data;
+using Empiria.Parties;
 
 namespace Empiria.Inventory.Assets.Data {
 
   /// <summary>Provides data read and write methods for asset instances.</summary>
   static internal class AssetsData {
 
+    static internal void Clean(Asset asset) {
+      if (asset.IsEmptyInstance) {
+        return;
+      }
+      var sql = "UPDATE OMS_ASSETS " +
+                $"SET ASSET_UID = '{Guid.NewGuid().ToString()}', " +
+                $"ASSET_KEYWORDS = '{asset.Keywords}', " +
+                $"ASSET_START_DATE = {DataCommonMethods.FormatSqlDbDate(new DateTime(2025, 07, 04))}, " +
+                $"ASSET_POSTING_TIME = {DataCommonMethods.FormatSqlDbDate(new DateTime(2025, 06, 25))}, " +
+                $"ASSET_END_DATE = {DataCommonMethods.FormatSqlDbDate(new DateTime(2078, 12, 31))}, " +
+                $"ASSET_LAST_UPDATE = {DataCommonMethods.FormatSqlDbDate(new DateTime(2025, 07, 04))}, " +
+                $"ASSET_POSTED_BY_ID = 152 " +
+                $"WHERE ASSET_ID = {asset.Id}";
+
+      var op = DataOperation.Parse(sql);
+
+      DataWriter.Execute(op);
+    }
+
     #region Methods
 
-    static internal FixedList<Person> GetAssetsAssignees() {
+    static internal FixedList<Person> GetAssetsAssignees(string keywords) {
       var sql = "SELECT DISTINCT * FROM Parties " +
-                "WHERE Party_ID IN (SELECT Asset_Assigned_To_ID " +
+                $"WHERE {SearchExpression.ParseAndLikeKeywords("PARTY_KEYWORDS", keywords)} " +
+                "AND Party_ID IN (SELECT Asset_Assigned_To_ID " +
                                    "FROM OMS_Assets " +
                                    "WHERE Asset_Status <> 'X') " +
                 "ORDER BY Party_Name";

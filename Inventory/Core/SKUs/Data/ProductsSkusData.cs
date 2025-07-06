@@ -8,12 +8,32 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
 using Empiria.Data;
 
 namespace Empiria.Inventory.Data {
 
   /// <summary>Provides data read and write methods for products SKUs instances.</summary>
   static internal class ProductsSkusData {
+
+    static internal void Clean(ProductSku sku) {
+      if (sku.IsEmptyInstance) {
+        return;
+      }
+      var sql = "UPDATE OMS_PRODUCTS_SKUS " +
+                $"SET SKU_UID = '{Guid.NewGuid().ToString()}', " +
+                $"SKU_KEYWORDS = '{sku.Keywords}', " +
+                $"SKU_START_DATE = {DataCommonMethods.FormatSqlDbDate(new DateTime(2025, 06, 25))}, " +
+                $"SKU_POSTING_TIME = {DataCommonMethods.FormatSqlDbDate(new DateTime(2025, 06, 25))}, " +
+                $"SKU_END_DATE = {DataCommonMethods.FormatSqlDbDate(new DateTime(2078, 12, 31))}, " +
+                $"SKU_LAST_UPDATE = {DataCommonMethods.FormatSqlDbDate(new DateTime(2025, 06, 25))}, " +
+                $"SKU_POSTED_BY_ID = 152 " +
+                $"WHERE SKU_ID = {sku.Id}";
+
+      var op = DataOperation.Parse(sql);
+
+      DataWriter.Execute(op);
+    }
 
     #region Methods
 

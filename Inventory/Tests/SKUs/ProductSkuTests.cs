@@ -11,6 +11,7 @@
 using Xunit;
 
 using Empiria.Inventory;
+using Empiria.Inventory.Data;
 
 namespace Empiria.Tests.Inventory {
 
@@ -18,6 +19,17 @@ namespace Empiria.Tests.Inventory {
   public class ProductSkuTests {
 
     #region Facts
+
+    [Fact]
+    public void Clean_Products_Skus() {
+      var skus = BaseObject.GetFullList<ProductSku>();
+
+      foreach (var sku in skus) {
+        ProductsSkusData.Clean(sku);
+      }
+    }
+
+
 
     [Fact]
     public void Should_Get_All_Products_Skus() {

@@ -14,6 +14,7 @@ using Empiria.StateEnums;
 using Empiria.WebApi;
 
 using Empiria.Inventory.Assets.Adapters;
+using Empiria.Inventory.Assets.Data;
 using Empiria.Inventory.Assets.UseCases;
 
 namespace Empiria.Inventory.Assets.WebApi {
@@ -22,6 +23,32 @@ namespace Empiria.Inventory.Assets.WebApi {
   public class AssetsTransactionsController : WebApiController {
 
     #region Web Apis
+
+    [HttpPost]
+    [Route("v2/assets/transactions/clean")]
+    public NoDataModel CleanTransactions() {
+      var transactions = AssetTransaction.GetList();
+
+      foreach (var txn in transactions) {
+        AssetsTransactionsData.Clean(txn);
+      }
+
+      return new NoDataModel(base.Request);
+    }
+
+
+    [HttpPost]
+    [Route("v2/assets/transactions/clean-entries")]
+    public NoDataModel CleanTransactionEntries() {
+      var entries = AssetTransactionEntry.GetFullList<AssetTransactionEntry>();
+
+      foreach (var entry in entries) {
+        AssetsTransactionsData.Clean(entry);
+      }
+
+      return new NoDataModel(base.Request);
+    }
+
 
     [HttpPost]
     [Route("v2/assets/transactions/{transactionUID:guid}/clone-for/{transactionTypeUID}")]

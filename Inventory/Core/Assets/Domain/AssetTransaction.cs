@@ -226,8 +226,8 @@ namespace Empiria.Inventory.Assets {
       get {
         return EmpiriaString.BuildKeywords(TransactionNo, Description, _identificators, _tags,
                                            AssetTransactionType.DisplayName, Manager.Keywords,
-                                           ManagerOrgUnit.Keywords, AssignedTo.Keywords,
-                                           AssignedToOrgUnit.Keywords, Location.Keywords,
+                                           AssignedToOrgUnit.Keywords, AssignedTo.Keywords,
+                                           Location.Keywords, ManagerOrgUnit.Keywords,
                                            OperationSource.Keywords);
       }
     }

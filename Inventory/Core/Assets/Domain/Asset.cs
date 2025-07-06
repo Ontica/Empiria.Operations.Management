@@ -224,7 +224,7 @@ namespace Empiria.Inventory.Assets {
     public string Keywords {
       get {
         return EmpiriaString.BuildKeywords(AssetType.Name, Sku.Keywords, Description, Year.ToString(),
-                                           _identificators, _tags, this.Condition, this.Location.FullName,
+                                           _identificators, _tags, this.Condition, this.Location.Keywords,
                                            this.AssignedTo.Keywords, this.AssignedToOrgUnit.Keywords,
                                            this.Manager.Keywords, this.ManagerOrgUnit.Keywords);
       }
