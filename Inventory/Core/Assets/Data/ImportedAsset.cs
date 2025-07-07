@@ -34,6 +34,7 @@ namespace Empiria.Inventory.Assets.Data {
       $"ESTADO2 = '{EmpiriaString.Clean(a.ESTADO2)}', " +
       $"OBSERVACIONES = '{EmpiriaString.Clean(a.OBSERVACIONES)}', " +
       $"PARTIDA_GLOBAL = '{EmpiriaString.Clean(a.PARTIDA_GLOBAL)}', " +
+      $"EXPEDIENTE = '{EmpiriaString.Clean(a.EXPEDIENTE)}', " +
       $"ASSET_TYPE_ID = -2 " +
       $"WHERE ID = {a.ID}";
 
@@ -185,6 +186,13 @@ namespace Empiria.Inventory.Assets.Data {
     public string PARTIDA_GLOBAL {
       get; private set;
     }
+
+
+    [DataField("EXPEDIENTE")]
+    public string EXPEDIENTE {
+      get; private set;
+    }
+
 
     [DataField("ORG_UNIT_ID")]
     public int ORG_UNIT_ID {
