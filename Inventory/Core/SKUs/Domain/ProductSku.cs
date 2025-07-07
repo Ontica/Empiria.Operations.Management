@@ -27,6 +27,10 @@ namespace Empiria.Inventory {
 
     #region Constructors and parsers
 
+    static ProductSku() {
+      _ = BaseObject.GetFullList<ProductSku>();
+    }
+
     protected ProductSku(ProductSkuType productSkuType) : base(productSkuType) {
       // Required by Empiria Framework for all partitioned types.
     }
