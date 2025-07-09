@@ -45,10 +45,9 @@ namespace Empiria.Inventory.Assets {
     }
 
 
+    [DataField("ASSET_NO")]
     public string AssetNo {
-      get {
-        return Sku.SkuNo;
-      }
+      get; private set;
     }
 
 
@@ -90,7 +89,7 @@ namespace Empiria.Inventory.Assets {
         return ExtData.Get("year", 0);
       }
       private set {
-        ExtData.SetIfValue("year", value);
+        ExtData.SetIf("year", value, value != 0);
       }
     }
 
@@ -128,14 +127,22 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("ASSET_ASSIGNED_TO_ID")]
     public Person AssignedTo {
-      get; private set;
+      get {
+        return LastAssignment.AssignedTo;
+      }
     }
 
 
-    [DataField("ASSET_ASSIGNED_TO_ORG_UNIT_ID")]
     public OrganizationalUnit AssignedToOrgUnit {
+      get {
+        return LastAssignment.AssignedToOrgUnit;
+      }
+    }
+
+
+    [DataField("ASSET_LAST_ASSIGNMENT_TXN_ID")]
+    public AssetTransaction LastAssignment {
       get; private set;
     }
 
@@ -225,8 +232,7 @@ namespace Empiria.Inventory.Assets {
       get {
         return EmpiriaString.BuildKeywords(AssetType.Name, Sku.Keywords, Description, Year.ToString(),
                                            _identificators, _tags, this.Condition, this.Location.Keywords,
-                                           this.AssignedTo.Keywords, this.AssignedToOrgUnit.Keywords,
-                                           this.Manager.Keywords, this.ManagerOrgUnit.Keywords);
+                                           LastAssignment.Keywords);
       }
     }
 

@@ -59,11 +59,7 @@ namespace Empiria.Inventory.Assets.Adapters {
 
 
     static internal string MapToSortString(this AssetsAssignmentsQuery query) {
-      if (query.OrderBy.Length != 0) {
-        return query.OrderBy;
-      }
-
-      return "ASSET_ASSIGNED_TO";
+      return query.OrderBy;
     }
 
     #endregion Extension Methods
@@ -75,7 +71,7 @@ namespace Empiria.Inventory.Assets.Adapters {
         return string.Empty;
       }
 
-      return $"SKU_NO LIKE '%{assetNo}%'";
+      return $"ASSET_NO LIKE '%{assetNo}%'";
     }
 
 

@@ -53,9 +53,7 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal FixedList<Asset> SearchAssets(string filter, string sortBy) {
-      var sql = "SELECT OMS_Assets.* " +
-                "FROM OMS_Assets INNER JOIN OMS_Products_SKUS " +
-                "ON OMS_Assets.Asset_SKU_ID = OMS_Products_SKUS.SKU_ID";
+      var sql = "SELECT OMS_Assets.* FROM OMS_Assets";
 
       if (!string.IsNullOrWhiteSpace(filter)) {
         sql += $" WHERE {filter}";
@@ -73,9 +71,9 @@ namespace Empiria.Inventory.Assets.Data {
 
     static internal void WriteAsset(Asset o, string accountingData, string extensionData) {
 
-      var op = DataOperation.Parse("write_OMS_Asset", o.Id, o.UID, o.AssetType.Id,
+      var op = DataOperation.Parse("write_OMS_Asset", o.Id, o.UID, o.AssetType.Id, o.AssetNo,
         o.Sku.Id, o.Description, EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
-        o.Manager.Id, o.ManagerOrgUnit.Id, o.AssignedTo.Id, o.AssignedToOrgUnit.Id,
+        o.Manager.Id, o.ManagerOrgUnit.Id, o.LastAssignment.Id,
         o.Location.Id, o.Condition, accountingData, extensionData, o.Keywords,
         o.StartDate, o.EndDate, o.LastUpdate, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 

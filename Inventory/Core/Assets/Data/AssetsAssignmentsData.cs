@@ -18,13 +18,10 @@ namespace Empiria.Inventory.Assets.Data {
     #region Methods
 
     static internal FixedList<Asset> GetAssets(AssetAssignment assignment) {
-      var sql = "SELECT OMS_Assets.* FROM OMS_Assets INNER JOIN OMS_Products_SKUS " +
-                "ON OMS_Assets.Asset_SKU_ID = OMS_Products_SKUS.SKU_ID " +
-                $"WHERE Asset_Assigned_To_Id = {assignment.AssignedTo.Id} AND " +
-                $"Asset_Assigned_To_Org_Unit_Id = {assignment.AssignedToOrgUnit.Id} AND " +
-                $"Asset_Location_Id = {assignment.Location.Id} AND " +
+      var sql = "SELECT OMS_Assets.* FROM OMS_Assets " +
+                $"WHERE Asset_Last_Assignment_Txn_Id = {assignment.LastAssignment.Id} AND " +
                 $"Asset_Status <> 'X' " +
-                "ORDER BY SKU_NO";
+                "ORDER BY Asset_No";
 
       var op = DataOperation.Parse(sql);
 
@@ -33,11 +30,8 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal FixedList<AssetAssignment> SearchAssignments(string filter, string sortBy) {
-      var sql = "SELECT DISTINCT Asset_Assigned_To_Id, Party_Name Asset_Assigned_To, " +
-                  "Asset_Assigned_To_Org_Unit_Id, Asset_Location_Id " +
-                "FROM OMS_Assets INNER JOIN OMS_Products_SKUS " +
-                  "ON OMS_Assets.Asset_SKU_ID = OMS_Products_SKUS.SKU_ID " +
-                "INNER JOIN Parties ON OMS_Assets.Asset_Assigned_To_Id = Parties.Party_Id";
+      var sql = "SELECT DISTINCT Asset_Last_Assignment_Txn_Id, Asset_Location_Id " +
+                "FROM OMS_Assets";
 
       if (!string.IsNullOrWhiteSpace(filter)) {
         sql += $" WHERE {filter}";
@@ -49,7 +43,9 @@ namespace Empiria.Inventory.Assets.Data {
 
       var op = DataOperation.Parse(sql);
 
-      return DataReader.GetPlainObjectFixedList<AssetAssignment>(op);
+      return DataReader.GetPlainObjectFixedList<AssetAssignment>(op)
+                       .Sort((x, y) => $"{x.AssignedTo.Name}|{x.AssignedToOrgUnit.Code}|{x.Location.FullName}"
+                                       .CompareTo($"{y.AssignedTo.Name}|{y.AssignedToOrgUnit.Code}|{y.Location.FullName}"));
     }
 
     #endregion Methods

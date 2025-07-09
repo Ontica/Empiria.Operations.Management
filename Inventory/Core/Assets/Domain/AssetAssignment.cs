@@ -25,12 +25,11 @@ namespace Empiria.Inventory.Assets {
 
       string[] parts = assignmentUID.Split('|');
 
-      Assertion.Require(parts.Length == 3, "Unrecognized asset assignment UID.");
+      Assertion.Require(parts.Length == 2, "Unrecognized asset assignment UID.");
 
       return new AssetAssignment {
-         AssignedTo = Person.Parse(int.Parse(parts[0])),
-         AssignedToOrgUnit = OrganizationalUnit.Parse(int.Parse(parts[1])),
-         Location = Location.Parse(int.Parse(parts[2]))
+         LastAssignment = AssetTransaction.Parse(parts[0]),
+         Location = Location.Parse(parts[1])
       };
     }
 
@@ -40,20 +39,41 @@ namespace Empiria.Inventory.Assets {
 
     public string UID {
       get {
-        return $"{AssignedTo.Id}|{AssignedToOrgUnit.Id}|{Location.Id}";
+        return $"{LastAssignment.UID}|{Location.UID}";
       }
     }
 
 
-    [DataField("ASSET_ASSIGNED_TO_ID")]
-    public Person AssignedTo {
+    [DataField("ASSET_LAST_ASSIGNMENT_TXN_ID")]
+    public AssetTransaction LastAssignment {
       get; private set;
     }
 
 
-    [DataField("ASSET_ASSIGNED_TO_ORG_UNIT_ID")]
+    public Person AssignedTo {
+      get {
+        return LastAssignment.AssignedTo;
+      }
+    }
+
+
     public OrganizationalUnit AssignedToOrgUnit {
-      get; private set;
+      get {
+        return LastAssignment.AssignedToOrgUnit;
+      }
+    }
+
+    public Person ReleasedBy {
+      get {
+        return LastAssignment.ReleasedBy;
+      }
+    }
+
+
+    public OrganizationalUnit ReleasedByOrgUnit {
+      get {
+        return LastAssignment.ReleasedByOrgUnit;
+      }
     }
 
 

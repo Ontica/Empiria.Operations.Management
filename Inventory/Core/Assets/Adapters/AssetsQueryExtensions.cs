@@ -57,7 +57,7 @@ namespace Empiria.Inventory.Assets.Adapters {
         return query.OrderBy;
       }
 
-      return "SKU_NO";
+      return "ASSET_NO";
     }
 
     #endregion Extension Methods
@@ -69,7 +69,7 @@ namespace Empiria.Inventory.Assets.Adapters {
         return string.Empty;
       }
 
-      return $"SKU_NO LIKE '%{assetNo}%'";
+      return $"ASSET_NO LIKE '%{assetNo}%'";
     }
 
 
