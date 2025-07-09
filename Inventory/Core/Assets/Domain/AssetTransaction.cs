@@ -114,6 +114,18 @@ namespace Empiria.Inventory.Assets {
     }
 
 
+    [DataField("ASSET_TXN_RELEASED_BY_ID")]
+    public Person ReleasedBy {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_TXN_RELEASED_BY_ORG_UNIT_ID")]
+    public OrganizationalUnit ReleasedByOrgUnit {
+      get; private set;
+    }
+
+
     [DataField("ASSET_TXN_ASSIGNED_TO_ID")]
     public Person AssignedTo {
       get; private set;
@@ -126,35 +138,41 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("ASSET_TXN_LOCATION_ID")]
-    public Location Location {
+    [DataField("ASSET_TXN_BASE_LOCATION_ID")]
+    public Location BaseLocation {
       get; private set;
     }
 
 
     public Location Building {
       get {
-        return Location.SeekTree(LocationType.Building);
+        return BaseLocation.SeekTree(LocationType.Building);
       }
     }
 
 
     public Location Floor {
       get {
-        return Location.SeekTree(LocationType.Floor);
+        return BaseLocation.SeekTree(LocationType.Floor);
       }
     }
 
 
     public Location Place {
       get {
-        return Location.SeekTree(LocationType.Place);
+        return BaseLocation.SeekTree(LocationType.Place);
       }
     }
 
 
     [DataField("ASSET_TXN_SOURCE_ID")]
     public OperationSource OperationSource {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_TXN_EXT_DATA")]
+    protected JsonObject ExtData {
       get; private set;
     }
 
@@ -171,8 +189,8 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("ASSET_TXN_APPLICATION_TIME")]
-    public DateTime ApplicationTime {
+    [DataField("ASSET_TXN_APPLICATION_DATE")]
+    public DateTime ApplicationDate {
       get; private set;
     }
 
@@ -183,8 +201,8 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("ASSET_TXN_RECORDING_TIME")]
-    public DateTime RecordingTime {
+    [DataField("ASSET_TXN_RECORDING_DATE")]
+    public DateTime RecordingDate {
       get; private set;
     }
 
@@ -194,9 +212,14 @@ namespace Empiria.Inventory.Assets {
       get; private set;
     }
 
+    [DataField("ASSET_TXN_AUTHORIZATION_TIME")]
+    public DateTime AuthorizationTime {
+      get; private set;
+    }
 
-    [DataField("ASSET_TXN_EXT_DATA")]
-    protected JsonObject ExtData {
+
+    [DataField("ASSET_TXN_AUTHORIZED_BY_ID")]
+    public Party AuthorizedBy {
       get; private set;
     }
 
@@ -225,10 +248,10 @@ namespace Empiria.Inventory.Assets {
     public virtual string Keywords {
       get {
         return EmpiriaString.BuildKeywords(TransactionNo, Description, _identificators, _tags,
-                                           AssetTransactionType.DisplayName, Manager.Keywords,
+                                           AssetTransactionType.DisplayName,
                                            AssignedToOrgUnit.Keywords, AssignedTo.Keywords,
-                                           Location.Keywords, ManagerOrgUnit.Keywords,
-                                           OperationSource.Keywords);
+                                           BaseLocation.Keywords, RequestedBy.Keywords, ReleasedByOrgUnit.Keywords,
+                                           Manager.Keywords, ManagerOrgUnit.Keywords, OperationSource.Keywords);
       }
     }
 
@@ -250,7 +273,7 @@ namespace Empiria.Inventory.Assets {
              !AssignedToOrgUnit.IsEmptyInstance &&
              !Manager.IsEmptyInstance &&
              !ManagerOrgUnit.IsEmptyInstance &&
-             ApplicationTime != ExecutionServer.DateMaxValue;
+             ApplicationDate != ExecutionServer.DateMaxValue;
     }
 
 
@@ -275,7 +298,7 @@ namespace Empiria.Inventory.Assets {
       transaction.Description = transactionType.DisplayName;
       transaction.Manager = Manager;
       transaction.ManagerOrgUnit = ManagerOrgUnit;
-      transaction.Location = Location;
+      transaction.BaseLocation = BaseLocation;
 
       foreach (var entry in Entries) {
         var fields = new AssetTransactionEntryFields {
@@ -325,7 +348,7 @@ namespace Empiria.Inventory.Assets {
         PostingTime = DateTime.Now;
       }
 
-      RecordingTime = DateTime.Now;
+      RecordingDate = DateTime.Now;
       RecordedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
 
       AssetsTransactionsData.WriteAssetTransaction(this, this.ExtData.ToString());
@@ -351,9 +374,9 @@ namespace Empiria.Inventory.Assets {
       ManagerOrgUnit = Patcher.Patch(fields.ManagerOrgUnitUID, ManagerOrgUnit);
       AssignedTo = Patcher.Patch(fields.AssignedToUID, AssignedTo);
       AssignedToOrgUnit = Patcher.Patch(fields.AssignedToOrgUnitUID, AssignedToOrgUnit);
-      Location = Patcher.Patch(fields.LocationUID, Location);
+      BaseLocation = Patcher.Patch(fields.LocationUID, BaseLocation);
       RequestedTime = Patcher.Patch(fields.RequestedTime, RequestedTime);
-      ApplicationTime = Patcher.Patch(fields.ApplicationTime, ApplicationTime);
+      ApplicationDate = Patcher.Patch(fields.ApplicationTime, ApplicationDate);
 
       _identificators = EmpiriaString.Tagging(fields.Identificators);
       _tags = EmpiriaString.Tagging(fields.Tags);

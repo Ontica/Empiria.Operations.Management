@@ -106,6 +106,14 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
+    public NamedEntityDto ReleasedBy {
+      get; internal set;
+    }
+
+    public NamedEntityDto ReleasedByOrgUnit {
+      get; internal set;
+    }
+
     public NamedEntityDto Building {
       get; internal set;
     }
@@ -118,7 +126,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public string LocationName {
+    public string BaseLocationName {
       get; internal set;
     }
 
@@ -126,15 +134,35 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public DateTime RequestedTime {
+    public DateTime ApplicationDate {
       get; internal set;
     }
 
-    public DateTime ApplicationTime {
+    public NamedEntityDto AppliedBy {
       get; internal set;
     }
 
     public DateTime RecordingTime {
+      get; internal set;
+    }
+
+    public NamedEntityDto RecordedBy {
+      get; internal set;
+    }
+
+    public DateTime AuthorizationTime {
+      get; internal set;
+    }
+
+    public NamedEntityDto AuthorizedBy {
+      get; internal set;
+    }
+
+    public DateTime RequestedTime {
+      get; internal set;
+    }
+
+    public NamedEntityDto RequestedBy {
       get; internal set;
     }
 
@@ -143,7 +171,6 @@ namespace Empiria.Inventory.Assets.Adapters {
     }
 
   }  // class AssetTransactionDto
-
 
 
   public class AssetTransactionDescriptorDto {
@@ -180,7 +207,15 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public string LocationName {
+    public string ReleasedByName {
+      get; internal set;
+    }
+
+    public string ReleasedByOrgUnitName {
+      get; internal set;
+    }
+
+    public string BaseLocationName {
       get; internal set;
     }
 
@@ -188,15 +223,35 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public DateTime RequestedTime {
+    public DateTime ApplicationDate {
       get; internal set;
     }
 
-    public DateTime ApplicationTime {
+    public string AppliedByName {
       get; internal set;
     }
 
     public DateTime RecordingTime {
+      get; internal set;
+    }
+
+    public string RecordedByName {
+      get; internal set;
+    }
+
+    public DateTime AuthorizationTime {
+      get; internal set;
+    }
+
+    public string AuthorizedByName {
+      get; internal set;
+    }
+
+    public DateTime RequestedTime {
+      get; internal set;
+    }
+
+    public string RequestedBy {
       get; internal set;
     }
 

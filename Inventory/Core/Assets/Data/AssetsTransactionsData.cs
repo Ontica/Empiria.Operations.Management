@@ -61,7 +61,7 @@ namespace Empiria.Inventory.Assets.Data {
       Assertion.Require(transactionPrefix,
           $"Undetermined asset transaction prefix for {transaction.AssetTransactionType.DisplayName}.");
 
-      int year = transaction.ApplicationTime.Year;
+      int year = transaction.ApplicationDate.Year;
 
       string prefix = $"{year}-AF-{transactionPrefix}";
 
@@ -175,8 +175,9 @@ namespace Empiria.Inventory.Assets.Data {
       var op = DataOperation.Parse("write_OMS_Asset_Transaction", o.Id, o.UID, o.AssetTransactionType.Id,
         o.TransactionNo, o.Description, EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
         o.Manager.Id, o.ManagerOrgUnit.Id, o.AssignedTo.Id, o.AssignedToOrgUnit.Id,
-        o.Location.Id, o.OperationSource.Id, o.RequestedTime, o.RequestedBy.Id,
-        o.ApplicationTime, o.AppliedBy.Id, o.RecordingTime, o.RecordedBy.Id,
+        o.ReleasedBy.Id, o.ReleasedByOrgUnit.Id, o.BaseLocation.Id, o.OperationSource.Id,
+        o.ApplicationDate, o.AppliedBy.Id, o.RecordingDate, o.RecordedBy.Id,
+        o.AuthorizationTime, o.AuthorizedBy.Id, o.RequestedTime, o.RequestedBy.Id,
         extensionData, o.Keywords, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);

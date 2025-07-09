@@ -29,12 +29,13 @@ namespace Empiria.Inventory.Assets.Adapters {
       string transactionTypeFilter = BuildTransactionTypeFilter(query.TransactionTypeUID);
       string assignedToFilter = BuildAssignedToFilter(query.AssignedToUID);
       string assignedToOrgUnitFilter = BuildAssignedToOrgUnitFilter(query.AssignedToOrgUnitUID);
-      string locationFilter = BuildLocationFilter(query);
+      string baseLocationFilter = BuildBaseLocationFilter(query);
       string managerFilter = BuildManagerFilter(query.ManagerUID);
       string managerOrgUnitFilter = BuildManagerOrgUnitFilter(query.ManagerOrgUnitUID);
+      string releasedByFilter = BuildReleasedByFilter(query.ReleasedByUID);
+      string releasedByOrgUnitFilter = BuildReleasedByOrgUnitFilter(query.ReleasedByOrgUnitUID);
       string operationSourceFilter = BuildOperationSourceFilter(query.OperationSourceUID);
       string statusFilter = BuildStatusFilter(query.Status);
-
       string tagsFilter = BuildTagsFilter(query.Tags);
       string keywordsFilter = BuildKeywordsFilter(query.Keywords);
 
@@ -42,9 +43,11 @@ namespace Empiria.Inventory.Assets.Adapters {
 
       filter.AppendAnd(assignedToFilter);
       filter.AppendAnd(assignedToOrgUnitFilter);
-      filter.AppendAnd(locationFilter);
+      filter.AppendAnd(baseLocationFilter);
       filter.AppendAnd(managerFilter);
       filter.AppendAnd(managerOrgUnitFilter);
+      filter.AppendAnd(releasedByFilter);
+      filter.AppendAnd(releasedByOrgUnitFilter);
       filter.AppendAnd(operationSourceFilter);
       filter.AppendAnd(statusFilter);
       filter.AppendAnd(tagsFilter);
@@ -57,7 +60,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       if (query.OrderBy.Length != 0) {
         return query.OrderBy;
       } else {
-        return "ASSET_TXN_NO, ASSET_TXN_APPLICATION_TIME, ASSET_TXN_REQUESTED_TIME";
+        return "ASSET_TXN_NO, ASSET_TXN_APPLICATION_DATE, ASSET_TXN_REQUESTED_TIME";
       }
     }
 
@@ -87,15 +90,7 @@ namespace Empiria.Inventory.Assets.Adapters {
     }
 
 
-    static private string BuildKeywordsFilter(string keywords) {
-      if (keywords.Length == 0) {
-        return string.Empty;
-      }
-      return SearchExpression.ParseAndLikeKeywords("ASSET_TXN_KEYWORDS", keywords);
-    }
-
-
-    static private string BuildLocationFilter(AssetsTransactionsQuery query) {
+    static private string BuildBaseLocationFilter(AssetsTransactionsQuery query) {
       if (query.BuildingUID.Length == 0) {
         return string.Empty;
       }
@@ -105,7 +100,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       if (query.PlaceUID.Length != 0) {
         location = Location.Parse(query.PlaceUID);
 
-        return $"ASSET_TXN_LOCATION_ID = {location.Id}";
+        return $"ASSET_TXN_BASE_LOCATION_ID = {location.Id}";
       }
 
       if (query.FloorUID.Length != 0) {
@@ -118,7 +113,15 @@ namespace Empiria.Inventory.Assets.Adapters {
 
       var locationIds = locations.Select(x => x.Id).ToFixedList().ToArray();
 
-      return SearchExpression.ParseInSet("ASSET_TXN_LOCATION_ID", locationIds);
+      return SearchExpression.ParseInSet("ASSET_TXN_BASE_LOCATION_ID", locationIds);
+    }
+
+
+    static private string BuildKeywordsFilter(string keywords) {
+      if (keywords.Length == 0) {
+        return string.Empty;
+      }
+      return SearchExpression.ParseAndLikeKeywords("ASSET_TXN_KEYWORDS", keywords);
     }
 
 
@@ -155,6 +158,28 @@ namespace Empiria.Inventory.Assets.Adapters {
     }
 
 
+    static private string BuildReleasedByFilter(string releasedByUID) {
+      if (releasedByUID.Length == 0) {
+        return string.Empty;
+      }
+
+      var releasedBy = Person.Parse(releasedByUID);
+
+      return $"ASSET_TXN_RELEASED_BY_ID = {releasedBy.Id}";
+    }
+
+
+    static private string BuildReleasedByOrgUnitFilter(string releasedByOrgUnitUID) {
+      if (releasedByOrgUnitUID.Length == 0) {
+        return string.Empty;
+      }
+
+      var releasedByOrgUnit = OrganizationalUnit.Parse(releasedByOrgUnitUID);
+
+      return $"ASSET_TXN_RELEASED_BY_ORG_UNIT_ID = {releasedByOrgUnit.Id}";
+    }
+
+
     static private string BuildStatusFilter(TransactionStatus status) {
       if (status == TransactionStatus.All) {
         return "ASSET_TXN_STATUS <> 'X'";
@@ -169,11 +194,7 @@ namespace Empiria.Inventory.Assets.Adapters {
         return string.Empty;
       }
 
-      return string.Empty;
-
-      //var filter = SearchExpression.ParseOrLikeKeywords("PRODUCT_TAGS", string.Join(" ", tags));
-
-      //return $"({filter})";
+      return SearchExpression.ParseAndLikeKeywords("ASSET_TXN_TAGS", string.Join(" ", tags));
     }
 
 

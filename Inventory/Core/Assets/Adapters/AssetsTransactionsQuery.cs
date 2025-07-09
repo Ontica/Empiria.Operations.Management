@@ -42,6 +42,16 @@ namespace Empiria.Inventory.Assets.Adapters {
     } = string.Empty;
 
 
+    public string ReleasedByUID {
+      get; internal set;
+    } = string.Empty;
+
+
+    public string ReleasedByOrgUnitUID {
+      get; internal set;
+    } = string.Empty;
+
+
     public string BuildingUID {
       get; set;
     } = string.Empty;
