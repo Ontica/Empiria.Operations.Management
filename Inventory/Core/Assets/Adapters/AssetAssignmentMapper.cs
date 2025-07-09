@@ -33,10 +33,13 @@ namespace Empiria.Inventory.Assets.Adapters {
         UID = assignment.UID,
         AssignedTo = assignment.AssignedTo.MapToNamedEntity(),
         AssignedToOrgUnit = assignment.AssignedToOrgUnit.MapToNamedEntity(),
+        ReleasedBy = assignment.ReleasedBy.MapToNamedEntity(),
+        ReleasedByOrgUnit = assignment.ReleasedByOrgUnit.MapToNamedEntity(),
         Building = assignment.Building.MapToNamedEntity(),
         Floor = assignment.Floor.MapToNamedEntity(),
         Place = assignment.Place.MapToNamedEntity(),
-        LocationName = assignment.Location.FullName
+        LocationName = assignment.Location.FullName,
+        LastAssignmentTransaction = AssetTransactionMapper.MapAssetTransaction(assignment.LastAssignment),
       };
     }
 
@@ -44,9 +47,14 @@ namespace Empiria.Inventory.Assets.Adapters {
     static private AssetAssignmentDescriptor MapToDescriptor(AssetAssignment assignment) {
       return new AssetAssignmentDescriptor {
         UID = assignment.UID,
-        LocationName = assignment.Location.FullName,
         AssignedToName = assignment.AssignedTo.FullName,
-        AssignedToOrgUnitName = assignment.AssignedToOrgUnit.FullName
+        AssignedToOrgUnitName = assignment.AssignedToOrgUnit.FullName,
+        ReleasedByName = assignment.ReleasedBy.Name,
+        ReleasedByOrgUnitName = assignment.ReleasedByOrgUnit.Name,
+        LocationName = assignment.Location.FullName,
+        LastAssignmentTransactionUID = assignment.LastAssignment.UID,
+        LastAssignmentTransactionNo = assignment.LastAssignment.TransactionNo,
+        LastAssignmentApplicationDate = assignment.LastAssignment.ApplicationDate
       };
     }
 

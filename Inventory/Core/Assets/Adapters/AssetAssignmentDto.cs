@@ -8,6 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
+
 namespace Empiria.Inventory.Assets.Adapters {
 
   /// <summary>Data transfer object used to return assets assignment data.</summary>
@@ -40,6 +42,14 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
+    public NamedEntityDto ReleasedBy {
+      get; internal set;
+    }
+
+    public NamedEntityDto ReleasedByOrgUnit {
+      get; internal set;
+    }
+
     public NamedEntityDto Building {
       get; internal set;
     }
@@ -53,6 +63,10 @@ namespace Empiria.Inventory.Assets.Adapters {
     }
 
     public string LocationName {
+      get; internal set;
+    }
+
+    public AssetTransactionDto LastAssignmentTransaction {
       get; internal set;
     }
 
@@ -75,7 +89,27 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
+    public string ReleasedByName {
+      get; internal set;
+    }
+
+    public string ReleasedByOrgUnitName {
+      get; internal set;
+    }
+
     public string LocationName {
+      get; internal set;
+    }
+
+    public string LastAssignmentTransactionUID {
+      get; internal set;
+    }
+
+    public string LastAssignmentTransactionNo {
+      get; internal set;
+    }
+
+    public DateTime LastAssignmentApplicationDate {
       get; internal set;
     }
 

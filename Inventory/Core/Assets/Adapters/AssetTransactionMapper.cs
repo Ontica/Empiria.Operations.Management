@@ -45,28 +45,7 @@ namespace Empiria.Inventory.Assets.Adapters {
                          .ToFixedList();
     }
 
-    #region Helpers
-
-    static private FixedList<AssetTransactionEntryDto> Map(FixedList<AssetTransactionEntry> entries) {
-      return entries.Select(entry => Map(entry))
-                    .ToFixedList();
-    }
-
-
-    static private AssetTransactionActions MapActions(AssetTransaction transaction) {
-      return new AssetTransactionActions {
-        CanAuthorize = false,
-        CanEditDocuments = true,
-        CanClone = transaction.CanOpen(),
-        CanClose = transaction.CanClose(),
-        CanDelete = transaction.CanEdit(),
-        CanOpen = transaction.CanOpen(),
-        CanUpdate = transaction.CanEdit(),
-      };
-    }
-
-
-    static private AssetTransactionDto MapAssetTransaction(AssetTransaction transaction) {
+    static internal AssetTransactionDto MapAssetTransaction(AssetTransaction transaction) {
       return new AssetTransactionDto {
         UID = transaction.UID,
         TransactionType = transaction.AssetTransactionType.MapToNamedEntity(),
@@ -94,6 +73,27 @@ namespace Empiria.Inventory.Assets.Adapters {
         RequestedTime = transaction.RequestedTime,
         RequestedBy = transaction.RequestedBy.MapToNamedEntity(),
         Status = transaction.Status.MapToNamedEntity()
+      };
+    }
+
+
+    #region Helpers
+
+    static private FixedList<AssetTransactionEntryDto> Map(FixedList<AssetTransactionEntry> entries) {
+      return entries.Select(entry => Map(entry))
+                    .ToFixedList();
+    }
+
+
+    static private AssetTransactionActions MapActions(AssetTransaction transaction) {
+      return new AssetTransactionActions {
+        CanAuthorize = false,
+        CanEditDocuments = true,
+        CanClone = transaction.CanOpen(),
+        CanClose = transaction.CanClose(),
+        CanDelete = transaction.CanEdit(),
+        CanOpen = transaction.CanOpen(),
+        CanUpdate = transaction.CanEdit(),
       };
     }
 
