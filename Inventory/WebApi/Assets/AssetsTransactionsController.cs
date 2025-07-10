@@ -11,11 +11,14 @@
 using System.Web.Http;
 
 using Empiria.StateEnums;
+using Empiria.Storage;
 using Empiria.WebApi;
 
 using Empiria.Inventory.Assets.Adapters;
 using Empiria.Inventory.Assets.Data;
 using Empiria.Inventory.Assets.UseCases;
+
+using Empiria.Inventory.Reporting;
 
 namespace Empiria.Inventory.Assets.WebApi {
 
@@ -99,6 +102,22 @@ namespace Empiria.Inventory.Assets.WebApi {
     }
 
 
+    [HttpPost]
+    [Route("v2/assets/transactions/export")]
+    public SingleObjectModel ExportAssetsAssignmentsToExcel([FromBody] AssetsTransactionsQuery query) {
+
+      using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
+        FixedList<AssetTransaction> transactions = usecases.SearchAssetTransactions(query);
+
+        var reportingService = AssetsReportingService.ServiceInteractor();
+
+        FileDto excelFile = reportingService.ExportAssetsTransactionsToExcel(transactions);
+
+        return new SingleObjectModel(base.Request, excelFile);
+      }
+    }
+
+
     [HttpGet]
     [Route("v2/assets/transactions/types")]
     public CollectionModel GetAssetTransactionTypes() {
@@ -152,9 +171,9 @@ namespace Empiria.Inventory.Assets.WebApi {
     public CollectionModel SearchAssetTransactions([FromBody] AssetsTransactionsQuery query) {
 
       using (var usecases = AssetTransactionUseCases.UseCaseInteractor()) {
-        FixedList<AssetTransactionDescriptorDto> transactions = usecases.SearchAssetTransactions(query);
+        FixedList<AssetTransaction> transactions = usecases.SearchAssetTransactions(query);
 
-        return new CollectionModel(base.Request, transactions);
+        return new CollectionModel(base.Request, AssetTransactionMapper.Map(transactions));
       }
     }
 

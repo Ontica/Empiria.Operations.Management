@@ -130,16 +130,14 @@ namespace Empiria.Inventory.Assets.UseCases {
     }
 
 
-    public FixedList<AssetTransactionDescriptorDto> SearchAssetTransactions(AssetsTransactionsQuery query) {
+    public FixedList<AssetTransaction> SearchAssetTransactions(AssetsTransactionsQuery query) {
       Assertion.Require(query, nameof(query));
 
       string filter = query.MapToFilterString();
 
       string sort = query.MapToSortString();
 
-      FixedList<AssetTransaction> transactions = AssetsTransactionsData.SearchTransactions(filter, sort);
-
-      return AssetTransactionMapper.Map(transactions);
+      return AssetsTransactionsData.SearchTransactions(filter, sort);
     }
 
 
