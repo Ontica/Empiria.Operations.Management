@@ -9,8 +9,10 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+using DocumentFormat.OpenXml.Bibliography;
 using Empiria.Data;
 using Empiria.Orders;
+using iText.StyledXmlParser.Jsoup.Select;
 
 namespace Empiria.Inventory.Data {
 
@@ -103,6 +105,24 @@ namespace Empiria.Inventory.Data {
         return DataReader.GetPlainObject<ProductEntry>(op);
 
       } catch (Exception ) {
+
+        throw new Exception("Producto no coincide con el seleccionado.");
+      }
+
+    }
+
+
+    internal static decimal GetProductPriceFromVirtualWarehouse(int productId) {
+      try {
+
+        var sql = $"SELECT TOp  1 Inv_Entry_Input_Cost FROM OMS_Inventory_Entries where Inv_Entry_Order_Id = -10 and Inv_Entry_Product_Id = {productId}" +
+                  $"  order by Inv_Entry_Id desc ";
+
+        var op = DataOperation.Parse(sql);
+
+        return DataReader.GetScalar<decimal>(op);
+
+      } catch (Exception) {
 
         throw new Exception("Producto no coincide con el seleccionado.");
       }

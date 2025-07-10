@@ -43,6 +43,19 @@ namespace Empiria.Inventory {
       this.OrderItem = OrderItem.Parse(orderItemUID);
       this.InventoryEntryTypeId = 4311; // TODO PREGUNTAR A JM COMO JALAR EL TIPO
       this.Unit = ProductUnit.Parse(OrderItem.ProductUnit.Id);
+      this.Sku = ProductSku.Empty;
+    }
+
+
+    public InventoryEntry(Order order, InventoryOrderItem orderItem) {
+      Assertion.Require(order, nameof(order));
+      Assertion.Require(orderItem, nameof(orderItem));
+
+      this.Order = order;
+      this.OrderItem = orderItem;
+      this.InventoryEntryTypeId = 4311; // TODO PREGUNTAR A JM COMO JALAR EL TIPO
+      this.Unit = orderItem.ProductUnit;
+      this.Sku = ProductSku.Empty;
     }
 
 
@@ -109,25 +122,25 @@ namespace Empiria.Inventory {
     [DataField("Inv_Entry_Input_Qty")]
     public decimal InputQuantity {
       get; set;
-    }
+    } = 0;
 
 
     [DataField("Inv_Entry_Input_Cost")]
     public decimal InputCost {
       get; set;
-    }
+    } = 0;
 
 
     [DataField("Inv_Entry_Output_Qty")]
     public decimal OutputQuantity {
       get; set;
-    }
+    } = 0;
 
 
     [DataField("Inv_Entry_Output_Cost")]
     public decimal OutputCost {
       get; set;
-    }
+    } = 0;
 
 
     [DataField("Inv_Entry_Time")]
@@ -139,7 +152,7 @@ namespace Empiria.Inventory {
     [DataField("Inv_Entry_Tags")]
     public string Tags {
       get; set;
-    }
+    } = string.Empty;
 
 
     [DataField("Inv_Entry_Ext_Data")]
@@ -189,6 +202,15 @@ namespace Empiria.Inventory {
 
     #region Private methods
 
+    internal void AddEntry(InventoryEntryFields fields) {
+
+      this.InputQuantity = fields.Quantity;
+      this.Product = Patcher.Patch(fields.ProductUID, this.Product);
+      this.Location = Patcher.Patch(fields.LocationUID, this.Location);      
+      this.InputCost = fields.Cost;      
+    }
+
+
     protected override void OnSave() {
 
       if (IsNew) {
@@ -197,6 +219,24 @@ namespace Empiria.Inventory {
         this.EntryTime = DateTime.Now;
       }
       InventoryOrderData.WriteInventoryEntry(this);
+    }
+
+
+    internal void OutputEntry(InventoryEntryFields fields) {
+
+      this.OutputQuantity = fields.Quantity;
+      this.Product = Patcher.Patch(fields.ProductUID, this.Product);
+      this.Location = Patcher.Patch(fields.LocationUID, this.Location);      
+      this.OutputCost = fields.Cost;
+    }
+
+
+    internal void OutputEntry(decimal cost) {
+
+      this.OutputQuantity = this.OrderItem.Quantity;
+      this.Product = this.OrderItem.Product;
+      this.Location = Location.Empty;
+      this.OutputCost = cost;
     }
 
 

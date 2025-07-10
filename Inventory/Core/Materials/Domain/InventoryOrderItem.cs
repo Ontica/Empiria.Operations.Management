@@ -101,6 +101,8 @@ namespace Empiria.Inventory {
       fields.EnsureValid();
 
       base.Update(fields);
+
+      this.UnitPrice = InventoryOrderData.GetProductPriceFromVirtualWarehouse(this.Product.Id);
     }
 
     #endregion Methods

@@ -12,8 +12,10 @@ using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
 using Empiria.Locations;
+using Empiria.Orders;
 using Empiria.Parties;
 using Empiria.Products;
+using Empiria.StateEnums;
 using Xunit;
 
 namespace Empiria.Tests.Inventory {
@@ -56,6 +58,45 @@ namespace Empiria.Tests.Inventory {
       Assert.NotNull(sut);
       Assert.Equal(InventoryOrder.Parse("Empty"), sut);
       Assert.Equal(-1, sut.Id);
+    }
+
+
+    [Fact]
+    public void Should_Add_Inventory_EntriesTest() {
+
+      TestsCommonMethods.Authenticate();
+
+      string orderUID = "75dadef4-0bc3-417b-a7e2-5b34f670f0a4";
+      string orderItemUID = "ea4b9d7c-f9dd-4987-aa87-572cda50a526";
+
+      InventoryEntryFields fields = new InventoryEntryFields {
+
+        Location = "A-005-01-23",
+        Product = "TG5F916X112-320",
+        Cost = 3.7628m ,
+        Quantity = 200
+      };
+
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(orderItemUID, nameof(orderItemUID));
+      Assertion.Require(fields, nameof(fields));
+
+      ProductEntry productEntry = InventoryOrderData.GetProductEntryByName(fields.Product.Trim());
+      LocationEntry locationEntry = InventoryOrderData.GetLocationEntryByName(fields.Location.Trim());
+
+      var orderItem = InventoryOrderItem.Parse(orderItemUID);
+      Assertion.Require(productEntry.ProductId == orderItem.Product.Id, "El producto no coincide con el seleccionado.");
+
+      fields.ProductUID = Product.Parse(productEntry.ProductId).UID;
+      fields.LocationUID = Location.Parse(locationEntry.LocationId).UID;
+
+      var inventoryEntry = new InventoryEntry(orderUID, orderItemUID);
+
+      inventoryEntry.AddEntry(fields);
+
+      inventoryEntry.Save();
+
+      Assert.NotNull(inventoryEntry);
     }
 
 
@@ -126,7 +167,7 @@ namespace Empiria.Tests.Inventory {
 
 
     [Fact]
-    public void CreateInventoryEntriesTest() {
+    public void Should_Create_Inventory_EntriesTest() {
 
       TestsCommonMethods.Authenticate();
 
@@ -241,7 +282,7 @@ namespace Empiria.Tests.Inventory {
     [Fact]
     public void Should_Get_Warehouses() {
 
-      var commonStorage = CommonStorage.GetList<Location>().FindAll(x => x.Level == 1).MapToNamedEntityList();
+      var commonStorage = CommonStorage.GetList<Location>().FindAll(x => x.Level == 1 && x.GetStatus<EntityStatus>() != EntityStatus.Deleted).MapToNamedEntityList();
       Assert.NotNull(commonStorage);
     }
 
@@ -251,6 +292,70 @@ namespace Empiria.Tests.Inventory {
 
       var sut = Party.GetPartiesInRole("User").MapToNamedEntityList();
       Assert.NotNull(sut);
+    }
+
+
+
+    [Fact]
+    public void Should_Output_Inventory_EntriesTest() {
+
+      TestsCommonMethods.Authenticate();
+
+      string orderUID = "75dadef4-0bc3-417b-a7e2-5b34f670f0a4";
+      string orderItemUID = "ea4b9d7c-f9dd-4987-aa87-572cda50a526";
+
+      InventoryEntryFields fields = new InventoryEntryFields {
+
+        Location = "A-005-01-23",
+        Product = "TG5F916X112-320",
+        Cost = 3.7628m,
+        Quantity = 500
+      };
+
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(orderItemUID, nameof(orderItemUID));
+      Assertion.Require(fields, nameof(fields));
+
+      ProductEntry productEntry = InventoryOrderData.GetProductEntryByName(fields.Product.Trim());
+      LocationEntry locationEntry = InventoryOrderData.GetLocationEntryByName(fields.Location.Trim());
+
+      var orderItem = InventoryOrderItem.Parse(orderItemUID);
+      Assertion.Require(productEntry.ProductId == orderItem.Product.Id, "El producto no coincide con el seleccionado.");
+
+      fields.ProductUID = Product.Parse(productEntry.ProductId).UID;
+      fields.LocationUID = Location.Parse(locationEntry.LocationId).UID;
+
+      var inventoryEntry = new InventoryEntry(orderUID, orderItemUID);
+
+      inventoryEntry.OutputEntry(fields);
+
+      inventoryEntry.Save();
+
+      Assert.NotNull(inventoryEntry);
+    }
+
+
+    [Fact]
+    public void Should_Output_Inventory_Entries_VWTest() {
+
+      TestsCommonMethods.Authenticate();
+
+      string orderUID = "1bb0543e-f733-4fa8-8f02-56844de8f95a";
+      var items = InventoryOrder.Parse("3652bd82-ea56-4d35-a0d9-75a165726063").Items;
+
+      var order = Order.Parse(orderUID);
+
+      foreach (var item in items) {
+        
+        var inventoryEntry = new InventoryEntry(order, item);
+
+        var price = InventoryOrderData.GetProductPriceFromVirtualWarehouse(item.Product.Id);
+        inventoryEntry.OutputEntry(price);
+
+        inventoryEntry.Save();
+      }      
+
+      Assert.NotNull(orderUID);
     }
 
 

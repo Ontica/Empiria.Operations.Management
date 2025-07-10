@@ -60,6 +60,10 @@ namespace Empiria.Inventory {
       get; set;
     }
 
+    public decimal Cost {
+      get; set;
+    }
+
   } // class InventoryEntryFields
 
 
