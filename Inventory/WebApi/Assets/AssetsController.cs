@@ -10,11 +10,13 @@
 
 using System.Web.Http;
 
+using Empiria.Storage;
 using Empiria.WebApi;
 
 using Empiria.Inventory.Assets.Adapters;
-using Empiria.Inventory.Assets.UseCases;
 using Empiria.Inventory.Assets.Data;
+using Empiria.Inventory.Assets.UseCases;
+using Empiria.Inventory.Reporting;
 
 namespace Empiria.Inventory.Assets.WebApi {
 
@@ -72,15 +74,33 @@ namespace Empiria.Inventory.Assets.WebApi {
 
 
     [HttpPost]
+    [Route("v2/assets/export")]
+    public SingleObjectModel ExportAssetsToExcel([FromBody] AssetsQuery query) {
+
+      base.RequireBody(query);
+
+      using (var usecases = AssetUseCases.UseCaseInteractor()) {
+        FixedList<Asset> assets = usecases.SearchAssets(query);
+
+        var reportingService = AssetsReportingService.ServiceInteractor();
+
+        FileDto excelFile = reportingService.ExportAssetsToExcel(assets);
+
+        return new SingleObjectModel(base.Request, excelFile);
+      }
+    }
+
+
+    [HttpPost]
     [Route("v2/assets/search")]
     public CollectionModel SearchAssets([FromBody] AssetsQuery query) {
 
       base.RequireBody(query);
 
       using (var usecases = AssetUseCases.UseCaseInteractor()) {
-        FixedList<AssetDescriptor> assets = usecases.SearchAssets(query);
+        FixedList<Asset> assets = usecases.SearchAssets(query);
 
-        return new CollectionModel(base.Request, assets);
+        return new CollectionModel(base.Request, AssetMapper.Map(assets));
       }
     }
 

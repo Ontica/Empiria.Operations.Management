@@ -57,15 +57,13 @@ namespace Empiria.Inventory.Assets.UseCases {
     }
 
 
-    public FixedList<AssetDescriptor> SearchAssets(AssetsQuery query) {
+    public FixedList<Asset> SearchAssets(AssetsQuery query) {
       Assertion.Require(query, nameof(query));
 
       string filter = query.MapToFilterString();
       string orderBy = query.MapToSortString();
 
-      FixedList<Asset> assets = AssetsData.SearchAssets(filter, orderBy);
-
-      return AssetMapper.Map(assets);
+      return AssetsData.SearchAssets(filter, orderBy);
     }
 
     #endregion Use cases
