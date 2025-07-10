@@ -10,10 +10,13 @@
 
 using System.Web.Http;
 
+using Empiria.Storage;
 using Empiria.WebApi;
 
 using Empiria.Inventory.Assets.Adapters;
 using Empiria.Inventory.Assets.UseCases;
+
+using Empiria.Inventory.Reporting;
 
 namespace Empiria.Inventory.Assets.WebApi {
 
@@ -21,6 +24,25 @@ namespace Empiria.Inventory.Assets.WebApi {
   public class AssetsAssignmentController : WebApiController {
 
     #region Web Apis
+
+    [HttpPost]
+    [Route("v2/assets/assignments/export")]
+    public SingleObjectModel ExportAssetsAssignmentsToExcel([FromBody] AssetsAssignmentsQuery query) {
+
+      using (var usecases = AssetAssignmentUseCases.UseCaseInteractor()) {
+        FixedList<AssetAssignment> assignments = usecases.SearchAssetsAssignments(query);
+
+        FixedList<AssetTransaction> transactions = assignments.Select(x => x.LastAssignment)
+                                                              .ToFixedList();
+
+        var reportingService = AssetsReportingService.ServiceInteractor();
+
+        FileDto excelFile = reportingService.ExportAssetsTransactionsToExcel(transactions);
+
+        return new SingleObjectModel(base.Request, excelFile);
+      }
+    }
+
 
     [HttpGet]
     [Route("v2/assets/assignments/{assignmentUID}")]
@@ -39,9 +61,9 @@ namespace Empiria.Inventory.Assets.WebApi {
     public CollectionModel SearchAssetsAssignments([FromBody] AssetsAssignmentsQuery query) {
 
       using (var usecases = AssetAssignmentUseCases.UseCaseInteractor()) {
-        FixedList<AssetAssignmentDescriptor> assignments = usecases.SearchAssetsAssignments(query);
+        FixedList<AssetAssignment> assignments = usecases.SearchAssetsAssignments(query);
 
-        return new CollectionModel(base.Request, assignments);
+        return new CollectionModel(base.Request, AssetAssignmentMapper.Map(assignments));
       }
     }
 

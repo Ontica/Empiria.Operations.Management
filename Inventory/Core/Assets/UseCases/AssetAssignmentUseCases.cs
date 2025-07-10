@@ -42,16 +42,14 @@ namespace Empiria.Inventory.Assets.UseCases {
     }
 
 
-    public FixedList<AssetAssignmentDescriptor> SearchAssetsAssignments(AssetsAssignmentsQuery query) {
+    public FixedList<AssetAssignment> SearchAssetsAssignments(AssetsAssignmentsQuery query) {
       Assertion.Require(query, nameof(query));
 
       string filter = query.MapToFilterString();
 
       string sort = query.MapToSortString();
 
-      FixedList<AssetAssignment> assignments = AssetsAssignmentsData.SearchAssignments(filter, sort);
-
-      return AssetAssignmentMapper.Map(assignments);
+      return AssetsAssignmentsData.SearchAssignments(filter, sort);
     }
 
     #endregion Use cases
