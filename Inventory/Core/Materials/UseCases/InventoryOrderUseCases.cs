@@ -17,6 +17,7 @@ using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
 using Empiria.Parties;
 using System;
+using Empiria.StateEnums;
 
 
 namespace Empiria.Inventory.UseCases {
@@ -191,7 +192,7 @@ namespace Empiria.Inventory.UseCases {
 
 
     public FixedList<NamedEntityDto> GetWarehouses() {
-      return CommonStorage.GetList<Location>().FindAll(x => x.Level == 1).MapToNamedEntityList();
+      return CommonStorage.GetList<Location>().FindAll(x => x.Level == 1 && x.GetStatus<EntityStatus>() != EntityStatus.Deleted).MapToNamedEntityList();
     }
 
 
