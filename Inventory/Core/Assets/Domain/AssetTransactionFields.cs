@@ -65,7 +65,7 @@ namespace Empiria.Inventory.Assets {
     } = DateTime.Today;
 
 
-    public DateTime ApplicationTime {
+    public DateTime ApplicationDate {
       get; set;
     } = DateTime.Today;
 
@@ -79,7 +79,7 @@ namespace Empiria.Inventory.Assets {
       Assertion.Require(AssignedToOrgUnitUID, nameof(AssignedToOrgUnitUID));
       Assertion.Require(LocationUID, nameof(LocationUID));
 
-      Assertion.Require(RequestedTime <= ApplicationTime,
+      Assertion.Require(RequestedTime <= ApplicationDate,
         "La fecha de solicitud debe ser anterior o igual a la fecha de aplicación.");
     }
 

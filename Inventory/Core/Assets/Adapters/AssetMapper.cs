@@ -51,6 +51,7 @@ namespace Empiria.Inventory.Assets.Adapters {
         Floor = asset.Floor.MapToNamedEntity(),
         Place = asset.Place.MapToNamedEntity(),
         LocationName = asset.Location.FullName,
+        Condition = asset.Condition,
         StartDate = asset.StartDate,
         EndDate = asset.EndDate,
         Status = asset.Status.MapToDto()

@@ -116,6 +116,10 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
+    public string Condition {
+      get; internal set;
+    }
+
     public DateTime StartDate {
       get; internal set;
     }
