@@ -175,6 +175,15 @@ namespace Empiria.Orders {
 
     #region Methods
 
+
+    internal protected virtual void Close() {
+      Assertion.Require(this.Status == EntityStatus.Active,
+                  $"No se puede cerrar una orden que está en estado {this.Status.GetName()}.");
+
+      this.Status = StateEnums.EntityStatus.Closed;
+    }
+
+
     internal protected virtual void Delete() {
       Assertion.Require(this.Status != EntityStatus.Deleted,
                   $"No se puede eliminar una orden que está en estado {this.Status.GetName()}.");

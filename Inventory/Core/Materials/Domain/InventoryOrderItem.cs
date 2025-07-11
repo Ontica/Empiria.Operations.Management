@@ -105,6 +105,12 @@ namespace Empiria.Inventory {
       this.UnitPrice = InventoryOrderData.GetProductPriceFromVirtualWarehouse(this.Product.Id);
     }
 
+
+    internal new void Close() {
+      base.Close();
+    }
+
+
     #endregion Methods
 
   } // class InventoryOrderItem

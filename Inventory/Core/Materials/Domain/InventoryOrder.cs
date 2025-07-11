@@ -104,6 +104,15 @@ namespace Empiria.Inventory {
     }
 
 
+
+    internal void CloseItems() {
+      foreach (var item in _items) {
+        item.Close();
+        item.Save();
+      }
+    }
+
+
     internal protected new void Delete() {
       base.Delete();
 

@@ -9,14 +9,14 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 
+using System;
+using Empiria.Inventory.Adapters;
+using Empiria.Inventory.Assets;
+using Empiria.Inventory.Data;
 using Empiria.Locations;
+using Empiria.Parties;
 using Empiria.Products;
 using Empiria.Services;
-
-using Empiria.Inventory.Adapters;
-using Empiria.Inventory.Data;
-using Empiria.Parties;
-using System;
 using Empiria.StateEnums;
 
 
@@ -227,6 +227,7 @@ namespace Empiria.Inventory.UseCases {
       return GetInventoryOrder(order.UID);
     }
 
+
     public InventoryHolderDto CloseInventoryOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
@@ -235,12 +236,31 @@ namespace Empiria.Inventory.UseCases {
       order.Close();
       order.Save();
 
+      order.CloseItems();
+
+      OutputInventoryEntriesVW(order);
+
+      CloseInventoryEntries(order.UID);
+
       return GetInventoryOrder(order.UID);
     }
 
     #endregion Use cases
 
     #region Helpers
+
+    public void OutputInventoryEntriesVW(InventoryOrder order) {
+      
+      foreach (var item in order.Items) {
+
+        var inventoryEntry = new InventoryEntry(order, item);
+
+        var price = InventoryOrderData.GetProductPriceFromVirtualWarehouse(item.Product.Id);
+        inventoryEntry.OutputEntry(price);
+
+        inventoryEntry.Save();
+      }      
+    }
 
     #endregion Helpers
 
