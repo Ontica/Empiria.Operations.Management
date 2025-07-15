@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
 using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
@@ -131,19 +132,22 @@ namespace Empiria.Tests.Inventory {
       TestsCommonMethods.Authenticate();
       //TG5F38X34
       InventoryOrderItemFields fields = new InventoryOrderItemFields {
-        Location = "A-001-01-23",
-        Product= "ASF24",
+        Location = "A-001-01-28",
+        Product= "TG538X7-190",
         Quantity = 13,
       };
 
-      var order = InventoryOrder.Parse("a7a99924-0efc-41b9-9b65-5b78d31bf329");
+      var order = InventoryOrder.Parse("75dadef4-0bc3-417b-a7e2-5b34f670f0a4");
+
+      var product = Product.TryParseWithCode(fields.Product);
+      Assertion.Require(product, "El producto no existe");
 
       var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
-      Assertion.Require(location, $"La ubiacacion {fields.Location} no existe.");
+      Assertion.Require(location, $"La ubicacion {fields.Location} no existe.");
 
-      var product = Product.TryParseWithCode(fields.Product);     
-      Assertion.Require(product, "El producto no existe");
-     
+      var isnotexistProductinLocation = VerifyProductAndLocationInOrder(order.Id, product.Id, location.Id);
+      Assertion.Require(isnotexistProductinLocation, $"Ya existe ese producto en esa localización {fields.Location}.");
+
       fields.ProductUID = product.UID;
       fields.Description  = product.Description;
       fields.ProductUnitUID = product.BaseUnit.UID;
@@ -163,6 +167,13 @@ namespace Empiria.Tests.Inventory {
       inventoryEntry.Save();
 
       Assert.NotNull(order);
+    }
+
+
+    private bool VerifyProductAndLocationInOrder(int orderId, int productID, int locationID) {
+      if (InventoryOrderData.VerifyProductAndLocationInOrder(orderId, productID, locationID) != 0)
+        { return false; }
+      return true;
     }
 
 

@@ -51,6 +51,17 @@ namespace Empiria.Inventory.Data {
     }
 
 
+    internal static FixedList<InventoryOrderItem> GetAllInventoryOrderItems(InventoryOrder order) {
+
+      string sql = $"SELECT * FROM OMS_Order_Items " +
+                   $"WHERE Order_Item_Order_Id = {order.Id} ";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<InventoryOrderItem>(op);
+    }
+
+
     internal static FixedList<InventoryOrderItem> GetInventoryOrderItems(InventoryOrder order) {
 
       string sql = $"SELECT * FROM OMS_Order_Items " +
@@ -113,7 +124,6 @@ namespace Empiria.Inventory.Data {
 
 
     internal static decimal GetProductPriceFromVirtualWarehouse(int productId) {
-      try {
 
         var sql = $"SELECT TOp  1 Inv_Entry_Input_Cost FROM OMS_Inventory_Entries where Inv_Entry_Order_Id = -10 and Inv_Entry_Product_Id = {productId}" +
                   $"  order by Inv_Entry_Id desc ";
@@ -121,11 +131,6 @@ namespace Empiria.Inventory.Data {
         var op = DataOperation.Parse(sql);
 
         return DataReader.GetScalar<decimal>(op);
-
-      } catch (Exception) {
-
-        throw new Exception("Producto no coincide con el seleccionado.");
-      }
 
     }
 
@@ -216,6 +221,16 @@ namespace Empiria.Inventory.Data {
       return DataReader.GetObject<InventoryEntry>(op);
     }
 
+    internal static int VerifyProductAndLocationInOrder(int orderId, int productID, int locationID) {
+
+      var sql = $"select count(*) from OMS_Order_Items where Order_Item_Order_Id = {orderId} " +
+                $" and Order_Item_Product_Id = {productID} and Order_Item_Location_Id = {locationID} and Order_Item_Status <> 'X'";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetScalar<int>(op);
+
+    }
   } // class InventoryOrderData
 
 } // namespace Empiria.Inventory.Data

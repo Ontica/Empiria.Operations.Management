@@ -162,7 +162,8 @@ namespace Empiria.Inventory {
       if (this.Items.Count == 0) {
         return 1;
       } else {
-        return this.Items.Count + 1;
+        var allItems = InventoryOrderData.GetAllInventoryOrderItems(this);
+        return allItems.Count + 1;
       }
 
     }
