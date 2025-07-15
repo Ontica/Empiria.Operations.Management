@@ -175,7 +175,7 @@ namespace Empiria.Inventory.Data {
           entry.InputCost, entry.OutputQuantity,
           entry.OutputCost, entry.EntryTime,
           entry.Tags, entry.ExtData,
-          entry.Keywords, entry.PostedBy.Id,
+          entry.Keywords, entry.Position, entry.PostedBy.Id,
           entry.PostingTime, (char) entry.Status);
 
       DataWriter.Execute(op);
@@ -205,6 +205,15 @@ namespace Empiria.Inventory.Data {
                      o.Keywords, o.Location.Id, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
+    }
+
+
+    static internal InventoryEntry GetInventoryEntry(int orderItemID) {
+      var sql = $"SELECT * FROM OMS_Inventory_Entries where Inv_Entry_Order_Item_Id = {orderItemID}";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetObject<InventoryEntry>(op);
     }
 
   } // class InventoryOrderData

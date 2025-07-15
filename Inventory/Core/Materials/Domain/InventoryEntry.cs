@@ -43,6 +43,7 @@ namespace Empiria.Inventory {
       this.OrderItem = OrderItem.Parse(orderItemUID);
       this.InventoryEntryTypeId = 4311; // TODO PREGUNTAR A JM COMO JALAR EL TIPO
       this.Unit = ProductUnit.Parse(OrderItem.ProductUnit.Id);
+      this.Position = OrderItem.Position;
       this.Sku = ProductSku.Empty;
     }
 
@@ -55,6 +56,7 @@ namespace Empiria.Inventory {
       this.OrderItem = orderItem;
       this.InventoryEntryTypeId = 4311; // TODO PREGUNTAR A JM COMO JALAR EL TIPO
       this.Unit = orderItem.ProductUnit;
+      this.Position = orderItem.Position;
       this.Sku = ProductSku.Empty;
     }
 
@@ -167,6 +169,12 @@ namespace Empiria.Inventory {
     } = string.Empty;
 
 
+    [DataField("Inv_Entry_Position")]
+    public int Position {
+      get; set;
+    } = 0;
+
+
     [DataField("Inv_Entry_Posted_By_Id")]
     internal Party PostedBy {
       get; set;
@@ -251,7 +259,13 @@ namespace Empiria.Inventory {
       this.OutputCost = 0;
       this.Tags = string.Empty;
       this.ExtData = string.Empty;
+      this.Position = 0;
       this.Status = InventoryStatus.Abierto;
+    }
+
+
+    internal void UpdatePosition(int position) {
+      this.Position = position;
     }
 
     #endregion Private methods

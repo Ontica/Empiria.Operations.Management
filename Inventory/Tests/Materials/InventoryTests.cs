@@ -167,6 +167,23 @@ namespace Empiria.Tests.Inventory {
 
 
     [Fact]
+    public void Should_UpdatePosition() {
+
+      TestsCommonMethods.Authenticate();
+      //TG5F38X34
+      var order = InventoryOrder.Parse("75dadef4-0bc3-417b-a7e2-5b34f670f0a4");
+
+      foreach (var item in order.Items) {
+        var entry = InventoryOrderData.GetInventoryEntry(item.Id);
+        entry.UpdatePosition(item.Position);
+        entry.Save();
+      }
+
+      Assert.NotNull(order);
+    }
+
+
+    [Fact]
     public void Should_Create_Inventory_EntriesTest() {
 
       TestsCommonMethods.Authenticate();
