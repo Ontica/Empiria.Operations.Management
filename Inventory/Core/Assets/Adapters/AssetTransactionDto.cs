@@ -90,14 +90,6 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto Manager {
-      get; internal set;
-    }
-
-    public NamedEntityDto ManagerOrgUnit {
-      get; internal set;
-    }
-
     public NamedEntityDto AssignedTo {
       get; internal set;
     }
@@ -188,14 +180,6 @@ namespace Empiria.Inventory.Assets.Adapters {
     }
 
     public string Description {
-      get; internal set;
-    }
-
-    public string ManagerName {
-      get; internal set;
-    }
-
-    public string ManagerOrgUnitName {
       get; internal set;
     }
 

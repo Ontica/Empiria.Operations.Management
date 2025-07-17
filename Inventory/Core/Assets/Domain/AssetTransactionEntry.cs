@@ -11,6 +11,7 @@
 using System;
 
 using Empiria.Json;
+using Empiria.Locations;
 using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.StateEnums;
@@ -74,6 +75,25 @@ namespace Empiria.Inventory.Assets {
     }
 
     string INamedEntity.Name => Description;
+
+
+    [DataField("ASSET_ENTRY_LOCATION_ID")]
+    public Location Location {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_ENTRY_PREVIOUS_CONDITION")]
+    public string PreviousCondition {
+      get; private set;
+    }
+
+
+    [DataField("ASSET_ENTRY_CONDITION")]
+    public string Condition {
+      get; private set;
+    }
+
 
     [DataField("ASSET_ENTRY_OPERATION_ID")]
     internal int OperationId {

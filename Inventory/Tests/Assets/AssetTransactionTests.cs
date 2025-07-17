@@ -31,8 +31,6 @@ namespace Empiria.Tests.Inventory.Assets {
       Assert.Equal(transactionType, sut.AssetTransactionType);
       Assert.Equal(transactionType.DisplayName, sut.Description);
       Assert.Equal(sourceTransaction.BaseLocation, sut.BaseLocation);
-      Assert.Equal(sourceTransaction.Manager, sut.Manager);
-      Assert.Equal(sourceTransaction.ManagerOrgUnit, sut.ManagerOrgUnit);
       Assert.Equal(sourceTransaction.Entries.Count, sut.Entries.Count);
     }
 
@@ -56,8 +54,6 @@ namespace Empiria.Tests.Inventory.Assets {
         Assert.NotNull(sut.Description);
         Assert.NotNull(sut.Identificators);
         Assert.NotNull(sut.Tags);
-        Assert.NotNull(sut.Manager);
-        Assert.NotNull(sut.ManagerOrgUnit);
         Assert.NotNull(sut.AssignedTo);
         Assert.NotNull(sut.AssignedToOrgUnit);
         Assert.NotNull(sut.BaseLocation);
@@ -68,6 +64,7 @@ namespace Empiria.Tests.Inventory.Assets {
         Assert.NotNull(sut.RequestedBy);
         Assert.NotNull(sut.RecordedBy);
         Assert.NotNull(sut.AppliedBy);
+        Assert.NotNull(sut.AuthorizedBy);
       }
     }
 

@@ -102,18 +102,6 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("ASSET_TXN_MGR_ID")]
-    public Person Manager {
-      get; private set;
-    }
-
-
-    [DataField("ASSET_TXN_MGR_ORG_UNIT_ID")]
-    public OrganizationalUnit ManagerOrgUnit {
-      get; private set;
-    }
-
-
     [DataField("ASSET_TXN_RELEASED_BY_ID")]
     public Person ReleasedBy {
       get; private set;
@@ -251,7 +239,7 @@ namespace Empiria.Inventory.Assets {
                                            AssetTransactionType.DisplayName,
                                            AssignedToOrgUnit.Keywords, AssignedTo.Keywords,
                                            BaseLocation.Keywords, RequestedBy.Keywords, ReleasedByOrgUnit.Keywords,
-                                           Manager.Keywords, ManagerOrgUnit.Keywords, OperationSource.Keywords);
+                                           OperationSource.Keywords);
       }
     }
 
@@ -271,8 +259,6 @@ namespace Empiria.Inventory.Assets {
              Entries.Count > 0 &&
              !AssignedTo.IsEmptyInstance &&
              !AssignedToOrgUnit.IsEmptyInstance &&
-             !Manager.IsEmptyInstance &&
-             !ManagerOrgUnit.IsEmptyInstance &&
              ApplicationDate != ExecutionServer.DateMaxValue;
     }
 
@@ -296,8 +282,6 @@ namespace Empiria.Inventory.Assets {
       var transaction = new AssetTransaction(transactionType);
 
       transaction.Description = transactionType.DisplayName;
-      transaction.Manager = Manager;
-      transaction.ManagerOrgUnit = ManagerOrgUnit;
       transaction.BaseLocation = BaseLocation;
 
       foreach (var entry in Entries) {
@@ -370,8 +354,6 @@ namespace Empiria.Inventory.Assets {
       fields.EnsureValid();
 
       Description = Patcher.PatchClean(fields.Description, Description);
-      Manager = Patcher.Patch(fields.ManagerUID, Manager);
-      ManagerOrgUnit = Patcher.Patch(fields.ManagerOrgUnitUID, ManagerOrgUnit);
       AssignedTo = Patcher.Patch(fields.AssignedToUID, AssignedTo);
       AssignedToOrgUnit = Patcher.Patch(fields.AssignedToOrgUnitUID, AssignedToOrgUnit);
       BaseLocation = Patcher.Patch(fields.LocationUID, BaseLocation);

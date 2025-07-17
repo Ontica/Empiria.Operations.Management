@@ -35,16 +35,6 @@ namespace Empiria.Inventory.Assets {
     } = new string[0];
 
 
-    public string ManagerUID {
-      get; set;
-    } = string.Empty;
-
-
-    public string ManagerOrgUnitUID {
-      get; set;
-    } = string.Empty;
-
-
     public string AssignedToUID {
       get; set;
     } = string.Empty;
@@ -73,8 +63,6 @@ namespace Empiria.Inventory.Assets {
     internal void EnsureValid() {
       Assertion.Require(TransactionTypeUID, nameof(TransactionTypeUID));
       Assertion.Require(Description, nameof(Description));
-      Assertion.Require(ManagerUID, nameof(ManagerUID));
-      Assertion.Require(ManagerOrgUnitUID, nameof(ManagerOrgUnitUID));
       Assertion.Require(AssignedToUID, nameof(AssignedToUID));
       Assertion.Require(AssignedToOrgUnitUID, nameof(AssignedToOrgUnitUID));
       Assertion.Require(LocationUID, nameof(LocationUID));

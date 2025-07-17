@@ -174,9 +174,8 @@ namespace Empiria.Inventory.Assets.Data {
 
       var op = DataOperation.Parse("write_OMS_Asset_Transaction", o.Id, o.UID, o.AssetTransactionType.Id,
         o.TransactionNo, o.Description, EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
-        o.Manager.Id, o.ManagerOrgUnit.Id, o.AssignedTo.Id, o.AssignedToOrgUnit.Id,
-        o.ReleasedBy.Id, o.ReleasedByOrgUnit.Id, o.BaseLocation.Id, o.OperationSource.Id,
-        o.ApplicationDate, o.AppliedBy.Id, o.RecordingDate, o.RecordedBy.Id,
+        o.AssignedTo.Id, o.AssignedToOrgUnit.Id, o.ReleasedBy.Id, o.ReleasedByOrgUnit.Id, o.BaseLocation.Id,
+        o.OperationSource.Id, o.ApplicationDate, o.AppliedBy.Id, o.RecordingDate, o.RecordedBy.Id,
         o.AuthorizationTime, o.AuthorizedBy.Id, o.RequestedTime, o.RequestedBy.Id,
         extensionData, o.Keywords, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
