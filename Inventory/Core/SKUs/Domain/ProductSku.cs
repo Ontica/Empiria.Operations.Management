@@ -113,6 +113,16 @@ namespace Empiria.Inventory {
     }
 
 
+    public int Year {
+      get {
+        return ExtData.Get("year", 0);
+      }
+      private set {
+        ExtData.SetIf("year", value, value > 0);
+      }
+    }
+
+
     [DataField("SKU_SERIAL_NO")]
     public string SerialNo {
       get; private set;

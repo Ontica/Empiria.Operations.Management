@@ -41,7 +41,7 @@ namespace Empiria.Inventory.Assets.Data {
     static internal FixedList<Person> GetAssetsAssignees(string keywords) {
       var sql = "SELECT DISTINCT * FROM Parties " +
                 $"WHERE {SearchExpression.ParseAndLikeKeywords("PARTY_KEYWORDS", keywords)} " +
-                "AND Party_ID IN (SELECT Asset_Assigned_To_ID " +
+                "AND Party_ID IN (SELECT Asset_Assigned_To_Id " +
                                    "FROM OMS_Assets " +
                                    "WHERE Asset_Status <> 'X') " +
                 "ORDER BY Party_Name";
@@ -74,7 +74,7 @@ namespace Empiria.Inventory.Assets.Data {
       var op = DataOperation.Parse("write_OMS_Asset", o.Id, o.UID, o.AssetType.Id, o.AssetNo,
         o.Sku.Id, o.Description, EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
         o.Manager.Id, o.ManagerOrgUnit.Id, o.LastAssignment.Id,
-        o.Location.Id, o.Condition, accountingData, extensionData, o.Keywords,
+        o.Location.Id, o.CurrentCondition, accountingData, extensionData, o.Keywords,
         o.StartDate, o.EndDate, o.LastUpdate, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);

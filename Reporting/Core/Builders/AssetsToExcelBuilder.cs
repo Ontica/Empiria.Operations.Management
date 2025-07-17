@@ -66,7 +66,7 @@ namespace Empiria.Inventory.Reporting {
         _excelFile.SetCell($"B{i}", EmpiriaString.Tagging(asset.Identificators));
         _excelFile.SetCell($"C{i}", asset.Name);
         _excelFile.SetCell($"D{i}", asset.AssetType.Name);
-        _excelFile.SetCell($"E{i}", asset.Condition);
+        _excelFile.SetCell($"E{i}", asset.CurrentCondition);
         _excelFile.SetCell($"F{i}", asset.Building.Name);
         _excelFile.SetCell($"G{i}", asset.Floor.Name);
         _excelFile.SetCell($"H{i}", asset.Place.Name);
