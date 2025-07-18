@@ -32,7 +32,7 @@ namespace Empiria.Inventory.Assets.WebApi {
       using (var usecases = AssetAssignmentUseCases.UseCaseInteractor()) {
         FixedList<AssetAssignment> assignments = usecases.SearchAssetsAssignments(query);
 
-        FixedList<AssetTransaction> transactions = assignments.Select(x => x.LastAssignment)
+        FixedList<AssetTransaction> transactions = assignments.Select(x => x.Transaction)
                                                               .ToFixedList();
 
         var reportingService = AssetsReportingService.ServiceInteractor();

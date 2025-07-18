@@ -19,7 +19,7 @@ namespace Empiria.Inventory.Assets.Data {
 
     static internal FixedList<Asset> GetAssets(AssetAssignment assignment) {
       var sql = "SELECT OMS_Assets.* FROM OMS_Assets " +
-                $"WHERE Asset_Last_Asgmt_Txn_Id = {assignment.LastAssignment.Id} AND " +
+                $"WHERE Asset_Last_Asgmt_Txn_Id = {assignment.Transaction.Id} AND " +
                 $"Asset_Status <> 'X' " +
                 "ORDER BY Asset_No";
 

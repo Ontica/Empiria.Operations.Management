@@ -28,7 +28,7 @@ namespace Empiria.Inventory.Assets {
       Assertion.Require(parts.Length == 2, "Unrecognized asset assignment UID.");
 
       return new AssetAssignment {
-         LastAssignment = AssetTransaction.Parse(parts[0]),
+         Transaction = AssetTransaction.Parse(parts[0]),
          Location = Location.Parse(parts[1])
       };
     }
@@ -39,40 +39,40 @@ namespace Empiria.Inventory.Assets {
 
     public string UID {
       get {
-        return $"{LastAssignment.UID}|{Location.UID}";
+        return $"{Transaction.UID}|{Location.UID}";
       }
     }
 
 
     [DataField("ASSET_LAST_ASGMT_TXN_ID")]
-    public AssetTransaction LastAssignment {
+    public AssetTransaction Transaction {
       get; private set;
     }
 
 
     public Person AssignedTo {
       get {
-        return LastAssignment.AssignedTo;
+        return Transaction.AssignedTo;
       }
     }
 
 
     public OrganizationalUnit AssignedToOrgUnit {
       get {
-        return LastAssignment.AssignedToOrgUnit;
+        return Transaction.AssignedToOrgUnit;
       }
     }
 
     public Person ReleasedBy {
       get {
-        return LastAssignment.ReleasedBy;
+        return Transaction.ReleasedBy;
       }
     }
 
 
     public OrganizationalUnit ReleasedByOrgUnit {
       get {
-        return LastAssignment.ReleasedByOrgUnit;
+        return Transaction.ReleasedByOrgUnit;
       }
     }
 
