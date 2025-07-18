@@ -166,6 +166,20 @@ namespace Empiria.Inventory.Assets.WebApi {
     }
 
 
+    [HttpGet]
+    [Route("v2/assets/transactions/{transactionUID:guid}/print")]
+    public SingleObjectModel PrintAssetTransaction([FromUri] string transactionUID) {
+
+        var transaction = AssetTransaction.Parse(transactionUID);
+
+        using (var reportingService = AssetsReportingService.ServiceInteractor()) {
+            FileDto file = reportingService.ExportAssetsTransactionToPdf(transaction);
+
+            return new SingleObjectModel(base.Request, file);
+        }
+    }
+
+
     [HttpPost]
     [Route("v2/assets/transactions/search")]
     public CollectionModel SearchAssetTransactions([FromBody] AssetsTransactionsQuery query) {

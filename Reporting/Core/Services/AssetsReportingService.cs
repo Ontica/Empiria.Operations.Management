@@ -63,6 +63,19 @@ namespace Empiria.Inventory.Reporting {
       return excelFile.ToFileDto();
     }
 
+
+    public FileDto ExportAssetsTransactionToPdf(AssetTransaction transaction) {
+      Assertion.Require(transaction, nameof(transaction));
+
+      var templateUID = $"{this.GetType().Name}.ExportAssetsTransactionToPdf";
+
+      var templateConfig = FileTemplateConfig.Parse(templateUID);
+
+      var exporter = new AssetsTransactionVoucherBuilder(templateConfig);
+
+      return exporter.CreateVoucher(transaction);
+    }
+
     #endregion Services
 
   } // class BudgetTransactionReportingService
