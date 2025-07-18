@@ -250,33 +250,21 @@ namespace Empiria.Inventory.Assets {
       }
     }
 
+
+    internal AssetTransactionRules Rules {
+      get {
+        return new AssetTransactionRules(this);
+      }
+    }
+
     #endregion Properties
 
     #region Methods
 
-    internal bool CanClose() {
-      return Status == TransactionStatus.Pending &&
-             Entries.Count > 0 &&
-             !AssignedTo.IsEmptyInstance &&
-             !AssignedToOrgUnit.IsEmptyInstance &&
-             ApplicationDate != ExecutionServer.DateMaxValue;
-    }
-
-
-    internal bool CanEdit() {
-      return this.Status == TransactionStatus.Pending;
-    }
-
-
-    internal bool CanOpen() {
-      return this.Status == TransactionStatus.Closed;
-    }
-
-
     internal AssetTransaction Clone(AssetTransactionType transactionType) {
       Assertion.Require(transactionType, nameof(transactionType));
       Assertion.Require(!this.IsEmptyInstance, "Can not clone the empty instance.");
-      Assertion.Require(this.CanOpen(),
+      Assertion.Require(Rules.CanClone,
                         $"Can not clone transaction {this.UID}. Its status is {this.Status.GetName()}.");
 
       var transaction = new AssetTransaction(transactionType);
@@ -298,7 +286,7 @@ namespace Empiria.Inventory.Assets {
 
 
     internal void Close() {
-      Assertion.Require(this.CanClose(),
+      Assertion.Require(Rules.CanClose,
                         $"Transaction can not be closed. Its status is {Status.GetName()}, " +
                         $"Entries = {Entries.Count}.");
 
@@ -312,7 +300,7 @@ namespace Empiria.Inventory.Assets {
 
 
     internal void Delete() {
-      Assertion.Require(this.Status == TransactionStatus.Pending,
+      Assertion.Require(Rules.CanDelete,
                         $"Transaction can not be deleted. Its status is {Status.GetName()}.");
 
       this.Status = TransactionStatus.Deleted;
@@ -370,7 +358,7 @@ namespace Empiria.Inventory.Assets {
 
     internal AssetTransactionEntry AppendEntry(AssetTransactionEntryFields fields) {
       Assertion.Require(fields, nameof(fields));
-      Assertion.Require(CanEdit(), $"Asset transaction {this.UID} can not be edited.");
+      Assertion.Require(Rules.CanUpdate, $"Asset transaction {this.UID} can not be edited.");
 
       fields.EnsureValid();
 
@@ -400,7 +388,7 @@ namespace Empiria.Inventory.Assets {
 
     internal void RemoveEntry(AssetTransactionEntry entry) {
       Assertion.Require(entry, nameof(entry));
-      Assertion.Require(CanEdit(), $"Asset transaction {this.UID} can not be edited.");
+      Assertion.Require(Rules.CanUpdate, $"Asset transaction {this.UID} can not be edited.");
 
       _ = GetEntry(entry.UID);
 
@@ -414,7 +402,7 @@ namespace Empiria.Inventory.Assets {
                               AssetTransactionEntryFields fields) {
       Assertion.Require(entry, nameof(entry));
       Assertion.Require(fields, nameof(fields));
-      Assertion.Require(CanEdit(), $"Asset transaction {this.UID} can not be edited.");
+      Assertion.Require(Rules.CanUpdate, $"Asset transaction {this.UID} can not be edited.");
 
       fields.EnsureValid();
 
@@ -422,7 +410,6 @@ namespace Empiria.Inventory.Assets {
 
       entry.Update(fields);
     }
-
 
     #endregion Entries Methods
 

@@ -56,7 +56,11 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public bool CanOpen {
+    public bool CanReject {
+      get; internal set;
+    }
+
+    public bool CanSendToAuthorization {
       get; internal set;
     }
 

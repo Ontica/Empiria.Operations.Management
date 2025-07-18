@@ -16,7 +16,8 @@ namespace Empiria.Inventory.Assets.Adapters {
     static internal AssetAssignmentHolder Map(AssetAssignment assignment) {
       return new AssetAssignmentHolder {
         Assignment = MapAssignment(assignment),
-        Assets = AssetMapper.Map(assignment.GetAssets())
+        Assets = AssetMapper.Map(assignment.GetAssets()),
+        Actions = AssetTransactionMapper.MapActions(assignment.Transaction.Rules)
       };
     }
 
@@ -39,7 +40,7 @@ namespace Empiria.Inventory.Assets.Adapters {
         Floor = assignment.Floor.MapToNamedEntity(),
         Place = assignment.Place.MapToNamedEntity(),
         LocationName = assignment.Location.FullName,
-        LastAssignmentTransaction = AssetTransactionMapper.MapAssetTransaction(assignment.LastAssignment),
+        LastAssignmentTransaction = AssetTransactionMapper.MapAssetTransaction(assignment.Transaction),
       };
     }
 
@@ -52,9 +53,9 @@ namespace Empiria.Inventory.Assets.Adapters {
         ReleasedByName = assignment.ReleasedBy.Name,
         ReleasedByOrgUnitName = assignment.ReleasedByOrgUnit.Name,
         LocationName = assignment.Location.FullName,
-        LastAssignmentTransactionUID = assignment.LastAssignment.UID,
-        LastAssignmentTransactionNo = assignment.LastAssignment.TransactionNo,
-        LastAssignmentApplicationDate = assignment.LastAssignment.ApplicationDate
+        LastAssignmentTransactionUID = assignment.Transaction.UID,
+        LastAssignmentTransactionNo = assignment.Transaction.TransactionNo,
+        LastAssignmentApplicationDate = assignment.Transaction.ApplicationDate
       };
     }
 

@@ -49,6 +49,13 @@ namespace Empiria.Inventory.Assets {
     }
 
 
+    public bool IsProtected {
+      get {
+        return base.ExtensionData.Get("isProtected", false);
+      }
+    }
+
+
     public string Prefix {
       get {
         return base.ExtensionData.Get("prefix", string.Empty);

@@ -23,6 +23,10 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
+    public AssetTransactionActions Actions {
+      get; internal set;
+    }
+
   }  // class AssetAssignmentHolder
 
 
