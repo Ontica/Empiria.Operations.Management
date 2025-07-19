@@ -80,6 +80,10 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
+    public string SerialNo {
+      get; internal set;
+    }
+
     public int Year {
       get; internal set;
     }

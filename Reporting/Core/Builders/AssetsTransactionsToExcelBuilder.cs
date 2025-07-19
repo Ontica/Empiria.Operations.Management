@@ -81,14 +81,14 @@ namespace Empiria.Inventory.Reporting {
           _excelFile.SetCell($"N{i}", asset.AssetNo);
           _excelFile.SetCell($"O{i}", asset.Name);
           _excelFile.SetCell($"P{i}", asset.AssetType.Name);
-          _excelFile.SetCell($"Q{i}", asset.PreviousCondition);
+          _excelFile.SetCell($"Q{i}", asset.LastAssignmentPreviousCondition);
           _excelFile.SetCell($"R{i}", asset.CurrentCondition);
           _excelFile.SetCell($"S{i}", txn.Building.Name);
           _excelFile.SetCell($"T{i}", txn.Floor.Name);
           _excelFile.SetCell($"U{i}", txn.Place.Name);
           _excelFile.SetCell($"V{i}", asset.Brand);
           _excelFile.SetCell($"W{i}", asset.Model);
-          _excelFile.SetCell($"X{i}", asset.Sku.SerialNo);
+          _excelFile.SetCell($"X{i}", asset.SerialNo);
           i++;
         }
       }

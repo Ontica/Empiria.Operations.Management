@@ -44,7 +44,7 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("ASSET_LAST_ASGMT_TXN_ID")]
+    [DataField("LAST_ASGMT_TXN_ID")]
     public AssetTransaction Transaction {
       get; private set;
     }
@@ -77,7 +77,7 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    [DataField("ASSET_LOCATION_ID")]
+    [DataField("LAST_ASGMT_LOCATION_ID")]
     public Location Location {
       get; private set;
     }

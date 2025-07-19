@@ -52,15 +52,8 @@ namespace Empiria.Inventory.Assets {
 
 
     [DataField("ASSET_SKU_ID")]
-    public ProductSku Sku {
+    internal int SkuId {
       get; private set;
-    }
-
-
-    public string Name {
-      get {
-        return Sku.Name;
-      }
     }
 
 
@@ -70,30 +63,8 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    public string Brand {
-      get {
-        return Sku.Brand;
-      }
-    }
-
-
-    public string Model {
-      get {
-        return Sku.Model;
-      }
-    }
-
-
-    public int Year {
-      get {
-        return Sku.Year;
-      }
-    }
-
-
     [DataField("ASSET_IDENTIFICATORS")]
     private string _identificators = string.Empty;
-
 
     public FixedList<string> Identificators {
       get {
@@ -124,62 +95,36 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    public Person AssignedTo {
-      get {
-        return LastAssignment.AssignedTo;
-      }
-    }
-
-
-    public OrganizationalUnit AssignedToOrgUnit {
-      get {
-        return LastAssignment.AssignedToOrgUnit;
-      }
-    }
-
-
-    [DataField("ASSET_LAST_ASGMT_TXN_ID")]
-    public AssetTransaction LastAssignment {
+    [DataField("ASSET_CURRENT_CONDITION")]
+    public string CurrentCondition {
       get; private set;
     }
 
 
-    [DataField("ASSET_LOCATION_ID")]
-    public Location Location {
+    [DataField("ASSET_CURRENT_LOCATION_ID")]
+    public Location CurrentLocation {
       get; private set;
     }
 
 
     public Location Building {
       get {
-        return Location.SeekTree(LocationType.Building);
+        return CurrentLocation.SeekTree(LocationType.Building);
       }
     }
 
 
     public Location Floor {
       get {
-        return Location.SeekTree(LocationType.Floor);
+        return CurrentLocation.SeekTree(LocationType.Floor);
       }
     }
 
 
     public Location Place {
       get {
-        return Location.SeekTree(LocationType.Place);
+        return CurrentLocation.SeekTree(LocationType.Place);
       }
-    }
-
-
-    [DataField("ASSET_CONDITION")]
-    public string CurrentCondition {
-      get; private set;
-    }
-
-
-    [DataField("ASSET_PREVIOUS_CONDITION")]
-    public string PreviousCondition {
-      get; private set;
     }
 
 
@@ -231,17 +176,112 @@ namespace Empiria.Inventory.Assets {
     }
 
 
+    [DataField("ASSET_LAST_ASGMT_TXN_ENTRY_ID")]
+    internal int LastAssignmentEntryId {
+      get; private set;
+    }
+
+
+    [DataField("LAST_ASGMT_ASSIGNED_TO_ID")]
+    public Person AssignedTo {
+      get; private set;
+    }
+
+
+    [DataField("LAST_ASGMT_ASSIGNED_TO_ORG_UNIT_ID")]
+    public OrganizationalUnit AssignedToOrgUnit {
+      get; private set;
+    }
+
+
+
+    [DataField("LAST_ASGMT_TXN_ID")]
+    private int LastAssignmentTransactionId {
+      get; set;
+    }
+
+    [DataField("LAST_ASGMT_TXN_NO")]
+    public string LastAssignmentTransactionNo {
+      get; private set;
+    }
+
+
+    [DataField("LAST_ASGMT_TXN_DATE")]
+    public DateTime LastAssignmentDate {
+      get; private set;
+    }
+
+
+    [DataField("LAST_ASGMT_LOCATION_ID")]
+    public Location LastAssignmentLocation {
+      get; private set;
+    }
+
+
+    [DataField("LAST_ASGMT_CONDITION")]
+    public string LastAssignmentCondition {
+      get; private set;
+    }
+
+
+    [DataField("LAST_ASGMT_PREVIOUS_CONDITION")]
+    public string LastAssignmentPreviousCondition {
+      get; private set;
+    }
+
+
+    [DataField("SKU_NAME")]
+    public string Name {
+      get; private set;
+    }
+
+
+    [DataField("SKU_BRAND")]
+    public string Brand {
+      get; private set;
+    }
+
+
+    [DataField("SKU_MODEL")]
+    public string Model {
+      get; private set;
+    }
+
+
+    [DataField("SKU_YEAR")]
+    public int Year {
+      get; private set;
+    }
+
+
+    [DataField("SKU_SERIAL_NO")]
+    public string SerialNo {
+      get; private set;
+    }
+
+
     public string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(AssetType.Name, Sku.Keywords, Description, Year.ToString(),
-                                           _identificators, _tags, this.CurrentCondition, this.Location.Keywords,
-                                           LastAssignment.Keywords);
+        return EmpiriaString.BuildKeywords(AssetNo, AssetType.Name, Description,
+                                           _identificators, _tags, GetSku().Keywords, CurrentCondition, CurrentLocation.Keywords);
       }
     }
 
     #endregion Properties
 
     #region Methods
+
+    public AssetTransaction GetLastAssignment() {
+      return AssetTransaction.Parse(LastAssignmentTransactionId);
+    }
+
+    public AssetTransactionEntry GetLastAssignmentEntry() {
+      return AssetTransactionEntry.Parse(LastAssignmentEntryId);
+    }
+
+    public ProductSku GetSku() {
+      return ProductSku.Parse(SkuId);
+    }
 
     protected override void OnSave() {
       if (IsNew) {

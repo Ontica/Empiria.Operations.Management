@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+
 using Empiria.Data;
 using Empiria.Parties;
 
@@ -41,8 +42,8 @@ namespace Empiria.Inventory.Assets.Data {
     static internal FixedList<Person> GetAssetsAssignees(string keywords) {
       var sql = "SELECT DISTINCT * FROM Parties " +
                 $"WHERE {SearchExpression.ParseAndLikeKeywords("PARTY_KEYWORDS", keywords)} " +
-                "AND Party_ID IN (SELECT Asset_Assigned_To_Id " +
-                                   "FROM OMS_Assets " +
+                "AND Party_ID IN (SELECT Last_Asgmt_Assigned_To_Id " +
+                                   "FROM vw_OMS_Assets " +
                                    "WHERE Asset_Status <> 'X') " +
                 "ORDER BY Party_Name";
 
@@ -53,7 +54,7 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal FixedList<Asset> SearchAssets(string filter, string sortBy) {
-      var sql = "SELECT OMS_Assets.* FROM OMS_Assets";
+      var sql = "SELECT * FROM vw_OMS_Assets";
 
       if (!string.IsNullOrWhiteSpace(filter)) {
         sql += $" WHERE {filter}";
@@ -72,9 +73,9 @@ namespace Empiria.Inventory.Assets.Data {
     static internal void WriteAsset(Asset o, string accountingData, string extensionData) {
 
       var op = DataOperation.Parse("write_OMS_Asset", o.Id, o.UID, o.AssetType.Id, o.AssetNo,
-        o.Sku.Id, o.Description, EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
-        o.Manager.Id, o.ManagerOrgUnit.Id, o.LastAssignment.Id,
-        o.Location.Id, o.CurrentCondition, accountingData, extensionData, o.Keywords,
+        o.SkuId, o.Description, EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
+        o.Manager.Id, o.ManagerOrgUnit.Id, o.LastAssignmentEntryId,
+        o.CurrentLocation.Id, o.CurrentCondition, accountingData, extensionData, o.Keywords,
         o.StartDate, o.EndDate, o.LastUpdate, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);

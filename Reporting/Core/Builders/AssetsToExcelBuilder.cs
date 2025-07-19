@@ -76,8 +76,8 @@ namespace Empiria.Inventory.Reporting {
         _excelFile.SetCell($"L{i}", asset.AssignedTo.Name);
         _excelFile.SetCell($"M{i}", asset.Brand);
         _excelFile.SetCell($"N{i}", asset.Model);
-        _excelFile.SetCell($"O{i}", asset.Sku.SerialNo);
-        _excelFile.SetCell($"P{i}", asset.LastAssignment.TransactionNo);
+        _excelFile.SetCell($"O{i}", asset.SerialNo);
+        _excelFile.SetCell($"P{i}", asset.LastAssignmentTransactionNo);
         _excelFile.SetCell($"Q{i}", asset.LastUpdate);
         i++;
       }

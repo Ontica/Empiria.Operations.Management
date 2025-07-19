@@ -91,7 +91,7 @@ namespace Empiria.Inventory.Assets.Adapters {
 
       var assignedTo = Person.Parse(assignedToUID);
 
-      return $"ASSET_ASSIGNED_TO_ID = {assignedTo.Id}";
+      return $"LAST_ASGMT_ASSIGNED_TO_ID = {assignedTo.Id}";
     }
 
 
@@ -102,7 +102,7 @@ namespace Empiria.Inventory.Assets.Adapters {
 
       var assignedToOrgUnit = OrganizationalUnit.Parse(assignedToOrgUnitUID);
 
-      return $"ASSET_ASSIGNED_TO_ORG_UNIT_ID = {assignedToOrgUnit.Id}";
+      return $"LAST_ASGMT_ASSIGNED_TO_ORG_UNIT_ID = {assignedToOrgUnit.Id}";
     }
 
 
@@ -125,7 +125,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       if (query.PlaceUID.Length != 0) {
         location = Location.Parse(query.PlaceUID);
 
-        return $"ASSET_LOCATION_ID = {location.Id}";
+        return $"LAST_ASGMT_LOCATION_ID = {location.Id}";
       }
 
       if (query.FloorUID.Length != 0) {
@@ -138,7 +138,7 @@ namespace Empiria.Inventory.Assets.Adapters {
 
       var locationIds = locations.Select(x => x.Id).ToFixedList().ToArray();
 
-      return SearchExpression.ParseInSet("ASSET_LOCATION_ID", locationIds);
+      return SearchExpression.ParseInSet("LAST_ASGMT_LOCATION_ID", locationIds);
     }
 
 

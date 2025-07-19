@@ -18,8 +18,8 @@ namespace Empiria.Inventory.Assets.Data {
     #region Methods
 
     static internal FixedList<Asset> GetAssets(AssetAssignment assignment) {
-      var sql = "SELECT OMS_Assets.* FROM OMS_Assets " +
-                $"WHERE Asset_Last_Asgmt_Txn_Id = {assignment.Transaction.Id} AND " +
+      var sql = "SELECT * FROM vw_OMS_Assets " +
+                $"WHERE Last_Asgmt_Txn_Id = {assignment.Transaction.Id} AND " +
                 $"Asset_Status <> 'X' " +
                 "ORDER BY Asset_No";
 
@@ -30,8 +30,8 @@ namespace Empiria.Inventory.Assets.Data {
 
 
     static internal FixedList<AssetAssignment> SearchAssignments(string filter, string sortBy) {
-      var sql = "SELECT DISTINCT Asset_Last_Asgmt_Txn_Id, Asset_Location_Id " +
-                "FROM OMS_Assets";
+      var sql = "SELECT DISTINCT Last_Asgmt_Txn_Id, Last_Asgmt_Location_Id " +
+                "FROM vw_OMS_Assets";
 
       if (!string.IsNullOrWhiteSpace(filter)) {
         sql += $" WHERE {filter}";
