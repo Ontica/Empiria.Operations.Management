@@ -27,10 +27,6 @@ namespace Empiria.Inventory {
 
     #region Constructors and parsers
 
-    static ProductSku() {
-      _ = BaseObject.GetFullList<ProductSku>();
-    }
-
     protected ProductSku(ProductSkuType productSkuType) : base(productSkuType) {
       // Required by Empiria Framework for all partitioned types.
     }
@@ -113,18 +109,20 @@ namespace Empiria.Inventory {
     }
 
 
+    [DataField("SKU_YEAR")]
     public int Year {
-      get {
-        return ExtData.Get("year", 0);
-      }
-      private set {
-        ExtData.SetIf("year", value, value > 0);
-      }
+      get; private set;
     }
 
 
     [DataField("SKU_SERIAL_NO")]
     public string SerialNo {
+      get; private set;
+    }
+
+
+    [DataField("SKU_CONDITION")]
+    public string Condition {
       get; private set;
     }
 
@@ -199,8 +197,8 @@ namespace Empiria.Inventory {
 
     public virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(SkuNo, Name, Brand, Model, SerialNo, Description,
-                                           _identificators, _tags, Product.Keywords);
+        return EmpiriaString.BuildKeywords(SkuNo, Name, Brand, Model, SerialNo, Year.ToString(),
+                                           _identificators, _tags, Product.Keywords, Description);
       }
     }
 
