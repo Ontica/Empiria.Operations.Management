@@ -72,22 +72,6 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public string Brand {
-      get; internal set;
-    }
-
-    public string Model {
-      get; internal set;
-    }
-
-    public string SerialNo {
-      get; internal set;
-    }
-
-    public int Year {
-      get; internal set;
-    }
-
     public NamedEntityDto AssignedTo {
       get; internal set;
     }
@@ -121,6 +105,42 @@ namespace Empiria.Inventory.Assets.Adapters {
     }
 
     public string Condition {
+      get; internal set;
+    }
+
+    public string Brand {
+      get; internal set;
+    }
+
+    public string Model {
+      get; internal set;
+    }
+
+    public string SerialNo {
+      get; internal set;
+    }
+
+    public DateTime AcquisitionDate {
+      get; internal set;
+    }
+
+    public string InvoiceNo {
+      get; internal set;
+    }
+
+    public string AccountingTag {
+      get; internal set;
+    }
+
+    public string SupplierName {
+      get; internal set;
+    }
+
+    public decimal HistoricalValue {
+      get; internal set;
+    }
+
+    public NamedEntityDto InUse {
       get; internal set;
     }
 
@@ -176,6 +196,10 @@ namespace Empiria.Inventory.Assets.Adapters {
     }
 
     public string Condition {
+      get; internal set;
+    }
+
+    public string InUseName {
       get; internal set;
     }
 

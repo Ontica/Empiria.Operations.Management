@@ -11,6 +11,7 @@
 using System;
 
 using Empiria.Office;
+using Empiria.StateEnums;
 using Empiria.Storage;
 
 using Empiria.Inventory.Assets;
@@ -77,8 +78,14 @@ namespace Empiria.Inventory.Reporting {
         _excelFile.SetCell($"M{i}", asset.Brand);
         _excelFile.SetCell($"N{i}", asset.Model);
         _excelFile.SetCell($"O{i}", asset.SerialNo);
-        _excelFile.SetCell($"P{i}", asset.LastAssignmentTransactionNo);
-        _excelFile.SetCell($"Q{i}", asset.LastUpdate);
+        _excelFile.SetCell($"P{i}", asset.AcquisitionDate);
+        _excelFile.SetCell($"Q{i}", asset.SupplierName);
+        _excelFile.SetCell($"R{i}", asset.InvoiceNo);
+        _excelFile.SetCell($"S{i}", asset.AccountingTag);
+        _excelFile.SetCell($"T{i}", asset.HistoricalValue);
+        _excelFile.SetCell($"U{i}", asset.InUse.GetName());
+        _excelFile.SetCell($"V{i}", asset.LastAssignmentTransactionNo);
+        _excelFile.SetCell($"W{i}", asset.LastUpdate);
         i++;
       }
     }

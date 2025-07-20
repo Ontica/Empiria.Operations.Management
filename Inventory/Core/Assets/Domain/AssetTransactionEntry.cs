@@ -83,6 +83,26 @@ namespace Empiria.Inventory.Assets {
     }
 
 
+    public Location Building {
+      get {
+        return Location.SeekTree(LocationType.Building);
+      }
+    }
+
+
+    public Location Floor {
+      get {
+        return Location.SeekTree(LocationType.Floor);
+      }
+    }
+
+
+    public Location Place {
+      get {
+        return Location.SeekTree(LocationType.Place);
+      }
+    }
+
     [DataField("ASSET_ENTRY_PREVIOUS_CONDITION")]
     public string PreviousCondition {
       get; private set;

@@ -107,6 +107,12 @@ namespace Empiria.Inventory.Assets {
     }
 
 
+    [DataField("ASSET_IN_USE", Default = ThreeStateValue.False)]
+    public ThreeStateValue InUse {
+      get; private set;
+    }
+
+
     public Location Building {
       get {
         return CurrentLocation.SeekTree(LocationType.Building);
@@ -147,8 +153,58 @@ namespace Empiria.Inventory.Assets {
 
 
     [DataField("ASSET_ACCOUNTING_DATA")]
-    protected JsonObject AccountingData {
-      get; private set;
+    private JsonObject AccountingData {
+      get; set;
+    }
+
+
+    public DateTime AcquisitionDate {
+      get {
+        return AccountingData.Get("acquisitionDate", DateTime.MinValue);
+      }
+      private set {
+        AccountingData.SetIfValue("acquisitionDate", value);
+      }
+    }
+
+
+    public string InvoiceNo {
+      get {
+        return AccountingData.Get("invoiceNo", string.Empty);
+      }
+      private set {
+        AccountingData.SetIfValue("invoiceNo", value);
+      }
+    }
+
+
+    public string SupplierName {
+      get {
+        return AccountingData.Get("supplierName", string.Empty);
+      }
+      private set {
+        AccountingData.SetIfValue("supplierName", value);
+      }
+    }
+
+
+    public string AccountingTag {
+      get {
+        return AccountingData.Get("accountingTag", string.Empty);
+      }
+      private set {
+        AccountingData.SetIfValue("accountingTag", value);
+      }
+    }
+
+
+    public decimal HistoricalValue {
+      get {
+        return AccountingData.Get("historicalValue", 0m);
+      }
+      private set {
+        AccountingData.SetIf("historicalValue", value, value > 0m);
+      }
     }
 
 
@@ -244,12 +300,6 @@ namespace Empiria.Inventory.Assets {
 
     [DataField("SKU_MODEL")]
     public string Model {
-      get; private set;
-    }
-
-
-    [DataField("SKU_YEAR")]
-    public int Year {
       get; private set;
     }
 
