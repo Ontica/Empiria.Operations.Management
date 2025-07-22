@@ -32,12 +32,9 @@ namespace Empiria.Inventory.Assets.WebApi {
       using (var usecases = AssetAssignmentUseCases.UseCaseInteractor()) {
         FixedList<AssetAssignment> assignments = usecases.SearchAssetsAssignments(query);
 
-        FixedList<AssetTransaction> transactions = assignments.Select(x => x.Transaction)
-                                                              .ToFixedList();
-
         var reportingService = AssetsReportingService.ServiceInteractor();
 
-        FileDto excelFile = reportingService.ExportAssetsTransactionsToExcel(transactions);
+        FileDto excelFile = reportingService.ExportAssetsAssignmentsToExcel(assignments);
 
         return new SingleObjectModel(base.Request, excelFile);
       }

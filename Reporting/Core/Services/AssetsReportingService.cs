@@ -14,6 +14,7 @@ using Empiria.Storage;
 using Empiria.Office;
 
 using Empiria.Inventory.Assets;
+using System;
 
 namespace Empiria.Inventory.Reporting {
 
@@ -44,6 +45,21 @@ namespace Empiria.Inventory.Reporting {
       var exporter = new AssetsToExcelBuilder(templateConfig);
 
       ExcelFile excelFile = exporter.CreateExcelFile(assets);
+
+      return excelFile.ToFileDto();
+    }
+
+
+    public FileDto ExportAssetsAssignmentsToExcel(FixedList<AssetAssignment> assignments) {
+      Assertion.Require(assignments, nameof(assignments));
+
+      var templateUID = $"{this.GetType().Name}.ExportAssetsAssignmentsToExcel";
+
+      var templateConfig = FileTemplateConfig.Parse(templateUID);
+
+      var exporter = new AssetsAssignmentsToExcelBuilder(templateConfig);
+
+      ExcelFile excelFile = exporter.CreateExcelFile(assignments);
 
       return excelFile.ToFileDto();
     }
