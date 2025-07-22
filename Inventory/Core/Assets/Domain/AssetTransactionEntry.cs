@@ -110,7 +110,7 @@ namespace Empiria.Inventory.Assets {
 
 
     [DataField("ASSET_ENTRY_CONDITION")]
-    public string Condition {
+    public string ReleasedCondition {
       get; private set;
     }
 

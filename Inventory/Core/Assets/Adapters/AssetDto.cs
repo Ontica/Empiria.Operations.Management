@@ -104,7 +104,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public string Condition {
+    public string CurrentCondition {
       get; internal set;
     }
 
@@ -195,7 +195,7 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
-    public string Condition {
+    public string CurrentCondition {
       get; internal set;
     }
 

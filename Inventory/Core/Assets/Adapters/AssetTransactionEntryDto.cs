@@ -29,6 +29,14 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
+    public string PreviousCondition {
+      get; internal set;
+    }
+
+    public string ReleasedCondition {
+      get; internal set;
+    }
+
     public string Description {
       get; internal set;
     }

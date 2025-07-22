@@ -74,8 +74,8 @@ namespace Empiria.Inventory.Assets.Data {
 
       var op = DataOperation.Parse("write_OMS_Asset", o.Id, o.UID, o.AssetType.Id, o.AssetNo,
         o.SkuId, o.Description, EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
-        o.Manager.Id, o.ManagerOrgUnit.Id, o.LastAssignmentEntryId,
-        o.CurrentLocation.Id, o.CurrentCondition, accountingData, extensionData, o.Keywords,
+        o.Manager.Id, o.ManagerOrgUnit.Id, o.CurrentLocation.Id, o.CurrentCondition, (int) o.InUse,
+        o.LastAssignmentEntryId, accountingData, extensionData, o.Keywords,
         o.StartDate, o.EndDate, o.LastUpdate, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
