@@ -16,7 +16,7 @@ namespace Empiria.Inventory.Assets.Adapters {
     static internal AssetAssignmentHolder Map(AssetAssignment assignment) {
       return new AssetAssignmentHolder {
         Assignment = MapAssignment(assignment),
-        Assets = AssetMapper.Map(assignment.GetAssets()),
+        Entries = AssetTransactionMapper.Map(assignment.Transaction.Entries),
         Actions = AssetTransactionMapper.MapActions(assignment.Transaction.Rules)
       };
     }

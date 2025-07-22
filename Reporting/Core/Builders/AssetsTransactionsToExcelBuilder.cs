@@ -70,7 +70,7 @@ namespace Empiria.Inventory.Reporting {
           _excelFile.SetCell($"C{i}", txn.RecordingDate);
           _excelFile.SetCell($"D{i}", txn.RecordedBy.Name);
           _excelFile.SetCell($"E{i}", txn.ApplicationDate);
-          _excelFile.SetCell($"F{i}", txn.AppliedBy.Name);
+          _excelFile.SetCell($"F{i}", txn.AuthorizedBy.Name);
           _excelFile.SetCell($"G{i}", txn.Status.GetName());
           _excelFile.SetCell($"H{i}", txn.AssignedToOrgUnit.Code);
           _excelFile.SetCell($"I{i}", txn.AssignedToOrgUnit.Name);
@@ -82,15 +82,14 @@ namespace Empiria.Inventory.Reporting {
           _excelFile.SetCell($"O{i}", asset.Name);
           _excelFile.SetCell($"P{i}", asset.AssetType.Name);
           _excelFile.SetCell($"Q{i}", entry.PreviousCondition);
-          _excelFile.SetCell($"R{i}", entry.Condition);
+          _excelFile.SetCell($"R{i}", entry.ReleasedCondition);
           _excelFile.SetCell($"S{i}", entry.Building.Name);
           _excelFile.SetCell($"T{i}", entry.Floor.Name);
           _excelFile.SetCell($"U{i}", entry.Place.Name);
           _excelFile.SetCell($"V{i}", asset.Brand);
           _excelFile.SetCell($"W{i}", asset.Model);
           _excelFile.SetCell($"X{i}", asset.SerialNo);
-          _excelFile.SetCell($"Y{i}", asset.InUse.GetName());
-          _excelFile.SetCell($"Z{i}", entry.Description);
+          _excelFile.SetCell($"Y{i}", entry.Description);
           i++;
         }
       }

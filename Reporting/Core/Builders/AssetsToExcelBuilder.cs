@@ -68,22 +68,26 @@ namespace Empiria.Inventory.Reporting {
         _excelFile.SetCell($"C{i}", asset.Name);
         _excelFile.SetCell($"D{i}", asset.AssetType.Name);
         _excelFile.SetCell($"E{i}", asset.CurrentCondition);
-        _excelFile.SetCell($"F{i}", asset.Building.Name);
-        _excelFile.SetCell($"G{i}", asset.Floor.Name);
-        _excelFile.SetCell($"H{i}", asset.Place.Name);
-        _excelFile.SetCell($"I{i}", asset.AssignedToOrgUnit.Code);
-        _excelFile.SetCell($"J{i}", asset.AssignedToOrgUnit.Name);
-        _excelFile.SetCell($"K{i}", asset.AssignedTo.Code);
-        _excelFile.SetCell($"L{i}", asset.AssignedTo.Name);
-        _excelFile.SetCell($"M{i}", asset.Brand);
-        _excelFile.SetCell($"N{i}", asset.Model);
-        _excelFile.SetCell($"O{i}", asset.SerialNo);
-        _excelFile.SetCell($"P{i}", asset.AcquisitionDate);
-        _excelFile.SetCell($"Q{i}", asset.SupplierName);
-        _excelFile.SetCell($"R{i}", asset.InvoiceNo);
-        _excelFile.SetCell($"S{i}", asset.AccountingTag);
-        _excelFile.SetCell($"T{i}", asset.HistoricalValue);
-        _excelFile.SetCell($"U{i}", asset.InUse.GetName());
+        _excelFile.SetCell($"F{i}", asset.InUse.GetName());
+        _excelFile.SetCell($"G{i}", asset.Building.Name);
+        _excelFile.SetCell($"H{i}", asset.Floor.Name);
+        _excelFile.SetCell($"I{i}", asset.Place.Name);
+        _excelFile.SetCell($"J{i}", asset.AssignedToOrgUnit.Code);
+        _excelFile.SetCell($"K{i}", asset.AssignedToOrgUnit.Name);
+        _excelFile.SetCell($"L{i}", asset.AssignedTo.Code);
+        _excelFile.SetCell($"M{i}", asset.AssignedTo.Name);
+        _excelFile.SetCell($"N{i}", asset.Brand);
+        _excelFile.SetCell($"O{i}", asset.Model);
+        _excelFile.SetCell($"P{i}", asset.SerialNo);
+        if (!ExecutionServer.IsMinOrMaxDate(asset.AcquisitionDate)) {
+          _excelFile.SetCell($"Q{i}", asset.AcquisitionDate);
+        }
+        _excelFile.SetCell($"R{i}", asset.SupplierName);
+        _excelFile.SetCell($"S{i}", asset.InvoiceNo);
+        _excelFile.SetCell($"T{i}", asset.AccountingTag);
+        if (asset.HistoricalValue != 0) {
+          _excelFile.SetCell($"U{i}", asset.HistoricalValue);
+        }
         _excelFile.SetCell($"V{i}", asset.LastAssignmentTransactionNo);
         _excelFile.SetCell($"W{i}", asset.LastUpdate);
         i++;

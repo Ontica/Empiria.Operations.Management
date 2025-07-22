@@ -189,8 +189,9 @@ namespace Empiria.Inventory.Assets.Data {
 
       var op = DataOperation.Parse("write_OMS_Asset_Entry", o.Id, o.UID,
         o.AssetTransactionEntryType.Id, o.Transaction.Id,
-        o.Asset.Id, o.Description, o.OperationId, operationData, extensionData,
-        o.Keywords, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+        o.Asset.Id, o.Description, o.Location.Id, o.OperationId, operationData,
+        o.PreviousCondition, o.ReleasedCondition, extensionData, o.Keywords,
+        o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }

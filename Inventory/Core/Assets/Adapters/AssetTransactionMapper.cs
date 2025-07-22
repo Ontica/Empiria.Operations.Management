@@ -35,6 +35,8 @@ namespace Empiria.Inventory.Assets.Adapters {
         EntryType = entry.AssetTransactionEntryType.MapToNamedEntity(),
         Transaction = entry.Transaction.MapToNamedEntity(),
         Asset = AssetMapper.MapAsset(entry.Asset),
+        PreviousCondition = entry.PreviousCondition,
+        ReleasedCondition = entry.ReleasedCondition,
         Description = entry.Description
       };
     }
@@ -43,6 +45,12 @@ namespace Empiria.Inventory.Assets.Adapters {
     static internal FixedList<AssetTransactionDescriptorDto> Map(FixedList<AssetTransaction> transactions) {
       return transactions.Select(transaction => MapToDescriptor(transaction))
                          .ToFixedList();
+    }
+
+
+    static internal FixedList<AssetTransactionEntryDto> Map(FixedList<AssetTransactionEntry> entries) {
+      return entries.Select(entry => Map(entry))
+                    .ToFixedList();
     }
 
 
@@ -90,11 +98,6 @@ namespace Empiria.Inventory.Assets.Adapters {
     }
 
     #region Helpers
-
-    static private FixedList<AssetTransactionEntryDto> Map(FixedList<AssetTransactionEntry> entries) {
-      return entries.Select(entry => Map(entry))
-                    .ToFixedList();
-    }
 
 
     static private AssetTransactionDescriptorDto MapToDescriptor(AssetTransaction transaction) {
