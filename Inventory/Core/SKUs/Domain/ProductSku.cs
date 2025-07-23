@@ -35,7 +35,7 @@ namespace Empiria.Inventory {
 
     static public ProductSku Parse(string uid) => ParseKey<ProductSku>(uid);
 
-    static public ProductSku Empty => BaseObject.ParseEmpty<ProductSku>();
+    static public ProductSku Empty => ParseEmpty<ProductSku>();
 
     #endregion Constructors and parsers
 
@@ -91,6 +91,12 @@ namespace Empiria.Inventory {
     }
 
 
+    [DataField("SKU_ACQUISITION_DATE")]
+    public DateTime AcquisitionDate {
+      get; private set;
+    }
+
+
     [DataField("SKU_EXPIRATION_DATE")]
     public DateTime ExpirationDate {
       get; private set;
@@ -107,13 +113,6 @@ namespace Empiria.Inventory {
     public string Model {
       get; private set;
     }
-
-
-    [DataField("SKU_YEAR")]
-    public int Year {
-      get; private set;
-    }
-
 
     [DataField("SKU_SERIAL_NO")]
     public string SerialNo {
@@ -197,7 +196,7 @@ namespace Empiria.Inventory {
 
     public virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(SkuNo, Name, Brand, Model, SerialNo, Year.ToString(),
+        return EmpiriaString.BuildKeywords(SkuNo, Name, Brand, Model, SerialNo,
                                            _identificators, _tags, Product.Keywords, Description);
       }
     }

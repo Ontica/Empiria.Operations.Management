@@ -158,16 +158,6 @@ namespace Empiria.Inventory.Assets {
     }
 
 
-    public DateTime AcquisitionDate {
-      get {
-        return AccountingData.Get("acquisitionDate", DateTime.MinValue);
-      }
-      private set {
-        AccountingData.SetIfValue("acquisitionDate", value);
-      }
-    }
-
-
     public string InvoiceNo {
       get {
         return AccountingData.Get("invoiceNo", string.Empty);
@@ -310,10 +300,16 @@ namespace Empiria.Inventory.Assets {
     }
 
 
+    [DataField("SKU_ACQUISITION_DATE")]
+    public DateTime AcquisitionDate {
+      get; private set;
+    }
+
     public string Keywords {
       get {
         return EmpiriaString.BuildKeywords(AssetNo, AssetType.Name, Description,
-                                           _identificators, _tags, GetSku().Keywords, CurrentCondition, CurrentLocation.Keywords);
+                                           _identificators, _tags, GetSku().Keywords,
+                                           CurrentCondition, CurrentLocation.Keywords);
       }
     }
 

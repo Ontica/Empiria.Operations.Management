@@ -39,11 +39,11 @@ namespace Empiria.Inventory.Data {
 
     static internal void WriteProductSku(ProductSku o, string variantAttrs, string extensionData) {
 
-      var op = DataOperation.Parse("WRITE_OMS_PRODUCT_SKU", o.Id, o.UID, o.SkuType.Id,
-        o.Product.Id, o.SkuNo, o.Name, o.Description, o.Unit.Id, o.Quantity, o.ExpirationDate,
-        o.Brand, o.Model, o.SerialNo, variantAttrs, EmpiriaString.Tagging(o.Identificators),
-        EmpiriaString.Tagging(o.Tags), extensionData, o.Keywords, o.StartDate, o.EndDate, o.LastUpdate,
-        o.PostedBy.Id, o.PostingTime, (char) o.Status);
+      var op = DataOperation.Parse("write_OMS_Product_SKU", o.Id, o.UID, o.SkuType.Id,
+        o.Product.Id, o.SkuNo, o.Name, o.Description, EmpiriaString.Tagging(o.Identificators),
+        EmpiriaString.Tagging(o.Tags), o.Unit.Id, o.Quantity, o.AcquisitionDate, o.ExpirationDate,
+        o.Brand, o.Model, o.SerialNo, o.Condition, variantAttrs, extensionData, o.Keywords,
+        o.StartDate, o.EndDate, o.LastUpdate, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }
