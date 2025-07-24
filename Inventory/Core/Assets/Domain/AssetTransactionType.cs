@@ -28,12 +28,23 @@ namespace Empiria.Inventory.Assets {
 
     static public new AssetTransactionType Parse(string typeName) => Parse<AssetTransactionType>(typeName);
 
+
+    static public AssetTransactionType ParseWithOperation(string operationName) {
+      AssetTransactionType txnType = GetList().Find(x => x.ExternalOperation == operationName);
+
+      Assertion.Require(txnType, $"Unrecognized asset transaction operation '{operationName}'.");
+
+      return txnType;
+    }
+
+
     static public FixedList<AssetTransactionType> GetList() {
       return Empty.GetAllSubclasses(false)
                   .Select(x => (AssetTransactionType) x)
                   .ToFixedList()
                   .Sort((x, y) => x.SortOrder.CompareTo(y.SortOrder));
     }
+
 
     static public AssetTransactionType Empty => Parse("ObjectTypeInfo.AssetTransaction");
 
@@ -59,6 +70,13 @@ namespace Empiria.Inventory.Assets {
     public string Prefix {
       get {
         return base.ExtensionData.Get("prefix", string.Empty);
+      }
+    }
+
+
+    public string ExternalOperation {
+      get {
+        return base.ExtensionData.Get("externalOperation", string.Empty);
       }
     }
 

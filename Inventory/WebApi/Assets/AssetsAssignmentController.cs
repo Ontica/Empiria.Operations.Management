@@ -73,20 +73,20 @@ namespace Empiria.Inventory.Assets.WebApi {
     public SingleObjectModel BulkOperations([FromUri] string operationID,
                                             [FromBody] AssignmentBulkCommand command) {
 
-      command.OperationID = operationID;
+      command.TransactionType = AssetTransactionType.ParseWithOperation(operationID);
 
       FileDto report;
 
       using (var usecases = AssetAssignmentUseCases.UseCaseInteractor()) {
 
-        AssetTransaction transaction = usecases.CreateBulkTransaction(command);
+        FixedList<AssetTransaction> txns = usecases.CreateBulkTransactions(command);
 
         using (var reporting = AssetsReportingService.ServiceInteractor()) {
-          report = reporting.ExportAssetsTransactionToPdf(transaction);
+          report = reporting.ExportAssetsTransactionToPdf(txns[0]);
         }
 
         var result = new BulkOperationResult {
-          Message = "Operación realizada satisfactoriamente.",
+          Message = $"Se generaron {txns.Count} transacciones de activo fijo.",
           File = report,
         };
 
@@ -101,20 +101,20 @@ namespace Empiria.Inventory.Assets.WebApi {
                                             [FromUri] string operationID,
                                             [FromBody] AssignmentBulkCommand command) {
 
-      command.OperationID = operationID;
+      command.TransactionType = AssetTransactionType.ParseWithOperation(operationID);
 
       FileDto report;
 
       using (var usecases = AssetAssignmentUseCases.UseCaseInteractor()) {
 
-        AssetTransaction transaction = usecases.CreateBulkTransaction(command);
+        AssetTransaction txn = usecases.CreateBulkTransaction(assignmentUID, command);
 
         using (var reporting = AssetsReportingService.ServiceInteractor()) {
-          report = reporting.ExportAssetsTransactionToPdf(transaction);
+          report = reporting.ExportAssetsTransactionToPdf(txn);
         }
 
         var result = new BulkOperationResult {
-          Message = "Operación realizada satisfactoriamente.",
+          Message = "La transacción de activo fijo fue generada satisfactoriamente.",
           File = report,
         };
 
