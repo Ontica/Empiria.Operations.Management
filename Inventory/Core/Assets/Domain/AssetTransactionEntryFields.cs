@@ -33,6 +33,16 @@ namespace Empiria.Inventory.Assets {
     } = string.Empty;
 
 
+    public string PreviousCondition {
+      get; set;
+    } = string.Empty;
+
+
+    public string ReleasedCondition {
+      get; set;
+    } = string.Empty;
+
+
     public string Description {
       get; set;
     } = string.Empty;
@@ -40,6 +50,9 @@ namespace Empiria.Inventory.Assets {
 
     internal void EnsureValid() {
       Assertion.Require(AssetUID, nameof(AssetUID));
+
+      PreviousCondition = EmpiriaString.Clean(PreviousCondition);
+      ReleasedCondition = EmpiriaString.Clean(ReleasedCondition);
 
       Description = EmpiriaString.Clean(Description);
 

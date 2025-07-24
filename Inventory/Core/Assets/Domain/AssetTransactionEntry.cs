@@ -193,6 +193,8 @@ namespace Empiria.Inventory.Assets {
       fields.EnsureValid();
 
       Asset = Patcher.Patch(fields.AssetUID, Asset);
+      PreviousCondition = Patcher.PatchClean(fields.PreviousCondition, PreviousCondition);
+      ReleasedCondition = Patcher.PatchClean(fields.ReleasedCondition, ReleasedCondition);
       Description = Patcher.PatchClean(fields.Description, Description);
 
       MarkAsDirty();
