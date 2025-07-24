@@ -23,7 +23,7 @@ namespace Empiria.Inventory.Assets.WebApi {
   /// <summary>Web API used to retrieve asset assignments data.</summary>
   public class AssetsAssignmentController : WebApiController {
 
-    #region Web Apis
+    #region Query web apis
 
     [HttpPost]
     [Route("v2/assets/assignments/export")]
@@ -64,8 +64,78 @@ namespace Empiria.Inventory.Assets.WebApi {
       }
     }
 
-    #endregion Web Apis
+    #endregion Query web apis
+
+    #region Command web apis
+
+    [HttpPost]
+    [Route("v2/assets/assignments/bulk-operation/{operationID}")]
+    public SingleObjectModel BulkOperations([FromUri] string operationID,
+                                            [FromBody] AssignmentBulkCommand command) {
+
+      command.OperationID = operationID;
+
+      FileDto report;
+
+      using (var usecases = AssetAssignmentUseCases.UseCaseInteractor()) {
+
+        AssetTransaction transaction = usecases.CreateBulkTransaction(command);
+
+        using (var reporting = AssetsReportingService.ServiceInteractor()) {
+          report = reporting.ExportAssetsTransactionToPdf(transaction);
+        }
+
+        var result = new BulkOperationResult {
+          Message = "Operación realizada satisfactoriamente.",
+          File = report,
+        };
+
+        return new SingleObjectModel(base.Request, result);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v2/assets/assignments/{assignmentUID}/bulk-operation/{operationID}")]
+    public SingleObjectModel BulkOperations([FromUri] string assignmentUID,
+                                            [FromUri] string operationID,
+                                            [FromBody] AssignmentBulkCommand command) {
+
+      command.OperationID = operationID;
+
+      FileDto report;
+
+      using (var usecases = AssetAssignmentUseCases.UseCaseInteractor()) {
+
+        AssetTransaction transaction = usecases.CreateBulkTransaction(command);
+
+        using (var reporting = AssetsReportingService.ServiceInteractor()) {
+          report = reporting.ExportAssetsTransactionToPdf(transaction);
+        }
+
+        var result = new BulkOperationResult {
+          Message = "Operación realizada satisfactoriamente.",
+          File = report,
+        };
+
+        return new SingleObjectModel(base.Request, result);
+      }
+    }
+
+    #endregion Command web apis
 
   }  // class AssetsAssignmentController
+
+  public class BulkOperationResult {
+
+    public string Message {
+      get; internal set;
+    }
+
+    public FileDto File {
+      get; internal set;
+    }
+
+  }  // class BulkOperationResult
 
 }  // namespace Empiria.Inventory.Assets.WebApi

@@ -33,6 +33,11 @@ namespace Empiria.Inventory.Assets.UseCases {
 
     #region Use cases
 
+    public AssetTransaction CreateBulkTransaction(AssignmentBulkCommand command) {
+      return AssetTransaction.Parse(1);
+    }
+
+
     public AssetAssignmentHolder GetAssetAssignment(string assignmentUID) {
       Assertion.Require(assignmentUID, nameof(assignmentUID));
 
