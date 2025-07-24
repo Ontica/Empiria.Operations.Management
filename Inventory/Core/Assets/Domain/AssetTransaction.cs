@@ -345,7 +345,6 @@ namespace Empiria.Inventory.Assets {
       AssignedTo = Patcher.Patch(fields.AssignedToUID, AssignedTo);
       AssignedToOrgUnit = Patcher.Patch(fields.AssignedToOrgUnitUID, AssignedToOrgUnit);
       BaseLocation = Patcher.Patch(fields.LocationUID, BaseLocation);
-      RequestedTime = Patcher.Patch(fields.RequestedTime, RequestedTime);
       ApplicationDate = Patcher.Patch(fields.ApplicationDate, ApplicationDate);
 
       _identificators = EmpiriaString.Tagging(fields.Identificators);
