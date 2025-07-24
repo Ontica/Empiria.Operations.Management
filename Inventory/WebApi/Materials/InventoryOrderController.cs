@@ -1,9 +1,11 @@
 ﻿
 using System.Web.Http;
+using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
+using Empiria.Inventory.Reporting.Adapters;
+using Empiria.Inventory.Reporting.UseCases;
 using Empiria.Inventory.UseCases;
 using Empiria.WebApi;
-using Empiria.Inventory;
 
 namespace Empiria.Inventory.WebApi {
 
@@ -74,6 +76,7 @@ namespace Empiria.Inventory.WebApi {
         return new CollectionModel(this.Request, parties);
       }
     }
+
 
     [HttpGet]
     [Route("v8/order-management/inventory-orders/warehousemen")]

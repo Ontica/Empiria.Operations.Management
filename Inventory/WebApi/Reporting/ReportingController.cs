@@ -14,15 +14,16 @@ namespace Empiria.Inventory.Reporting.WebApi {
 
     [HttpPost]
     [Route("v8/order-management/inventory/finder")]
-    public SingleObjectModel GetInventory([FromBody] FinderInventoryQuery query) {
+    public SingleObjectModel FindInventory([FromBody] SearchInventoryQuery query) {
 
       using (var usecases = ReportingUseCases.UseCaseInteractor()) {
 
-       ReportingDataDto inventoryOrderDto = usecases.FinderInventory(query);
+        ReportingDataDto inventoryOrderDto = usecases.FinderInventory(query);
 
-       return new SingleObjectModel(this.Request, inventoryOrderDto);
+        return new SingleObjectModel(this.Request, inventoryOrderDto);
       }
     }
+
 
     #endregion Web Apis
 
