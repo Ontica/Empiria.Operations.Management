@@ -9,9 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.Locations;
-
 using Empiria.Orders;
-
 using Empiria.Inventory.Data;
 
 namespace Empiria.Inventory {
@@ -84,25 +82,13 @@ namespace Empiria.Inventory {
      InventoryOrderData.WriteOrder(this, this.ExtData.ToString());
     }
 
+    internal protected virtual void AddItem(InventoryOrderItem orderItem) {
+      Assertion.Require(orderItem, nameof(orderItem));
+         
+      base.AddItem(orderItem);
 
-    internal InventoryOrderItem AddItem(Location location, InventoryOrderItemFields fields) {
-
-      var orderItemType = Orders.OrderItemType.Parse(4059);
-
-      InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, this, location);
-
-      var position = GetItemPosition();
-      fields.Position = position;
-
-      orderItem.Update(fields);
-
-      orderItem.Save();
-
-      _items = InventoryOrderData.GetInventoryOrderItems(this);
-
-      return orderItem;
+      this.Items = GetItems<InventoryOrderItem>();
     }
-
 
 
     internal void CloseItems() {
@@ -120,14 +106,12 @@ namespace Empiria.Inventory {
     }
 
 
-    internal void DeleteItem(string orderItemUID) {
-       var orderItem = InventoryOrderItem.Parse(orderItemUID);
+    internal protected virtual void RemoveItem(InventoryOrderItem orderItem) {
+      Assertion.Require(orderItem, nameof(orderItem));
 
-      orderItem.DelItem();
+      base.RemoveItem(orderItem);
 
-      orderItem.Save();
-
-      _items = InventoryOrderData.GetInventoryOrderItems(this);
+      this.Items = GetItems<InventoryOrderItem>();
     }
 
 
@@ -148,25 +132,11 @@ namespace Empiria.Inventory {
     #region Helpers
 
     private void DeleteItems() {
-
       foreach (var item in this.Items) {
         item.DelItem();
         item.Save();
       }
-
-    }
-
-
-    private int GetItemPosition() {
-
-      if (this.Items.Count == 0) {
-        return 1;
-      } else {
-        var allItems = InventoryOrderData.GetAllInventoryOrderItems(this);
-        return allItems.Count + 1;
-      }
-
-    }
+    }   
 
     #endregion Helpers
 

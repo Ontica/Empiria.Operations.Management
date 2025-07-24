@@ -34,7 +34,7 @@ namespace Empiria.Inventory.Data {
     }
 
 
-    internal static FixedList<InventoryEntry> FinderInventory(string filter, string sort) {
+    internal static FixedList<InventoryEntry> SearchInventoryEntries(string filter, string sort) {
 
       var sql = "SELECT * FROM VW_Inventory_Entries";
 

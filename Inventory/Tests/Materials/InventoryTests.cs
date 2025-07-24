@@ -8,12 +8,12 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
 using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
 using Empiria.Locations;
 using Empiria.Orders;
+using Empiria.Orders.Adapters;
 using Empiria.Parties;
 using Empiria.Products;
 using Empiria.StateEnums;
@@ -130,14 +130,14 @@ namespace Empiria.Tests.Inventory {
     public void Should_Create_Inventory_Order_Item() {
 
       TestsCommonMethods.Authenticate();
-      //TG5F38X34
+      
       InventoryOrderItemFields fields = new InventoryOrderItemFields {
-        Location = "A-001-01-28",
-        Product= "TG538X7-190",
-        Quantity = 13,
+        Location = "M-MN3-01-71",
+        Product= "TG8F34X112-180",
+        Quantity = 1,
       };
 
-      var order = InventoryOrder.Parse("75dadef4-0bc3-417b-a7e2-5b34f670f0a4");
+      var order = InventoryOrder.Parse("3652bd82-ea56-4d35-a0d9-75a165726063");
 
       var product = Product.TryParseWithCode(fields.Product);
       Assertion.Require(product, "El producto no existe");
@@ -152,47 +152,21 @@ namespace Empiria.Tests.Inventory {
       fields.Description  = product.Description;
       fields.ProductUnitUID = product.BaseUnit.UID;
 
-      var orderItem = order.AddItem(location, fields);
+      var orderItemType = Orders.OrderItemType.Parse(4059);
+           
+      InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, order, location);
+      var position = GetItemPosition(order);
+      fields.Position = position;
 
-      var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
+      orderItem.Update(fields);
+      order.AddItem(orderItem);
+      orderItem.Save();    
 
-      InventoryEntryFields entryFields = new InventoryEntryFields();
-      
-      entryFields.Product = fields.Product;
-      entryFields.Quantity = fields.Quantity;
-      entryFields.Location = fields.Location;
-
-      inventoryEntry.Update(entryFields, orderItem.UID);
-
-      inventoryEntry.Save();
+      AddInventoryEntry(order, orderItem, fields);
 
       Assert.NotNull(order);
     }
-
-
-    private bool VerifyProductAndLocationInOrder(int orderId, int productID, int locationID) {
-      if (InventoryOrderData.VerifyProductAndLocationInOrder(orderId, productID, locationID) != 0)
-        { return false; }
-      return true;
-    }
-
-
-    [Fact]
-    public void Should_UpdatePosition() {
-
-      TestsCommonMethods.Authenticate();
-      //TG5F38X34
-      var order = InventoryOrder.Parse("75dadef4-0bc3-417b-a7e2-5b34f670f0a4");
-
-      foreach (var item in order.Items) {
-        var entry = InventoryOrderData.GetInventoryEntry(item.Id);
-        entry.UpdatePosition(item.Position);
-        entry.Save();
-      }
-
-      Assert.NotNull(order);
-    }
-
+       
 
     [Fact]
     public void Should_Create_Inventory_EntriesTest() {
@@ -266,8 +240,8 @@ namespace Empiria.Tests.Inventory {
 
     [Fact]
     public void Should_Delete_Inventory_Order_Item() {
-      var orderUID = "bedf1014-f49d-47a8-a1da-3e56f712ec47";
-      var orderItemUID = "504e14a9-6158-42a6-8054-17cd1f5cacf3"; 
+      var orderUID = "3652bd82-ea56-4d35-a0d9-75a165726063";
+      var orderItemUID = "1001fb6b-dd7b-4270-92f9-2c73c35401a6"; 
 
       TestsCommonMethods.Authenticate();
 
@@ -275,9 +249,13 @@ namespace Empiria.Tests.Inventory {
       Assertion.Require(orderItemUID, nameof(orderItemUID));
 
       InventoryOrder order = InventoryOrder.Parse(orderUID);
+        
+      var item = order.GetItem<InventoryOrderItem>(orderItemUID);
 
-      order.DeleteItem(orderItemUID);
-     
+      order.RemoveItem(item);
+
+      item.Save();
+
       Assert.NotNull(order);
     }
 
@@ -321,7 +299,6 @@ namespace Empiria.Tests.Inventory {
       var sut = Party.GetPartiesInRole("User").MapToNamedEntityList();
       Assert.NotNull(sut);
     }
-
 
 
     [Fact]
@@ -414,6 +391,92 @@ namespace Empiria.Tests.Inventory {
       Assert.NotNull(order);
     }
 
+
+    [Fact]
+    public void Update_InventoryOrderItem() {
+
+      string orderUID = "3652bd82-ea56-4d35-a0d9-75a165726063";
+      string itemUID = "e9599f34-830f-4499-bd76-76a216eb443c";
+
+      InventoryOrderItemFields fields = new InventoryOrderItemFields {
+        Location = "M-MN3-01-71",
+        Product = "TG8F34X112-180",
+        Quantity = 40,
+      };
+
+      var product = Product.TryParseWithCode(fields.Product);
+      Assertion.Require(product, "El producto no existe");
+
+      var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
+      Assertion.Require(location, $"La ubicacion {fields.Location} no existe.");
+
+      fields.ProductUID = product.UID;
+      fields.Description = product.Description;
+      fields.ProductUnitUID = product.BaseUnit.UID;
+
+      var order = InventoryOrder.Parse(orderUID);
+
+      var item = order.GetItem<InventoryOrderItem>(itemUID);
+
+      item.Update(fields);
+
+      item.Save();
+
+      Assert.NotNull(order);
+    }
+
+
+    [Fact]
+    public void Should_UpdatePosition() {
+
+      TestsCommonMethods.Authenticate();
+      //TG5F38X34
+      var order = InventoryOrder.Parse("75dadef4-0bc3-417b-a7e2-5b34f670f0a4");
+
+      foreach (var item in order.Items) {
+        var entry = InventoryOrderData.GetInventoryEntry(item.Id);
+        entry.UpdatePosition(item.Position);
+        entry.Save();
+      }
+
+      Assert.NotNull(order);
+    }
+
+    #region Helpers
+
+    private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem, InventoryOrderItemFields fields) {
+      var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
+
+      InventoryEntryFields entryFields = new InventoryEntryFields();
+
+      entryFields.Product = fields.Product;
+      entryFields.Quantity = fields.Quantity;
+      entryFields.Location = fields.Location;
+
+      inventoryEntry.Update(entryFields, orderItem.UID);
+
+      inventoryEntry.Save();
+    }
+
+
+    private int GetItemPosition(InventoryOrder order) {
+      if (order.Items.Count == 0) {
+        return 1;
+      } else {
+        var allItems = InventoryOrderData.GetAllInventoryOrderItems(order);
+        return allItems.Count + 1;
+      }
+    }
+
+
+    private bool VerifyProductAndLocationInOrder(int orderId, int productID, int locationID) {
+      if (InventoryOrderData.VerifyProductAndLocationInOrder(orderId, productID, locationID) != 0) {
+        return false;
+      }
+      return true;
+    }
+
+    #endregion Helpers
 
   } // class InventoryTests
 

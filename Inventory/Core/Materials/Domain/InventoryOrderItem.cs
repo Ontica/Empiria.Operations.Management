@@ -35,7 +35,6 @@ namespace Empiria.Inventory {
       Assertion.Require(!location.IsEmptyInstance, nameof(location));
 
       this.Location = location;
-      // no-op
     }
 
 
@@ -43,16 +42,12 @@ namespace Empiria.Inventory {
 
     static public new InventoryOrderItem Parse(string uid) => ParseKey<InventoryOrderItem>(uid);
 
-    
-
     static public InventoryOrderItem Empty => ParseEmpty<InventoryOrderItem>();
 
     #endregion Constructors and parsers
 
     #region Properties
     
-
-
     [DataField("ORDER_ITEM_LOCATION_ID")]
     public Location Location {
       get; private set; 
@@ -93,7 +88,7 @@ namespace Empiria.Inventory {
     internal void DelItem() {
       base.Delete();
     }
-
+     
 
     internal void Update(InventoryOrderItemFields fields) {
       Assertion.Require(fields, nameof(fields));
@@ -109,7 +104,6 @@ namespace Empiria.Inventory {
     internal new void Close() {
       base.Close();
     }
-
 
     #endregion Methods
 

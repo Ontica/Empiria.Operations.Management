@@ -14,6 +14,8 @@ using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Assets;
 using Empiria.Inventory.Data;
 using Empiria.Locations;
+using Empiria.Orders;
+using Empiria.Orders.Adapters;
 using Empiria.Parties;
 using Empiria.Products;
 using Empiria.Services;
@@ -99,27 +101,32 @@ namespace Empiria.Inventory.UseCases {
       Assertion.Require(orderUID, nameof(orderUID));
       Assertion.Require(fields, nameof(fields));
 
-      var order = InventoryOrder.Parse(orderUID);
-
       var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
       Assertion.Require(location, $"La ubiacacion {fields.Location} no existe.");
 
       var product = Product.TryParseWithCode(fields.Product);
       Assertion.Require(product, $"El producto con clave {fields.Product} no existe.");
 
+      var order = InventoryOrder.Parse(orderUID);
+
+      var isnotexistProductinLocation = VerifyProductAndLocationInOrder(order.Id, product.Id, location.Id);
+      Assertion.Require(isnotexistProductinLocation, $"Ya existe ese producto en esa localización {fields.Location}.");
+
       fields.ProductUID = product.UID;
       fields.Description = product.Description;
-      fields.ProductUnitUID = product.BaseUnit.UID;
+      fields.ProductUnitUID = product.BaseUnit.UID;      
 
-      var orderItem = order.AddItem(location,fields);
+      var orderItemType = Orders.OrderItemType.Parse(4059);
+      InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, order, location);
 
-      InventoryEntryFields entryFields = new InventoryEntryFields();
+      var position = GetItemPosition(order);
+      fields.Position = position;
 
-      entryFields.Product = fields.Product;
-      entryFields.Quantity = fields.Quantity;
-      entryFields.Location = fields.Location;
+      orderItem.Update(fields);
+      order.AddItem(orderItem);
+      orderItem.Save();
 
-      CreateInventoryEntry(orderUID, orderItem.UID, entryFields);
+      AddInventoryEntry(order, orderItem, fields);
 
       return GetInventoryOrder(order.UID);
     }
@@ -160,7 +167,11 @@ namespace Empiria.Inventory.UseCases {
 
       InventoryOrder order = InventoryOrder.Parse(orderUID);
 
-      order.DeleteItem(orderItemUID);
+      var item = order.GetItem<InventoryOrderItem>(orderItemUID);
+
+      order.RemoveItem(item);
+
+      item.Save();
 
       return GetInventoryOrder(orderUID);
     }
@@ -227,6 +238,34 @@ namespace Empiria.Inventory.UseCases {
       return GetInventoryOrder(order.UID);
     }
 
+    
+    public InventoryHolderDto UpdateInventoryOrderItem(string orderUID, string orderItemUID,
+                                               InventoryOrderItemFields fields) {
+      Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(orderItemUID, nameof(orderItemUID));
+      Assertion.Require(fields, nameof(fields));
+
+      var product = Product.TryParseWithCode(fields.Product);
+      Assertion.Require(product, "El producto no existe");
+
+      var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
+      Assertion.Require(location, $"La ubicacion {fields.Location} no existe.");
+
+      fields.ProductUID = product.UID;
+      fields.Description = product.Description;
+      fields.ProductUnitUID = product.BaseUnit.UID;
+
+      var order = InventoryOrder.Parse(orderUID);
+
+      var item = order.GetItem<InventoryOrderItem>(orderItemUID);
+
+      item.Update(fields);
+
+      item.Save();
+
+      return GetInventoryOrder(order.UID);
+    }
+
 
     public InventoryHolderDto CloseInventoryOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
@@ -249,6 +288,31 @@ namespace Empiria.Inventory.UseCases {
 
     #region Helpers
 
+    private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem, InventoryOrderItemFields fields) {
+      var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
+
+      InventoryEntryFields entryFields = new InventoryEntryFields();
+
+      entryFields.Product = fields.Product;
+      entryFields.Quantity = fields.Quantity;
+      entryFields.Location = fields.Location;
+
+      inventoryEntry.Update(entryFields, orderItem.UID);
+
+      inventoryEntry.Save();
+    }
+
+
+    private int GetItemPosition(InventoryOrder order) {
+      if (order.Items.Count == 0) {
+        return 1;
+      } else {
+        var allItems = InventoryOrderData.GetAllInventoryOrderItems(order);
+        return allItems.Count + 1;
+      }
+    }   
+
+
     public void OutputInventoryEntriesVW(InventoryOrder order) {
       
       foreach (var item in order.Items) {
@@ -260,6 +324,14 @@ namespace Empiria.Inventory.UseCases {
 
         inventoryEntry.Save();
       }      
+    }
+
+
+    private bool VerifyProductAndLocationInOrder(int orderId, int productID, int locationID) {
+      if (InventoryOrderData.VerifyProductAndLocationInOrder(orderId, productID, locationID) != 0) {
+        return false;
+      }
+      return true;
     }
 
     #endregion Helpers
