@@ -20,6 +20,36 @@ namespace Empiria.Inventory.Assets {
     } = string.Empty;
 
 
+    public DateTime ApplicationDate {
+      get; set;
+    } = DateTime.Today;
+
+
+    public string AssignedToUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string AssignedToOrgUnitUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string ReleasedByUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string ReleasedByOrgUnitUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string LocationUID {
+      get; set;
+    } = string.Empty;
+
+
     public string Description {
       get; set;
     } = string.Empty;
@@ -35,31 +65,13 @@ namespace Empiria.Inventory.Assets {
     } = new string[0];
 
 
-    public string AssignedToUID {
-      get; set;
-    } = string.Empty;
-
-
-    public string AssignedToOrgUnitUID {
-      get; set;
-    } = string.Empty;
-
-
-    public string LocationUID {
-      get; set;
-    } = string.Empty;
-
-
-    public DateTime ApplicationDate {
-      get; set;
-    } = DateTime.Today;
-
-
     internal void EnsureValid() {
       Assertion.Require(TransactionTypeUID, nameof(TransactionTypeUID));
       Assertion.Require(Description, nameof(Description));
       Assertion.Require(AssignedToUID, nameof(AssignedToUID));
       Assertion.Require(AssignedToOrgUnitUID, nameof(AssignedToOrgUnitUID));
+      Assertion.Require(ReleasedByUID, nameof(ReleasedByUID));
+      Assertion.Require(ReleasedByOrgUnitUID, nameof(ReleasedByOrgUnitUID));
       Assertion.Require(LocationUID, nameof(LocationUID));
     }
 

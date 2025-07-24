@@ -344,6 +344,8 @@ namespace Empiria.Inventory.Assets {
       Description = Patcher.PatchClean(fields.Description, Description);
       AssignedTo = Patcher.Patch(fields.AssignedToUID, AssignedTo);
       AssignedToOrgUnit = Patcher.Patch(fields.AssignedToOrgUnitUID, AssignedToOrgUnit);
+      ReleasedBy = Patcher.Patch(fields.ReleasedByUID, ReleasedBy);
+      ReleasedByOrgUnit = Patcher.Patch(fields.ReleasedByOrgUnitUID, ReleasedByOrgUnit);
       BaseLocation = Patcher.Patch(fields.LocationUID, BaseLocation);
       ApplicationDate = Patcher.Patch(fields.ApplicationDate, ApplicationDate);
 
