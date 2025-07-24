@@ -19,7 +19,7 @@ namespace Empiria.Inventory.Reporting.Adapters {
 
     #region Public methods
 
-    static public ReportingDataDto MapToInventoryEntryDataDto(FixedList<InventoryEntry> list, FinderInventoryQuery query) {
+    static public ReportingDataDto MapToInventoryEntryDataDto(FixedList<InventoryEntry> list, SearchInventoryQuery query) {
 
       return new ReportingDataDto {
         Query = query,

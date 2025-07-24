@@ -7,12 +7,11 @@
 *  Summary  : Use cases to manage inventory order.                                                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using Empiria.Services;
-
+using System.Collections.Generic;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
-
 using Empiria.Inventory.Reporting.Adapters;
+using Empiria.Services;
 
 
 namespace Empiria.Inventory.Reporting.UseCases {
@@ -34,22 +33,37 @@ namespace Empiria.Inventory.Reporting.UseCases {
 
     #region Use cases
 
-    public ReportingDataDto FinderInventory(FinderInventoryQuery query) {
+    public ReportingDataDto FinderInventory(SearchInventoryQuery query) {
       Assertion.Require(query, nameof(query));
 
-      var filter = query.MapToFilterString();
-      var sort = query.MapToSortString();
+      List<InventoryEntry> inventoryEntries = new List<InventoryEntry>();
+        
+      foreach (string location in query.Locations) {
+        query.Location = location;
 
-      var inventoryEntries = InventoryOrderData.FinderInventory(filter, sort);
+        inventoryEntries.AddRange(GetInventoryEntries(query));
+      }
 
-      return FinderInventoryMapper.MapToInventoryEntryDataDto(inventoryEntries, query);
-      ;
+
+      foreach (string product in query.Products) {
+        query.Product = product;
+
+        inventoryEntries.AddRange(GetInventoryEntries(query));
+      }
+
+      return FinderInventoryMapper.MapToInventoryEntryDataDto(inventoryEntries.ToFixedList(), query);   
     }
-          
+
     #endregion Use cases
 
     #region Helpers
 
+    private IEnumerable<InventoryEntry> GetInventoryEntries(SearchInventoryQuery query) {
+      var filter = query.MapToFilterString();
+      var sort = query.MapToSortString();
+
+      return InventoryOrderData.SearchInventoryEntries(filter, sort);
+    }
 
     #endregion Helpers
 

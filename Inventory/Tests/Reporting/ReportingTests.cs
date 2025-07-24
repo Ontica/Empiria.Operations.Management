@@ -27,17 +27,18 @@ namespace Empiria.Tests.Inventory {
 
     #endregion Initialization
 
+
     [Fact]
     public void SearchInventoryOrderTest() {
       List<InventoryEntry> inventoryEntries = new List<InventoryEntry>();
 
-      FinderInventoryQuery query = new FinderInventoryQuery {
+      SearchInventoryQuery query = new SearchInventoryQuery {
         Keywords = "",
-        Products = { },
-        Locations = {"A-001", "A-001-1" },
-        WarehouseUID = "",
+        Products = {}, 
+        Locations = {},
+        WarehouseUID = "", // TODO preguntar como hacerlo mas eficiente, 
         RackUID = "",
-        LevelUID = "",
+        LevelUID = "D4F5F352-05D2-464F-879E-B090AD915075",
         Position = "",
       };
 
@@ -48,7 +49,7 @@ namespace Empiria.Tests.Inventory {
 
         inventoryEntries.AddRange(GetInventoryEntries(query));
       }
-
+      
 
       foreach (string product in query.Products) {
         query.Product = product;
@@ -56,17 +57,21 @@ namespace Empiria.Tests.Inventory {
         inventoryEntries.AddRange(GetInventoryEntries(query));
       }
 
-      var sut = FinderInventoryMapper.MapToInventoryEntryDataDto(inventoryEntries.ToFixedList(), query);
+      inventoryEntries.AddRange(GetInventoryEntries(query));
+
+      var aux = inventoryEntries.ToFixedList();
+
+      var sut = FinderInventoryMapper.MapToInventoryEntryDataDto(aux, query);
       
       Assert.NotNull(sut);
     }
 
 
-    private IEnumerable<InventoryEntry> GetInventoryEntries(FinderInventoryQuery query) {
+    private IEnumerable<InventoryEntry> GetInventoryEntries(SearchInventoryQuery query) {
       var filter = query.MapToFilterString();
       var sort = query.MapToSortString();
 
-      return InventoryOrderData.FinderInventory(filter, sort);
+      return InventoryOrderData.SearchInventoryEntries(filter, sort);
     }
 
   } // class ReportingTests

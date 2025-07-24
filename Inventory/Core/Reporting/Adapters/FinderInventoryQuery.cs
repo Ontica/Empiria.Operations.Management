@@ -2,7 +2,7 @@
 *                                                                                                            *
 *  Module   : Material Management                        Component : Adapters Layer                          *
 *  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Data Transfer Object                    *
-*  Type     : InventoryQuery                             License   : Please read LICENSE.txt file            *
+*  Type     : SearchInventoryQuery                       License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Input query DTO used to retrieve inventory orders.                                             *
 *                                                                                                            *
@@ -14,34 +14,30 @@ using Empiria.Products;
 namespace Empiria.Inventory.Reporting.Adapters {
 
   /// <summary>Input query DTO used to retrieve inventory orders.</summary>
-  public class FinderInventoryQuery {
+  public class SearchInventoryQuery {
 
     public string Keywords {
       get; set;
     } = string.Empty;
 
 
-    public string[] Products {
-      get;
-      internal set;
-    } = new string[0];
+    public List<string> Products {
+      get; set;
+    } = new List<string>();
 
 
     public List<string> Locations {
-      get;
-      set;
+      get; set;
     } = new List<string>();
     
 
     public string Product {
-      get;
-      internal set;
+      get; set;
     } = string.Empty;
 
 
     public string Location {
-      get;
-      internal set;
+      get; set;
     } = string.Empty;
 
 
@@ -51,56 +47,58 @@ namespace Empiria.Inventory.Reporting.Adapters {
      
     
     public string RackUID {
-      get;
-      internal set;
+      get; set;
     } = string.Empty;
 
 
     public string LevelUID {
-      get;
-      internal set;
+      get; set;
     } = string.Empty;
 
 
     public string Position {
-      get;
-      internal set;
+      get; set;
     } = string.Empty;
 
-  }
+  } // class SearchInventoryQuery
 
 
-  static internal class FinderInventoryQueryExtensions {
+  /// <summary>Extension methods for query DTO used to retrieve inventory orders.</summary>
 
-    static internal string MapToFilterString(this FinderInventoryQuery query) {
+  static internal class SearchInventoryQueryExtensions {
+
+    static internal string MapToFilterString(this SearchInventoryQuery query) {
 
       string keywordsFilter = BuildKeywordsFilter(query.Keywords);
       string locationFilter = BuildLocationFilter(query.Location);
+      string productFilter = BuildProudctFilter(query.Product);
+     
       string warehouseFilter = BuildWarehouseFilter(query.WarehouseUID);
-      string rackFilter = BuildRackFilter(query.RackUID); 
+      string rackFilter = BuildRackFilter(query.RackUID);
       string levelFilter = BuildLevelFilter(query.LevelUID);
       string positionFilter = BuildPositionFilter(query.Position);
-      string productFilter = BuildProudctFilter(query.Product);
 
       var filter = new Filter(keywordsFilter);
       filter.AppendAnd(locationFilter);
-      filter.AppendAnd(positionFilter);
+      filter.AppendOr(productFilter);
+
       filter.AppendAnd(warehouseFilter);
+      filter.AppendAnd(positionFilter);
       filter.AppendOr(rackFilter);
       filter.AppendAnd(levelFilter);
-      filter.AppendAnd(productFilter);
+
       filter.AppendAnd("Inv_Entry_Status != 'X' ");
 
       return filter.ToString();
     }
 
 
-    static internal string MapToSortString(this FinderInventoryQuery query) {
+    static internal string MapToSortString(this SearchInventoryQuery query) {
 
       return string.Empty;
     }
 
-    #region Private methods  
+    #region Helpers 
 
     private static string BuildKeywordsFilter(string keywords) {
 
@@ -133,9 +131,9 @@ namespace Empiria.Inventory.Reporting.Adapters {
 
       switch (levelFilter) {
         case 1 : return BuildWarehouseFilter(loc.UID); 
-        case 2 : return BuildRackFilter(loc.UID);
-        case 3 : return BuildLevelFilter(loc.UID); 
-        case 4 : return BuildPositionFilter(loc.UID); 
+        case 2 : return $"Rack = {loc.Id}"; //return BuildRackFilter(loc.UID);
+        case 3 : return $"Leve = {loc.Id}"; // return BuildLevelFilter(loc.UID); 
+        case 4 : return $"Position = {loc.Id}"; // BuildPositionFilter(loc.UID); 
         default : return string.Empty; 
       }
     }
@@ -146,7 +144,7 @@ namespace Empiria.Inventory.Reporting.Adapters {
         return string.Empty;
       }
 
-      var position = CommonStorage.TryParseNamedKey<Location>(locatition);
+     var position = Location.Parse(locatition);
 
       return $"Position = {position.Id}";
     }
@@ -181,11 +179,15 @@ namespace Empiria.Inventory.Reporting.Adapters {
 
       var warehouse = Location.Parse(warehouseUID);
 
+      if (warehouse.Name == "VIRTUAL") {
+        return "Warehouse = -1";
+      }
+
       return $"Warehouse = {warehouse.Id}";
     }
 
-    #endregion Private methods
+    #endregion Helpers
 
-  } // class FinderInventoryQuery
+  } // class SearchInventoryQueryExtensions {
 
 } // namespace Empiria.Inventory.Reporting.Adapters

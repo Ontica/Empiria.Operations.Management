@@ -21,7 +21,7 @@ namespace Empiria.Inventory.Reporting.Adapters {
   public class ReportingDataDto {
 
 
-    public FinderInventoryQuery Query {
+    public SearchInventoryQuery Query {
       get; set;
     }
 
