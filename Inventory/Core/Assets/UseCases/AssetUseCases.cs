@@ -8,6 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.DataTypes;
+using Empiria.Json;
 using Empiria.Services;
 
 using Empiria.Inventory.Assets.Adapters;
@@ -47,6 +49,15 @@ namespace Empiria.Inventory.Assets.UseCases {
       FixedList<Parties.Person> assignees = AssetsData.GetAssetsAssignees(keywords);
 
       return assignees.MapToNamedEntityList();
+    }
+
+
+    public FixedList<NamedEntityDto> GetAssetConditions() {
+      var storedJson = StoredJson.Parse("FixedAssets.Conditions");
+
+      var conditions = storedJson.Value.GetFixedList<KeyValue>("conditions");
+
+      return conditions.MapToNamedEntityList(false);
     }
 
 

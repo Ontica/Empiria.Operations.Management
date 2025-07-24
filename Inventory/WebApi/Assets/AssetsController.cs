@@ -36,6 +36,7 @@ namespace Empiria.Inventory.Assets.WebApi {
       }
     }
 
+
     [HttpPost]
     [Route("v2/assets/clean")]
     public NoDataModel Clean() {
@@ -57,6 +58,18 @@ namespace Empiria.Inventory.Assets.WebApi {
         FixedList<NamedEntityDto> assignees = usecases.GetAssetsAssignees(keywords);
 
         return new CollectionModel(base.Request, assignees);
+      }
+    }
+
+
+    [HttpGet]
+    [Route("v2/assets/conditions")]
+    public CollectionModel GetAssetConditions() {
+
+      using (var usecases = AssetUseCases.UseCaseInteractor()) {
+        FixedList<NamedEntityDto> assetConditions = usecases.GetAssetConditions();
+
+        return new CollectionModel(base.Request, assetConditions);
       }
     }
 
