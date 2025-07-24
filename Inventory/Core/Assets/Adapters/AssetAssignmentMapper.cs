@@ -8,15 +8,20 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Inventory.Assets.Data;
+
 namespace Empiria.Inventory.Assets.Adapters {
 
   /// <summary>Provides data mapping services for AssetAssignment instances.</summary>
   static internal class AssetAssignmentMapper {
 
     static internal AssetAssignmentHolder Map(AssetAssignment assignment) {
+      FixedList<AssetTransaction> txns = AssetsAssignmentsData.GetTransactionsFor(assignment.AssignedTo);
+
       return new AssetAssignmentHolder {
         Assignment = MapAssignment(assignment),
         Entries = AssetTransactionMapper.Map(assignment.Transaction.Entries),
+        Transactions = AssetTransactionMapper.Map(txns),
         Actions = AssetTransactionMapper.MapActions(assignment.Transaction.Rules)
       };
     }

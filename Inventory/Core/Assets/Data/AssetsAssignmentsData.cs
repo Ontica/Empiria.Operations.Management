@@ -8,7 +8,20 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
+
+/* Empiria Operations ****************************************************************************************
+*                                                                                                            *
+*  Module   : Assets Management                          Component : Data Layer                              *
+*  Assembly : Empiria.Inventory.Core.dll                 Pattern   : Data service                            *
+*  Type     : AssetsAssignmentsData                      License   : Please read LICENSE.txt file            *
+*                                                                                                            *
+*  Summary  : Provides data read methods for asset assignments.                                              *
+*                                                                                                            *
+************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
+
 using Empiria.Data;
+using Empiria.Parties;
 
 namespace Empiria.Inventory.Assets.Data {
 
@@ -26,6 +39,19 @@ namespace Empiria.Inventory.Assets.Data {
       var op = DataOperation.Parse(sql);
 
       return DataReader.GetFixedList<Asset>(op);
+    }
+
+
+    static internal FixedList<AssetTransaction> GetTransactionsFor(Person assignedTo) {
+      var sql = "SELECT * FROM OMS_Assets_Transactions " +
+                $"WHERE (ASSET_TXN_ASSIGNED_TO_ID = {assignedTo.Id} OR " +
+                $"ASSET_TXN_RELEASED_BY_ID = {assignedTo.Id}) AND " +
+                $"ASSET_TXN_STATUS <> 'X' " +
+                $"ORDER BY ASSET_TXN_NO DESC";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<AssetTransaction>(op);
     }
 
 

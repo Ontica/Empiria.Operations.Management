@@ -23,6 +23,10 @@ namespace Empiria.Inventory.Assets.Adapters {
       get; internal set;
     }
 
+    public FixedList<AssetTransactionDescriptorDto> Transactions {
+      get; internal set;
+    }
+
     public AssetTransactionActions Actions {
       get; internal set;
     }
