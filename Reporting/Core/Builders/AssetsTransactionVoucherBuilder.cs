@@ -66,7 +66,8 @@ namespace Empiria.Inventory.Reporting {
                 var entryHtml = new StringBuilder(TEMPLATE.Replace("{{ASSET.ASSET_NO}}", entry.Asset.AssetNo));
 
                 entryHtml.Replace("{{ASSET.NAME}}", entry.Asset.Name);
-                entryHtml.Replace("{{ASSET.CONDITION}}", entry.Asset.CurrentCondition);
+                entryHtml.Replace("{{PREVIOUS_CONDITION}}", entry.PreviousCondition);
+                entryHtml.Replace("{{RELEASED_CONDITION}}", entry.ReleasedCondition);
                 entryHtml.Replace("{{DESCRIPTION}}", entry.Description);
 
                 entriesHtml.Append(entryHtml);
