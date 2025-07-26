@@ -66,8 +66,8 @@ namespace Empiria.Inventory.Assets {
 
 
     internal void EnsureValid() {
+      Description = EmpiriaString.Clean(Description);
       Assertion.Require(TransactionTypeUID, nameof(TransactionTypeUID));
-      Assertion.Require(Description, nameof(Description));
       Assertion.Require(AssignedToUID, nameof(AssignedToUID));
       Assertion.Require(AssignedToOrgUnitUID, nameof(AssignedToOrgUnitUID));
       Assertion.Require(ReleasedByUID, nameof(ReleasedByUID));
