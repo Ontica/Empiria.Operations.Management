@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
 using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
@@ -132,7 +133,7 @@ namespace Empiria.Tests.Inventory {
       TestsCommonMethods.Authenticate();
       
       InventoryOrderItemFields fields = new InventoryOrderItemFields {
-        Location = "M-MN3-01-71",
+        Location = "A-001-05-05",
         Product= "TG8F34X112-180",
         Quantity = 1,
       };
@@ -143,8 +144,12 @@ namespace Empiria.Tests.Inventory {
       Assertion.Require(product, "El producto no existe");
 
       var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
+
       Assertion.Require(location, $"La ubicacion {fields.Location} no existe.");
 
+      Assertion.Require(order.Warehouse == GetRootLocation(location),
+                    $"La localización {fields.Location} no existe en el almacen {order.Warehouse.Name}");
+      
       var isnotexistProductinLocation = VerifyProductAndLocationInOrder(order.Id, product.Id, location.Id);
       Assertion.Require(isnotexistProductinLocation, $"Ya existe ese producto en esa localización {fields.Location}.");
 
@@ -466,6 +471,17 @@ namespace Empiria.Tests.Inventory {
         var allItems = InventoryOrderData.GetAllInventoryOrderItems(order);
         return allItems.Count + 1;
       }
+    }
+
+
+    private Location GetRootLocation(Location location) {
+      var current = location;
+      while (!current.IsRoot) {
+        var parent = current.GetParent<Location>();
+        current = parent;
+      }
+
+      return current;
     }
 
 

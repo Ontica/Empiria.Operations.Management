@@ -101,13 +101,15 @@ namespace Empiria.Inventory.UseCases {
       Assertion.Require(orderUID, nameof(orderUID));
       Assertion.Require(fields, nameof(fields));
 
+      var order = InventoryOrder.Parse(orderUID);
+
       var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
-      Assertion.Require(location, $"La ubiacacion {fields.Location} no existe.");
+      Assertion.Require(location, $"La ubicacion {fields.Location} no existe.");
+      Assertion.Require(order.Warehouse == GetRootLocation(location),
+                 $"La localización {fields.Location} no existe en el almacen {order.Warehouse.Name}");
 
       var product = Product.TryParseWithCode(fields.Product);
       Assertion.Require(product, $"El producto con clave {fields.Product} no existe.");
-
-      var order = InventoryOrder.Parse(orderUID);
 
       var isnotexistProductinLocation = VerifyProductAndLocationInOrder(order.Id, product.Id, location.Id);
       Assertion.Require(isnotexistProductinLocation, $"Ya existe ese producto en esa localización {fields.Location}.");
@@ -310,7 +312,18 @@ namespace Empiria.Inventory.UseCases {
         var allItems = InventoryOrderData.GetAllInventoryOrderItems(order);
         return allItems.Count + 1;
       }
-    }   
+    }
+
+
+    private Location GetRootLocation(Location location) {
+      var current = location;
+      while (!current.IsRoot) {
+        var parent = current.GetParent<Location>();
+        current = parent;
+      }
+
+      return current;
+    }
 
 
     public void OutputInventoryEntriesVW(InventoryOrder order) {
