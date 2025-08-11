@@ -1,9 +1,6 @@
 ﻿
 using System.Web.Http;
-using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
-using Empiria.Inventory.Reporting.Adapters;
-using Empiria.Inventory.Reporting.UseCases;
 using Empiria.Inventory.UseCases;
 using Empiria.WebApi;
 
@@ -92,21 +89,6 @@ namespace Empiria.Inventory.WebApi {
 
 
     [HttpPost]
-    [Route("v8/order-management/inventory-orders/{orderUID}/items/{itemUID}/entries")]
-    public SingleObjectModel CreateInventoryEntry([FromUri] string orderUID,
-                                                  [FromUri] string itemUID,
-                                                  [FromBody] InventoryEntryFields fields) {
-
-      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
-
-        InventoryHolderDto inventoryOrder = usecases.CreateInventoryEntry(orderUID, itemUID, fields);
-
-        return new SingleObjectModel(this.Request, inventoryOrder);
-      }
-    }
-
-
-    [HttpPost]
     [Route("v8/order-management/inventory-orders")]
     public SingleObjectModel CreateInventoryOrder([FromBody] InventoryOrderFields fields) {
 
@@ -133,40 +115,12 @@ namespace Empiria.Inventory.WebApi {
 
 
     [HttpPost]
-    [Route("v8/order-management/inventory-orders/{orderUID}/close-entries")]
-    public SingleObjectModel CloseInventoryEntry([FromUri] string orderUID) {
-
-      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
-
-        InventoryHolderDto inventoryOrder = usecases.CloseInventoryEntries(orderUID);
-
-        return new SingleObjectModel(this.Request, inventoryOrder);
-      }
-    }
-
-
-    [HttpPost]
     [Route("v8/order-management/inventory-orders/{orderUID:guid}/close")]
     public SingleObjectModel CloseInventoryOrder([FromUri] string orderUID) {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
         InventoryHolderDto inventoryOrder = usecases.CloseInventoryOrder(orderUID);
-
-        return new SingleObjectModel(this.Request, inventoryOrder);
-      }
-    }
-
-
-    [HttpDelete]
-    [Route("v8/order-management/inventory-orders/{orderUID}/items/{itemUID}/entries/{entryUID}")]
-    public SingleObjectModel DeleteInventoryEntry([FromUri] string orderUID,
-                                                  [FromUri] string itemUID,
-                                                  [FromUri] string entryUID) {
-
-      using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
-
-        InventoryHolderDto inventoryOrder = usecases.DeleteInventoryEntry(orderUID, itemUID, entryUID);
 
         return new SingleObjectModel(this.Request, inventoryOrder);
       }

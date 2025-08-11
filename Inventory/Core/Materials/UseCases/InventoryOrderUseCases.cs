@@ -8,18 +8,14 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-
-using System;
-using Empiria.Inventory.Adapters;
-using Empiria.Inventory.Assets;
-using Empiria.Inventory.Data;
-using Empiria.Locations;
-using Empiria.Orders;
-using Empiria.Orders.Adapters;
 using Empiria.Parties;
-using Empiria.Products;
 using Empiria.Services;
 using Empiria.StateEnums;
+using Empiria.Inventory.Adapters;
+using Empiria.Inventory.Data;
+using Empiria.Locations;
+using Empiria.Orders.Adapters;
+using Empiria.Products;
 
 
 namespace Empiria.Inventory.UseCases {
@@ -43,41 +39,22 @@ namespace Empiria.Inventory.UseCases {
 
     #region Use cases
 
-    public InventoryHolderDto CloseInventoryEntries(string orderUID) {
+    public InventoryHolderDto CloseInventoryOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
       InventoryOrder order = InventoryOrder.Parse(orderUID);
 
-      FixedList<InventoryOrderItem> orderItems = order.GetItems<InventoryOrderItem>();
+      order.Close();
+      order.Save();
 
-      InventoryUtility.EnsureIsValidToClose(orderItems);
+      order.CloseItems();
 
-      InventoryOrderData.UpdateEntriesStatusByOrder(order.Id, InventoryStatus.Cerrado);
+      OutputInventoryEntriesVW(order);
 
-      return GetInventoryOrder(orderUID);
-    }
+      var inventoryEntryUseCase = InventoryEntryUseCases.UseCaseInteractor();
+      inventoryEntryUseCase.CloseInventoryEntries(order.UID);
 
-
-    public InventoryHolderDto CreateInventoryEntry(string orderUID, string orderItemUID,
-                                                   InventoryEntryFields fields) {
-      Assertion.Require(orderUID, nameof(orderUID));
-      Assertion.Require(orderItemUID, nameof(orderItemUID));
-      Assertion.Require(fields, nameof(fields));
-
-      ProductEntry productEntry = InventoryOrderData.GetProductEntryByName(fields.Product.Trim());
-      LocationEntry locationEntry = InventoryOrderData.GetLocationEntryByName(fields.Location.Trim());
-
-      fields.EnsureIsValid(productEntry.ProductId, orderItemUID);
-      fields.ProductUID = Product.Parse(productEntry.ProductId).UID;
-      fields.LocationUID = Location.Parse(locationEntry.LocationId).UID;
-
-      var inventoryEntry = new InventoryEntry(orderUID, orderItemUID);
-
-      inventoryEntry.Update(fields, orderItemUID);
-
-      inventoryEntry.Save();
-
-      return GetInventoryOrder(orderUID);
+      return GetInventoryOrder(order.UID);
     }
 
 
@@ -132,26 +109,7 @@ namespace Empiria.Inventory.UseCases {
 
       return GetInventoryOrder(order.UID);
     }
-
-
-    public InventoryHolderDto DeleteInventoryEntry(string orderUID, string itemUID, string entryUID) {
-      Assertion.Require(orderUID, nameof(orderUID));
-      Assertion.Require(itemUID, nameof(itemUID));
-      Assertion.Require(entryUID, nameof(entryUID));
-
-      InventoryOrder order = InventoryOrder.Parse(orderUID);
-      InventoryOrderItem orderItem = InventoryOrderItem.Parse(itemUID);
-      InventoryEntry entry = InventoryEntry.Parse(entryUID);
-
-      Assertion.Require(order.Id == entry.Order.Id && orderItem.Order.Id == entry.Order.Id,
-                        $"El registro de inventario no coincide con la orden!");
-
-      InventoryOrderData.DeleteEntryStatus(order.Id, orderItem.Id,
-                                           entry.Id, InventoryStatus.Deleted);
-
-      return GetInventoryOrder(orderUID);
-    }
-
+       
 
     public void DeleteInventoryOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
@@ -187,15 +145,6 @@ namespace Empiria.Inventory.UseCases {
       InventoryOrderActions actions = InventoryUtility.GetActions(inventoryOrder);
 
       return InventoryOrderMapper.MapToHolderDto(inventoryOrder, actions);
-    }
-
-
-    public InventoryEntryDto GetInventoryEntryByUID(string inventoryEntryUID) {
-      Assertion.Require(inventoryEntryUID, nameof(inventoryEntryUID));
-
-      InventoryEntry entry = InventoryEntry.Parse(inventoryEntryUID);
-
-      return InventoryOrderMapper.MapToInventoryEntryDto(entry);
     }
 
 
@@ -267,24 +216,7 @@ namespace Empiria.Inventory.UseCases {
 
       return GetInventoryOrder(order.UID);
     }
-
-
-    public InventoryHolderDto CloseInventoryOrder(string orderUID) {
-      Assertion.Require(orderUID, nameof(orderUID));
-
-      InventoryOrder order = InventoryOrder.Parse(orderUID);
-
-      order.Close();
-      order.Save();
-
-      order.CloseItems();
-
-      OutputInventoryEntriesVW(order);
-
-      CloseInventoryEntries(order.UID);
-
-      return GetInventoryOrder(order.UID);
-    }
+        
 
     #endregion Use cases
 

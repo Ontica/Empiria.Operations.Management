@@ -30,7 +30,7 @@ namespace Empiria.Tests.Inventory {
     [Fact]
     public void GetInventoryEntryByUIDTest() {
 
-      var usecase = InventoryOrderUseCases.UseCaseInteractor();
+      var usecase = InventoryEntryUseCases.UseCaseInteractor();
       
       string inventoryEntryUID = "0986119b-d72a-4107-902d-f70199554ec6";
 
@@ -43,7 +43,7 @@ namespace Empiria.Tests.Inventory {
     [Fact]
     public void CloseInventoryEntryTest() {
 
-      var usecase = InventoryOrderUseCases.UseCaseInteractor();
+      var usecase = InventoryEntryUseCases.UseCaseInteractor();
       string orderUID = "829b237e-354a-4c06-8da9-ac5e23b704e1";
 
       InventoryHolderDto sut = usecase.CloseInventoryEntries(orderUID);
@@ -55,7 +55,7 @@ namespace Empiria.Tests.Inventory {
     [Fact]
     public void CreateInventoryEntriesTest() {
 
-      var usecase = InventoryOrderUseCases.UseCaseInteractor();
+      var usecase = InventoryEntryUseCases.UseCaseInteractor();
       string orderUID = "a7a99924-0efc-41b9-9b65-5b78d31bf329";
       string orderItemUID = "f4874ac2-52f4-4061-87f4-28a554a5a0d7";
 
@@ -75,7 +75,7 @@ namespace Empiria.Tests.Inventory {
     [Fact]
     public void DeleteInventoryEntryTest() {
 
-      var usecase = InventoryOrderUseCases.UseCaseInteractor();
+      var usecase = InventoryEntryUseCases.UseCaseInteractor();
       string orderUID =  "829b237e-354a-4c06-8da9-ac5e23b704e1";
       string orderItemUID = "3f52c3bc-1a84-4390-9bb4-7850fb79f38e";
       string entryUID = "30dd291d-3d7c-4520-b8a1-11d644d37f80";

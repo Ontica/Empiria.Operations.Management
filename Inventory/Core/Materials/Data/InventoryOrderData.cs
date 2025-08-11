@@ -221,6 +221,7 @@ namespace Empiria.Inventory.Data {
       return DataReader.GetObject<InventoryEntry>(op);
     }
 
+
     internal static int VerifyProductAndLocationInOrder(int orderId, int productID, int locationID) {
 
       var sql = $"select count(*) from OMS_Order_Items where Order_Item_Order_Id = {orderId} " +
@@ -229,8 +230,9 @@ namespace Empiria.Inventory.Data {
       var op = DataOperation.Parse(sql);
 
       return DataReader.GetScalar<int>(op);
-
     }
+
+
   } // class InventoryOrderData
 
 } // namespace Empiria.Inventory.Data
