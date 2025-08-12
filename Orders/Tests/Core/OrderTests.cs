@@ -29,7 +29,7 @@ namespace Empiria.Tests.Orders {
 
         SalesOrderFields fields = new SalesOrderFields {
         CategoryUID = "4A9C79FE-AF5B-4F1A-BFE0-2CE86C3B9A0D",
-        Description = "Prueba 22 de Julio despues de comer",
+        Description = "Orden 30 de Julio para pruebas de CAPA",
         BeneficiaryUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd",
         ResponsibleUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1",
       };

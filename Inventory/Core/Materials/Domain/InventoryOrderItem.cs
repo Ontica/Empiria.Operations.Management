@@ -69,7 +69,7 @@ namespace Empiria.Inventory {
     [DataField("ORDER_ITEM_CURRENCY_ID")]
     public Currency Currency {
       get; private set;
-    } = Currency.Default;
+    } 
 
 
     internal FixedList<InventoryEntry> Entries {
