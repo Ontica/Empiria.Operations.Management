@@ -93,7 +93,7 @@ namespace Empiria.Inventory.UseCases {
 
       fields.ProductUID = product.UID;
       fields.Description = product.Description;
-      fields.ProductUnitUID = product.BaseUnit.UID;      
+      fields.ProductUnitUID = product.BaseUnit.UID;
 
       var orderItemType = Orders.OrderItemType.Parse(4059);
       InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, order, location);
@@ -105,11 +105,11 @@ namespace Empiria.Inventory.UseCases {
       order.AddItem(orderItem);
       orderItem.Save();
 
-      AddInventoryEntry(order, orderItem, fields);
+      AddInventoryEntry(order, orderItem);
 
       return GetInventoryOrder(order.UID);
     }
-       
+
 
     public void DeleteInventoryOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
@@ -189,7 +189,7 @@ namespace Empiria.Inventory.UseCases {
       return GetInventoryOrder(order.UID);
     }
 
-    
+
     public InventoryHolderDto UpdateInventoryOrderItem(string orderUID, string orderItemUID,
                                                InventoryOrderItemFields fields) {
       Assertion.Require(orderUID, nameof(orderUID));
@@ -216,22 +216,16 @@ namespace Empiria.Inventory.UseCases {
 
       return GetInventoryOrder(order.UID);
     }
-        
+
 
     #endregion Use cases
 
     #region Helpers
 
-    private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem, InventoryOrderItemFields fields) {
+    private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
       var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
 
-      InventoryEntryFields entryFields = new InventoryEntryFields();
-
-      entryFields.Product = fields.Product;
-      entryFields.Quantity = fields.Quantity;
-      entryFields.Location = fields.Location;
-
-      inventoryEntry.Update(entryFields, orderItem.UID);
+      inventoryEntry.InputEntry(orderItem.UnitPrice);
 
       inventoryEntry.Save();
     }
@@ -259,7 +253,7 @@ namespace Empiria.Inventory.UseCases {
 
 
     public void OutputInventoryEntriesVW(InventoryOrder order) {
-      
+
       foreach (var item in order.Items) {
 
         var inventoryEntry = new InventoryEntry(order, item);
@@ -268,7 +262,7 @@ namespace Empiria.Inventory.UseCases {
         inventoryEntry.OutputEntry(price);
 
         inventoryEntry.Save();
-      }      
+      }
     }
 
 

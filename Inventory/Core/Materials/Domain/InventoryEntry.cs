@@ -67,6 +67,12 @@ namespace Empiria.Inventory {
       return InventoryOrderData.GetInventoryEntriesByOrderItem(orderItem);
     }
 
+    public static InventoryEntry TryParseWithOrderItemId(int orderId) {
+      Assertion.Require(orderId, nameof(orderId));
+
+      return TryParse<InventoryEntry>($"Inv_Entry_Order_Item_Id = {orderId}");
+    }
+
 
     #endregion Constructors and parsers
 
@@ -214,8 +220,8 @@ namespace Empiria.Inventory {
 
       this.InputQuantity = fields.Quantity;
       this.Product = Patcher.Patch(fields.ProductUID, this.Product);
-      this.Location = Patcher.Patch(fields.LocationUID, this.Location);      
-      this.InputCost = fields.Cost;      
+      this.Location = Patcher.Patch(fields.LocationUID, this.Location);
+      this.InputCost = fields.Cost;
     }
 
 
@@ -234,7 +240,7 @@ namespace Empiria.Inventory {
 
       this.OutputQuantity = fields.Quantity;
       this.Product = Patcher.Patch(fields.ProductUID, this.Product);
-      this.Location = Patcher.Patch(fields.LocationUID, this.Location);      
+      this.Location = Patcher.Patch(fields.LocationUID, this.Location);
       this.OutputCost = fields.Cost;
     }
 
@@ -245,6 +251,15 @@ namespace Empiria.Inventory {
       this.Product = this.OrderItem.Product;
       this.Location = Location.Empty;
       this.OutputCost = cost;
+    }
+
+    internal void InputEntry(decimal inputCost) {
+
+      this.InputQuantity = this.OrderItem.Quantity;
+      this.Product = this.OrderItem.Product;
+      this.Location = Location.Empty;
+      this.InputCost = inputCost;
+      this.Position = this.OrderItem.Position;
     }
 
 

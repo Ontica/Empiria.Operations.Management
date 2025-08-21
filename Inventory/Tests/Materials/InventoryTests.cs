@@ -12,8 +12,6 @@ using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
 using Empiria.Locations;
-using Empiria.Orders;
-using Empiria.Orders.Adapters;
 using Empiria.Parties;
 using Empiria.Products;
 using Empiria.StateEnums;
@@ -64,15 +62,15 @@ namespace Empiria.Tests.Inventory {
 
     [Fact]
     public void Should_Create_InventoryOrder() {
-    
+
       TestsCommonMethods.Authenticate();
 
       InventoryOrderFields fields = new InventoryOrderFields {
         WarehouseUID = "35EA9626-332F-4234-B62C-053A8E81350C",
-        InventoryTypeUID = "68AC65E2-4122-42B2-BEC6-48E9417086AD", 
+        InventoryTypeUID = "68AC65E2-4122-42B2-BEC6-48E9417086AD",
         Description = "Prueba 20 de Junio antes de ir por las memelas",
         RequestedByUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd",
-        ResponsibleUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1",        
+        ResponsibleUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1",
       };
 
       var orderType = Orders.OrderType.Parse(4010);
@@ -91,14 +89,14 @@ namespace Empiria.Tests.Inventory {
     public void Should_Create_Inventory_Order_Item() {
 
       TestsCommonMethods.Authenticate();
-      
+
       InventoryOrderItemFields fields = new InventoryOrderItemFields {
         Location = "A-001-05-05",
-        Product= "TG8F34X112-180",
+        Product = "TG8F34X112-180",
         Quantity = 1,
       };
 
-      var order = InventoryOrder.Parse("3652bd82-ea56-4d35-a0d9-75a165726063");
+      var order = InventoryOrder.Parse("4295d542-f788-4b16-bed1-420500e93a9d");
 
       var product = Product.TryParseWithCode(fields.Product);
       Assertion.Require(product, "El producto no existe");
@@ -109,29 +107,29 @@ namespace Empiria.Tests.Inventory {
 
       Assertion.Require(order.Warehouse == GetRootLocation(location),
                     $"La localización {fields.Location} no existe en el almacen {order.Warehouse.Name}");
-      
+
       var isnotexistProductinLocation = VerifyProductAndLocationInOrder(order.Id, product.Id, location.Id);
       Assertion.Require(isnotexistProductinLocation, $"Ya existe ese producto en esa localización {fields.Location}.");
 
       fields.ProductUID = product.UID;
-      fields.Description  = product.Description;
+      fields.Description = product.Description;
       fields.ProductUnitUID = product.BaseUnit.UID;
 
       var orderItemType = Orders.OrderItemType.Parse(4059);
-           
+
       InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, order, location);
       var position = GetItemPosition(order);
       fields.Position = position;
 
       orderItem.Update(fields);
       order.AddItem(orderItem);
-      orderItem.Save();    
+      orderItem.Save();
 
-      AddInventoryEntry(order, orderItem, fields);
+      AddInventoryEntry(order, orderItem);
 
       Assert.NotNull(order);
     }
-    
+
 
     [Fact]
     public void Should_Close_Inventory_Order() {
@@ -170,7 +168,7 @@ namespace Empiria.Tests.Inventory {
     [Fact]
     public void Should_Delete_Inventory_Order_Item() {
       var orderUID = "3652bd82-ea56-4d35-a0d9-75a165726063";
-      var orderItemUID = "1001fb6b-dd7b-4270-92f9-2c73c35401a6"; 
+      var orderItemUID = "1001fb6b-dd7b-4270-92f9-2c73c35401a6";
 
       TestsCommonMethods.Authenticate();
 
@@ -178,7 +176,7 @@ namespace Empiria.Tests.Inventory {
       Assertion.Require(orderItemUID, nameof(orderItemUID));
 
       InventoryOrder order = InventoryOrder.Parse(orderUID);
-        
+
       var item = order.GetItem<InventoryOrderItem>(orderItemUID);
 
       order.RemoveItem(item);
@@ -191,7 +189,7 @@ namespace Empiria.Tests.Inventory {
 
     [Fact]
     public void Should_Get_InventoryOrder() {
-      var orderUID = "17f8f807-1dc1-414c-aaa9-bda2f65711b1";
+      var orderUID = "3c599a76-132f-42ae-a4d0-255d04c286c3";
 
       Assertion.Require(orderUID, nameof(orderUID));
 
@@ -201,9 +199,22 @@ namespace Empiria.Tests.Inventory {
 
       var sut = InventoryOrderMapper.MapToHolderDto(inventoryOrder, actions);
 
-       Assert.NotNull(sut);
+      Assert.NotNull(sut);
     }
 
+
+    [Fact]
+    public void Should_Get_InventoryOrderItem() {
+
+      var item1 = InventoryOrderItem.Parse(33189);
+
+      //var order = InventoryOrder.Parse(orderUID);
+
+      //var item = order.GetItem<InventoryOrderItem>(itemUID);
+
+
+      Assert.NotNull(item1);
+    }
 
     [Fact]
     public void Should_Get_InventoryTypes() {
@@ -310,16 +321,10 @@ namespace Empiria.Tests.Inventory {
 
     #region Helpers
 
-    private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem, InventoryOrderItemFields fields) {
+    private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
       var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
 
-      InventoryEntryFields entryFields = new InventoryEntryFields();
-
-      entryFields.Product = fields.Product;
-      entryFields.Quantity = fields.Quantity;
-      entryFields.Location = fields.Location;
-
-      inventoryEntry.Update(entryFields, orderItem.UID);
+      inventoryEntry.InputEntry(orderItem.UnitPrice);
 
       inventoryEntry.Save();
     }
