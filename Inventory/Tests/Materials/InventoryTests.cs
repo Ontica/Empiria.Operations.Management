@@ -84,6 +84,16 @@ namespace Empiria.Tests.Inventory {
       Assert.NotNull(order);
     }
 
+    [Fact]
+    public void Should_GetProductPriceFromHistoricCost() {
+
+      TestsCommonMethods.Authenticate();
+
+      var productKey = InventoryOrderData.GetProductPriceFromHistoricCost("MM10912X20-800");
+
+      Assert.NotNull(productKey.ToString());
+    }
+
 
     [Fact]
     public void Should_Create_Inventory_Order_Item() {
@@ -314,6 +324,23 @@ namespace Empiria.Tests.Inventory {
         var entry = InventoryOrderData.GetInventoryEntry(item.Id);
         entry.UpdatePosition(item.Position);
         entry.Save();
+      }
+
+      Assert.NotNull(order);
+    }
+
+
+    [Fact]
+    public void Should_UpdateCost() {
+
+      TestsCommonMethods.Authenticate();      
+      var order = InventoryOrder.Parse(5895);
+
+      foreach (var item in order.Items) {
+        //if (item.UnitPrice == 0) {
+          item.UpdatePrice();          
+          item.Save();
+        //}        
       }
 
       Assert.NotNull(order);

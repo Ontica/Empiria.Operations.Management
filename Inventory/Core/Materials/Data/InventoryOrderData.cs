@@ -126,11 +126,25 @@ namespace Empiria.Inventory.Data {
     internal static decimal GetProductPriceFromVirtualWarehouse(int productId) {
 
         var sql = $"SELECT TOp  1 Inv_Entry_Input_Cost FROM OMS_Inventory_Entries where Inv_Entry_Order_Id = -10 and Inv_Entry_Product_Id = {productId}" +
-                  $"  order by Inv_Entry_Id desc ";
+                  $"  order by Inv_Entry_Time ";
 
         var op = DataOperation.Parse(sql);
 
         return DataReader.GetScalar<decimal>(op);
+
+    }
+
+
+    internal static decimal GetProductPriceFromHistoricCost(string productName) {
+
+      var productKey = productName.Split('-');
+      
+      var sql = $"SELECT top 1 Costo6  FROM Historic_Cost_Initial where Clave = '{productKey[0]}'" +
+                $"  order by fecha desc ";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetScalar<decimal>(op);
 
     }
 

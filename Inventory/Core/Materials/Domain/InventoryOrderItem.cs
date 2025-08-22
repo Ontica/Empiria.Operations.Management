@@ -8,10 +8,12 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
 using Empiria.Financial;
+using Empiria.Inventory.Data;
 using Empiria.Locations;
 using Empiria.Orders;
-using Empiria.Inventory.Data;
+using Empiria.Products;
 
 namespace Empiria.Inventory {
 
@@ -97,7 +99,13 @@ namespace Empiria.Inventory {
 
       base.Update(fields);
 
-      this.UnitPrice = InventoryOrderData.GetProductPriceFromVirtualWarehouse(this.Product.Id);
+      this.UnitPrice = GetProductPrice();
+    }
+
+
+    internal void UpdatePrice() {
+
+      this.UnitPrice = GetProductPrice();
     }
 
 
@@ -107,6 +115,22 @@ namespace Empiria.Inventory {
 
     #endregion Methods
 
+    #region Helpers
+
+    private decimal GetProductPrice() {
+      
+      var unitPrice = InventoryOrderData.GetProductPriceFromVirtualWarehouse(this.Product.Id);
+
+      if (unitPrice == 0)
+       {
+        return InventoryOrderData.GetProductPriceFromHistoricCost(this.Product.Name);
+      } else {
+        return unitPrice;
+      }
+        
+    }
+
+    #endregion
   } // class InventoryOrderItem
 
 } // namespace Empiria.Inventory
