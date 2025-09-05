@@ -75,20 +75,18 @@ namespace Empiria.Inventory.Assets.WebApi {
 
       command.TransactionType = AssetTransactionType.ParseWithOperation(operationID);
 
-      FileDto report;
-
       using (var usecases = AssetAssignmentUseCases.UseCaseInteractor()) {
 
         FixedList<AssetTransaction> txns = usecases.CreateBulkTransactions(command);
+
+        FileDto report;
 
         using (var reporting = AssetsReportingService.ServiceInteractor()) {
           report = reporting.ExportAssetsTransactionToPdf(txns[0]);
         }
 
-        var result = new BulkOperationResult {
-          Message = $"Se generaron {txns.Count} transacciones de activo fijo.",
-          File = report,
-        };
+        var result = new FileResultDto(report,
+            $"Se generaron {txns.Count} transacciones de activo fijo.");
 
         return new SingleObjectModel(base.Request, result);
       }
@@ -103,20 +101,18 @@ namespace Empiria.Inventory.Assets.WebApi {
 
       command.TransactionType = AssetTransactionType.ParseWithOperation(operationID);
 
-      FileDto report;
-
       using (var usecases = AssetAssignmentUseCases.UseCaseInteractor()) {
 
         AssetTransaction txn = usecases.CreateBulkTransaction(assignmentUID, command);
+
+        FileDto report;
 
         using (var reporting = AssetsReportingService.ServiceInteractor()) {
           report = reporting.ExportAssetsTransactionToPdf(txn);
         }
 
-        var result = new BulkOperationResult {
-          Message = "La transacción de activo fijo fue generada satisfactoriamente.",
-          File = report,
-        };
+        var result = new FileResultDto(report,
+            "La transacción de activo fijo fue generada satisfactoriamente.");
 
         return new SingleObjectModel(base.Request, result);
       }
@@ -125,17 +121,5 @@ namespace Empiria.Inventory.Assets.WebApi {
     #endregion Command web apis
 
   }  // class AssetsAssignmentController
-
-  public class BulkOperationResult {
-
-    public string Message {
-      get; internal set;
-    }
-
-    public FileDto File {
-      get; internal set;
-    }
-
-  }  // class BulkOperationResult
 
 }  // namespace Empiria.Inventory.Assets.WebApi

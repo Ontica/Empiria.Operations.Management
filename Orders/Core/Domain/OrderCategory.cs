@@ -8,8 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
-
 namespace Empiria.Orders {
 
   /// <summary>Represents an order category which holds orders of the same kind or order type.</summary>
@@ -49,7 +47,7 @@ namespace Empiria.Orders {
       }
     }
 
-    
+
     public bool IsAssignable {
       get {
         return base.ExtData.Get("isAssignable", true);
