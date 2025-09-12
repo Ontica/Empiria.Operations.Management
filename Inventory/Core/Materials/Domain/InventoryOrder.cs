@@ -20,11 +20,11 @@ namespace Empiria.Inventory {
     #region Constructors and parsers
 
     protected InventoryOrder(OrderType orderType) : base(orderType) {
-     //Requeired by Empiria Framework
+      //Requeired by Empiria Framework
     }
 
 
-    internal InventoryOrder(string warehouseUID ,OrderType orderType) : base(orderType) {
+    internal InventoryOrder(string warehouseUID, OrderType orderType) : base(orderType) {
       Assertion.Require(warehouseUID, nameof(warehouseUID));
 
       this.Warehouse = Location.Parse(warehouseUID);
@@ -49,7 +49,7 @@ namespace Empiria.Inventory {
     #region Properties
 
     public InventoryType InventoryType {
-     get {
+      get {
         return (InventoryType) base.Category;
       }
     }
@@ -79,12 +79,12 @@ namespace Empiria.Inventory {
     #region Methods
 
     protected override void OnSave() {
-     InventoryOrderData.WriteOrder(this, this.ExtData.ToString());
+      InventoryOrderData.WriteOrder(this, this.ExtData.ToString());
     }
 
     internal protected virtual void AddItem(InventoryOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
-         
+
       base.AddItem(orderItem);
 
       this.Items = GetItems<InventoryOrderItem>();
@@ -92,7 +92,7 @@ namespace Empiria.Inventory {
 
 
     internal void CloseItems() {
-      foreach (var item in _items) {
+      foreach (var item in Items) {
         item.Close();
         item.Save();
       }
@@ -136,7 +136,7 @@ namespace Empiria.Inventory {
         item.DelItem();
         item.Save();
       }
-    }   
+    }
 
     #endregion Helpers
 

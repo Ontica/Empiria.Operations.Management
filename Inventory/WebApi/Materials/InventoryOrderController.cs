@@ -12,7 +12,7 @@ namespace Empiria.Inventory.WebApi {
 
     [HttpPost]
     [Route("v8/order-management/inventory-orders/search")]
-    public SingleObjectModel GetInventoryOrderList([FromBody] InventoryOrderQuery query) {
+    public SingleObjectModel SearchInventoryOrderList([FromBody] InventoryOrderQuery query) {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
@@ -147,7 +147,7 @@ namespace Empiria.Inventory.WebApi {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
-       InventoryHolderDto inventoryOrder =  usecases.DeleteInventoryOrderItem(orderUID, orderItemUID);
+        InventoryHolderDto inventoryOrder = usecases.DeleteInventoryOrderItem(orderUID, orderItemUID);
 
         return new SingleObjectModel(this.Request, inventoryOrder);
       }
