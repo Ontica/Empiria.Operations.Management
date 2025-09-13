@@ -28,7 +28,7 @@ namespace Empiria.Tests.Inventory {
     }
 
     #endregion Initialization
-      
+
     [Fact]
     public void Should_Add_Inventory_EntriesTest() {
 
@@ -41,7 +41,7 @@ namespace Empiria.Tests.Inventory {
 
         Location = "A-005-01-23",
         Product = "TG5F916X112-320",
-        Cost = 3.7628m ,
+        Cost = 3.7628m,
         Quantity = 200
       };
 
@@ -98,8 +98,8 @@ namespace Empiria.Tests.Inventory {
 
       inventoryEntry.Update(fields, orderItemUID);
 
-      inventoryEntry.Save();    
-     
+      inventoryEntry.Save();
+
       Assert.NotNull(inventoryEntry);
     }
 
@@ -154,18 +154,37 @@ namespace Empiria.Tests.Inventory {
       var order = Order.Parse(orderUID);
 
       foreach (var item in items) {
-        
+
         var inventoryEntry = new InventoryEntry(order, item);
 
         var price = InventoryOrderData.GetProductPriceFromVirtualWarehouse(item.Product.Id);
         inventoryEntry.OutputEntry(price);
 
         inventoryEntry.Save();
-      }      
+      }
 
       Assert.NotNull(orderUID);
     }
-  
+
+
+    [Fact]
+    public void Should_UpdatePrice() {
+
+      TestsCommonMethods.Authenticate();
+
+      var items = InventoryOrder.Parse(5898).Items;
+
+      foreach (var item in items) {
+
+        var inventoryEntry = InventoryEntry.TryParseWithOrderItemId(item.Id);
+
+        inventoryEntry.InputEntry(item.UnitPrice, item.Location);
+        inventoryEntry.Save();
+      }
+
+      Assert.NotNull(items);
+    }
+
     #region Helpers
 
     #endregion Helpers

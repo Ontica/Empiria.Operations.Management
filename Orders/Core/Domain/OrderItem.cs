@@ -178,7 +178,7 @@ namespace Empiria.Orders {
 
     internal protected virtual void Close() {
       Assertion.Require(this.Status == EntityStatus.Active,
-                  $"No se puede cerrar una orden que está en estado {this.Status.GetName()}.");
+                  $"No se puede cerrar una orden item que está en estado {this.Status.GetName()}.");
 
       this.Status = StateEnums.EntityStatus.Closed;
     }

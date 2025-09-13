@@ -11,6 +11,7 @@
 using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
+using Empiria.Inventory.UseCases;
 using Empiria.Locations;
 using Empiria.Parties;
 using Empiria.Products;
@@ -143,7 +144,7 @@ namespace Empiria.Tests.Inventory {
 
     [Fact]
     public void Should_Close_Inventory_Order() {
-      var orderUID = "ee38424a-be8f-41bb-aca8-e8599cb9a1c6";
+      var orderUID = "cc68d35d-3bc2-470b-bf8a-7c5ba0fe5e1f";
 
       TestsCommonMethods.Authenticate();
 
@@ -154,9 +155,29 @@ namespace Empiria.Tests.Inventory {
       order.Close();
       order.Save();
 
+      order.CloseItems();
+
+      OutputInventoryEntriesVW(order);
+
+      var inventoryEntryUseCase = InventoryEntryUseCases.UseCaseInteractor();
+
+      inventoryEntryUseCase.CloseInventoryEntries(order.UID);
+
       Assert.NotNull(order);
     }
 
+    private void OutputInventoryEntriesVW(InventoryOrder order) {
+
+      foreach (var item in order.Items) {
+
+        var inventoryEntry = new InventoryEntry(order, item);
+
+        var price = InventoryOrderData.GetProductPriceFromVirtualWarehouse(item.Product.Id);
+        inventoryEntry.OutputEntry(price);
+
+        inventoryEntry.Save();
+      }
+    }
 
     [Fact]
     public void Should_Delete_Inventory_Order() {
@@ -333,13 +354,13 @@ namespace Empiria.Tests.Inventory {
     [Fact]
     public void Should_UpdateCost() {
 
-      TestsCommonMethods.Authenticate();      
-      var order = InventoryOrder.Parse(5895);
+      TestsCommonMethods.Authenticate();
+      var order = InventoryOrder.Parse(5899);
 
       foreach (var item in order.Items) {
         //if (item.UnitPrice == 0) {
-          item.UpdatePrice();          
-          item.Save();
+        item.UpdatePrice();
+        item.Save();
         //}        
       }
 
@@ -351,7 +372,7 @@ namespace Empiria.Tests.Inventory {
     private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
       var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
 
-      inventoryEntry.InputEntry(orderItem.UnitPrice);
+      inventoryEntry.InputEntry(orderItem.UnitPrice, orderItem.Location);
 
       inventoryEntry.Save();
     }

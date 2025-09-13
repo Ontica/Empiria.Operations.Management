@@ -67,12 +67,12 @@ namespace Empiria.Inventory {
       return InventoryOrderData.GetInventoryEntriesByOrderItem(orderItem);
     }
 
+
     public static InventoryEntry TryParseWithOrderItemId(int orderId) {
       Assertion.Require(orderId, nameof(orderId));
 
       return TryParse<InventoryEntry>($"Inv_Entry_Order_Item_Id = {orderId}");
     }
-
 
     #endregion Constructors and parsers
 
@@ -253,11 +253,11 @@ namespace Empiria.Inventory {
       this.OutputCost = cost;
     }
 
-    internal void InputEntry(decimal inputCost) {
+    internal void InputEntry(decimal inputCost, Location location) {
 
       this.InputQuantity = this.OrderItem.Quantity;
       this.Product = this.OrderItem.Product;
-      this.Location = Location.Empty;
+      this.Location = location;
       this.InputCost = inputCost;
       this.Position = this.OrderItem.Position;
     }
