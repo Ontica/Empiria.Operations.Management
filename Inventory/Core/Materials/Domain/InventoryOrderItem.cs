@@ -8,12 +8,10 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
 using Empiria.Financial;
 using Empiria.Inventory.Data;
 using Empiria.Locations;
 using Empiria.Orders;
-using Empiria.Products;
 
 namespace Empiria.Inventory {
 
@@ -49,10 +47,10 @@ namespace Empiria.Inventory {
     #endregion Constructors and parsers
 
     #region Properties
-    
+
     [DataField("ORDER_ITEM_LOCATION_ID")]
     public Location Location {
-      get; private set; 
+      get; private set;
     }
 
 
@@ -71,7 +69,7 @@ namespace Empiria.Inventory {
     [DataField("ORDER_ITEM_CURRENCY_ID")]
     public Currency Currency {
       get; private set;
-    } 
+    }
 
 
     internal FixedList<InventoryEntry> Entries {
@@ -90,7 +88,7 @@ namespace Empiria.Inventory {
     internal void DelItem() {
       base.Delete();
     }
-     
+
 
     internal void Update(InventoryOrderItemFields fields) {
       Assertion.Require(fields, nameof(fields));
@@ -109,6 +107,12 @@ namespace Empiria.Inventory {
     }
 
 
+    internal new void UpdateQuantity(decimal quantity) {
+
+      base.UpdateQuantity(quantity);
+    }
+
+
     internal new void Close() {
       base.Close();
     }
@@ -118,16 +122,15 @@ namespace Empiria.Inventory {
     #region Helpers
 
     private decimal GetProductPrice() {
-      
+
       var unitPrice = InventoryOrderData.GetProductPriceFromVirtualWarehouse(this.Product.Id);
 
-      if (unitPrice == 0)
-       {
+      if (unitPrice == 0) {
         return InventoryOrderData.GetProductPriceFromHistoricCost(this.Product.Name);
       } else {
         return unitPrice;
       }
-        
+
     }
 
     #endregion

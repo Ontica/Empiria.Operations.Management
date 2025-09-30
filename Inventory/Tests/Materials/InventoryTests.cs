@@ -301,32 +301,20 @@ namespace Empiria.Tests.Inventory {
 
 
     [Fact]
-    public void Update_InventoryOrderItem() {
+    public void Should_Update_InventoryOrderItem() {
 
-      string orderUID = "3652bd82-ea56-4d35-a0d9-75a165726063";
-      string itemUID = "e9599f34-830f-4499-bd76-76a216eb443c";
+      string orderUID = "a33c76c7-c266-43ff-bfb2-2b2b820b312a";
+      string itemUID = "aae0d7b5-1dd9-485a-ae29-0974c9a7951e";
 
       InventoryOrderItemFields fields = new InventoryOrderItemFields {
-        Location = "M-MN3-01-71",
-        Product = "TG8F34X112-180",
-        Quantity = 40,
+        Quantity = 555
       };
-
-      var product = Product.TryParseWithCode(fields.Product);
-      Assertion.Require(product, "El producto no existe");
-
-      var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
-      Assertion.Require(location, $"La ubicacion {fields.Location} no existe.");
-
-      fields.ProductUID = product.UID;
-      fields.Description = product.Description;
-      fields.ProductUnitUID = product.BaseUnit.UID;
 
       var order = InventoryOrder.Parse(orderUID);
 
       var item = order.GetItem<InventoryOrderItem>(itemUID);
 
-      item.Update(fields);
+      item.UpdateQuantity(fields.Quantity);
 
       item.Save();
 

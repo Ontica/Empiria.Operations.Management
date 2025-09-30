@@ -8,14 +8,14 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Parties;
-using Empiria.Services;
-using Empiria.StateEnums;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
 using Empiria.Locations;
 using Empiria.Orders.Adapters;
+using Empiria.Parties;
 using Empiria.Products;
+using Empiria.Services;
+using Empiria.StateEnums;
 
 
 namespace Empiria.Inventory.UseCases {
@@ -190,27 +190,13 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
-    public InventoryHolderDto UpdateInventoryOrderItem(string orderUID, string orderItemUID,
+    public InventoryHolderDto UpdateInventoryOrderItemQuantity(string orderUID, string orderItemUID,
                                                InventoryOrderItemFields fields) {
-      Assertion.Require(orderUID, nameof(orderUID));
-      Assertion.Require(orderItemUID, nameof(orderItemUID));
-      Assertion.Require(fields, nameof(fields));
-
-      var product = Product.TryParseWithCode(fields.Product);
-      Assertion.Require(product, "El producto no existe");
-
-      var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
-      Assertion.Require(location, $"La ubicacion {fields.Location} no existe.");
-
-      fields.ProductUID = product.UID;
-      fields.Description = product.Description;
-      fields.ProductUnitUID = product.BaseUnit.UID;
-
       var order = InventoryOrder.Parse(orderUID);
 
       var item = order.GetItem<InventoryOrderItem>(orderItemUID);
 
-      item.Update(fields);
+      item.UpdateQuantity(fields.Quantity);
 
       item.Save();
 

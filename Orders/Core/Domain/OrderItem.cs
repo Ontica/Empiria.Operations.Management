@@ -217,6 +217,13 @@ namespace Empiria.Orders {
       MarkAsDirty();
     }
 
+    internal protected virtual void UpdateQuantity(decimal quantity) {
+      Assertion.Require(quantity > 0,
+                  $"La cantidad debe de ser mayor que 0.");
+
+      this.Quantity = quantity;
+    }
+
     #endregion Methods
 
   }  // class OrderItem
