@@ -263,7 +263,7 @@ namespace Empiria.Inventory {
     }
 
 
-    internal void Update(InventoryEntryFields fields, string orderItemUID) {
+    internal void Update(InventoryEntryFields fields) {
 
       this.InputQuantity = fields.Quantity;
       this.Product = Patcher.Patch(fields.ProductUID, this.Product);

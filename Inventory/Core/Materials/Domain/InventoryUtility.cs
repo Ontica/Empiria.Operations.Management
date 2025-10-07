@@ -59,7 +59,7 @@ namespace Empiria.Inventory {
 
       InventoryOrder inventoryOrder = InventoryOrder.Parse(orderUID);
 
-      //inventoryOrder.Items = inventoryOrder.GetItems<InventoryOrderItem>();
+      inventoryOrder.Items = inventoryOrder.GetItems<InventoryOrderItem>();
 
       GetInventoryEntriesByItem(inventoryOrder.Items);
 

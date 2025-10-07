@@ -49,10 +49,10 @@ namespace Empiria.Inventory.UseCases {
 
       order.CloseItems();
 
-      //OutputInventoryEntriesVW(order);
+      OutputInventoryEntriesVW(order);
 
-      //var inventoryEntryUseCase = InventoryEntryUseCases.UseCaseInteractor();
-      //inventoryEntryUseCase.CloseInventoryEntries(order.UID);
+      var inventoryEntryUseCase = InventoryEntryUseCases.UseCaseInteractor();
+      inventoryEntryUseCase.CloseInventoryEntries(order.UID);
 
       return GetInventoryOrder(order.UID);
     }
