@@ -66,7 +66,13 @@ namespace Empiria.Inventory.UseCases {
 
       var inventoryEntry = new InventoryEntry(orderUID, orderItemUID);
 
-      inventoryEntry.Update(fields, orderItemUID);
+      var order = InventoryOrder.Parse(orderUID);
+
+      if (order.InventoryType.UID == "0eb5a072-b857-4071-8b06-57a34822ec64") {
+        inventoryEntry.OutputEntry(fields);
+      } else {
+        inventoryEntry.AddEntry(fields);
+      }
 
       inventoryEntry.Save();
 
@@ -102,14 +108,14 @@ namespace Empiria.Inventory.UseCases {
 
       return InventoryOrderMapper.MapToInventoryEntryDto(entry);
     }
-    
+
 
     #endregion Use cases
 
     #region Helpers
 
     public void OutputInventoryEntriesVW(InventoryOrder order) {
-      
+
       foreach (var item in order.Items) {
 
         var inventoryEntry = new InventoryEntry(order, item);
@@ -118,7 +124,7 @@ namespace Empiria.Inventory.UseCases {
         inventoryEntry.OutputEntry(price);
 
         inventoryEntry.Save();
-      }      
+      }
     }
 
     #endregion Helpers

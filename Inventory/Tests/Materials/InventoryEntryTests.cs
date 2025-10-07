@@ -73,13 +73,13 @@ namespace Empiria.Tests.Inventory {
 
       TestsCommonMethods.Authenticate();
 
-      string orderUID = "a7a99924-0efc-41b9-9b65-5b78d31bf329";
-      string orderItemUID = "f4874ac2-52f4-4061-87f4-28a554a5a0d7";
+      string orderUID = "829b237e-354a-4c06-8da9-ac5e23b704e1";
+      string orderItemUID = "22a93afc-9bce-4703-aaeb-76f3bdcbdf96";
 
       InventoryEntryFields fields = new InventoryEntryFields {
 
         Location = "A-001-01-23",
-        Product = "ASF24",
+        Product = "TG538X412-50",
         Quantity = 5
       };
 
@@ -96,7 +96,13 @@ namespace Empiria.Tests.Inventory {
 
       var inventoryEntry = new InventoryEntry(orderUID, orderItemUID);
 
-      inventoryEntry.Update(fields, orderItemUID);
+      var order = InventoryOrder.Parse(orderUID);
+
+      if (order.InventoryType.UID == "0eb5a072-b857-4071-8b06-57a34822ec64") {
+        inventoryEntry.OutputEntry(fields);
+      } else {
+        inventoryEntry.AddEntry(fields);
+      }
 
       inventoryEntry.Save();
 

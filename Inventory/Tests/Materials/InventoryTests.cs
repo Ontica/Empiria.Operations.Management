@@ -220,7 +220,7 @@ namespace Empiria.Tests.Inventory {
 
     [Fact]
     public void Should_Get_InventoryOrder() {
-      var orderUID = "3c599a76-132f-42ae-a4d0-255d04c286c3";
+      var orderUID = "829b237e-354a-4c06-8da9-ac5e23b704e1";
 
       Assertion.Require(orderUID, nameof(orderUID));
 

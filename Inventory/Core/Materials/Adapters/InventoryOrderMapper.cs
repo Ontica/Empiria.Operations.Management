@@ -84,12 +84,19 @@ namespace Empiria.Inventory.Adapters {
 
 
     static internal InventoryEntryDto MapToInventoryEntryDto(InventoryEntry entry) {
+      decimal quantity = 0;
+
+      if (entry.Order.Category.UID == "0eb5a072-b857-4071-8b06-57a34822ec64") {
+        quantity = entry.OutputQuantity;
+      } else {
+        quantity = entry.InputQuantity;
+      }
 
       return new InventoryEntryDto {
         UID = entry.UID,
         Product = entry.Product.Name,
         Location = entry.Location.Name,
-        Quantity = entry.InputQuantity,
+        Quantity = quantity,
         PostedBy = entry.PostedBy.MapToNamedEntity(),
         PostingTime = entry.PostingTime
       };
