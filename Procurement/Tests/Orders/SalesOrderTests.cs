@@ -13,6 +13,7 @@ using Xunit;
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
 using Empiria.Orders.UseCases;
+using Empiria.Procurement.Orders;
 
 
 namespace Empiria.Tests.Orders {

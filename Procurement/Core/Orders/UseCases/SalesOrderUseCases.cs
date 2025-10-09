@@ -9,7 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.Orders.Adapters;
-
+using Empiria.Procurement.Orders;
 using Empiria.Services;
 
 
@@ -116,7 +116,7 @@ namespace Empiria.Orders.UseCases {
 
       order.Save();//
 
-      
+
       return SalesOrderMapper.Map(order);
     }
 
@@ -137,16 +137,16 @@ namespace Empiria.Orders.UseCases {
 
     }
 
-    
+
     public SalesOrderHolderDto GetSalesOrderByUID(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
       var order = SalesOrder.Parse(orderUID);
-      
+
       return SalesOrderMapper.Map(order);
     }
 
-    
+
     #endregion Use cases
 
     #region Helpers

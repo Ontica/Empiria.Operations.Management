@@ -11,9 +11,11 @@
 using System.Linq;
 
 using Empiria.Financial;
+using Empiria.Orders;
+
 using Empiria.Orders.Data;
 
-namespace Empiria.Orders {
+namespace Empiria.Procurement.Orders {
 
   /// <summary>Represents a Sales order.</summary>  
   public class SalesOrder : Order {
@@ -26,7 +28,7 @@ namespace Empiria.Orders {
       base.OrderNo = EmpiriaString.BuildRandomString(8)
                                   .ToUpperInvariant();
     }
-    
+
     internal SalesOrder() {
       //no-op
     }
@@ -71,7 +73,7 @@ namespace Empiria.Orders {
     protected override void OnSave() {
       SalesOrdersData.WriteSalesOrder(this, this.ExtData.ToString());
     }
- 
+
     internal protected virtual void RemoveItem(SalesOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
 

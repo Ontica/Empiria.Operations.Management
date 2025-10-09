@@ -10,9 +10,10 @@
 
 using Empiria.Budgeting;
 using Empiria.Financial;
+using Empiria.Orders;
 using Empiria.Orders.Data;
 
-namespace Empiria.Orders {
+namespace Empiria.Procurement.Orders {
 
 
   /// <summary>Represents an abstract sales order item.</summary>

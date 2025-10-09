@@ -8,6 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Procurement.Orders;
+
 namespace Empiria.Orders.Adapters {
 
   /// <summary>Mapping methods for sales order.</summary>
@@ -31,15 +33,15 @@ namespace Empiria.Orders.Adapters {
       return new SalesOrderDescriptor(order);
     }
 
-    
-    static internal FixedList<SalesOrderItemDto> Map(FixedList<SalesOrderItem> orderItems) {
-        return orderItems.Select(x => Map(x))
-                         .ToFixedList();
-      }
 
-      static internal SalesOrderItemDto Map(SalesOrderItem orderItem) {
-        return new SalesOrderItemDto(orderItem);
-      }
+    static internal FixedList<SalesOrderItemDto> Map(FixedList<SalesOrderItem> orderItems) {
+      return orderItems.Select(x => Map(x))
+                       .ToFixedList();
+    }
+
+    static internal SalesOrderItemDto Map(SalesOrderItem orderItem) {
+      return new SalesOrderItemDto(orderItem);
+    }
 
     #region Helpers
 
@@ -53,30 +55,30 @@ namespace Empiria.Orders.Adapters {
         CanOpen = true,
       };
     }
-    
-        static internal SalesOrderDto MapToSalesOrderDto(SalesOrder order) {
-           return new SalesOrderDto {
-           //UID = order.UID,
-           //Type = order.OrderType.MapToNamedEntity(),
-           Category = order.Category.MapToNamedEntity(),
-           OrderNo = order.OrderNo,
-           Description = order.Description,
-           Identificators = order.Identificators,
-           Tags = order.Tags,
-           Responsible = order.Responsible.MapToNamedEntity(),
-           Beneficiary = order.Beneficiary.MapToNamedEntity(),
-           IsForMultipleBeneficiaries = order.IsForMultipleBeneficiaries,
-           Provider = order.Provider.MapToNamedEntity(),  
-           RequestedBy = order.RequestedBy.MapToNamedEntity(),
-           Project = order.Project.MapToNamedEntity(),
-           //Priority = order.Priority.MapToDto(),
-           AuthorizationTime = order.AuthorizationTime,
-           AuthorizedBy = order.AuthorizedBy.MapToNamedEntity(),
-           ClosingTime = order.ClosingTime,
-           ClosedBy = order.ClosedBy.MapToNamedEntity(),
-           //Status = order.Status.MapToDto()
-         };
-       }
+
+    static internal SalesOrderDto MapToSalesOrderDto(SalesOrder order) {
+      return new SalesOrderDto {
+        //UID = order.UID,
+        //Type = order.OrderType.MapToNamedEntity(),
+        Category = order.Category.MapToNamedEntity(),
+        OrderNo = order.OrderNo,
+        Description = order.Description,
+        Identificators = order.Identificators,
+        Tags = order.Tags,
+        Responsible = order.Responsible.MapToNamedEntity(),
+        Beneficiary = order.Beneficiary.MapToNamedEntity(),
+        IsForMultipleBeneficiaries = order.IsForMultipleBeneficiaries,
+        Provider = order.Provider.MapToNamedEntity(),
+        RequestedBy = order.RequestedBy.MapToNamedEntity(),
+        Project = order.Project.MapToNamedEntity(),
+        //Priority = order.Priority.MapToDto(),
+        AuthorizationTime = order.AuthorizationTime,
+        AuthorizedBy = order.AuthorizedBy.MapToNamedEntity(),
+        ClosingTime = order.ClosingTime,
+        ClosedBy = order.ClosedBy.MapToNamedEntity(),
+        //Status = order.Status.MapToDto()
+      };
+    }
     #endregion Helpers
 
   }// class SalesOrderMapper

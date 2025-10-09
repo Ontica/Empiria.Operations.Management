@@ -11,11 +11,13 @@
 using System;
 using Empiria.Documents;
 using Empiria.History;
+using Empiria.Procurement.Orders;
 using Empiria.StateEnums;
+
 
 namespace Empiria.Orders.Adapters {
 
-  
+
   /// <summary>Data transfer object used to return complete Sales orders information.</summary>
   public class SalesOrderHolderDto {
 
@@ -34,7 +36,7 @@ namespace Empiria.Orders.Adapters {
     }
 
   }  // class SalesOrderHolderDto
-  
+
   public class SalesOrderActions {
 
     public bool CanEdit {
@@ -73,7 +75,7 @@ namespace Empiria.Orders.Adapters {
   /// <summary>Data transfer object used to return Sales orders information.</summary>
   /// 
   public class SalesOrderDto : OrderDto {
-    
+
     public SalesOrderDto() : base(null) {
     }
 
@@ -107,11 +109,11 @@ namespace Empiria.Orders.Adapters {
     public new string UID {
       get; private set;
     }
-    
+
     public new NamedEntityDto Type {
       get; internal set;
     }
-    
+
     public new NamedEntityDto Category {
       get; internal set;
     }
