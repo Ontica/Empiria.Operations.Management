@@ -62,6 +62,12 @@ namespace Empiria.Inventory {
     }
 
 
+    public int RelatedOrderId {
+      get;
+      private set;
+    }
+
+
     private FixedList<InventoryOrderItem> _items;
 
     public FixedList<InventoryOrderItem> Items {
@@ -123,6 +129,8 @@ namespace Empiria.Inventory {
       fields.CategoryUID = fields.InventoryTypeUID;
 
       Warehouse = Patcher.Patch(fields.WarehouseUID, Warehouse);
+
+      RelatedOrderId = fields.RelatedOrderId;
 
       base.Update(fields);
     }

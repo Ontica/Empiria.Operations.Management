@@ -95,7 +95,12 @@ namespace Empiria.Inventory {
     public string InventoryTypeUID {
       get; set;
     } = string.Empty;
-          
+
+
+    public int RelatedOrderId {
+      get; set;
+    } = -1;
+
 
     public override void EnsureValid() {
       Assertion.Require(WarehouseUID, nameof(WarehouseUID));

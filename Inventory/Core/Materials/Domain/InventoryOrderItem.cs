@@ -29,6 +29,10 @@ namespace Empiria.Inventory {
     }
 
     protected internal InventoryOrderItem(OrderItemType powertype,
+                                       InventoryOrder order) : base(powertype, order) {
+    }
+
+    protected internal InventoryOrderItem(OrderItemType powertype,
                                         InventoryOrder order, Location location) : base(powertype, order) {
 
       Assertion.Require(location, nameof(location));
@@ -51,7 +55,7 @@ namespace Empiria.Inventory {
     [DataField("ORDER_ITEM_LOCATION_ID")]
     public Location Location {
       get; private set;
-    }
+    } = Location.Empty;
 
 
     [DataField("ORDER_ITEM_UNIT_PRICE")]

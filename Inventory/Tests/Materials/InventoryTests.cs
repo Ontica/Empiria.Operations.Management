@@ -13,6 +13,7 @@ using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
 using Empiria.Inventory.UseCases;
 using Empiria.Locations;
+using Empiria.Orders;
 using Empiria.Parties;
 using Empiria.Products;
 using Empiria.StateEnums;
@@ -269,6 +270,95 @@ namespace Empiria.Tests.Inventory {
 
       var sut = Party.GetPartiesInRole("User").MapToNamedEntityList();
       Assert.NotNull(sut);
+    }
+
+
+    [Fact]
+    public void Should_Load_Inventory_Output_Orders() {
+
+      TestsCommonMethods.Authenticate();
+
+      var order = Order.Parse(21209);
+
+      InventoryOrderFields fields = new InventoryOrderFields {
+        WarehouseUID = "DA6017D5-ED38-449B-9659-ACE06C4565DE",
+        InventoryTypeUID = "0eb5a072-b857-4071-8b06-57a34822ec64",
+        Description = "Orden de Salida correspondiente ala fact" + order.OrderNo,
+        RequestedByUID = order.RequestedBy.UID,
+        ResponsibleUID = order.Responsible.UID,
+        RelatedOrderId = order.Id,
+      };
+
+      var orderType = Orders.OrderType.Parse(4010);
+
+      InventoryOrder inventoryOrder = new InventoryOrder(fields.WarehouseUID, orderType);
+
+      inventoryOrder.Update(fields);
+
+      inventoryOrder.Save();
+
+      Assert.NotNull(inventoryOrder);
+    }
+
+
+    [Fact]
+    public void Should_Load_Inventory_Input_Orders() {
+
+      TestsCommonMethods.Authenticate();
+
+      var order = Order.Parse(21243);
+
+      InventoryOrderFields fields = new InventoryOrderFields {
+        WarehouseUID = "DA6017D5-ED38-449B-9659-ACE06C4565DE",
+        InventoryTypeUID = "a40c65bd-9a56-48eb-a8bf-f9245ecd3004",
+        Description = "Orden de Entrada correspondiente ala fact" + order.OrderNo,
+        RequestedByUID = order.RequestedBy.UID,
+        ResponsibleUID = order.Responsible.UID,
+        RelatedOrderId = order.Id,
+      };
+
+      var orderType = Orders.OrderType.Parse(4010);
+
+      InventoryOrder inventoryOrder = new InventoryOrder(fields.WarehouseUID, orderType);
+
+      inventoryOrder.Update(fields);
+
+      inventoryOrder.Save();
+
+      Assert.NotNull(inventoryOrder);
+    }
+
+
+    [Fact]
+    public void Should_Load_Inventory_Output_OrderItems() {
+
+      TestsCommonMethods.Authenticate();
+
+      var order = Order.Parse(21243);
+      var items = order.GetItems<OrderItem>();
+
+      var inventoryOrder = InventoryOrder.Parse(21257);
+
+      var orderItemType = Orders.OrderItemType.Parse(4059);
+
+      foreach (var item in items) {
+        InventoryOrderItemFields fields = new InventoryOrderItemFields();
+
+        fields.ProductUID = item.Product.UID;
+        fields.Description = item.Product.Description;
+        fields.ProductUnitUID = item.Product.BaseUnit.UID;
+        fields.Quantity = item.Quantity;
+        fields.Position = item.Position;
+        fields.Location = "A-001-01-01";
+
+        InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, inventoryOrder);
+
+        orderItem.Update(fields);
+        inventoryOrder.AddItem(orderItem);
+        orderItem.Save();
+      }
+
+      Assert.NotNull(inventoryOrder);
     }
 
 

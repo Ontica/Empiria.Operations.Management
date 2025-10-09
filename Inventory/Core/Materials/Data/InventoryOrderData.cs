@@ -9,10 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
-using DocumentFormat.OpenXml.Bibliography;
 using Empiria.Data;
-using Empiria.Orders;
-using iText.StyledXmlParser.Jsoup.Select;
 
 namespace Empiria.Inventory.Data {
 
@@ -115,7 +112,7 @@ namespace Empiria.Inventory.Data {
 
         return DataReader.GetPlainObject<ProductEntry>(op);
 
-      } catch (Exception ) {
+      } catch (Exception) {
 
         throw new Exception("Producto no coincide con el seleccionado.");
       }
@@ -125,12 +122,12 @@ namespace Empiria.Inventory.Data {
 
     internal static decimal GetProductPriceFromVirtualWarehouse(int productId) {
 
-        var sql = $"SELECT TOp  1 Inv_Entry_Input_Cost FROM OMS_Inventory_Entries where Inv_Entry_Order_Id = -10 and Inv_Entry_Product_Id = {productId}" +
-                  $"  order by Inv_Entry_Time ";
+      var sql = $"SELECT TOp  1 Inv_Entry_Input_Cost FROM OMS_Inventory_Entries where Inv_Entry_Order_Id = -10 and Inv_Entry_Product_Id = {productId}" +
+                $"  order by Inv_Entry_Time ";
 
-        var op = DataOperation.Parse(sql);
+      var op = DataOperation.Parse(sql);
 
-        return DataReader.GetScalar<decimal>(op);
+      return DataReader.GetScalar<decimal>(op);
 
     }
 
@@ -138,7 +135,7 @@ namespace Empiria.Inventory.Data {
     internal static decimal GetProductPriceFromHistoricCost(string productName) {
 
       var productKey = productName.Split('-');
-      
+
       var sql = $"SELECT top 1 Costo6  FROM Historic_Cost_Initial where Clave = '{productKey[0]}'" +
                 $"  order by fecha desc ";
 
@@ -208,8 +205,8 @@ namespace Empiria.Inventory.Data {
                      o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
                      -1, o.RequisitionId, -1, o.Project.Id, 600,
                      o.Source.Id, (char) o.Priority, o.AuthorizationTime, o.AuthorizedBy.Id,
-                     o.ClosingTime, o.ClosedBy.Id, extensionData, o.Keywords, o.Warehouse.Id, 
-                     o.PostedBy.Id, o.PostingTime, (char) o.Status);
+                     o.ClosingTime, o.ClosedBy.Id, extensionData, o.Keywords, o.Warehouse.Id,
+                     o.RelatedOrderId, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }
