@@ -159,7 +159,7 @@ namespace Empiria.Orders {
     }
 
 
-    [DataField("ORDER_ITEM_STATUS", Default = EntityStatus.Pending)]
+    [DataField("ORDER_ITEM_STATUS", Default = EntityStatus.Active)]
     public EntityStatus Status {
       get; private set;
     }
