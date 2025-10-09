@@ -130,8 +130,9 @@ namespace Empiria.Inventory.UseCases {
       var item = order.GetItem<InventoryOrderItem>(orderItemUID);
 
       order.RemoveItem(item);
-
       item.Save();
+
+      InventoryOrderData.DeleteEntry(order.Id, item.Id);
 
       return GetInventoryOrder(orderUID);
     }

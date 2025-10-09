@@ -16,6 +16,18 @@ namespace Empiria.Inventory.Data {
   /// <summary>Provides data read and write methods for inventory order instances.</summary>
   static internal class InventoryOrderData {
 
+    internal static void DeleteEntry(int orderId, int orderItemId) {
+
+      string sql = $"UPDATE OMS_Inventory_Entries " +
+                   $"SET Inv_Entry_Status = 'X' " +
+                   $"WHERE Inv_Entry_Order_Id = {orderId} AND " +
+                   $"Inv_Entry_Order_Item_Id = {orderItemId}";
+
+      var dataOperation = DataOperation.Parse(sql);
+
+      DataWriter.Execute(dataOperation);
+    }
+
     internal static void DeleteEntryStatus(int orderId, int orderItemId,
                                            int inventoryEntryId, InventoryStatus status) {
 
