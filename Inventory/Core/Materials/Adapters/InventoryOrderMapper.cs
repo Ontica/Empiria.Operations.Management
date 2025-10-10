@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Empiria.DynamicData;
+using Empiria.Orders;
 using Empiria.StateEnums;
 
 namespace Empiria.Inventory.Adapters {
@@ -38,6 +39,7 @@ namespace Empiria.Inventory.Adapters {
       columns.Add(new DataTableColumn("orderNo", "Orden", "text-link"));
       columns.Add(new DataTableColumn("warehouseName", "Almacén", "text"));
       columns.Add(new DataTableColumn("responsibleName", "Responsable", "text"));
+      columns.Add(new DataTableColumn("documentNo", "No. Documento", "text"));
       columns.Add(new DataTableColumn("postingTime", "Registro", "date"));
       columns.Add(new DataTableColumn("status", "Estatus", "text-tag"));
 
@@ -63,7 +65,7 @@ namespace Empiria.Inventory.Adapters {
 
     #endregion Public methods
 
-    #region Private methods
+    #region Helpers
 
     static private InventoryOrderDescriptorDto MapToDescriptor(InventoryOrder order) {
 
@@ -76,6 +78,7 @@ namespace Empiria.Inventory.Adapters {
         ResponsibleName = order.Responsible.IsEmptyInstance ? "Sin Asignar" : order.Responsible.Name,
         RequestedByName = order.RequestedBy.Name,
         Description = order.Description,
+        DocumentNo = GetDocumentNo(order),
         PostedByName = order.PostedBy.Name,
         PostingTime = order.PostingTime,
         Status = order.Status.GetName()
@@ -168,22 +171,19 @@ namespace Empiria.Inventory.Adapters {
         EntriesRequired = inventoryType.EntriesRequired,
         ItemsRequired = inventoryType.ItemsRequired,
       };
-
-      //if (inventoryType.Id == 12756) {
-      //  return new InventoryTypeRulesDto {
-      //    EntriesRequired = true,
-      //    ItemsRequired = false,
-      //  };
-      //}
-
-      //return new InventoryTypeRulesDto {
-      //  EntriesRequired = false,
-      //  ItemsRequired = true,
-      //};
-
     }
 
-    #endregion Private methods
+    static private string GetDocumentNo(InventoryOrder inventoryOrder) {
+
+      if (inventoryOrder.RelatedOrderId == -1) {
+        return string.Empty;
+      }
+
+      var order = Order.Parse(inventoryOrder.RelatedOrderId);
+      return order.OrderNo;
+    }
+
+    #endregion helpers
 
   } // class InventoryOrderMapper
 

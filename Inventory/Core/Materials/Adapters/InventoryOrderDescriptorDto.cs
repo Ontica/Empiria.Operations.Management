@@ -39,7 +39,7 @@ namespace Empiria.Inventory.Adapters {
     public string WarehouseName {
       get; set;
     }
-      
+
 
     public string ResponsibleName {
       get; set;
@@ -52,6 +52,11 @@ namespace Empiria.Inventory.Adapters {
 
 
     public string Description {
+      get; set;
+    }
+
+
+    public string DocumentNo {
       get; set;
     }
 

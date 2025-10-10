@@ -31,7 +31,7 @@ namespace Empiria.Tests.Inventory {
     public void GetInventoryEntryByUIDTest() {
 
       var usecase = InventoryEntryUseCases.UseCaseInteractor();
-      
+
       string inventoryEntryUID = "0986119b-d72a-4107-902d-f70199554ec6";
 
       InventoryEntryDto sut = usecase.GetInventoryEntryByUID(inventoryEntryUID);
@@ -65,7 +65,7 @@ namespace Empiria.Tests.Inventory {
         Product = "ASF24",
         Quantity = 5
       };
-      
+
       InventoryHolderDto sut = usecase.CreateInventoryEntry(orderUID, orderItemUID, fields);
 
       Assert.NotNull(sut);
@@ -76,7 +76,7 @@ namespace Empiria.Tests.Inventory {
     public void DeleteInventoryEntryTest() {
 
       var usecase = InventoryEntryUseCases.UseCaseInteractor();
-      string orderUID =  "829b237e-354a-4c06-8da9-ac5e23b704e1";
+      string orderUID = "829b237e-354a-4c06-8da9-ac5e23b704e1";
       string orderItemUID = "3f52c3bc-1a84-4390-9bb4-7850fb79f38e";
       string entryUID = "30dd291d-3d7c-4520-b8a1-11d644d37f80";
 
@@ -116,11 +116,11 @@ namespace Empiria.Tests.Inventory {
     public void SearchInventoryOrderTest() {
 
       var usecase = InventoryOrderUseCases.UseCaseInteractor();
-      
+
       InventoryOrderQuery query = new InventoryOrderQuery {
         Keywords = "",
         WarehouseUID = "",
-        InventoryTypeUID = "5ECC7A4B-9CA0-48E8-9C44-7B16F3E1E9CB",
+        InventoryTypeUID = "0eb5a072-b857-4071-8b06-57a34822ec64",
         Status = StateEnums.EntityStatus.All
       };
 
