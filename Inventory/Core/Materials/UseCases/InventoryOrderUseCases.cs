@@ -8,9 +8,12 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
+using Empiria.Json;
 using Empiria.Locations;
+using Empiria.Orders;
 using Empiria.Orders.Adapters;
 using Empiria.Parties;
 using Empiria.Products;
@@ -24,6 +27,8 @@ namespace Empiria.Inventory.UseCases {
   public class InventoryOrderUseCases : UseCase {
 
     private const int INVENTORYORDERTYPEID = 4010;
+    static private readonly JsonObject config = ConfigurationData.Get<JsonObject>("Dates");
+
 
     #region Constructors and parsers
 
@@ -32,6 +37,8 @@ namespace Empiria.Inventory.UseCases {
     }
 
     static public InventoryOrderUseCases UseCaseInteractor() {
+      var _fromDate = config.Get<DateTime>("importDate");
+
       return UseCase.CreateInstance<InventoryOrderUseCases>();
     }
 
@@ -176,6 +183,43 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
+    public void LoadOrderFromNK() {
+      JsonObject config = ConfigurationData.Get<JsonObject>("ImportNK.Dates");
+      var _fromDate = config.Get<DateTime>("importDate");
+
+      LoadInputOrdersFromNK(_fromDate);
+      LoadOutputOrdersFromNK(_fromDate);
+    }
+
+
+    public void LoadInputOrdersFromNK(DateTime fromDate) {
+      var sut = Order.GetFullList<Order>().FindAll(x => x.ClosingTime == fromDate && x.OrderType.Id == 4005);
+
+      string inventoryTypeUID = "a40c65bd-9a56-48eb-a8bf-f9245ecd3004";
+
+      InventoryOrder inventoryOrder;
+      for (int i = 0; i < 3; i++) {
+        var order = sut[i];
+        inventoryOrder = GenerateInventoryOrder(order, inventoryTypeUID);
+        GenerateInventoryOrderItems(order, inventoryOrder);
+      }
+    }
+
+
+    public void LoadOutputOrdersFromNK(DateTime fromDate) {
+      var sut = Order.GetFullList<Order>().FindAll(x => x.ClosingTime == fromDate && x.OrderType.Id == 4011);
+
+      string inventoryTypeUID = "0eb5a072-b857-4071-8b06-57a34822ec64";
+
+      InventoryOrder inventoryOrder;
+      for (int i = 0; i < 3; i++) {
+        var order = sut[i];
+        inventoryOrder = GenerateInventoryOrder(order, inventoryTypeUID);
+        GenerateInventoryOrderItems(order, inventoryOrder);
+      }
+    }
+
+
     public InventoryHolderDto UpdateInventoryOrder(string orderUID, InventoryOrderFields fields) {
       Assertion.Require(orderUID, nameof(orderUID));
       Assertion.Require(fields, nameof(fields));
@@ -203,7 +247,6 @@ namespace Empiria.Inventory.UseCases {
 
       return GetInventoryOrder(order.UID);
     }
-
 
     #endregion Use cases
 
@@ -236,6 +279,61 @@ namespace Empiria.Inventory.UseCases {
       }
 
       return current;
+    }
+
+
+    private InventoryOrder GenerateInventoryOrder(Order order, string inventoryTypeUID) {
+
+      InventoryOrderFields fields = new InventoryOrderFields {
+        WarehouseUID = "DA6017D5-ED38-449B-9659-ACE06C4565DE",
+        InventoryTypeUID = inventoryTypeUID,
+        Description = "Orden de inventario correspondiente " + order.OrderNo,
+        RequestedByUID = order.RequestedBy.UID,
+        ResponsibleUID = order.Responsible.UID,
+        RelatedOrderId = order.Id,
+      };
+
+      var orderType = Orders.OrderType.Parse(4010);
+
+      InventoryOrder inventoryOrder = new InventoryOrder(fields.WarehouseUID, orderType);
+
+      inventoryOrder.Update(fields);
+
+      inventoryOrder.Save();
+
+      return inventoryOrder;
+    }
+
+
+    private void GenerateInventoryOrderItems(Order order, InventoryOrder inventoryOrder) {
+
+      var items = order.GetItems<OrderItem>();
+
+      var orderItemType = Orders.OrderItemType.Parse(4059);
+
+      foreach (var item in items) {
+        InventoryOrderItemFields fields = new InventoryOrderItemFields();
+
+        fields.ProductUID = item.Product.UID;
+        fields.Description = item.Product.Description;
+        fields.ProductUnitUID = item.Product.BaseUnit.UID;
+        fields.Quantity = item.Quantity;
+        fields.Position = item.Position;
+        fields.Location = "A-001-01-01";
+
+        InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, inventoryOrder);
+
+        orderItem.Update(fields);
+        inventoryOrder.AddItem(orderItem);
+        orderItem.Save();
+      }
+    }
+
+    public void GenerateDifFicalInventory(string orderUID) {
+      var order = InventoryOrder.Parse(orderUID);
+
+
+
     }
 
 
