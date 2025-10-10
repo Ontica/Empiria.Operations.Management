@@ -147,6 +147,13 @@ namespace Empiria.Orders {
     } = -1;
 
 
+    [DataField("ORDER_RELATED_ORDER_ID")]
+    public int RelatedOrderId {
+      get;
+      private set;
+    }
+
+
     [DataField("ORDER_PROJECT_ID")]
     public Project Project {
       get; private set;
@@ -313,6 +320,7 @@ namespace Empiria.Orders {
       RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);
       Project = Patcher.Patch(fields.ProjectUID, Project);
       Priority = fields.Priority;
+      RelatedOrderId = fields.RelatedOrderId;
     }
 
     #endregion Methods

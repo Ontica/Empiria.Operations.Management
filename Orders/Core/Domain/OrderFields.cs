@@ -74,6 +74,11 @@ namespace Empiria.Orders {
     } = Priority.Normal;
 
 
+    public int RelatedOrderId {
+      get; set;
+    } = -1;
+
+
     public virtual void EnsureValid() {
       Assertion.Require(OrderTypeUID, nameof(OrderTypeUID));
       Assertion.Require(CategoryUID, nameof(CategoryUID));
