@@ -27,7 +27,6 @@ namespace Empiria.Inventory.UseCases {
   public class InventoryOrderUseCases : UseCase {
 
     private const int INVENTORYORDERTYPEID = 4010;
-    static private readonly JsonObject config = ConfigurationData.Get<JsonObject>("Dates");
 
 
     #region Constructors and parsers
@@ -37,8 +36,6 @@ namespace Empiria.Inventory.UseCases {
     }
 
     static public InventoryOrderUseCases UseCaseInteractor() {
-      var _fromDate = config.Get<DateTime>("importDate");
-
       return UseCase.CreateInstance<InventoryOrderUseCases>();
     }
 
