@@ -75,6 +75,12 @@ namespace Empiria.Inventory.Adapters {
       get; set;
     }
 
+
+    public string StakeholderName {
+      get;
+      internal set;
+    }
+
   } // class InventoryOrderDescriptorDto
 
 } // namespace Empiria.Inventory.Adapters

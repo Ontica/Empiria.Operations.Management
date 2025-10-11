@@ -7,6 +7,7 @@
 *  Summary  : Mapping methods for inventory order.                                                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -40,6 +41,7 @@ namespace Empiria.Inventory.Adapters {
       columns.Add(new DataTableColumn("warehouseName", "Almacén", "text"));
       columns.Add(new DataTableColumn("responsibleName", "Responsable", "text"));
       columns.Add(new DataTableColumn("documentNo", "No. Documento", "text"));
+      columns.Add(new DataTableColumn("stakeholderName", "Cliente/Proveedor", "text"));
       columns.Add(new DataTableColumn("postingTime", "Registro", "date"));
       columns.Add(new DataTableColumn("status", "Estatus", "text-tag"));
 
@@ -79,14 +81,15 @@ namespace Empiria.Inventory.Adapters {
         RequestedByName = order.RequestedBy.Name,
         Description = order.Description,
         DocumentNo = GetDocumentNo(order),
+        StakeholderName = GetStakeholderName(order),
         PostedByName = order.PostedBy.Name,
         PostingTime = order.PostingTime,
         Status = order.Status.GetName()
       };
     }
 
-
-    static internal InventoryEntryDto MapToInventoryEntryDto(InventoryEntry entry) {
+    
+   static internal InventoryEntryDto MapToInventoryEntryDto(InventoryEntry entry) {
       decimal quantity = 0;
 
       if (entry.Order.Category.UID == "0eb5a072-b857-4071-8b06-57a34822ec64") {
@@ -173,6 +176,7 @@ namespace Empiria.Inventory.Adapters {
       };
     }
 
+
     static private string GetDocumentNo(InventoryOrder inventoryOrder) {
 
       if (inventoryOrder.RelatedOrderId == -1) {
@@ -181,6 +185,21 @@ namespace Empiria.Inventory.Adapters {
 
       var order = Order.Parse(inventoryOrder.RelatedOrderId);
       return order.OrderNo;
+    }
+
+
+    private static string GetStakeholderName(InventoryOrder inventoryOrder) {
+      if (inventoryOrder.RelatedOrderId == -1) {
+        return string.Empty;
+      }
+
+      var order = Order.Parse(inventoryOrder.RelatedOrderId);
+
+      if (order.Category.UID == "a40c65bd-9a56-48eb-a8bf-f9245ecd3004") {
+        return order.Provider.Name;
+      } else {
+        return order.Beneficiary.Name;
+      }
     }
 
     #endregion helpers
