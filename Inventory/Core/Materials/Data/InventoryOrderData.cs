@@ -131,6 +131,16 @@ namespace Empiria.Inventory.Data {
 
     }
 
+    internal static FixedList<InventoryEntriesReport> GetProductEntryInventoryReport(int orderId) {
+
+      var sql = $"SELECT * FROM vw_Inventory_Report WHERE Inv_Entry_Order_Id = {orderId} ORDER BY Product_Name";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetPlainObjectFixedList<InventoryEntriesReport>(op);
+    }
+
+
 
     internal static decimal GetProductPriceFromVirtualWarehouse(int productId) {
 

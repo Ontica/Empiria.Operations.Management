@@ -110,6 +110,16 @@ namespace Empiria.Inventory.UseCases {
     }
 
 
+    public FixedList<InventoryEntryReportDto> GetInventoryEntryReport(string inventoryOrderUID) {
+      Assertion.Require(inventoryOrderUID, nameof(inventoryOrderUID));
+
+      var inventoryOrder = InventoryOrder.Parse(inventoryOrderUID);
+
+      var report = InventoryOrderData.GetProductEntryInventoryReport(inventoryOrder.Id);
+
+      return InventoryEntriesReportMapper.Map(report);
+    }
+
     #endregion Use cases
 
     #region Helpers
