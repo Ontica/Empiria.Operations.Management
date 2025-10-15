@@ -68,10 +68,10 @@ namespace Empiria.Inventory {
     }
 
 
-    public static InventoryEntry TryParseWithOrderItemId(int orderId) {
-      Assertion.Require(orderId, nameof(orderId));
+    public static InventoryEntry TryParseWithOrderItemId(int orderItemId) {
+      Assertion.Require(orderItemId, nameof(orderItemId));
 
-      return TryParse<InventoryEntry>($"Inv_Entry_Order_Item_Id = {orderId}");
+      return TryParse<InventoryEntry>($"Inv_Entry_Order_Item_Id = {orderItemId}");
     }
 
     #endregion Constructors and parsers
@@ -281,6 +281,11 @@ namespace Empiria.Inventory {
 
     internal void UpdatePosition(int position) {
       this.Position = position;
+    }
+
+
+    internal void UpdateInputQuantity(decimal quantity) {
+      this.InputQuantity = quantity;
     }
 
     #endregion Private methods

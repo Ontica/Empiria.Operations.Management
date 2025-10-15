@@ -242,6 +242,12 @@ namespace Empiria.Inventory.UseCases {
 
       item.Save();
 
+      var inventoryEntry = InventoryEntry.TryParseWithOrderItemId(item.Id);
+
+      inventoryEntry.UpdateInputQuantity(fields.Quantity);
+
+      inventoryEntry.Save();
+
       return GetInventoryOrder(order.UID);
     }
 
