@@ -69,8 +69,8 @@ namespace Empiria.Inventory.Adapters {
         PhysicalCount = entry.InventoryCount,
         Stock = entry.Stock,
         Variance = entry.CountVariance,
-        CostVariance = entry.VariantCost,
-        Location = "Multi Localización",
+        CostVariance = entry.FinalCost,
+        Location = entry.IsMultiLocation,
       };
 
     }

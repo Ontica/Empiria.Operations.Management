@@ -12,7 +12,7 @@ namespace Empiria.Inventory {
   /// <summary>Represents an inventory entry.</summary>
   internal class InventoryEntriesReport {
 
-    #region Constructors and parsers
+    #region Properties
 
     [DataField("PRODUCT_NAME")]
     public string ProductName {
@@ -44,7 +44,7 @@ namespace Empiria.Inventory {
     }
 
 
-    [DataField("SUM_ALMACEN_VIRTUAL")]
+    [DataField("SALDO_INICIAL")]
     public decimal Stock {
       get; internal set;
     }
@@ -67,19 +67,12 @@ namespace Empiria.Inventory {
       get; internal set;
     }
 
-
-    [DataField("INV_ENTRY_INPUT_COST")]
-    public decimal InputCost {
+    [DataField("ESTADO_UBICACION")]
+    public string IsMultiLocation {
       get; internal set;
     }
 
-
-    [DataField("COSTO_DIFERENCIA_INVENTARIO")]
-    public decimal VariantCost {
-      get; internal set;
-    }
-
-    #endregion Constructors and parsers
+    #endregion Properties
 
   } // class InventoryEntriesReport
 
