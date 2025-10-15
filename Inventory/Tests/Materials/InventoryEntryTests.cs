@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.Inventory;
+using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
 using Empiria.Locations;
 using Empiria.Orders;
@@ -170,6 +171,22 @@ namespace Empiria.Tests.Inventory {
       }
 
       Assert.NotNull(orderUID);
+    }
+
+
+    [Fact]
+    public void Should_GetInventoryEntriesReport() {
+
+      TestsCommonMethods.Authenticate();
+
+      var inventoryOrderUID = "a33c76c7-c266-43ff-bfb2-2b2b820b312a";
+      var inventoryOrder = InventoryOrder.Parse(inventoryOrderUID);
+
+      var report = InventoryOrderData.GetProductEntryInventoryReport(inventoryOrder.Id);
+
+      var sut = InventoryEntriesReportMapper.Map(report);
+
+      Assert.NotNull(sut);
     }
 
 

@@ -22,7 +22,7 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    public decimal InventoryCount {
+    public decimal PhysicalCount {
       get; internal set;
     }
 
@@ -32,11 +32,11 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    public decimal CountVariance {
+    public decimal Variance {
       get; internal set;
     }
 
-    public decimal VariantCost {
+    public decimal CostVariance {
       get; internal set;
     }
 
@@ -66,10 +66,10 @@ namespace Empiria.Inventory.Adapters {
       return new InventoryEntryReportDto {
         ProductCode = entry.ProductName,
         ProductDescription = entry.ProductDescription,
-        InventoryCount = entry.InventoryCount,
+        PhysicalCount = entry.InventoryCount,
         Stock = entry.Stock,
-        CountVariance = entry.CountVariance,
-        VariantCost = entry.VariantCost,
+        Variance = entry.CountVariance,
+        CostVariance = entry.VariantCost,
         Location = "Multi Localización",
       };
 

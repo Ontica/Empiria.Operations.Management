@@ -61,7 +61,20 @@ namespace Empiria.Inventory.WebApi {
         return new SingleObjectModel(this.Request, inventoryOrder);
       }
     }
-    
+
+
+    [HttpGet]
+    [Route("v8/order-management/inventory-orders/entries-report/{orderUID:guid}")]
+    public SingleObjectModel GetInventoryEntriesReport([FromUri] string orderUID) {
+
+      using (var usecases = InventoryEntryUseCases.UseCaseInteractor()) {
+
+        FixedList<InventoryEntryReportDto> report = usecases.GetInventoryEntryReport(orderUID);
+
+        return new SingleObjectModel(this.Request, report);
+      }
+    }
+
     #endregion Web Apis
 
   }
