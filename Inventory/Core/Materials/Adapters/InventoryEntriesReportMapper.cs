@@ -41,10 +41,19 @@ namespace Empiria.Inventory.Adapters {
     }
 
 
-    public string Location {
+    public string IsMultiLocation {
       get; internal set;
     }
 
+
+    public string LocationReaded {
+      get; internal set;
+    }
+
+
+    public string Locations {
+      get; internal set;
+    }
 
   }  // class InventoryEntryReportDto 
 
@@ -70,7 +79,9 @@ namespace Empiria.Inventory.Adapters {
         Stock = entry.Stock,
         Variance = entry.CountVariance,
         CostVariance = entry.FinalCost,
-        Location = entry.IsMultiLocation,
+        IsMultiLocation = entry.IsMultiLocation,
+        LocationReaded = entry.LocationReaded,
+        Locations = entry.Locations
       };
 
     }

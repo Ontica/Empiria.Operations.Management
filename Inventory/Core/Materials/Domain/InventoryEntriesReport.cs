@@ -67,8 +67,21 @@ namespace Empiria.Inventory {
       get; internal set;
     }
 
+
     [DataField("ESTADO_UBICACION")]
     public string IsMultiLocation {
+      get; internal set;
+    }
+
+
+    [DataField("Location_Name_Readed")]
+    public string LocationReaded {
+      get; internal set;
+    }
+
+
+    [DataField("Locations_Names")]
+    public string Locations {
       get; internal set;
     }
 
