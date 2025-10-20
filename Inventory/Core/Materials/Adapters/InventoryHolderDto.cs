@@ -42,7 +42,6 @@ namespace Empiria.Inventory.Adapters {
 
   public class InventoryOrderActions {
 
-
     public bool CanEdit {
       get; set;
     } = false;
@@ -72,6 +71,15 @@ namespace Empiria.Inventory.Adapters {
       get; set;
     } = false;
 
+
+    public bool DisplayCountStatus {
+      get; set;
+    } = false;
+
+
+    public bool HasCountVariance {
+      get; set;
+    } = false;
 
   } // class InventoryOrderActions
 

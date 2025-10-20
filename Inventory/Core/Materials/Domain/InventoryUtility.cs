@@ -17,6 +17,12 @@ namespace Empiria.Inventory {
   /// <summary>Represents an inventory utility.</summary>
   internal class InventoryUtility {
 
+    #region Fields
+
+    static internal readonly string INVENTORY_MANAGER = "inventory-manager";
+
+    #endregion Fields
+
     #region Public methods
 
     static internal InventoryOrderActions GetActions(InventoryOrder order) {
@@ -37,10 +43,14 @@ namespace Empiria.Inventory {
         CanDelete = order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active,
         CanClose = order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active,
         CanEditEntries = (order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active || existClosedEntries) && order.InventoryType.EntriesRequired == true,
+        DisplayCountStatus = true,
+        HasCountVariance = ExecutionServer.CurrentPrincipal.IsInRole(INVENTORY_MANAGER),
       };
 
       return actions;
     }
+
+
 
 
     static internal void EnsureIsValidToClose(FixedList<InventoryOrderItem> orderItems) {
