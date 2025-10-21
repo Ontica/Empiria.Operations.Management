@@ -44,10 +44,15 @@ namespace Empiria.Inventory {
         CanClose = order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active,
         CanEditEntries = (order.Status == EntityStatus.Pending || order.Status == EntityStatus.Active || existClosedEntries) && order.InventoryType.EntriesRequired == true,
         DisplayCountStatus = true,
-        HasCountVariance = ExecutionServer.CurrentPrincipal.IsInRole(INVENTORY_MANAGER),
+        HasCountVariance = GetPermission(),
       };
 
       return actions;
+    }
+
+    static internal bool GetPermission() {
+      return ExecutionServer.CurrentPrincipal.IsInRole(INVENTORY_MANAGER);
+
     }
 
 
