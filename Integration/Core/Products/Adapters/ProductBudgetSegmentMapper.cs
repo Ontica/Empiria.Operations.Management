@@ -16,13 +16,13 @@ namespace Empiria.Operations.Integration.Products.Adapters {
   /// <summary>Maps product budget segments to ProductBudgetSegmentDto instances.</summary>
   internal class ProductBudgetSegmentMapper {
 
-    static internal FixedList<ProductBudgetSegmentDto> Map(FixedList<BudgetAccountSegmentLink> links) {
+    static internal FixedList<ProductBudgetSegmentDto> Map(FixedList<FormerBudgetAcctSegmentLink> links) {
       return links.Select(x => Map(x))
                   .ToFixedList();
     }
 
 
-    static internal ProductBudgetSegmentDto Map(BudgetAccountSegmentLink link) {
+    static internal ProductBudgetSegmentDto Map(FormerBudgetAcctSegmentLink link) {
       return new ProductBudgetSegmentDto {
         UID = link.UID,
         Product = link.GetLinkedObject<Product>().MapToNamedEntity(),
