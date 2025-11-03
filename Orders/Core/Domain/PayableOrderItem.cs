@@ -65,7 +65,7 @@ namespace Empiria.Orders {
 
 
     [DataField("ORDER_ITEM_BUDGET_ACCOUNT_ID")]
-    public BudgetAccount BudgetAccount {
+    public FormerBudgetAccount BudgetAccount {
       get; private set;
     }
 
@@ -125,7 +125,7 @@ namespace Empiria.Orders {
       Discount = fields.Discount;
       Currency = Patcher.Patch(fields.CurrencyUID, Order.Currency);
 
-      BudgetAccount = BudgetAccount.Parse(fields.BudgetAccountUID);
+      BudgetAccount = FormerBudgetAccount.Parse(fields.BudgetAccountUID);
 
       base.Update(fields);
     }

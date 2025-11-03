@@ -43,10 +43,10 @@ namespace Empiria.Operations.Integration.Products.UseCases {
       Assertion.Require(productUID, nameof(productUID));
       Assertion.Require(fields, nameof(fields));
 
-      var segment = BudgetAccountSegment.Parse(fields.BudgetSegmentUID);
+      var segment = FormerBudgetAcctSegment.Parse(fields.BudgetSegmentUID);
       var product = Product.Parse(productUID);
 
-      var link = new BudgetAccountSegmentLink(segment, product, fields.Code, fields.Observations);
+      var link = new FormerBudgetAcctSegmentLink(segment, product, fields.Code, fields.Observations);
 
       link.Save();
 
@@ -59,7 +59,7 @@ namespace Empiria.Operations.Integration.Products.UseCases {
 
       var product = Product.Parse(productUID);
 
-      FixedList<BudgetAccountSegmentLink> links = BudgetAccountSegmentLink.GetListForProduct(product);
+      FixedList<FormerBudgetAcctSegmentLink> links = FormerBudgetAcctSegmentLink.GetListForProduct(product);
 
       return ProductBudgetSegmentMapper.Map(links);
     }
@@ -71,7 +71,7 @@ namespace Empiria.Operations.Integration.Products.UseCases {
       Assertion.Require(budgetSegmentProductLinkUID, nameof(budgetSegmentProductLinkUID));
 
       var product = Product.Parse(productUID);
-      var link = BudgetAccountSegmentLink.Parse(budgetSegmentProductLinkUID);
+      var link = FormerBudgetAcctSegmentLink.Parse(budgetSegmentProductLinkUID);
 
       Assertion.Require(link.GetLinkedObject<Product>().Equals(product),
                         "BudgetSegmentProductLink product mismatch");
@@ -92,11 +92,11 @@ namespace Empiria.Operations.Integration.Products.UseCases {
       var product = Product.Parse(query.ProductUID);
       var budgetType = BudgetType.Parse(query.BudgetTypeUID);
 
-      BudgetAccountSegmentType segmentType = budgetType.ProductProcurementSegmentType;
+      FormerBudgetAcctSegmentType segmentType = budgetType.ProductProcurementSegmentType;
 
-      FixedList<BudgetAccountSegment> segments = segmentType.SearchInstances(string.Empty, query.Keywords);
+      FixedList<FormerBudgetAcctSegment> segments = segmentType.SearchInstances(string.Empty, query.Keywords);
 
-      var current = BudgetAccountSegmentLink.GetBudgetAccountSegmentsForProduct(product);
+      var current = FormerBudgetAcctSegmentLink.GetBudgetAccountSegmentsForProduct(product);
 
       return segments.Remove(current)
                      .MapToNamedEntityList();
@@ -112,15 +112,15 @@ namespace Empiria.Operations.Integration.Products.UseCases {
       var orgUnit = OrganizationalUnit.Parse(query.OrgUnitUID);
       var budget = Budget.Parse(query.BudgetUID);
 
-      var segments = BudgetAccountSegmentLink.GetBudgetAccountSegmentsForProduct(product);
+      var segments = FormerBudgetAcctSegmentLink.GetBudgetAccountSegmentsForProduct(product);
 
       if (segments.Count == 0) {
         return new FixedList<NamedEntityDto>();
       }
 
-      var searcher = new BudgetAccountSearcher(budget.BudgetType, string.Empty);
+      var searcher = new FormerBudgetAccountSearcher(budget.BudgetType, string.Empty);
 
-      FixedList<BudgetAccount> accounts = searcher.Search(orgUnit, segments);
+      FixedList<FormerBudgetAccount> accounts = searcher.Search(orgUnit, segments);
 
       return accounts.MapToNamedEntityList();
     }
