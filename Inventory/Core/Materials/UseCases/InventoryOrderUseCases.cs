@@ -293,7 +293,7 @@ namespace Empiria.Inventory.UseCases {
         Description = "Orden de inventario correspondiente " + order.OrderNo,
         RequestedByUID = order.RequestedBy.UID,
         ResponsibleUID = order.Responsible.UID,
-        RelatedOrderId = order.Id,
+        ParentOrderUID = order.UID,
       };
 
       var orderType = Orders.OrderType.Parse(4010);

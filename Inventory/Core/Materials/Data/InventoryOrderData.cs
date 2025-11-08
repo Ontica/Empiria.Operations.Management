@@ -144,13 +144,14 @@ namespace Empiria.Inventory.Data {
 
     internal static decimal GetProductPriceFromVirtualWarehouse(int productId) {
 
-      var sql = $"SELECT TOp  1 Inv_Entry_Input_Cost FROM OMS_Inventory_Entries where Inv_Entry_Order_Id = -10 and Inv_Entry_Product_Id = {productId}" +
-                $"  order by Inv_Entry_Time ";
+      var sql = $"SELECT TOP  1 Inv_Entry_Input_Cost FROM " +
+                $"OMS_Inventory_Entries " +
+                $"where Inv_Entry_Order_Id = -10 and Inv_Entry_Product_Id = {productId} " +
+                $"order by Inv_Entry_Time ";
 
       var op = DataOperation.Parse(sql);
 
       return DataReader.GetScalar<decimal>(op);
-
     }
 
 
@@ -225,10 +226,10 @@ namespace Empiria.Inventory.Data {
                      o.Id, o.UID, o.OrderType.Id, o.InventoryType.Id, o.OrderNo, o.Description,
                      EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
                      o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
-                     -1, o.RequisitionId, -1, o.Project.Id, 600,
+                     -1, o.Requisition.Id, -1, o.Project.Id, 600,
                      o.Source.Id, (char) o.Priority, o.AuthorizationTime, o.AuthorizedBy.Id,
                      o.ClosingTime, o.ClosedBy.Id, extensionData, o.Keywords, o.Warehouse.Id,
-                     o.RelatedOrderId, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+                     o.ParentOrder.Id, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }
@@ -237,10 +238,12 @@ namespace Empiria.Inventory.Data {
     static internal void WriteOrderItem(InventoryOrderItem o, string extensionData) {
       var op = DataOperation.Parse("write_OMS_Order_Item",
                      o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Product.Id,
-                     o.Description, o.ProductUnit.Id, o.Quantity, o.UnitPrice, o.Discount,
-                     o.Currency.Id, -1, -1, o.RequestedBy.Id,
-                     -1, o.Project.Id, o.Provider.Id, -1, extensionData,
-                     o.Keywords, o.Location.Id, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+                     o.Description, "", o.ProductUnit.Id, o.Quantity, o.UnitPrice,
+                     o.Discount, o.Currency.Id, "",
+                     "", o.RequestedBy.Id, "", o.Project.Id,
+                     o.Provider.Id, o.Location.Id, "",
+                     extensionData, o.Keywords, o.Position, o.PostedBy.Id,
+                     o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }
@@ -264,7 +267,6 @@ namespace Empiria.Inventory.Data {
 
       return DataReader.GetScalar<int>(op);
     }
-
 
   } // class InventoryOrderData
 

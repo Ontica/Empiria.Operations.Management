@@ -471,10 +471,10 @@ namespace Empiria.Tests.Inventory {
         Description = "Orden de inventario correspondiente " + order.OrderNo,
         RequestedByUID = order.RequestedBy.UID,
         ResponsibleUID = order.Responsible.UID,
-        RelatedOrderId = order.Id,
+        ParentOrderUID = order.UID,
       };
 
-      var orderType = Orders.OrderType.Parse(4010);
+      var orderType = OrderType.Parse(4010);
 
       InventoryOrder inventoryOrder = new InventoryOrder(fields.WarehouseUID, orderType);
 
@@ -492,7 +492,7 @@ namespace Empiria.Tests.Inventory {
 
       var items = order.GetItems<OrderItem>();
 
-      var orderItemType = Orders.OrderItemType.Parse(4059);
+      var orderItemType = OrderItemType.Parse(4059);
 
       foreach (var item in items) {
         InventoryOrderItemFields fields = new InventoryOrderItemFields();

@@ -10,10 +10,7 @@
 
 using System.Linq;
 
-using Empiria.Financial;
 using Empiria.Orders;
-
-using Empiria.Orders.Data;
 
 namespace Empiria.Procurement.Orders {
 
@@ -41,15 +38,6 @@ namespace Empiria.Procurement.Orders {
 
     #endregion Constructors and parsers
 
-    #region Properties
-
-    [DataField("ORDER_CURRENCY_ID")]
-    public Currency Currency {
-      get; private set;
-    }
-
-    #endregion Properties
-
     #region Methods
 
     internal protected virtual void AddItem(SalesOrderItem orderItem) {
@@ -59,8 +47,7 @@ namespace Empiria.Procurement.Orders {
     }
 
 
-    public FixedList<SalesOrderItem> GetItems(SalesOrderItem orderItem) {
-      Assertion.Require(orderItem, nameof(orderItem));
+    public FixedList<SalesOrderItem> GetItems() {
       return base.GetItems<SalesOrderItem>();
     }
 
@@ -69,10 +56,6 @@ namespace Empiria.Procurement.Orders {
                   .Sum(x => x.Total);
     }
 
-
-    protected override void OnSave() {
-      SalesOrdersData.WriteSalesOrder(this, this.ExtData.ToString());
-    }
 
     internal protected virtual void RemoveItem(SalesOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
@@ -83,6 +66,7 @@ namespace Empiria.Procurement.Orders {
 
     internal protected void Update(SalesOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
+
       base.Update(fields);
     }
 
