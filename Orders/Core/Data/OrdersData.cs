@@ -47,15 +47,17 @@ namespace Empiria.Orders.Data {
     }
 
 
-    static internal void WriteOrder(PayableOrder o, string extensionData) {
+    static internal void WriteOrder(Order o) {
       var op = DataOperation.Parse("write_OMS_Order",
-                     o.Id, o.UID, o.OrderType.Id, o.Category.Id, o.OrderNo, o.Description,
-                     EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
-                     o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
-                     o.Budget.Id, o.RequisitionId, -1, o.Project.Id, o.Currency.Id,
-                     o.Source.Id, (char) o.Priority, o.AuthorizationTime, o.AuthorizedBy.Id,
-                     o.ClosingTime, o.ClosedBy.Id, extensionData, o.Keywords,
-                     o.PostedBy.Id, o.PostingTime, (char) o.Status);
+        o.Id, o.UID, o.OrderType.Id, o.Category.Id, o.OrderNo, o.Description, o.Justification,
+        EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
+        o.Requisition.Id, o.ParentOrder.Id, o.ContractId, o.Project.Id,
+        o.BaseBudgetType.Id, o.BaseBudget.Id, o.Currency.Id, o.RequestedBy.Id, o.Responsible.Id,
+        o.Beneficiary.Id, o.Provider.Id, o.Source.Id, (char) o.Priority,
+        o.Conditions.ToString(), o.Specifications.ToString(), o.Delivery.ToString(), o.ExtData.ToString(),
+        o.Keywords, o.RecordingTime, o.RecordedBy.Id, o.ApplicationDate, o.AppliedBy.Id,
+        o.AuthorizationTime, o.AuthorizedBy.Id, o.ClosingTime, o.ClosedBy.Id,
+        o.PostingTime, o.PostedBy.Id, (char) o.Status);
 
       DataWriter.Execute(op);
     }
@@ -63,11 +65,11 @@ namespace Empiria.Orders.Data {
 
     static internal void WriteOrderItem(PayableOrderItem o, string extensionData) {
       var op = DataOperation.Parse("write_OMS_Order_Item",
-                     o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Product.Id,
-                     o.Description, o.ProductUnit.Id, o.Quantity, o.UnitPrice, o.Discount,
-                     o.Currency.Id, o.RelatedItemId, o.RequisitionItemId, o.RequestedBy.Id,
-                     o.BudgetAccount.Id, o.Project.Id, o.Provider.Id, o.PerEachItemId, extensionData,
-                     o.Keywords, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+                  o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Product.Id,
+                  o.Description, "", o.ProductUnit.Id, o.Quantity,
+                  o.Currency.Id, o.UnitPrice, o.Discount, o.RelatedItemId, o.RequisitionItemId, o.RequestedBy.Id,
+                  o.BudgetAccount.Id, o.Project.Id, o.Provider.Id, o.PerEachItemId, "",
+                  extensionData, o.Keywords, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }
