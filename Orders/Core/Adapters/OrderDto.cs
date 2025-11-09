@@ -120,6 +120,10 @@ namespace Empiria.Orders.Adapters {
       get; private set;
     }
 
+    public NamedEntityDto RequestedBy {
+      get; private set;
+    }
+
     public NamedEntityDto Responsible {
       get; private set;
     }
@@ -137,10 +141,6 @@ namespace Empiria.Orders.Adapters {
     }
 
     public FixedList<NamedEntityDto> ProvidersGroup {
-      get; private set;
-    }
-
-    public NamedEntityDto RequestedBy {
       get; private set;
     }
 

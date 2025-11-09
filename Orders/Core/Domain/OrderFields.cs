@@ -34,6 +34,16 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public string Justification {
+      get; set;
+    } = string.Empty;
+
+
+    public string[] Identificators {
+      get; set;
+    } = new string[0];
+
+
     public string[] Tags {
       get; set;
     } = new string[0];
@@ -53,7 +63,6 @@ namespace Empiria.Orders {
       get; set;
     }
 
-
     public string ProviderUID {
       get; set;
     } = string.Empty;
@@ -69,14 +78,14 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
-    public Priority Priority {
+    public Priority? Priority {
       get; set;
-    } = Priority.Normal;
+    }
 
 
-    public int RelatedOrderId {
+    public string ParentOrderUID {
       get; set;
-    } = -1;
+    } = string.Empty;
 
 
     public virtual void EnsureValid() {
@@ -84,7 +93,7 @@ namespace Empiria.Orders {
       Assertion.Require(CategoryUID, nameof(CategoryUID));
       Assertion.Require(Description, nameof(Description));
       Assertion.Require(ResponsibleUID, nameof(ResponsibleUID));
-      Assertion.Require(BeneficiaryUID, nameof(BeneficiaryUID));
+      Priority = Priority.HasValue ? Priority.Value : StateEnums.Priority.Normal;
     }
 
   }  // class OrderFields

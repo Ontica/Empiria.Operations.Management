@@ -39,6 +39,8 @@ namespace Empiria.Orders {
 
     protected Order(OrderType orderType) : base(orderType) {
       // Required by Empiria Framework for all partitioned types.
+
+      OrderNo = "Por asignar";
     }
 
     public Order() {
@@ -396,15 +398,17 @@ namespace Empiria.Orders {
       Category = Patcher.Patch(fields.CategoryUID, Category);
       Description = Patcher.PatchClean(fields.Description, Description);
       Justification = Patcher.PatchClean(fields.Justification, string.Empty);
-      _tags = EmpiriaString.Tagging(fields.Tags);
       Responsible = Patcher.Patch(fields.ResponsibleUID, Responsible);
       Beneficiary = Patcher.Patch(fields.BeneficiaryUID, Beneficiary);
       IsForMultipleBeneficiaries = fields.IsForMultipleBeneficiaries;
       Provider = Patcher.Patch(fields.ProviderUID, Provider);
       RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);
       Project = Patcher.Patch(fields.ProjectUID, Project);
-      Priority = fields.Priority;
+      Priority = fields.Priority.Value;
       ParentOrder = Patcher.Patch(fields.ParentOrderUID, Empty);
+
+      _tags = EmpiriaString.Tagging(fields.Tags);
+      _identificators = EmpiriaString.Tagging(fields.Identificators);
     }
 
     #endregion Methods
