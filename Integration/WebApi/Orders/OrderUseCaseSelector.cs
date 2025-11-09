@@ -20,11 +20,35 @@ namespace Empiria.Operations.Integration.Orders {
   /// <summary>Dispatches order actions to their corresponding use cases.</summary>
   static internal class OrderUseCaseSelector {
 
+    static internal OrderHolderDto ActivateOrder(string orderUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+
+      var order = Order.Parse(orderUID);
+
+      if (order is Requisition) {
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.Activate(order.UID);
+        }
+      }
+
+      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
+        return usecases.ActivateOrder(order.UID);
+      }
+
+    }
+
     static internal OrderHolderDto CreateOrder(OrderFields fields) {
       Assertion.Require(fields, nameof(fields));
       Assertion.Require(fields.OrderTypeUID, nameof(fields.OrderTypeUID));
 
       var orderType = OrderType.Parse(fields.OrderTypeUID);
+
+
+      if (orderType.Name.Contains("Requisition")) {
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.Create((RequisitionFields) fields);
+        }
+      }
 
       if (orderType.Equals(OrderType.ContractOrder)) {
 
@@ -45,6 +69,12 @@ namespace Empiria.Operations.Integration.Orders {
 
       var order = Order.Parse(orderUID);
 
+      if (order is Requisition) {
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.CreateItem(order.UID, (PayableOrderItemFields) orderItemFields);
+        }
+      }
+
       if (order is ContractOrder) {
         using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
           return usecases.CreateContractOrderItem(order.UID, (ContractOrderItemFields) orderItemFields);
@@ -61,6 +91,12 @@ namespace Empiria.Operations.Integration.Orders {
       Assertion.Require(orderUID, nameof(orderUID));
 
       var order = Order.Parse(orderUID);
+
+      if (order is Requisition) {
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.Delete(order.UID);
+        }
+      }
 
       if (order is ContractOrder) {
         using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
@@ -80,6 +116,12 @@ namespace Empiria.Operations.Integration.Orders {
 
       var order = Order.Parse(orderUID);
 
+      if (order is Requisition) {
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.DeleteItem(order.UID, orderItemUID);
+        }
+      }
+
       if (order is ContractOrder) {
         using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
           return usecases.DeleteContractOrderItem(order.UID, orderItemUID);
@@ -97,6 +139,12 @@ namespace Empiria.Operations.Integration.Orders {
 
       var order = Order.Parse(orderUID);
 
+      if (order is Requisition) {
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.GetRequisition(order.UID);
+        }
+      }
+
       if (order is ContractOrder) {
         using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
           return usecases.GetContractOrder(order.UID);
@@ -109,13 +157,43 @@ namespace Empiria.Operations.Integration.Orders {
     }
 
 
+    static public FixedList<OrderDescriptor> Search(OrdersQuery query) {
+      Assertion.Require(query, nameof(query));
+
+      OrderType orderType = OrderType.Parse(query.OrderTypeUID);
+
+
+      if (orderType.Name.Contains("PayableOrder")) {
+
+        using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
+          return usecases.SearchOrders(query)
+                         .Select(x => (OrderDescriptor) x)
+                         .ToFixedList();
+        }
+
+      } else {
+
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.SearchRequisitions(query)
+                         .Select(x => (OrderDescriptor) x)
+                         .ToFixedList();
+        }
+      }
+    }
+
+
     static internal OrderHolderDto UpdateOrder(OrderFields fields) {
       Assertion.Require(fields, nameof(fields));
-      Assertion.Require(fields.OrderTypeUID, nameof(fields.OrderTypeUID));
 
-      var orderType = OrderType.Parse(fields.OrderTypeUID);
+      var order = Order.Parse(fields.UID);
 
-      if (orderType.Equals(OrderType.ContractOrder)) {
+      if (order is Requisition) {
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.Update((RequisitionFields) fields);
+        }
+      }
+
+      if (order is ContractOrder) {
 
         using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
           return usecases.UpdateContractOrder((ContractOrderFields) fields);
@@ -135,6 +213,12 @@ namespace Empiria.Operations.Integration.Orders {
 
       var order = Order.Parse(orderUID);
 
+      if (order is Requisition) {
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.UpdateItem(order.UID, orderItemUID, (PayableOrderItemFields) fields);
+        }
+      }
+
       if (order is ContractOrder) {
         using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
           return usecases.UpdateContractOrderItem(order.UID, orderItemUID, (ContractOrderItemFields) fields);
@@ -146,6 +230,21 @@ namespace Empiria.Operations.Integration.Orders {
       }
     }
 
+    static internal OrderHolderDto SuspendOrder(string orderUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+
+      var order = Order.Parse(orderUID);
+
+      if (order is Requisition) {
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.Suspend(order.UID);
+        }
+      }
+
+      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
+        return usecases.SuspendOrder(order.UID);
+      }
+    }
   }  // class OrderUseCaseSelector
 
 } // namespace Empiria.Operations.Integration.Orders
