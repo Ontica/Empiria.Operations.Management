@@ -24,8 +24,7 @@ namespace Empiria.Orders {
       // Required by Empiria Framework for all partitioned types.
     }
 
-    protected internal PayableOrderItem(OrderItemType powertype,
-                                        PayableOrder order) : base(powertype, order) {
+    protected internal PayableOrderItem(OrderItemType powertype, Order order) : base(powertype, order) {
       // no-op
     }
 
