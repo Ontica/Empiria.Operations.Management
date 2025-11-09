@@ -12,12 +12,13 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Empiria.Budgeting;
+
 using Empiria.Financial;
 
 namespace Empiria.Orders {
 
   /// <summary>Represents a payable order.</summary>
-  public class PayableOrder : Order, IPayableEntity {
+  public class PayableOrder : Order, IPayableEntity, IBudgetingEntity {
 
     #region Constructors and parsers
 
@@ -127,12 +128,12 @@ namespace Empiria.Orders {
       fields.EnsureValid();
 
       if (this.GetItems<PayableOrderItem>().Count != 0 &&
-         (this.BaseBudget.Distinct(Budget.Parse(fields.Budgets[0])) ||
+         (this.BaseBudget.Distinct(Budget.Parse(fields.BudgetUID)) ||
           this.Currency.Distinct(Currency.Parse(fields.CurrencyUID)))) {
         Assertion.RequireFail("No es posible cambiar el presupuesto o la moneda, " +
                               "debido a que la orden tiene registradas una o más partidas.");
       }
-      base.BaseBudget = Budget.Parse(fields.Budgets[0]);
+      base.BaseBudget = Budget.Parse(fields.BudgetUID);
 
       if (fields.CurrencyUID.Length == 0) {
         base.Currency = Currency.Default;

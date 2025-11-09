@@ -27,7 +27,7 @@ namespace Empiria.Procurement.Contracts {
 
   /// <summary>Represents a contract.</summary>
   [PartitionedType(typeof(ContractType))]
-  public class Contract : BaseObject, IPayableEntity {
+  public class Contract : BaseObject, IPayableEntity, IBudgetingEntity {
 
     #region Fields
 
