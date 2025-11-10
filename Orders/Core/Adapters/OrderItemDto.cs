@@ -8,6 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
+
 using Empiria.StateEnums;
 
 namespace Empiria.Orders.Adapters {
@@ -17,41 +19,126 @@ namespace Empiria.Orders.Adapters {
 
     protected internal OrderItemDto(OrderItem item) {
       UID = item.UID;
+      OrderItemType = item.OrderItemType.MapToNamedEntity();
       Order = item.Order.MapToNamedEntity();
-      OrderType = item.Order.OrderType.MapToNamedEntity();
-      Description = item.Description;
-      Quantity = item.Quantity;
-      ProductUnit = item.ProductUnit.MapToNamedEntity();
       Product = item.Product.MapToNamedEntity();
+      ProductCode = item.ProductCode;
+      Description = item.Description;
+      Justification = item.Justification;
+      ProductUnit = item.ProductUnit.MapToNamedEntity();
+      RequestedQty = item.RequestedQty;
+      Quantity = item.Quantity;
+      UnitPrice = item.UnitPrice;
+      Discount = item.Discount;
+      Currency = item.Currency.MapToNamedEntity();
+      Budget = item.Budget.MapToNamedEntity();
+      BudgetAccount = item.BudgetAccount.MapToNamedEntity();
+      Project = item.Project.MapToNamedEntity();
+      Provider = item.Provider.MapToNamedEntity();
+      Requisition = item.Requisition.MapToNamedEntity();
+      RequisitionItem = item.RequisitionItem.MapToNamedEntity();
+      RelatedItem = item.RelatedItem.MapToNamedEntity();
+      OriginCountry = item.OriginCountry.MapToNamedEntity();
+      SupplyStartDate = item.SupplyStartDate;
+      SupplyEndDate = item.SupplyEndDate;
+      RequiredTime = item.RequiredTime;
       Status = item.Status.MapToDto();
     }
 
     public string UID {
-      get; private set;
+      get;
+    }
+
+    public NamedEntityDto OrderItemType {
+      get;
     }
 
     public NamedEntityDto Order {
-      get; private set;
-    }
-
-    public NamedEntityDto OrderType {
-      get; private set;
-    }
-
-    public string Description {
-      get; private set;
+      get;
     }
 
     public NamedEntityDto Product {
-      get; private set;
+      get;
+    }
+
+    public string ProductCode {
+      get;
+    }
+
+    public string Description {
+      get;
+    }
+
+    public string Justification {
+      get;
     }
 
     public NamedEntityDto ProductUnit {
-      get; private set;
+      get; set;
+    }
+
+    public decimal RequestedQty {
+      get;
     }
 
     public decimal Quantity {
-      get; private set;
+      get; set;
+    }
+
+    public decimal UnitPrice {
+      get;
+    }
+
+    public decimal Discount {
+      get;
+    }
+
+    public NamedEntityDto Currency {
+      get;
+    }
+
+    public NamedEntityDto Budget {
+      get;
+    }
+
+    public NamedEntityDto BudgetAccount {
+      get;
+    }
+
+    public NamedEntityDto Project {
+      get;
+    }
+
+    public NamedEntityDto Provider {
+      get;
+    }
+
+    public NamedEntityDto Requisition {
+      get;
+    }
+
+    public NamedEntityDto RequisitionItem {
+      get;
+    }
+
+    public NamedEntityDto RelatedItem {
+      get;
+    }
+
+    public NamedEntityDto OriginCountry {
+      get;
+    }
+
+    public DateTime SupplyStartDate {
+      get;
+    }
+
+    public DateTime SupplyEndDate {
+      get;
+    }
+
+    public DateTime RequiredTime {
+      get;
     }
 
     public NamedEntityDto Status {

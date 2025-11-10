@@ -118,12 +118,12 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_REQUISITION_ID")]
     private int _requisitionId;
-    public Order Requisition {
+    public Requisition Requisition {
       get {
-        if (this.IsEmptyInstance) {
-          return this;
+        if (this.IsEmptyInstance && this is Requisition) {
+          return (Requisition) this;
         }
-        return Parse(_requisitionId);
+        return Requisition.Parse(_requisitionId);
       }
       private set {
         _requisitionId = value.Id;

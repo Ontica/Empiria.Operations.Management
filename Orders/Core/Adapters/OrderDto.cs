@@ -71,6 +71,7 @@ namespace Empiria.Orders.Adapters {
       Category = order.Category.MapToNamedEntity();
       OrderNo = order.OrderNo;
       Description = order.Description;
+      Justification = order.Justification;
       Identificators = order.Identificators;
       Tags = order.Tags;
       Responsible = order.Responsible.MapToNamedEntity();
@@ -109,6 +110,10 @@ namespace Empiria.Orders.Adapters {
     }
 
     public string Description {
+      get; private set;
+    }
+
+    public string Justification {
       get; private set;
     }
 

@@ -245,7 +245,7 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_ITEM_DELIVERY_PLACE_ID")]
     public Location DeliveryPlace {
-      get; private set;
+      get; protected set;
     }
 
 
@@ -301,7 +301,7 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_ITEM_RECEIVED_BY_ID")]
     public Party ReceivedBy {
-      get; private set;
+      get; protected set;
     }
 
 
@@ -375,22 +375,52 @@ namespace Empiria.Orders {
 
       fields.EnsureValid();
 
-      Product = Patcher.Patch(fields.ProductUID, Product);
+      Product = Patcher.Patch(fields.ProductUID, Product.Empty);
+      ProductCode = EmpiriaString.Clean(fields.ProductCode);
+
       Description = EmpiriaString.Clean(fields.Description);
+      if (Description.Length == 0 && !Product.IsEmptyInstance) {
+        Description = Product.Description;
+      } else {
+        Description = "Sin descripción";
+      }
+
+      Justification = EmpiriaString.Clean(fields.Justification);
+
       ProductUnit = Patcher.Patch(fields.ProductUnitUID, ProductUnit);
+
       Quantity = fields.Quantity;
-      RequestedBy = Patcher.Patch(fields.RequestedByUID, Order.RequestedBy);
-      Project = Patcher.Patch(fields.ProjectUID, Order.Project);
-      Provider = Patcher.Patch(fields.ProviderUID, Order.Provider);
+
+      if (RequestedQty != 0) {
+        RequestedQty = fields.RequestedQty;
+      } else {
+        RequestedQty = Quantity;
+      }
 
       UnitPrice = fields.UnitPrice;
       Discount = fields.Discount;
       Currency = Patcher.Patch(fields.CurrencyUID, Order.Currency);
 
+      Budget = Patcher.Patch(fields.BudgetUID, Order.BaseBudget);
       BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, BudgetAccount.Empty);
+
+      Project = Patcher.Patch(fields.ProjectUID, Order.Project);
+      Provider = Patcher.Patch(fields.ProviderUID, Order.Provider);
+      Requisition = Patcher.Patch(fields.RequisitionUID, Order.Requisition);
+      RequisitionItem = Patcher.Patch(fields.RequisitionItemUID, Empty);
+      RelatedItem = Patcher.Patch(fields.RelatedItemUID, Empty);
+
+      OriginCountry = Patcher.Patch(fields.OriginCountryUID, Location.Empty);
+
+      SupplyStartDate = Patcher.Patch(fields.SupplyStartDate, ExecutionServer.DateMaxValue);
+      SupplyEndDate = Patcher.Patch(fields.SupplyEndDate, ExecutionServer.DateMaxValue);
+
+      RequestedBy = Patcher.Patch(fields.RequestedByUID, Order.RequestedBy);
+      RequiredTime = Patcher.Patch(fields.RequiredTime, ExecutionServer.DateMaxValue);
 
       MarkAsDirty();
     }
+
 
     internal protected virtual void UpdateQuantity(decimal quantity) {
       Assertion.Require(quantity > 0,
