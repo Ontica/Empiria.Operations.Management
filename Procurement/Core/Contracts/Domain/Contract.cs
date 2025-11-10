@@ -15,7 +15,6 @@ using System.Linq;
 using Empiria.Json;
 using Empiria.Ontology;
 using Empiria.Parties;
-using Empiria.Projects;
 using Empiria.StateEnums;
 using Empiria.Financial;
 
@@ -27,7 +26,7 @@ namespace Empiria.Procurement.Contracts {
 
   /// <summary>Represents a contract.</summary>
   [PartitionedType(typeof(ContractType))]
-  public class Contract : BaseObject, IPayableEntity, IBudgetingEntity {
+  public class Contract : BaseObject, IBudgetingEntity, INamedEntity {
 
     #region Fields
 
@@ -222,70 +221,6 @@ namespace Empiria.Procurement.Contracts {
     }
 
     #endregion Properties
-
-    #region IPayableEntity implementation
-
-    INamedEntity IPayableEntity.Type {
-      get {
-        return this.ContractType;
-      }
-    }
-
-
-    string IPayableEntity.EntityNo {
-      get {
-        return this.ContractNo;
-      }
-    }
-
-
-    INamedEntity IPayableEntity.PayTo {
-      get {
-        return this.Supplier;
-      }
-    }
-
-
-    INamedEntity IPayableEntity.OrganizationalUnit {
-      get {
-        return this.ManagedByOrgUnit;
-      }
-    }
-
-
-    INamedEntity IPayableEntity.Currency {
-      get {
-        return this.Currency;
-      }
-    }
-
-
-    decimal IPayableEntity.Total {
-      get {
-        return this.MaxTotal;
-      }
-    }
-
-    INamedEntity IPayableEntity.Budget {
-      get {
-        return Budgets.Count != 0 ? Budgets[0] : Budget.Empty;
-      }
-    }
-
-
-    INamedEntity IPayableEntity.Project {
-      get {
-        return Project.Empty;
-      }
-    }
-
-    IEnumerable<IPayableEntityItem> IPayableEntity.Items {
-      get {
-        return this.GetItems();
-      }
-    }
-
-    #endregion IPayableEntity implementation
 
     #region Methods
 

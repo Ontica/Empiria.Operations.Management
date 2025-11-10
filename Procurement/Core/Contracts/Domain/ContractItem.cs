@@ -28,7 +28,7 @@ namespace Empiria.Procurement.Contracts {
 
   /// <summary>Represents a contract item.</summary>
   [PartitionedType(typeof(ContractItemType))]
-  public class ContractItem : BaseObject, IPayableEntityItem, IPositionable, INamedEntity {
+  public class ContractItem : BaseObject, IPositionable, INamedEntity {
 
     #region Constructors and parsers
 
@@ -229,47 +229,6 @@ namespace Empiria.Procurement.Contracts {
     }
 
     #endregion Properties
-
-    #region IPayableEntityItem implementation
-
-    decimal IPayableEntityItem.Quantity {
-      get {
-        return MaxQuantity;
-      }
-    }
-
-    INamedEntity IPayableEntityItem.Unit {
-      get {
-        return ProductUnit;
-      }
-    }
-
-    INamedEntity IPayableEntityItem.Currency {
-      get {
-        return this.Currency;
-      }
-    }
-
-    INamedEntity IPayableEntityItem.Product {
-      get {
-        return Product;
-      }
-    }
-
-    INamedEntity IPayableEntityItem.BudgetAccount {
-      get {
-        return BudgetAccount;
-      }
-    }
-
-
-    decimal IPayableEntityItem.Total {
-      get {
-        return MaxTotal;
-      }
-    }
-
-    #endregion IPayableEntityItem implementation
 
     #region Methods
 
