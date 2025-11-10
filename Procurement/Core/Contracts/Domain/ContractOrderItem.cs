@@ -47,12 +47,9 @@ namespace Empiria.Procurement.Contracts {
       }
     }
 
+
     public ContractItem ContractItem {
-      get {
-        return ContractItem.Parse(base.RelatedItemId);
-      } set {
-        base.RelatedItemId = value.Id;
-      }
+      get; private set;
     }
 
     #endregion Properties
