@@ -53,7 +53,7 @@ namespace Empiria.Procurement.Orders {
 
     public decimal GetTotal() {
       return base.GetItems<SalesOrderItem>()
-                  .Sum(x => x.Total);
+                 .Sum(x => x.Subtotal);
     }
 
 

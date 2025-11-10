@@ -112,7 +112,7 @@ namespace Empiria.Orders {
 
     public decimal GetTotal() {
       return base.GetItems<PayableOrderItem>()
-                  .Sum(x => x.Total);
+                  .Sum(x => x.Subtotal);
     }
 
     internal protected virtual void RemoveItem(PayableOrderItem orderItem) {

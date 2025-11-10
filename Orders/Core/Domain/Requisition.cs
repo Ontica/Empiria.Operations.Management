@@ -11,7 +11,6 @@
 using System.Linq;
 
 using Empiria.Budgeting;
-using Empiria.Budgeting.Transactions;
 
 namespace Empiria.Orders {
 
@@ -56,7 +55,7 @@ namespace Empiria.Orders {
 
     public decimal GetTotal() {
       return base.GetItems<PayableOrderItem>()
-                  .Sum(x => x.Total);
+                 .Sum(x => x.Subtotal);
     }
 
 

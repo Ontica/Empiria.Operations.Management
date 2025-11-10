@@ -17,7 +17,7 @@ namespace Empiria.Orders.Adapters {
       UnitPrice = item.UnitPrice;
       Discount = item.Discount;
       Currency = item.Currency.MapToNamedEntity();
-      Total = item.Total;
+      Total = item.Subtotal;
       BudgetAccount = item.BudgetAccount.MapToNamedEntity();
     }
 
