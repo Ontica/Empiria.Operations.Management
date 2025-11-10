@@ -131,8 +131,6 @@ namespace Empiria.Tests.Inventory {
       var orderItemType = Orders.OrderItemType.Parse(4059);
 
       InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, order, location);
-      var position = GetItemPosition(order);
-      fields.Position = position;
 
       orderItem.Update(fields);
       order.AddItem(orderItem);
@@ -413,22 +411,6 @@ namespace Empiria.Tests.Inventory {
     }
 
 
-    [Fact]
-    public void Should_UpdateCost() {
-
-      TestsCommonMethods.Authenticate();
-      var order = InventoryOrder.Parse(5899);
-
-      foreach (var item in order.Items) {
-        //if (item.UnitPrice == 0) {
-        item.UpdatePrice();
-        item.Save();
-        //}        
-      }
-
-      Assert.NotNull(order);
-    }
-
     #region Helpers
 
     private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
@@ -437,16 +419,6 @@ namespace Empiria.Tests.Inventory {
       inventoryEntry.InputEntry(orderItem.UnitPrice, orderItem.Location);
 
       inventoryEntry.Save();
-    }
-
-
-    private int GetItemPosition(InventoryOrder order) {
-      if (order.Items.Count == 0) {
-        return 1;
-      } else {
-        var allItems = InventoryOrderData.GetAllInventoryOrderItems(order);
-        return allItems.Count + 1;
-      }
     }
 
 
@@ -501,7 +473,6 @@ namespace Empiria.Tests.Inventory {
         fields.Description = item.Product.Description;
         fields.ProductUnitUID = item.Product.BaseUnit.UID;
         fields.Quantity = item.Quantity;
-        fields.Position = item.Position;
         fields.Location = "A-001-01-01";
 
         InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, inventoryOrder);
