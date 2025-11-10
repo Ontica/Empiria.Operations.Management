@@ -10,8 +10,6 @@
 
 using Empiria.Financial;
 
-using Empiria.Orders.Data;
-
 namespace Empiria.Orders {
 
   /// <summary>Represents a payable order item.</summary>
@@ -78,11 +76,6 @@ namespace Empiria.Orders {
     #endregion IPayableEntityItem implementation
 
     #region Methods
-
-    protected override void OnSave() {
-      OrdersData.WriteOrderItem(this, this.ExtData.ToString());
-    }
-
 
     internal void Update(PayableOrderItemFields fields) {
       Assertion.Require(fields, nameof(fields));

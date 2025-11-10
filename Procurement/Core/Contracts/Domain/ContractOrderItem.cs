@@ -28,7 +28,7 @@ namespace Empiria.Procurement.Contracts {
 
       _ = order.Contract.GetItem(contractItem.UID);
 
-      this.ContractItem = contractItem;
+      base.ContractItemId = contractItem.Id;
     }
 
     static internal new ContractOrderItem Parse(int id) => ParseId<ContractOrderItem>(id);
@@ -49,7 +49,9 @@ namespace Empiria.Procurement.Contracts {
 
 
     public ContractItem ContractItem {
-      get; private set;
+      get {
+        return ContractItem.Parse(base.ContractItemId);
+      }
     }
 
     #endregion Properties

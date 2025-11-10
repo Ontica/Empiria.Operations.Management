@@ -20,6 +20,7 @@ using Empiria.Projects;
 using Empiria.StateEnums;
 
 using Empiria.Budgeting;
+using Empiria.Orders.Data;
 
 namespace Empiria.Orders {
 
@@ -63,28 +64,6 @@ namespace Empiria.Orders {
       get; private set;
     }
 
-
-    [DataField("ORDER_ITEM_REQUISITION_ID")]
-    public Requisition Requisition {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_ITEM_REQUISITION_ITEM_ID")]
-    private int _requisitionItemId;
-
-    public OrderItem RequisitionItem {
-      get {
-        if (this.IsEmptyInstance) {
-          return this;
-        }
-
-        return Parse(_requisitionItemId);
-      }
-      private set {
-        _requisitionItemId = value.Id;
-      }
-    }
 
     [DataField("ORDER_ITEM_PRODUCT_ID")]
     public Product Product {
@@ -162,7 +141,7 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_ITEM_PRICE_ID")]
     public int PriceId {
-      get; private set;
+      get; protected set;
     } = -1;
 
 
@@ -192,6 +171,34 @@ namespace Empiria.Orders {
     [DataField("ORDER_ITEM_PROVIDER_ID")]
     public Party Provider {
       get; private set;
+    }
+
+    [DataField("ORDER_ITEM_REQUISITION_ID")]
+    public Requisition Requisition {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_REQUISITION_ITEM_ID")]
+    private int _requisitionItemId;
+
+    public OrderItem RequisitionItem {
+      get {
+        if (this.IsEmptyInstance) {
+          return this;
+        }
+
+        return Parse(_requisitionItemId);
+      }
+      private set {
+        _requisitionItemId = value.Id;
+      }
+    }
+
+
+    [DataField("ORDER_ITEM_CONTRACT_ITEM_ID")]
+    protected internal int ContractItemId {
+      get; protected set;
     }
 
 
@@ -354,11 +361,12 @@ namespace Empiria.Orders {
     }
 
 
-    protected override void OnBeforeSave() {
+    protected override void OnSave() {
       if (base.IsNew) {
         this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         this.PostingTime = DateTime.Now;
       }
+      OrdersData.WriteOrderItem(this);
     }
 
 
