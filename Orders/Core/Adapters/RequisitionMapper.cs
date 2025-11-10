@@ -14,6 +14,8 @@ using Empiria.History;
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 
+using Empiria.Payments.Orders.Adapters;
+
 namespace Empiria.Orders.Adapters {
 
   /// <summary>Maps requisitions to their corresponding DTOs.</summary>
@@ -30,6 +32,9 @@ namespace Empiria.Orders.Adapters {
         Order = new RequisitionDto(requisition),
         Items = Map(requisition.GetItems<PayableOrderItem>()),
         BudgetTransactions = MapBudgetTransactions(requisition),
+        Orders = new FixedList<OrderDescriptor>(),
+        PaymentOrders = new FixedList<PaymentOrderDescriptor>(),
+        Bills = new FixedList<Billing.Adapters.BillDescriptorDto>(),
         Documents = DocumentServices.GetAllEntityDocuments(requisition),
         History = HistoryServices.GetEntityHistory(requisition),
         Actions = MapActions(requisition),

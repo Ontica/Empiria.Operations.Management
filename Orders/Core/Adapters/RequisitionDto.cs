@@ -8,7 +8,9 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Billing.Adapters;
 using Empiria.Budgeting.Transactions.Adapters;
+using Empiria.Payments.Orders.Adapters;
 
 namespace Empiria.Orders.Adapters {
 
@@ -20,6 +22,18 @@ namespace Empiria.Orders.Adapters {
     }
 
     public FixedList<BudgetTransactionDescriptorDto> BudgetTransactions {
+      get; internal set;
+    }
+
+    public FixedList<OrderDescriptor> Orders {
+      get; internal set;
+    }
+
+    public FixedList<PaymentOrderDescriptor> PaymentOrders {
+      get; internal set;
+    }
+
+    public FixedList<BillDescriptorDto> Bills {
       get; internal set;
     }
 
