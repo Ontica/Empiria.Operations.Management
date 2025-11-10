@@ -32,6 +32,24 @@ namespace Empiria.Orders {
       get; set;
     } = 1;
 
+    public decimal UnitPrice {
+      get; set;
+    }
+
+    public decimal Discount {
+      get; set;
+    }
+
+    public string CurrencyUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string BudgetAccountUID {
+      get; set;
+    } = string.Empty;
+
+
     public string RequestedByUID {
       get; set;
     } = string.Empty;
@@ -46,11 +64,6 @@ namespace Empiria.Orders {
       get; set;
     } = string.Empty;
 
-
-    public int Position {
-      get;
-      set;
-    }
 
     public virtual void EnsureValid() {
       Assertion.Require(ProductUID, "Necesito se proporcione el producto.");

@@ -1,25 +1,29 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Orders Management                          Component : Domain Layer                            *
-*  Assembly : Empiria.Orders.Core.dll                    Pattern   : Information Holder                      *
+*  Assembly : Empiria.Orders.Core.dll                    Pattern   : Partitioned type                        *
 *  Type     : OrderItem                                  License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Represents an abstract order item.                                                             *
+*  Summary  : Abstract partitioned type that represents an order item.                                       *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
 
+using Empiria.Financial;
 using Empiria.Json;
+using Empiria.Locations;
 using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.Products;
 using Empiria.Projects;
 using Empiria.StateEnums;
 
+using Empiria.Budgeting;
+
 namespace Empiria.Orders {
 
-  /// <summary>Represents an abstract order item.</summary>
+  /// <summary>Abstract partitioned type that represents an order item.</summary>
   [PartitionedType(typeof(OrderItemType))]
   abstract public class OrderItem : BaseObject, INamedEntity {
 
@@ -35,11 +39,6 @@ namespace Empiria.Orders {
       Assertion.Require(!order.IsEmptyInstance, nameof(order));
 
       this.Order = order;
-    }
-
-
-    public OrderItem() {
-      //no-op
     }
 
     static public OrderItem Parse(int id) => ParseId<OrderItem>(id);
@@ -61,13 +60,46 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_ITEM_ORDER_ID")]
     public Order Order {
-      get;
-      private set;
+      get; private set;
     }
 
 
+    [DataField("ORDER_ITEM_REQUISITION_ID")]
+    public Requisition Requisition {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_REQUISITION_ITEM_ID")]
+    private int _requisitionItemId;
+
+    public OrderItem RequisitionItem {
+      get {
+        if (this.IsEmptyInstance) {
+          return this;
+        }
+
+        return Parse(_requisitionItemId);
+      }
+      private set {
+        _requisitionItemId = value.Id;
+      }
+    }
+
     [DataField("ORDER_ITEM_PRODUCT_ID")]
     public Product Product {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_SKU_ID")]
+    internal int SkuId {
+      get; private set;
+    } = -1;
+
+
+    [DataField("ORDER_ITEM_PRODUCT_CODE")]
+    public string ProductCode {
       get; private set;
     }
 
@@ -78,6 +110,11 @@ namespace Empiria.Orders {
     }
 
 
+    [DataField("ORDER_ITEM_JUSTIFICATION")]
+    public string Justification {
+      get; private set;
+    }
+
     string INamedEntity.Name {
       get {
         if (Description.Length != 0) {
@@ -87,35 +124,64 @@ namespace Empiria.Orders {
       }
     }
 
+
     [DataField("ORDER_ITEM_PRODUCT_UNIT_ID")]
     public ProductUnit ProductUnit {
       get; private set;
     }
 
 
-    [DataField("ORDER_ITEM_PRODUCT_QTY")]
+    [DataField("ORDER_ITEM_REQUESTED_QTY")]
+    public decimal RequestedQty {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_QTY")]
     public decimal Quantity {
       get; private set;
     }
 
 
-    [DataField("ORDER_ITEM_RELATED_ITEM_ID")]
-    protected internal int RelatedItemId {
-      get; protected set;
-    } = -1;
-
-
-    [DataField("ORDER_ITEM_REQUISITION_ITEM_ID")]
-    internal int RequisitionItemId {
-      get; private set;
-    } = -1;
-
-
-    [DataField("ORDER_ITEM_REQUESTED_BY_ID")]
-    public Party RequestedBy {
+    [DataField("ORDER_ITEM_UNIT_PRICE")]
+    public decimal UnitPrice {
       get; private set;
     }
 
+
+    [DataField("ORDER_ITEM_DISCOUNT")]
+    public decimal Discount {
+      get; private set;
+    }
+
+    public decimal Subtotal {
+      get {
+        return Math.Round((Quantity * UnitPrice) - Discount, 2);
+      }
+    }
+
+    [DataField("ORDER_ITEM_PRICE_ID")]
+    public int PriceId {
+      get; private set;
+    } = -1;
+
+
+    [DataField("ORDER_ITEM_CURRENCY_ID")]
+    public Currency Currency {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_BUDGET_ID")]
+    public Budget Budget {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_BUDGET_ACCOUNT_ID")]
+    public BudgetAccount BudgetAccount {
+      get; private set;
+    }
 
     [DataField("ORDER_ITEM_PROJECT_ID")]
     public Project Project {
@@ -129,14 +195,117 @@ namespace Empiria.Orders {
     }
 
 
-    [DataField("ORDER_ITEM_PER_EACH_ITEM_ID")]
-    internal int PerEachItemId {
+    [DataField("ORDER_ITEM_RELATED_ITEM_ID")]
+    private int _relatedItemId;
+
+    public OrderItem RelatedItem {
+      get {
+        if (this.IsEmptyInstance) {
+          return this;
+        }
+
+        return Parse(_relatedItemId);
+      }
+      protected set {
+        _relatedItemId = value.Id;
+      }
+    }
+
+
+    [DataField("ORDER_ITEM_ORIGIN_COUNTRY_ID")]
+    public Location OriginCountry {
       get; private set;
-    } = -1;
+    }
+
+
+    [DataField("ORDER_ITEM_SUPPLY_START_DATE")]
+    public DateTime SupplyStartDate {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_SUPPLY_END_DATE")]
+    public DateTime SupplyEndDate {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_LOCATION_ID")]
+    public Location Location {
+      get; protected set;
+    }
+
+
+    [DataField("ORDER_ITEM_DELIVERY_PLACE_ID")]
+    public Location DeliveryPlace {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_CONFIG_EXT_DATA")]
+    internal protected JsonObject ConfigData {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_CONDITIONS_EXT_DATA")]
+    internal protected JsonObject ConditionsData {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_SPEC_EXT_DATA")]
+    internal protected JsonObject SpecificationData {
+      get; private set;
+    }
 
 
     [DataField("ORDER_ITEM_EXT_DATA")]
-    protected JsonObject ExtData {
+    internal protected JsonObject ExtData {
+      get; private set;
+    }
+
+
+    public string Keywords {
+      get {
+        return EmpiriaString.BuildKeywords(Description, Product.Keywords, ProductCode,
+                                           Requisition.Keywords, Order.Keywords, Justification);
+      }
+    }
+
+
+    [DataField("ORDER_ITEM_REQUESTED_TIME")]
+    public DateTime RequestedTime {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_REQUESTED_BY_ID")]
+    public Party RequestedBy {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_REQUIRED_TIME")]
+    public DateTime RequiredTime {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_RECEIVED_BY_ID")]
+    public Party ReceivedBy {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_CLOSING_TIME")]
+    public DateTime ClosingTime {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_CLOSED_BY_ID")]
+    public Party ClosedBy {
       get; private set;
     }
 
@@ -147,14 +316,14 @@ namespace Empiria.Orders {
     }
 
 
-    [DataField("ORDER_ITEM_POSTED_BY_ID")]
-    public Party PostedBy {
+    [DataField("ORDER_ITEM_POSTING_TIME")]
+    public DateTime PostingTime {
       get; private set;
     }
 
 
-    [DataField("ORDER_ITEM_POSTING_TIME")]
-    public DateTime PostingTime {
+    [DataField("ORDER_ITEM_POSTED_BY_ID")]
+    public Party PostedBy {
       get; private set;
     }
 
@@ -162,13 +331,6 @@ namespace Empiria.Orders {
     [DataField("ORDER_ITEM_STATUS", Default = EntityStatus.Active)]
     public EntityStatus Status {
       get; private set;
-    }
-
-
-    public string Keywords {
-      get {
-        return EmpiriaString.BuildKeywords(Description, Product.Name);
-      }
     }
 
     #endregion Properties
@@ -212,7 +374,12 @@ namespace Empiria.Orders {
       RequestedBy = Patcher.Patch(fields.RequestedByUID, Order.RequestedBy);
       Project = Patcher.Patch(fields.ProjectUID, Order.Project);
       Provider = Patcher.Patch(fields.ProviderUID, Order.Provider);
-      Position = Patcher.Patch(fields.Position, Position);
+
+      UnitPrice = fields.UnitPrice;
+      Discount = fields.Discount;
+      Currency = Patcher.Patch(fields.CurrencyUID, Order.Currency);
+
+      BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, BudgetAccount.Empty);
 
       MarkAsDirty();
     }

@@ -65,11 +65,13 @@ namespace Empiria.Orders.Data {
 
     static internal void WriteOrderItem(PayableOrderItem o, string extensionData) {
       var op = DataOperation.Parse("write_OMS_Order_Item",
-                  o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Product.Id,
-                  o.Description, "", o.ProductUnit.Id, o.Quantity,
-                  o.Currency.Id, o.UnitPrice, o.Discount, o.RelatedItemId, o.RequisitionItemId, o.RequestedBy.Id,
-                  o.BudgetAccount.Id, o.Project.Id, o.Provider.Id, o.PerEachItemId, "",
-                  extensionData, o.Keywords, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+        o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Requisition.Id, o.Product.Id, o.SkuId,
+        o.ProductCode, o.Description, o.Justification, o.ProductUnit.Id, o.RequestedQty, o.Quantity,
+        o.UnitPrice, o.Discount, o.PriceId, o.Currency.Id, o.Budget.Id, o.BudgetAccount.Id, o.Project.Id,
+        o.Provider.Id, o.RelatedItem.Id, o.OriginCountry.Id, o.DeliveryPlace.Id, o.ConfigData.ToString(),
+        o.ConditionsData.ToString(), o.SpecificationData.ToString(), o.ExtData.ToString(),
+        o.Keywords, o.RequestedTime, o.RequestedBy.Id, o.RequiredTime, o.ReceivedBy.Id,
+        o.ClosingTime, o.ClosedBy.Id, o.Position, o.PostingTime, o.PostedBy.Id, (char) o.Status);
 
       DataWriter.Execute(op);
     }
