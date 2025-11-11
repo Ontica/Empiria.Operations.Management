@@ -20,6 +20,8 @@ using Empiria.Projects;
 using Empiria.StateEnums;
 
 using Empiria.Budgeting;
+using Empiria.Budgeting.Transactions;
+
 using Empiria.Orders.Data;
 
 namespace Empiria.Orders {
@@ -159,6 +161,11 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_ITEM_BUDGET_ACCOUNT_ID")]
     public BudgetAccount BudgetAccount {
+      get; private set;
+    }
+
+    [DataField("ORDER_ITEM_BUDGET_ENTRY_ID")]
+    public BudgetEntry BudgetEntry {
       get; private set;
     }
 

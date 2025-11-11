@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Empiria.Json;
+using Empiria.Locations;
 using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.Projects;
@@ -197,6 +198,12 @@ namespace Empiria.Orders {
     [DataField("ORDER_PROVIDER_ID")]
     public Party Provider {
       get; private set;
+    }
+
+
+    [DataField("ORDER_WAREHOUSE_ID")]
+    public Location Warehouse {
+      get; protected set;
     }
 
 

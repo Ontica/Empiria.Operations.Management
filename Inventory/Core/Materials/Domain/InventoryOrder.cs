@@ -55,13 +55,6 @@ namespace Empiria.Inventory {
     }
 
 
-    [DataField("ORDER_LOCATION_ID")]
-    public Location Warehouse {
-      get;
-      private set;
-    }
-
-
     private FixedList<InventoryOrderItem> _items;
 
     public FixedList<InventoryOrderItem> Items {
