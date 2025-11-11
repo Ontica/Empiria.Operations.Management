@@ -32,7 +32,7 @@ namespace Empiria.Orders.Adapters {
         Order = new RequisitionDto(requisition),
         Items = Map(requisition.GetItems<PayableOrderItem>()),
         BudgetTransactions = MapBudgetTransactions(requisition),
-        Orders = new FixedList<OrderDescriptor>(),
+        Payables = new FixedList<OrderDescriptor>(),
         PaymentOrders = new FixedList<PaymentOrderDescriptor>(),
         Bills = new FixedList<Billing.Adapters.BillDescriptorDto>(),
         Documents = DocumentServices.GetAllEntityDocuments(requisition),

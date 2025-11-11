@@ -69,26 +69,7 @@ namespace Empiria.Orders.Adapters {
   public class PayableOrderDescriptor : OrderDescriptor {
 
     protected internal PayableOrderDescriptor(PayableOrder order) : base(order) {
-      BudgetTypeName = order.BaseBudget.BudgetType.DisplayName;
-      BudgetName = order.BaseBudget.Name;
-      CurrencyName = order.Currency.Name;
-      Total = order.GetTotal();
-    }
 
-    public string BudgetTypeName {
-      get; private set;
-    }
-
-    public string BudgetName {
-      get; private set;
-    }
-
-    public string CurrencyName {
-      get; private set;
-    }
-
-    public decimal Total {
-      get; private set;
     }
 
   } // class PayableOrderDescriptor

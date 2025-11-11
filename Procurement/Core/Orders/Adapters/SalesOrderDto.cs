@@ -208,90 +208,20 @@ namespace Empiria.Orders.Adapters {
   public class SalesOrderDescriptor : OrderDescriptor {
 
     protected internal SalesOrderDescriptor(SalesOrder order) : base(order) {
-      UID = order.UID;
-      TypeName = order.OrderType.Name;
-      CategoryName = order.Category.Name;
-      OrderNo = order.OrderNo;
-      Description = order.Description;
       ResponsibleName = order.Responsible.Name;
       BeneficiaryName = order.Beneficiary.Name;
-      ProviderName = order.Provider.Name;
       RequestedByName = order.RequestedBy.Name;
-      ProjectName = order.Project.Name;
-      PriorityUID = order.Priority.ToString();
-      PriorityName = order.Priority.GetName();
-      AuthorizationTime = order.AuthorizationTime;
-      AuthorizedByName = order.AuthorizedBy.Name;
-      ClosingTime = order.ClosingTime;
-      ClosedByName = order.ClosedBy.Name;
-      StatusName = order.Status.GetName();
     }
 
-    public new string UID {
+    public string ResponsibleName {
       get; private set;
     }
 
-    public new string TypeName {
+    public string BeneficiaryName {
       get; private set;
     }
 
-    public new string CategoryName {
-      get; private set;
-    }
-
-    public new string OrderNo {
-      get; private set;
-    }
-
-    public new string Description {
-      get; private set;
-    }
-
-    public new string ResponsibleName {
-      get; private set;
-    }
-
-    public new string BeneficiaryName {
-      get; private set;
-    }
-
-    public new string ProviderName {
-      get; private set;
-    }
-
-    public new string RequestedByName {
-      get; private set;
-    }
-
-    public new string ProjectName {
-      get; private set;
-    }
-
-    public new string PriorityUID {
-      get; private set;
-    }
-
-    public new string PriorityName {
-      get; private set;
-    }
-
-    public new DateTime AuthorizationTime {
-      get; private set;
-    }
-
-    public new string AuthorizedByName {
-      get; private set;
-    }
-
-    public new DateTime ClosingTime {
-      get; private set;
-    }
-
-    public new string ClosedByName {
-      get; private set;
-    }
-
-    public new string StatusName {
+    public string RequestedByName {
       get; private set;
     }
 

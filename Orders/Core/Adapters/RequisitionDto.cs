@@ -25,7 +25,7 @@ namespace Empiria.Orders.Adapters {
       get; internal set;
     }
 
-    public FixedList<OrderDescriptor> Orders {
+    public FixedList<OrderDescriptor> Payables {
       get; internal set;
     }
 
@@ -83,26 +83,7 @@ namespace Empiria.Orders.Adapters {
   public class RequisitionDescriptor : OrderDescriptor {
 
     protected internal RequisitionDescriptor(Requisition requisition) : base(requisition) {
-      BudgetTypeName = requisition.BaseBudgetType.DisplayName;
-      BudgetName = requisition.BaseBudget.Name;
-      CurrencyName = requisition.Currency.Name;
-      Total = requisition.GetTotal();
-    }
-
-    public string BudgetTypeName {
-      get; private set;
-    }
-
-    public string BudgetName {
-      get; private set;
-    }
-
-    public string CurrencyName {
-      get; private set;
-    }
-
-    public decimal Total {
-      get; private set;
+      BaseBudgetName = requisition.BaseBudgetType.DisplayName;
     }
 
   } // class RequisitionDescriptor
