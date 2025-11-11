@@ -9,7 +9,6 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System.Collections.Generic;
-using System.Linq;
 
 using Empiria.Budgeting;
 
@@ -109,11 +108,6 @@ namespace Empiria.Orders {
       base.AddItem(orderItem);
     }
 
-
-    public decimal GetTotal() {
-      return base.GetItems<PayableOrderItem>()
-                  .Sum(x => x.Subtotal);
-    }
 
     internal protected virtual void RemoveItem(PayableOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));

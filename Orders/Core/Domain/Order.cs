@@ -364,6 +364,11 @@ namespace Empiria.Orders {
                          .ToFixedList();
     }
 
+
+    public decimal GetTotal() {
+      return _items.Value.Sum(x => x.Subtotal);
+    }
+
     protected override void OnSave() {
       if (base.IsNew) {
         PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);

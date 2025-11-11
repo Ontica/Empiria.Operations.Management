@@ -8,8 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System.Linq;
-
 using Empiria.Orders;
 
 namespace Empiria.Procurement.Orders {
@@ -49,11 +47,6 @@ namespace Empiria.Procurement.Orders {
 
     public FixedList<SalesOrderItem> GetItems() {
       return base.GetItems<SalesOrderItem>();
-    }
-
-    public decimal GetTotal() {
-      return base.GetItems<SalesOrderItem>()
-                 .Sum(x => x.Subtotal);
     }
 
 
