@@ -383,11 +383,18 @@ namespace Empiria.Orders {
       fields.EnsureValid();
 
       Product = Patcher.Patch(fields.ProductUID, Product.Empty);
-      ProductCode = EmpiriaString.Clean(fields.ProductCode);
+      ProductCode = Patcher.PatchClean(fields.ProductCode, Product.InternalCode);
+
+      Budget = Patcher.Patch(fields.BudgetUID, Order.BaseBudget);
+      BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, BudgetAccount.Empty);
 
       Description = EmpiriaString.Clean(fields.Description);
       if (Description.Length == 0 && !Product.IsEmptyInstance) {
         Description = Product.Description;
+
+      } else if (Description.Length == 0 && !BudgetAccount.IsEmptyInstance) {
+        Description = BudgetAccount.Name;
+
       } else {
         Description = "Sin descripción";
       }
@@ -407,9 +414,6 @@ namespace Empiria.Orders {
       UnitPrice = fields.UnitPrice;
       Discount = fields.Discount;
       Currency = Patcher.Patch(fields.CurrencyUID, Order.Currency);
-
-      Budget = Patcher.Patch(fields.BudgetUID, Order.BaseBudget);
-      BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, BudgetAccount.Empty);
 
       Project = Patcher.Patch(fields.ProjectUID, Order.Project);
       Provider = Patcher.Patch(fields.ProviderUID, Order.Provider);

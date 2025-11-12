@@ -123,7 +123,8 @@ namespace Empiria.Orders {
     } = ExecutionServer.DateMaxValue;
 
     public virtual void EnsureValid() {
-      Assertion.Require(ProductUID, "Necesito se proporcione el producto.");
+      Assertion.Require(ProductUID.Length != 0 || BudgetAccountUID.Length != 0 || Description.Length != 0,
+                        "Necesito se proporcione el producto, su cuenta presupuestal o su descripción.");
       Assertion.Require(Quantity > 0, "Necesito se proporcione la cantidad mínima.");
     }
 
