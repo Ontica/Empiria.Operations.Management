@@ -77,7 +77,7 @@ namespace Empiria.Tests.Inventory {
         Priority = Empiria.StateEnums.Priority.Normal
       };
 
-      var orderType = Orders.OrderType.Parse(4010);
+      var orderType = Orders.OrderType.Parse(4011);
 
       InventoryOrder order = new InventoryOrder(fields.WarehouseUID, orderType);
 
@@ -110,7 +110,7 @@ namespace Empiria.Tests.Inventory {
         Quantity = 23801,
       };
 
-      var order = InventoryOrder.Parse("a33c76c7-c266-43ff-bfb2-2b2b820b312a");
+      var order = InventoryOrder.Parse("d2413b35-8d79-4f89-9f7c-174c903b2510");
 
       var product = Product.TryParseWithCode(fields.Product);
       Assertion.Require(product, "El producto no existe");
@@ -182,7 +182,7 @@ namespace Empiria.Tests.Inventory {
 
     [Fact]
     public void Should_Delete_Inventory_Order() {
-      var orderUID = "611d5a4e-9cb4-4006-86a0-85dc302fb5b0";
+      var orderUID = "d2413b35-8d79-4f89-9f7c-174c903b2510";
 
       TestsCommonMethods.Authenticate();
 
@@ -223,11 +223,11 @@ namespace Empiria.Tests.Inventory {
     public void Should_Get_InventoryOrder() {
 
       TestsCommonMethods.Authenticate();
-      var orderUID = "829b237e-354a-4c06-8da9-ac5e23b704e1";
+      var orderUID = "d2413b35-8d79-4f89-9f7c-174c903b2510";
 
       Assertion.Require(orderUID, nameof(orderUID));
-      var x = ExecutionServer.CurrentPrincipal.Permissions;
-      var HasCountVariance = ExecutionServer.CurrentPrincipal.IsInRole("inventory-manager");
+      //var x = ExecutionServer.CurrentPrincipal.Permissions;
+      //var HasCountVariance = ExecutionServer.CurrentPrincipal.IsInRole("inventory-manager");
 
       InventoryOrder inventoryOrder = InventoryUtility.GetInventoryOrder(orderUID);
 
@@ -351,14 +351,15 @@ namespace Empiria.Tests.Inventory {
 
     [Fact]
     public void Should_Update_Inventory_Order() {
-      var orderUID = "e4c7b65f-fd7c-4e43-b5e6-505015dbb22b";
+      var orderUID = "d2413b35-8d79-4f89-9f7c-174c903b2510";
 
       InventoryOrderFields fields = new InventoryOrderFields {
-        WarehouseUID = "6E18F039-291D-43D9-9660-9C206326F01E",
-        InventoryTypeUID = "0691ACCC-7787-444B-930C-A07035A6DE09",
-        Description = "24 de junio prueba update cambiado por Chris Y Hugo v2",
-        RequestedByUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1",
-        ResponsibleUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd",
+        WarehouseUID = "DA6017D5-ED38-449B-9659-ACE06C4565DE",
+        InventoryTypeUID = "020B1EF9-F30F-41D5-9E95-29E3B52D23B9",
+        Description = "12 de nov prueba update",
+        RequestedByUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd",
+        ResponsibleUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1",
+        Priority = Empiria.StateEnums.Priority.Normal       
       };
 
       TestsCommonMethods.Authenticate();

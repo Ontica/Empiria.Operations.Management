@@ -74,7 +74,7 @@ namespace Empiria.Orders {
 
 
     [DataField("ORDER_ITEM_SKU_ID")]
-    internal int SkuId {
+    public int SkuId {
       get; private set;
     } = -1;
 

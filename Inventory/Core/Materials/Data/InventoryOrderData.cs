@@ -247,15 +247,15 @@ namespace Empiria.Inventory.Data {
     }
 
 
-    static internal void WriteOrderItem(InventoryOrderItem o, string extensionData) {
+    static internal void WriteOrderItem(InventoryOrderItem o, int contractItemID, string extensionData) {
       var op = DataOperation.Parse("write_OMS_Order_Item",
-                     o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Product.Id,
-                     o.Description, "", o.ProductUnit.Id, o.Quantity, o.UnitPrice,
-                     o.Discount, o.Currency.Id, "",
-                     "", o.RequestedBy.Id, "", o.Project.Id,
-                     o.Provider.Id, o.Location.Id, "",
-                     extensionData, o.Keywords, o.Position, o.PostedBy.Id,
-                     o.PostingTime, (char) o.Status);
+                     o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Product.Id, o.SkuId, o.ProductCode,
+                     o.Description, o.Justification, o.ProductUnit.Id, o.RequestedQty, o.Quantity, o.UnitPrice,
+                     o.Discount, o.PriceId, o.Currency.Id, o.Budget.Id, o.BudgetAccount.Id, o.BudgetEntry.Id, o.Project.Id, 
+                     o.Provider.Id, o.Requisition.Id, o.RequisitionItem.Id, contractItemID, o.RelatedItem.Id, o.OriginCountry.Id, 
+                     o.SupplyStartDate, o.SupplyEndDate, o.Location.Id, o.DeliveryPlace.Id, "", "", "", extensionData,
+                     o.Keywords, o.RequestedTime, o.RequestedBy.Id, o.RequiredTime, o.ReceivedBy.Id, o.ClosingTime, o.ClosedBy.Id, o.Position,
+                     o.PostingTime, o.PostedBy.Id, (char) o.Status);
 
       DataWriter.Execute(op);
     }

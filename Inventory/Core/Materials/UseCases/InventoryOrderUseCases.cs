@@ -26,7 +26,7 @@ namespace Empiria.Inventory.UseCases {
   /// <summary>Use cases to manage inventory order.</summary>
   public class InventoryOrderUseCases : UseCase {
 
-    private const int INVENTORYORDERTYPEID = 4010;
+    private const int INVENTORYORDERTYPEID = 4011;
 
 
     #region Constructors and parsers
