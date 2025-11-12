@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+using DocumentFormat.OpenXml.Presentation;
 using Empiria.Data;
 
 namespace Empiria.Inventory.Data {
@@ -221,15 +222,15 @@ namespace Empiria.Inventory.Data {
     }
 
 
-    static internal void WriteOrder(InventoryOrder o, string extensionData) {
-      var op = DataOperation.Parse("write_OMS_Order",
-                     o.Id, o.UID, o.OrderType.Id, o.InventoryType.Id, o.OrderNo, o.Description,
-                     EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
-                     o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
-                     -1, o.Requisition.Id, -1, o.Project.Id, 600,
-                     o.Source.Id, (char) o.Priority, o.AuthorizationTime, o.AuthorizedBy.Id,
-                     o.ClosingTime, o.ClosedBy.Id, extensionData, o.Keywords, o.Warehouse.Id,
-                     o.ParentOrder.Id, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+    static internal void WriteOrder(InventoryOrder o, string conditions,string specifications, string delivery, string extensionData) {
+      var op = DataOperation.Parse("write_OMS_Order", o.Id, o.UID, o.Category,
+        o.OrderNo, o.Description, o.Justification, o.Identificators, o.Tags,
+        o.Requisition, o.ParentOrder, o.ContractId, o.Project, o.BaseBudgetType,
+        o.BaseBudget, 600, o.RequestedBy, o.Responsible, o.Beneficiary, o.Provider,
+        o.Source, (char) o.Priority, conditions, specifications, delivery, extensionData,
+        o.Keywords, o.RecordingTime, o.RecordedBy, o.ApplicationDate, o.AppliedBy,
+        o.AuthorizationTime, o.AuthorizedBy, o.ClosingTime, o.ClosedBy, o.PostedBy,
+       o.PostingTime, (char) o.Status, o.Warehouse);
 
       DataWriter.Execute(op);
     }
