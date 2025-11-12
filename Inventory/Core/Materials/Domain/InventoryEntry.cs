@@ -151,6 +151,18 @@ namespace Empiria.Inventory {
     } = 0;
 
 
+    [DataField("Inv_Entry_Counting_Qty")]
+    public decimal CountingQuantity {
+      get; set;
+    } = 0;
+
+
+    [DataField("Inv_Entry_Counting_Cost")]
+    public decimal CountingCost {
+      get; set;
+    } = 0;
+
+
     [DataField("Inv_Entry_Time")]
     public DateTime EntryTime {
       get; set;
@@ -253,12 +265,13 @@ namespace Empiria.Inventory {
       this.OutputCost = cost;
     }
 
-    internal void InputEntry(decimal inputCost, Location location) {
 
-      this.InputQuantity = this.OrderItem.Quantity;
+    internal void InitialEntry(decimal countingCost, Location location) {
+
+      this.CountingQuantity = this.OrderItem.Quantity;
       this.Product = this.OrderItem.Product;
       this.Location = location;
-      this.InputCost = inputCost;
+      this.CountingCost = countingCost;
       this.Position = this.OrderItem.Position;
     }
 
@@ -284,8 +297,8 @@ namespace Empiria.Inventory {
     }
 
 
-    internal void UpdateInputQuantity(decimal quantity) {
-      this.InputQuantity = quantity;
+    internal void UpdateCountingQuantity(decimal quantity) {
+      this.CountingQuantity = quantity;
     }
 
     #endregion Private methods

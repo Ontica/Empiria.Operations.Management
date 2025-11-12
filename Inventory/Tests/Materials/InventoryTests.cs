@@ -104,12 +104,12 @@ namespace Empiria.Tests.Inventory {
       TestsCommonMethods.Authenticate();
 
       InventoryOrderItemFields fields = new InventoryOrderItemFields {
-        Location = "A-001-05-05",
-        Product = "TG8F34X112-180",
-        Quantity = 1,
+        Location = "A-021-02-09",
+        Product = "TG858X4-140",
+        Quantity = 23801,
       };
 
-      var order = InventoryOrder.Parse("4295d542-f788-4b16-bed1-420500e93a9d");
+      var order = InventoryOrder.Parse("a33c76c7-c266-43ff-bfb2-2b2b820b312a");
 
       var product = Product.TryParseWithCode(fields.Product);
       Assertion.Require(product, "El producto no existe");
@@ -222,9 +222,13 @@ namespace Empiria.Tests.Inventory {
 
     [Fact]
     public void Should_Get_InventoryOrder() {
+
+      TestsCommonMethods.Authenticate();
       var orderUID = "829b237e-354a-4c06-8da9-ac5e23b704e1";
 
       Assertion.Require(orderUID, nameof(orderUID));
+      var x = ExecutionServer.CurrentPrincipal.Permissions;
+      var HasCountVariance = ExecutionServer.CurrentPrincipal.IsInRole("inventory-manager");
 
       InventoryOrder inventoryOrder = InventoryUtility.GetInventoryOrder(orderUID);
 
@@ -434,7 +438,7 @@ namespace Empiria.Tests.Inventory {
     private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
       var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
 
-      inventoryEntry.InputEntry(orderItem.UnitPrice, orderItem.Location);
+      inventoryEntry.InitialEntry(orderItem.UnitPrice, orderItem.Location);
 
       inventoryEntry.Save();
     }

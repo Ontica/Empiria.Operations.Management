@@ -201,7 +201,7 @@ namespace Empiria.Tests.Inventory {
 
         var inventoryEntry = InventoryEntry.TryParseWithOrderItemId(item.Id);
 
-        inventoryEntry.InputEntry(item.UnitPrice, item.Location);
+        inventoryEntry.InitialEntry(item.UnitPrice, item.Location);
         inventoryEntry.Save();
       }
 
