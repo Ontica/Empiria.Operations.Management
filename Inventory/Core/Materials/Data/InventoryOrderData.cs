@@ -141,6 +141,18 @@ namespace Empiria.Inventory.Data {
     }
 
 
+    internal static FixedList<InventoryEntriesReport> GetProductEntryInventoryReportByLocation(string locationName) {
+
+      var sql = $"SELECT * FROM vw_Inventory_Report " +
+                 $" inner join Common_Storage on Inv_Entry_Location_Id = Object_Id " + 
+                 $" WHERE Object_Type_Id = 275 and Object_Name = {locationName} ORDER BY Product_Name ";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetPlainObjectFixedList<InventoryEntriesReport>(op);
+    }
+
+
 
     internal static decimal GetProductPriceFromVirtualWarehouse(int productId) {
 
@@ -212,8 +224,8 @@ namespace Empiria.Inventory.Data {
           entry.Observations,
           entry.Unit.Id, entry.InputQuantity,
           entry.InputCost, entry.OutputQuantity,
-          entry.OutputCost, entry.EntryTime,
-          entry.Tags, entry.ExtData,
+          entry.OutputCost, entry.CountingQuantity, entry.CountingCost,
+          entry.EntryTime, entry.Tags, entry.ExtData,
           entry.Keywords, entry.Position, entry.PostedBy.Id,
           entry.PostingTime, (char) entry.Status);
 

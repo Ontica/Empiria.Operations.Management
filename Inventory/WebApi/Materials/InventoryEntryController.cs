@@ -75,6 +75,19 @@ namespace Empiria.Inventory.WebApi {
       }
     }
 
+
+    [HttpGet]
+    [Route("v8/order-management/inventory-orders/entries-reportbylocation/{locationUID:guid}")]
+    public SingleObjectModel GetInventoryEntriesReportByLocation([FromUri] string locationUID) {
+
+      using (var usecases = InventoryEntryUseCases.UseCaseInteractor()) {
+
+        FixedList<InventoryEntryReportDto> report = usecases.GetInventoryEntryReportByLocation(locationUID);
+
+        return new SingleObjectModel(this.Request, report);
+      }
+    }
+
     #endregion Web Apis
 
   }

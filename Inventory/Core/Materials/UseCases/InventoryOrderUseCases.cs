@@ -241,7 +241,7 @@ namespace Empiria.Inventory.UseCases {
 
       var inventoryEntry = InventoryEntry.TryParseWithOrderItemId(item.Id);
 
-      inventoryEntry.UpdateInputQuantity(fields.Quantity);
+      inventoryEntry.UpdateCountingQuantity(fields.Quantity);
 
       inventoryEntry.Save();
 
@@ -255,7 +255,7 @@ namespace Empiria.Inventory.UseCases {
     private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
       var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
 
-      inventoryEntry.InputEntry(orderItem.UnitPrice, orderItem.Location);
+      inventoryEntry.InitialEntry(orderItem.UnitPrice, orderItem.Location);
 
       inventoryEntry.Save();
     }
