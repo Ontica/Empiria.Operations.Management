@@ -48,6 +48,10 @@ namespace Empiria.Orders {
       get; set;
     } = new string[0];
 
+    public string RequestedByUID {
+      get; set;
+    } = string.Empty;
+
 
     public string ResponsibleUID {
       get; set;
@@ -64,11 +68,6 @@ namespace Empiria.Orders {
     }
 
     public string ProviderUID {
-      get; set;
-    } = string.Empty;
-
-
-    public string RequestedByUID {
       get; set;
     } = string.Empty;
 
@@ -92,7 +91,7 @@ namespace Empiria.Orders {
       Assertion.Require(OrderTypeUID, nameof(OrderTypeUID));
       Assertion.Require(CategoryUID, nameof(CategoryUID));
       Assertion.Require(Description, nameof(Description));
-      Assertion.Require(ResponsibleUID, nameof(ResponsibleUID));
+      Assertion.Require(RequestedByUID, nameof(RequestedByUID));
       Priority = Priority.HasValue ? Priority.Value : StateEnums.Priority.Normal;
     }
 

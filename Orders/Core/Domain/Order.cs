@@ -410,11 +410,11 @@ namespace Empiria.Orders {
       Category = Patcher.Patch(fields.CategoryUID, Category);
       Description = Patcher.PatchClean(fields.Description, Description);
       Justification = Patcher.PatchClean(fields.Justification, string.Empty);
-      Responsible = Patcher.Patch(fields.ResponsibleUID, Responsible);
-      Beneficiary = Patcher.Patch(fields.BeneficiaryUID, Beneficiary);
+      RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);
+      Responsible = Patcher.Patch(fields.ResponsibleUID, RequestedBy);
+      Beneficiary = Patcher.Patch(fields.BeneficiaryUID, RequestedBy);
       IsForMultipleBeneficiaries = fields.IsForMultipleBeneficiaries;
       Provider = Patcher.Patch(fields.ProviderUID, Provider);
-      RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);
       Project = Patcher.Patch(fields.ProjectUID, Project);
       Priority = fields.Priority.Value;
       ParentOrder = Patcher.Patch(fields.ParentOrderUID, Empty);
