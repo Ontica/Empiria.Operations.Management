@@ -235,7 +235,7 @@ namespace Empiria.Inventory.Data {
 
     static internal void WriteOrder(InventoryOrder o, string conditions, string specifications, string delivery, string extensionData) {
       var op = DataOperation.Parse("write_OMS_Order", o.Id, o.UID, o.OrderType.Id, o.Category.Id,
-        o.OrderNo, o.Description, o.Justification, o.Identificators.ToString(), o.Tags.ToString(),
+        o.OrderNo, o.Description, o.Justification, EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
          -1, o.ParentOrder.Id, o.ContractId, o.Project.Id, o.BaseBudgetType.Id,
         o.BaseBudget.Id, 600, o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
         o.Source.Id, (char) o.Priority, conditions, specifications, delivery, extensionData,
