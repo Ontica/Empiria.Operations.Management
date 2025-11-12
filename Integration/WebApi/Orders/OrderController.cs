@@ -15,10 +15,8 @@ using Empiria.WebApi;
 
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
-using Empiria.Orders.UseCases;
 
 using Empiria.Procurement.Contracts;
-
 
 namespace Empiria.Operations.Integration.Orders.WebApi {
 
@@ -31,11 +29,9 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     [Route("v8/order-management/orders/{orderUID:guid}/activate")]
     public SingleObjectModel ActivateOrder([FromUri] string orderUID) {
 
-      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
-        OrderHolderDto order = usecases.ActivateOrder(orderUID);
+      OrderHolderDto order = OrderUseCaseSelector.ActivateOrder(orderUID);
 
-        return new SingleObjectModel(base.Request, order);
-      }
+      return new SingleObjectModel(base.Request, order);
     }
 
 
@@ -101,11 +97,9 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
       base.RequireBody(query);
 
-      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
-        FixedList<PayableOrderDescriptor> orders = usecases.SearchOrders(query);
+      FixedList<OrderDescriptor> orders = OrderUseCaseSelector.Search(query);
 
-        return new CollectionModel(base.Request, orders);
-      }
+      return new CollectionModel(base.Request, orders);
     }
 
 
@@ -113,11 +107,9 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     [Route("v8/order-management/orders/{orderUID:guid}/suspend")]
     public SingleObjectModel SuspendOrder([FromUri] string orderUID) {
 
-      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
-        OrderHolderDto order = usecases.SuspendOrder(orderUID);
+      OrderHolderDto order = OrderUseCaseSelector.SuspendOrder(orderUID);
 
-        return new SingleObjectModel(base.Request, order);
-      }
+      return new SingleObjectModel(base.Request, order);
     }
 
 
@@ -168,11 +160,18 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
       if (orderType.Equals(OrderType.Empty)) {
         throw Assertion.EnsureNoReachThisCode("orderTypeUID can not be empty.");
 
+      } else if (orderType.Name.Contains("Requisition")) {
+        return JsonConverter.ToObject<RequisitionFields>(json.ToString());
+
       } else if (orderType.Equals(OrderType.ContractOrder)) {
         return JsonConverter.ToObject<ContractOrderFields>(json.ToString());
 
-      } else {
+      } else if (orderType.Name.Contains("Payable")) {
         return JsonConverter.ToObject<PayableOrderFields>(json.ToString());
+
+      } else {
+        throw Assertion.EnsureNoReachThisCode(
+          $"Unsupported order type '{orderType.Name}' for order creation or update.");
       }
     }
 

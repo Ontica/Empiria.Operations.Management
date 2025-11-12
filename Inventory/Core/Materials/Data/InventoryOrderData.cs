@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+using DocumentFormat.OpenXml.Presentation;
 using Empiria.Data;
 
 namespace Empiria.Inventory.Data {
@@ -156,13 +157,14 @@ namespace Empiria.Inventory.Data {
 
     internal static decimal GetProductPriceFromVirtualWarehouse(int productId) {
 
-      var sql = $"SELECT TOp  1 Inv_Entry_Input_Cost FROM OMS_Inventory_Entries where Inv_Entry_Order_Id = -10 and Inv_Entry_Product_Id = {productId}" +
-                $"  order by Inv_Entry_Time ";
+      var sql = $"SELECT TOP  1 Inv_Entry_Input_Cost FROM " +
+                $"OMS_Inventory_Entries " +
+                $"where Inv_Entry_Order_Id = -10 and Inv_Entry_Product_Id = {productId} " +
+                $"order by Inv_Entry_Time ";
 
       var op = DataOperation.Parse(sql);
 
       return DataReader.GetScalar<decimal>(op);
-
     }
 
 
@@ -232,15 +234,15 @@ namespace Empiria.Inventory.Data {
     }
 
 
-    static internal void WriteOrder(InventoryOrder o, string extensionData) {
-      var op = DataOperation.Parse("write_OMS_Order",
-                     o.Id, o.UID, o.OrderType.Id, o.InventoryType.Id, o.OrderNo, o.Description,
-                     EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
-                     o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
-                     -1, o.RequisitionId, -1, o.Project.Id, 600,
-                     o.Source.Id, (char) o.Priority, o.AuthorizationTime, o.AuthorizedBy.Id,
-                     o.ClosingTime, o.ClosedBy.Id, extensionData, o.Keywords, o.Warehouse.Id,
-                     o.RelatedOrderId, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+    static internal void WriteOrder(InventoryOrder o, string conditions,string specifications, string delivery, string extensionData) {
+      var op = DataOperation.Parse("write_OMS_Order", o.Id, o.UID, o.Category,
+        o.OrderNo, o.Description, o.Justification, o.Identificators, o.Tags,
+        o.Requisition, o.ParentOrder, o.ContractId, o.Project, o.BaseBudgetType,
+        o.BaseBudget, 600, o.RequestedBy, o.Responsible, o.Beneficiary, o.Provider,
+        o.Source, (char) o.Priority, conditions, specifications, delivery, extensionData,
+        o.Keywords, o.RecordingTime, o.RecordedBy, o.ApplicationDate, o.AppliedBy,
+        o.AuthorizationTime, o.AuthorizedBy, o.ClosingTime, o.ClosedBy, o.PostedBy,
+       o.PostingTime, (char) o.Status, o.Warehouse);
 
       DataWriter.Execute(op);
     }
@@ -249,10 +251,12 @@ namespace Empiria.Inventory.Data {
     static internal void WriteOrderItem(InventoryOrderItem o, string extensionData) {
       var op = DataOperation.Parse("write_OMS_Order_Item",
                      o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Product.Id,
-                     o.Description, o.ProductUnit.Id, o.Quantity, o.UnitPrice, o.Discount,
-                     o.Currency.Id, -1, -1, o.RequestedBy.Id,
-                     -1, o.Project.Id, o.Provider.Id, -1, extensionData,
-                     o.Keywords, o.Location.Id, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+                     o.Description, "", o.ProductUnit.Id, o.Quantity, o.UnitPrice,
+                     o.Discount, o.Currency.Id, "",
+                     "", o.RequestedBy.Id, "", o.Project.Id,
+                     o.Provider.Id, o.Location.Id, "",
+                     extensionData, o.Keywords, o.Position, o.PostedBy.Id,
+                     o.PostingTime, (char) o.Status);
 
       DataWriter.Execute(op);
     }
@@ -276,7 +280,6 @@ namespace Empiria.Inventory.Data {
 
       return DataReader.GetScalar<int>(op);
     }
-
 
   } // class InventoryOrderData
 

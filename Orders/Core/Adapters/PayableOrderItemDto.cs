@@ -14,30 +14,10 @@ namespace Empiria.Orders.Adapters {
   public class PayableOrderItemDto : OrderItemDto {
 
     protected internal PayableOrderItemDto(PayableOrderItem item) : base(item) {
-      UnitPrice = item.UnitPrice;
-      Discount = item.Discount;
-      Currency = item.Currency.MapToNamedEntity();
-      Total = item.Total;
-      BudgetAccount = item.BudgetAccount.MapToNamedEntity();
-    }
-
-    public decimal UnitPrice {
-      get; private set;
-    }
-
-    public decimal Discount {
-      get; private set;
-    }
-
-    public NamedEntityDto Currency {
-      get; private set;
+      Total = item.Subtotal;
     }
 
     public decimal Total {
-      get; private set;
-    }
-
-    public NamedEntityDto BudgetAccount {
       get; private set;
     }
 

@@ -7,7 +7,6 @@
 *  Summary  : Mapping methods for inventory order.                                                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -88,8 +87,8 @@ namespace Empiria.Inventory.Adapters {
       };
     }
 
-    
-   static internal InventoryEntryDto MapToInventoryEntryDto(InventoryEntry entry) {
+
+    static internal InventoryEntryDto MapToInventoryEntryDto(InventoryEntry entry) {
       decimal quantity = 0;
 
       if (entry.Order.Category.UID == "0eb5a072-b857-4071-8b06-57a34822ec64") {
@@ -179,21 +178,21 @@ namespace Empiria.Inventory.Adapters {
 
     static private string GetDocumentNo(InventoryOrder inventoryOrder) {
 
-      if (inventoryOrder.RelatedOrderId == -1) {
+      if (inventoryOrder.ParentOrder.Id == -1) {
         return string.Empty;
       }
 
-      var order = Order.Parse(inventoryOrder.RelatedOrderId);
+      var order = Order.Parse(inventoryOrder.ParentOrder.Id);
       return order.OrderNo;
     }
 
 
     private static string GetStakeholderName(InventoryOrder inventoryOrder) {
-      if (inventoryOrder.RelatedOrderId == -1) {
+      if (inventoryOrder.ParentOrder.Id == -1) {
         return string.Empty;
       }
 
-      var order = Order.Parse(inventoryOrder.RelatedOrderId);
+      var order = Order.Parse(inventoryOrder.ParentOrder.Id);
 
       if (order.Category.UID == "a40c65bd-9a56-48eb-a8bf-f9245ecd3004") {
         return order.Provider.Name;

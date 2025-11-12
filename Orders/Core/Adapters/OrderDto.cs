@@ -71,6 +71,7 @@ namespace Empiria.Orders.Adapters {
       Category = order.Category.MapToNamedEntity();
       OrderNo = order.OrderNo;
       Description = order.Description;
+      Justification = order.Justification;
       Identificators = order.Identificators;
       Tags = order.Tags;
       Responsible = order.Responsible.MapToNamedEntity();
@@ -90,6 +91,9 @@ namespace Empiria.Orders.Adapters {
       ClosingTime = order.ClosingTime;
       ClosedBy = order.ClosedBy.MapToNamedEntity();
       Status = order.Status.MapToDto();
+
+      BaseBudgetName = order.BaseBudget.Name;
+      BaseOrgUnitName = order.RequestedBy.Name;
     }
 
     public string UID {
@@ -112,11 +116,19 @@ namespace Empiria.Orders.Adapters {
       get; private set;
     }
 
+    public string Justification {
+      get; private set;
+    }
+
     public FixedList<string> Identificators {
       get; private set;
     }
 
     public FixedList<string> Tags {
+      get; private set;
+    }
+
+    public NamedEntityDto RequestedBy {
       get; private set;
     }
 
@@ -137,10 +149,6 @@ namespace Empiria.Orders.Adapters {
     }
 
     public FixedList<NamedEntityDto> ProvidersGroup {
-      get; private set;
-    }
-
-    public NamedEntityDto RequestedBy {
       get; private set;
     }
 
@@ -172,6 +180,14 @@ namespace Empiria.Orders.Adapters {
       get; private set;
     }
 
+    public string BaseOrgUnitName {
+      get; protected set;
+    }
+
+    public string BaseBudgetName {
+      get; protected set;
+    }
+
   }  // class OrderDto
 
 
@@ -185,11 +201,12 @@ namespace Empiria.Orders.Adapters {
       CategoryName = order.Category.Name;
       OrderNo = order.OrderNo;
       Description = order.Description;
-      ResponsibleName = order.Responsible.Name;
-      BeneficiaryName = order.Beneficiary.Name;
+      BaseOrgUnitName = order.RequestedBy.Name;
+      BaseBudgetName = order.BaseBudget.Name;
       ProviderName = order.Provider.Name;
-      RequestedByName = order.RequestedBy.Name;
       ProjectName = order.Project.Name;
+      CurrencyName = order.Currency.ISOCode;
+      Total = order.GetTotal();
       PriorityUID = order.Priority.ToString();
       PriorityName = order.Priority.GetName();
       AuthorizationTime = order.AuthorizationTime;
@@ -200,43 +217,47 @@ namespace Empiria.Orders.Adapters {
     }
 
     public string UID {
-      get; private set;
+      get;
     }
 
     public string TypeName {
-      get; private set;
+      get;
     }
 
     public string CategoryName {
-      get; private set;
+      get;
     }
 
     public string OrderNo {
-      get; private set;
+      get;
     }
 
     public string Description {
-      get; private set;
+      get;
     }
 
-    public string ResponsibleName {
-      get; private set;
+    public string BaseOrgUnitName {
+      get; protected set;
     }
 
-    public string BeneficiaryName {
-      get; private set;
+    public string BaseBudgetName {
+      get; protected set;
     }
 
     public string ProviderName {
       get; private set;
     }
 
-    public string RequestedByName {
-      get; private set;
+    public string ProjectName {
+      get;
     }
 
-    public string ProjectName {
-      get; private set;
+    public string CurrencyName {
+      get;
+    }
+
+    public decimal Total {
+      get;
     }
 
     public string PriorityUID {
@@ -248,23 +269,23 @@ namespace Empiria.Orders.Adapters {
     }
 
     public DateTime AuthorizationTime {
-      get; private set;
+      get;
     }
 
     public string AuthorizedByName {
-      get; private set;
+      get;
     }
 
     public DateTime ClosingTime {
-      get; private set;
+      get;
     }
 
     public string ClosedByName {
-      get; private set;
+      get;
     }
 
     public string StatusName {
-      get; private set;
+      get;
     }
 
   } // class OrderDescriptor

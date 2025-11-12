@@ -8,11 +8,11 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Budgeting.Transactions;
-using Empiria.Budgeting.Transactions.Adapters;
-
 using Empiria.Documents;
 using Empiria.History;
+
+using Empiria.Budgeting.Transactions;
+using Empiria.Budgeting.Transactions.Adapters;
 
 namespace Empiria.Orders.Adapters {
 

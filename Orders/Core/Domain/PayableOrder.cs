@@ -9,17 +9,15 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System.Collections.Generic;
-using System.Linq;
 
 using Empiria.Budgeting;
-using Empiria.Financial;
 
-using Empiria.Orders.Data;
+using Empiria.Financial;
 
 namespace Empiria.Orders {
 
   /// <summary>Represents a payable order.</summary>
-  public class PayableOrder : Order, IPayableEntity {
+  public class PayableOrder : Order, IPayableEntity, IBudgetingEntity {
 
     #region Constructors and parsers
 
@@ -37,21 +35,6 @@ namespace Empiria.Orders {
     static public new PayableOrder Empty => ParseEmpty<PayableOrder>();
 
     #endregion Constructors and parsers
-
-    #region Properties
-
-    [DataField("ORDER_BUDGET_ID")]
-    public Budget Budget {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_CURRENCY_ID")]
-    public Currency Currency {
-      get; private set;
-    }
-
-    #endregion Properties
 
     #region IPayableEntity interface
 
@@ -96,7 +79,7 @@ namespace Empiria.Orders {
 
     INamedEntity IPayableEntity.Budget {
       get {
-        return this.Budget;
+        return this.BaseBudget;
       }
     }
 
@@ -126,17 +109,6 @@ namespace Empiria.Orders {
     }
 
 
-    public decimal GetTotal() {
-      return base.GetItems<PayableOrderItem>()
-                  .Sum(x => x.Total);
-    }
-
-
-    protected override void OnSave() {
-      OrdersData.WriteOrder(this, this.ExtData.ToString());
-    }
-
-
     internal protected virtual void RemoveItem(PayableOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
 
@@ -150,13 +122,18 @@ namespace Empiria.Orders {
       fields.EnsureValid();
 
       if (this.GetItems<PayableOrderItem>().Count != 0 &&
-         (this.Budget.Distinct(Budget.Parse(fields.BudgetUID)) ||
+         (this.BaseBudget.Distinct(Budget.Parse(fields.BudgetUID)) ||
           this.Currency.Distinct(Currency.Parse(fields.CurrencyUID)))) {
         Assertion.RequireFail("No es posible cambiar el presupuesto o la moneda, " +
-                              "debido a que la orden tiene registradas uno o más partidas.");
+                              "debido a que la orden tiene registradas una o más partidas.");
       }
-      this.Budget = Budget.Parse(fields.BudgetUID);
-      this.Currency = Currency.Parse(fields.CurrencyUID);
+      base.BaseBudget = Budget.Parse(fields.BudgetUID);
+
+      if (fields.CurrencyUID.Length == 0) {
+        base.Currency = Currency.Default;
+      } else {
+        base.Currency = Currency.Parse(fields.CurrencyUID);
+      }
 
       base.Update(fields);
     }

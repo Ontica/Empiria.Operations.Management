@@ -89,7 +89,7 @@ namespace Empiria.Orders.Adapters {
     #region Helpers
 
     static private string BuildBudgetFilter(string budgetUID) {
-      if (budgetUID == string.Empty) {
+      if (budgetUID.Length == 0) {
         return string.Empty;
       }
 
@@ -100,7 +100,7 @@ namespace Empiria.Orders.Adapters {
 
 
     static private string BuildBudgetTypeFilter(string budgetTypeUID) {
-      if (budgetTypeUID == string.Empty) {
+      if (budgetTypeUID.Length == 0) {
         return string.Empty;
       }
 
@@ -117,7 +117,7 @@ namespace Empiria.Orders.Adapters {
 
 
     static private string BuildCategoryFilter(string categoryUID) {
-      if (categoryUID == string.Empty) {
+      if (categoryUID.Length == 0) {
         return string.Empty;
       }
 
@@ -128,7 +128,7 @@ namespace Empiria.Orders.Adapters {
 
 
     static private string BuildKeywordsFilter(string keywords) {
-      if (keywords == string.Empty) {
+      if (keywords.Length == 0) {
         return string.Empty;
       }
 
@@ -137,7 +137,7 @@ namespace Empiria.Orders.Adapters {
 
 
     static private string BuildOrderNoFilter(string orderNo) {
-      if (orderNo == string.Empty) {
+      if (orderNo.Length == 0) {
         return string.Empty;
       }
 
@@ -162,7 +162,7 @@ namespace Empiria.Orders.Adapters {
 
 
     static private string BuildProjectFilter(string projectUID) {
-      if (projectUID == string.Empty) {
+      if (projectUID.Length == 0) {
         return string.Empty;
       }
 
@@ -173,7 +173,7 @@ namespace Empiria.Orders.Adapters {
 
 
     static private string BuildProviderFilter(string providerUID) {
-      if (providerUID == string.Empty) {
+      if (providerUID.Length == 0) {
         return string.Empty;
       }
 
@@ -184,7 +184,7 @@ namespace Empiria.Orders.Adapters {
 
 
     static private string BuildResponsibleFilter(string responsibleUID) {
-      if (responsibleUID == string.Empty) {
+      if (responsibleUID.Length == 0) {
         return string.Empty;
       }
 
@@ -197,6 +197,9 @@ namespace Empiria.Orders.Adapters {
     static private string BuildStatusFilter(EntityStatus status) {
       if (status == EntityStatus.All) {
         return "ORDER_STATUS <> 'X' ";
+      }
+      if (status == EntityStatus.Deleted) {
+        return "ORDER_STATUS = 'X' AND ORDER_ID <> -1";
       }
 
       return $"ORDER_STATUS = '{(char) status}'";

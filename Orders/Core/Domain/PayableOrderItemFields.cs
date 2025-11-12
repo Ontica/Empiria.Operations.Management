@@ -13,24 +13,6 @@ namespace Empiria.Orders {
   /// <summary>DTO fields structure used for update payable order items.</summary>
   public class PayableOrderItemFields : OrderItemFields {
 
-    public decimal UnitPrice {
-      get; set;
-    }
-
-    public decimal Discount {
-      get; set;
-    }
-
-    public string CurrencyUID {
-      get; internal set;
-    } = string.Empty;
-
-
-    public string BudgetAccountUID {
-      get; set;
-    } = string.Empty;
-
-
     public override void EnsureValid() {
       base.EnsureValid();
 

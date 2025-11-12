@@ -55,13 +55,6 @@ namespace Empiria.Inventory {
     }
 
 
-    [DataField("ORDER_LOCATION_ID")]
-    public Location Warehouse {
-      get;
-      private set;
-    }
-
-
     private FixedList<InventoryOrderItem> _items;
 
     public FixedList<InventoryOrderItem> Items {
@@ -79,7 +72,7 @@ namespace Empiria.Inventory {
     #region Methods
 
     protected override void OnSave() {
-      InventoryOrderData.WriteOrder(this, this.ExtData.ToString());
+      InventoryOrderData.WriteOrder(this,this.Conditions.ToString(), this.Specifications.ToString(), this.Delivery.ToString(), this.ExtData.ToString());
     }
 
     internal protected virtual void AddItem(InventoryOrderItem orderItem) {

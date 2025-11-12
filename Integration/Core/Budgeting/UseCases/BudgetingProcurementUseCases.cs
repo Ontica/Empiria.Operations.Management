@@ -15,7 +15,6 @@ using Empiria.Services;
 using Empiria.Financial;
 using Empiria.Parties;
 
-using Empiria.Budgeting;
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 using Empiria.Budgeting.Transactions.UseCases;
@@ -72,15 +71,15 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       var orgUnit = OrganizationalUnit.Parse(query.OrganizationalUnitUID);
 
-      filter.AppendAnd($"CONTRACT_MGMT_ORG_UNIT_ID = {orgUnit.Id}");
-      filter.AppendAnd($"CONTRACT_STATUS <> 'X'");
+      filter.AppendAnd($"ORDER_REQUESTED_BY_ID = {orgUnit.Id}");
+      filter.AppendAnd($"ORDER_STATUS <> 'X'");
 
       if (query.Keywords.Length != 0) {
-        filter.AppendAnd(SearchExpression.ParseAndLikeKeywords("CONTRACT_KEYWORDS", query.Keywords));
+        filter.AppendAnd(SearchExpression.ParseAndLikeKeywords("ORDER_KEYWORDS", query.Keywords));
       }
 
-      return Contract.GetFullList<Contract>(filter.ToString(), "CONTRACT_NO")
-                     .MapToNamedEntityList();
+      return Orders.Data.OrdersData.Search(filter.ToString(), "ORDER_NO")
+                                   .MapToNamedEntityList();
     }
 
 

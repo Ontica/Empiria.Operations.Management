@@ -8,6 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
+
 namespace Empiria.Orders {
 
   /// <summary>Abstract DTO fields structure used for update order items information.</summary>
@@ -18,7 +20,17 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public string ProductCode {
+      get; set;
+    } = string.Empty;
+
+
     public string Description {
+      get; set;
+    } = string.Empty;
+
+
+    public string Justification {
       get; set;
     } = string.Empty;
 
@@ -28,11 +40,35 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public decimal RequestedQty {
+      get; set;
+    }
+
+
     public decimal Quantity {
       get; set;
     } = 1;
 
-    public string RequestedByUID {
+
+    public decimal UnitPrice {
+      get; set;
+    }
+
+    public decimal Discount {
+      get; set;
+    }
+
+    public string CurrencyUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string BudgetUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string BudgetAccountUID {
       get; set;
     } = string.Empty;
 
@@ -47,13 +83,48 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
-    public int Position {
-      get;
-      set;
-    }
+    public string RequestedByUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string RequisitionUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string RequisitionItemUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string RelatedItemUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string OriginCountryUID {
+      get; set;
+    } = string.Empty;
+
+
+    public DateTime SupplyStartDate {
+      get; set;
+    } = ExecutionServer.DateMaxValue;
+
+
+    public DateTime SupplyEndDate {
+      get; set;
+    } = ExecutionServer.DateMaxValue;
+
+
+    public DateTime RequiredTime {
+      get; set;
+    } = ExecutionServer.DateMaxValue;
 
     public virtual void EnsureValid() {
-      Assertion.Require(ProductUID, "Necesito se proporcione el producto.");
+      Assertion.Require(ProductUID.Length != 0 || BudgetAccountUID.Length != 0 || Description.Length != 0,
+                        "Necesito se proporcione el producto, su cuenta presupuestal o su descripción.");
       Assertion.Require(Quantity > 0, "Necesito se proporcione la cantidad mínima.");
     }
 

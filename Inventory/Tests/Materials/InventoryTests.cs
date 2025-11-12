@@ -69,11 +69,12 @@ namespace Empiria.Tests.Inventory {
       TestsCommonMethods.Authenticate();
 
       InventoryOrderFields fields = new InventoryOrderFields {
-        WarehouseUID = "35EA9626-332F-4234-B62C-053A8E81350C",
-        InventoryTypeUID = "68AC65E2-4122-42B2-BEC6-48E9417086AD",
-        Description = "Prueba 20 de Junio antes de ir por las memelas",
+        WarehouseUID = "DA6017D5-ED38-449B-9659-ACE06C4565DE",
+        InventoryTypeUID = "020B1EF9-F30F-41D5-9E95-29E3B52D23B9",
+        Description = "Prueba 11 del 11 antes de ir por una cold",
         RequestedByUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd",
         ResponsibleUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1",
+        Priority = Empiria.StateEnums.Priority.Normal
       };
 
       var orderType = Orders.OrderType.Parse(4010);
@@ -131,8 +132,6 @@ namespace Empiria.Tests.Inventory {
       var orderItemType = Orders.OrderItemType.Parse(4059);
 
       InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, order, location);
-      var position = GetItemPosition(order);
-      fields.Position = position;
 
       orderItem.Update(fields);
       order.AddItem(orderItem);
@@ -417,22 +416,6 @@ namespace Empiria.Tests.Inventory {
     }
 
 
-    [Fact]
-    public void Should_UpdateCost() {
-
-      TestsCommonMethods.Authenticate();
-      var order = InventoryOrder.Parse(5899);
-
-      foreach (var item in order.Items) {
-        //if (item.UnitPrice == 0) {
-        item.UpdatePrice();
-        item.Save();
-        //}        
-      }
-
-      Assert.NotNull(order);
-    }
-
     #region Helpers
 
     private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
@@ -441,16 +424,6 @@ namespace Empiria.Tests.Inventory {
       inventoryEntry.InitialEntry(orderItem.UnitPrice, orderItem.Location);
 
       inventoryEntry.Save();
-    }
-
-
-    private int GetItemPosition(InventoryOrder order) {
-      if (order.Items.Count == 0) {
-        return 1;
-      } else {
-        var allItems = InventoryOrderData.GetAllInventoryOrderItems(order);
-        return allItems.Count + 1;
-      }
     }
 
 
@@ -475,10 +448,10 @@ namespace Empiria.Tests.Inventory {
         Description = "Orden de inventario correspondiente " + order.OrderNo,
         RequestedByUID = order.RequestedBy.UID,
         ResponsibleUID = order.Responsible.UID,
-        RelatedOrderId = order.Id,
+        ParentOrderUID = order.UID,
       };
 
-      var orderType = Orders.OrderType.Parse(4010);
+      var orderType = OrderType.Parse(4010);
 
       InventoryOrder inventoryOrder = new InventoryOrder(fields.WarehouseUID, orderType);
 
@@ -496,7 +469,7 @@ namespace Empiria.Tests.Inventory {
 
       var items = order.GetItems<OrderItem>();
 
-      var orderItemType = Orders.OrderItemType.Parse(4059);
+      var orderItemType = OrderItemType.Parse(4059);
 
       foreach (var item in items) {
         InventoryOrderItemFields fields = new InventoryOrderItemFields();
@@ -505,7 +478,6 @@ namespace Empiria.Tests.Inventory {
         fields.Description = item.Product.Description;
         fields.ProductUnitUID = item.Product.BaseUnit.UID;
         fields.Quantity = item.Quantity;
-        fields.Position = item.Position;
         fields.Location = "A-001-01-01";
 
         InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, inventoryOrder);

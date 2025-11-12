@@ -39,8 +39,8 @@ namespace Empiria.Orders.Adapters {
   public class PayableOrderDto : OrderDto {
 
     protected internal PayableOrderDto(PayableOrder order) : base(order) {
-      BudgetType = order.Budget.BudgetType.MapToNamedEntity();
-      Budget = order.Budget.MapToNamedEntity();
+      BudgetType = order.BaseBudget.BudgetType.MapToNamedEntity();
+      Budget = order.BaseBudget.MapToNamedEntity();
       Currency = order.Currency.MapToNamedEntity();
       Total = order.GetTotal();
     }
@@ -69,26 +69,7 @@ namespace Empiria.Orders.Adapters {
   public class PayableOrderDescriptor : OrderDescriptor {
 
     protected internal PayableOrderDescriptor(PayableOrder order) : base(order) {
-      BudgetTypeName = order.Budget.BudgetType.DisplayName;
-      BudgetName = order.Budget.Name;
-      CurrencyName = order.Currency.Name;
-      Total = order.GetTotal();
-    }
 
-    public string BudgetTypeName {
-      get; private set;
-    }
-
-    public string BudgetName {
-      get; private set;
-    }
-
-    public string CurrencyName {
-      get; private set;
-    }
-
-    public decimal Total {
-      get; private set;
     }
 
   } // class PayableOrderDescriptor

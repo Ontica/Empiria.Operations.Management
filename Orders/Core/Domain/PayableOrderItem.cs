@@ -8,10 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Budgeting;
 using Empiria.Financial;
-
-using Empiria.Orders.Data;
 
 namespace Empiria.Orders {
 
@@ -24,8 +21,7 @@ namespace Empiria.Orders {
       // Required by Empiria Framework for all partitioned types.
     }
 
-    protected internal PayableOrderItem(OrderItemType powertype,
-                                        PayableOrder order) : base(powertype, order) {
+    protected internal PayableOrderItem(OrderItemType powertype, Order order) : base(powertype, order) {
       // no-op
     }
 
@@ -45,36 +41,6 @@ namespace Empiria.Orders {
       }
     }
 
-
-    [DataField("ORDER_ITEM_UNIT_PRICE")]
-    public decimal UnitPrice {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_ITEM_DISCOUNT")]
-    public decimal Discount {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_ITEM_CURRENCY_ID")]
-    public Currency Currency {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_ITEM_BUDGET_ACCOUNT_ID")]
-    public FormerBudgetAccount BudgetAccount {
-      get; private set;
-    }
-
-
-    public decimal Total {
-      get {
-        return (Quantity * UnitPrice) - Discount;
-      }
-    }
 
     #endregion Properties
 
@@ -111,21 +77,10 @@ namespace Empiria.Orders {
 
     #region Methods
 
-    protected override void OnSave() {
-      OrdersData.WriteOrderItem(this, this.ExtData.ToString());
-    }
-
-
     internal void Update(PayableOrderItemFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();
-
-      UnitPrice = fields.UnitPrice;
-      Discount = fields.Discount;
-      Currency = Patcher.Patch(fields.CurrencyUID, Order.Currency);
-
-      BudgetAccount = FormerBudgetAccount.Parse(fields.BudgetAccountUID);
 
       base.Update(fields);
     }

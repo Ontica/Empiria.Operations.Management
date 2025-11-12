@@ -13,10 +13,14 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Empiria.Json;
+using Empiria.Locations;
 using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.Projects;
 using Empiria.StateEnums;
+
+using Empiria.Budgeting;
+using Empiria.Financial;
 
 using Empiria.Orders.Data;
 
@@ -36,6 +40,8 @@ namespace Empiria.Orders {
 
     protected Order(OrderType orderType) : base(orderType) {
       // Required by Empiria Framework for all partitioned types.
+
+      OrderNo = "Por asignar";
     }
 
     public Order() {
@@ -58,7 +64,7 @@ namespace Empiria.Orders {
 
     public OrderType OrderType {
       get {
-        return (OrderType) base.GetEmpiriaType();
+        return (OrderType) GetEmpiriaType();
       }
     }
 
@@ -80,12 +86,17 @@ namespace Empiria.Orders {
       get; private set;
     }
 
-
     string INamedEntity.Name {
       get {
         return Description;
       }
     }
+
+    [DataField("ORDER_JUSTIFICATION")]
+    public string Justification {
+      get; private set;
+    }
+
 
     [DataField("ORDER_IDENTIFICATORS")]
     private string _identificators = string.Empty;
@@ -106,6 +117,72 @@ namespace Empiria.Orders {
       }
     }
 
+    [DataField("ORDER_REQUISITION_ID")]
+    private int _requisitionId;
+    public Requisition Requisition {
+      get {
+        if (this.IsEmptyInstance && this is Requisition) {
+          return (Requisition) this;
+        }
+        return Requisition.Parse(_requisitionId);
+      }
+      private set {
+        _requisitionId = value.Id;
+      }
+    }
+
+
+    [DataField("ORDER_PARENT_ID")]
+    private int _parentId;
+    public Order ParentOrder {
+      get {
+        if (this.IsEmptyInstance) {
+          return this;
+        }
+        return Parse(_parentId);
+      }
+      private set {
+        _parentId = value.Id;
+      }
+    }
+
+
+    [DataField("ORDER_CONTRACT_ID")]
+    public int ContractId {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_PROJECT_ID")]
+    public Project Project {
+      get; private set;
+    }
+
+
+    public BudgetType BaseBudgetType {
+      get {
+        return BaseBudget.BudgetType;
+      }
+    }
+
+
+    [DataField("ORDER_BASE_BUDGET_ID")]
+    public Budget BaseBudget {
+      get; protected set;
+    }
+
+
+    [DataField("ORDER_CURRENCY_ID")]
+    public Currency Currency {
+      get; protected set;
+    }
+
+
+    [DataField("ORDER_REQUESTED_BY_ID")]
+    public Party RequestedBy {
+      get; private set;
+    }
+
 
     [DataField("ORDER_RESPONSIBLE_ID")]
     public Party Responsible {
@@ -118,45 +195,15 @@ namespace Empiria.Orders {
       get; private set;
     }
 
-
-    public bool IsForMultipleBeneficiaries {
-      get {
-        return ExtData.Get("isForMultipleBeneficiaries", false);
-      }
-      set {
-        ExtData.SetIf("isForMultipleBeneficiaries", value, value);
-      }
-    }
-
-
     [DataField("ORDER_PROVIDER_ID")]
     public Party Provider {
       get; private set;
     }
 
 
-    [DataField("ORDER_REQUESTED_BY_ID")]
-    public Party RequestedBy {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_REQUISITION_ID")]
-    public int RequisitionId {
-      get; private set;
-    } = -1;
-
-
-    [DataField("ORDER_RELATED_ORDER_ID")]
-    public int RelatedOrderId {
-      get;
-      private set;
-    }
-
-
-    [DataField("ORDER_PROJECT_ID")]
-    public Project Project {
-      get; private set;
+    [DataField("ORDER_WAREHOUSE_ID")]
+    public Location Warehouse {
+      get; protected set;
     }
 
 
@@ -171,12 +218,63 @@ namespace Empiria.Orders {
       get; private set;
     }
 
+    [DataField("ORDER_CONDITIONS_EXT_DATA")]
+    protected internal JsonObject Conditions {
+      get; private set;
+    }
+
+    [DataField("ORDER_SPECIFICATION_EXT_DATA")]
+    protected internal JsonObject Specifications {
+      get; private set;
+    }
+
+    [DataField("ORDER_DELIVERY_EXT_DATA")]
+    protected internal JsonObject Delivery {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_EXT_DATA")]
+    protected internal JsonObject ExtData {
+      get; private set;
+    }
+
+
+    public virtual string Keywords {
+      get {
+        return EmpiriaString.BuildKeywords(OrderNo, Description, Beneficiary.Keywords,
+                                           Provider.Keywords, Project.Keywords,
+                                           Responsible.Keywords);
+      }
+    }
+
+
+    [DataField("ORDER_RECORDING_TIME")]
+    public DateTime RecordingTime {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_RECORDED_BY_ID")]
+    public Party RecordedBy {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_APPLICATION_DATE")]
+    public DateTime ApplicationDate {
+      get; private set;
+    }
+
+    [DataField("ORDER_APPLIED_BY_ID")]
+    public Party AppliedBy {
+      get; private set;
+    }
 
     [DataField("ORDER_AUTHORIZATION_TIME")]
     public DateTime AuthorizationTime {
       get; private set;
     }
-
 
     [DataField("ORDER_AUTHORIZED_BY_ID")]
     public Party AuthorizedBy {
@@ -196,18 +294,9 @@ namespace Empiria.Orders {
     }
 
 
-    [DataField("ORDER_EXT_DATA")]
-    protected JsonObject ExtData {
+    [DataField("ORDER_POSTING_TIME")]
+    public DateTime PostingTime {
       get; private set;
-    }
-
-
-    public virtual string Keywords {
-      get {
-        return EmpiriaString.BuildKeywords(OrderNo, Description, Beneficiary.Keywords,
-                                           Provider.Keywords, Project.Keywords,
-                                           Responsible.Keywords);
-      }
     }
 
 
@@ -216,16 +305,18 @@ namespace Empiria.Orders {
       get; private set;
     }
 
-
-    [DataField("ORDER_POSTING_TIME")]
-    public DateTime PostingTime {
-      get; private set;
-    }
-
-
     [DataField("ORDER_STATUS", Default = EntityStatus.Pending)]
     public EntityStatus Status {
       get; private set;
+    }
+
+    public bool IsForMultipleBeneficiaries {
+      get {
+        return ExtData.Get("multipleBeneficiaries", false);
+      }
+      set {
+        ExtData.SetIf("multipleBeneficiaries", value, value);
+      }
     }
 
     #endregion Properties
@@ -280,11 +371,17 @@ namespace Empiria.Orders {
                          .ToFixedList();
     }
 
-    protected override void OnBeforeSave() {
+
+    public decimal GetTotal() {
+      return _items.Value.Sum(x => x.Subtotal);
+    }
+
+    protected override void OnSave() {
       if (base.IsNew) {
-        this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
-        this.PostingTime = DateTime.Now;
+        PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+        PostingTime = DateTime.Now;
       }
+      OrdersData.WriteOrder(this);
     }
 
 
@@ -312,15 +409,18 @@ namespace Empiria.Orders {
 
       Category = Patcher.Patch(fields.CategoryUID, Category);
       Description = Patcher.PatchClean(fields.Description, Description);
-      _tags = EmpiriaString.Tagging(fields.Tags);
-      Responsible = Patcher.Patch(fields.ResponsibleUID, Responsible);
-      Beneficiary = Patcher.Patch(fields.BeneficiaryUID, Beneficiary);
+      Justification = Patcher.PatchClean(fields.Justification, string.Empty);
+      RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);
+      Responsible = Patcher.Patch(fields.ResponsibleUID, RequestedBy);
+      Beneficiary = Patcher.Patch(fields.BeneficiaryUID, RequestedBy);
       IsForMultipleBeneficiaries = fields.IsForMultipleBeneficiaries;
       Provider = Patcher.Patch(fields.ProviderUID, Provider);
-      RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);
       Project = Patcher.Patch(fields.ProjectUID, Project);
-      Priority = fields.Priority;
-      RelatedOrderId = fields.RelatedOrderId;
+      Priority = fields.Priority.Value;
+      ParentOrder = Patcher.Patch(fields.ParentOrderUID, Empty);
+
+      _tags = EmpiriaString.Tagging(fields.Tags);
+      _identificators = EmpiriaString.Tagging(fields.Identificators);
     }
 
     #endregion Methods

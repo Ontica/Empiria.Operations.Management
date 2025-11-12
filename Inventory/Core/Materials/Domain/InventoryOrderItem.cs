@@ -8,10 +8,10 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Financial;
-using Empiria.Inventory.Data;
 using Empiria.Locations;
 using Empiria.Orders;
+
+using Empiria.Inventory.Data;
 
 namespace Empiria.Inventory {
 
@@ -24,21 +24,17 @@ namespace Empiria.Inventory {
       // Required by Empiria Framework for all partitioned types.
     }
 
-    internal InventoryOrderItem() {
-      //no-op
+    protected internal InventoryOrderItem(OrderItemType powertype,
+                                          InventoryOrder order) : base(powertype, order) {
     }
 
     protected internal InventoryOrderItem(OrderItemType powertype,
-                                       InventoryOrder order) : base(powertype, order) {
-    }
-
-    protected internal InventoryOrderItem(OrderItemType powertype,
-                                        InventoryOrder order, Location location) : base(powertype, order) {
+                                          InventoryOrder order, Location location) : base(powertype, order) {
 
       Assertion.Require(location, nameof(location));
       Assertion.Require(!location.IsEmptyInstance, nameof(location));
 
-      this.Location = location;
+      base.Location = location;
     }
 
 
@@ -51,30 +47,6 @@ namespace Empiria.Inventory {
     #endregion Constructors and parsers
 
     #region Properties
-
-    [DataField("ORDER_ITEM_LOCATION_ID")]
-    public Location Location {
-      get; private set;
-    } = Location.Empty;
-
-
-    [DataField("ORDER_ITEM_UNIT_PRICE")]
-    public decimal UnitPrice {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_ITEM_DISCOUNT")]
-    public decimal Discount {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_ITEM_CURRENCY_ID")]
-    public Currency Currency {
-      get; private set;
-    }
-
 
     internal FixedList<InventoryEntry> Entries {
       get; set;
@@ -99,15 +71,9 @@ namespace Empiria.Inventory {
 
       fields.EnsureValid();
 
+      fields.UnitPrice = GetProductPrice();
+
       base.Update(fields);
-
-      this.UnitPrice = GetProductPrice();
-    }
-
-
-    internal void UpdatePrice() {
-
-      this.UnitPrice = GetProductPrice();
     }
 
 
@@ -134,10 +100,10 @@ namespace Empiria.Inventory {
       } else {
         return unitPrice;
       }
-
     }
 
-    #endregion
+    #endregion Helpers
+
   } // class InventoryOrderItem
 
 } // namespace Empiria.Inventory

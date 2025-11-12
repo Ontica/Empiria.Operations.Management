@@ -1,26 +1,30 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Orders Management                          Component : Domain Layer                            *
-*  Assembly : Empiria.Orders.Core.dll                    Pattern   : Fields DTO                              *
-*  Type     : PayableOrderItemFields                     License   : Please read LICENSE.txt file            *
+*  Assembly : Empiria.Orders.Core.dll                    Pattern   : Input fields DTO                        *
+*  Type     : RequisitionFields                          License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : DTO fields structure used for update sales order items.                                      *
+*  Summary  : Input fields DTO used to update requisitions.                                                  *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
+
 namespace Empiria.Orders {
 
-  /// <summary>DTO fields structure used for update sales order items.</summary>
-  public class SalesOrderItemFields : OrderItemFields {
+  /// <summary>Input fields DTO used to update requisitions.</summary>
+  public class RequisitionFields : OrderFields {
+
+    public string[] Budgets {
+      get; set;
+    } = new string[0];
 
 
     public override void EnsureValid() {
       base.EnsureValid();
-
-      Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");
-      Assertion.Require(Discount >= 0, "El descuento no puede ser negativo.");
-      Assertion.Require(((Quantity * UnitPrice) - Discount) >= 0, "El total del concepto no puede ser negativo.");
+      Assertion.Require(Budgets.Length > 0, "At least one budget must be specified.");
     }
 
-  }  // class SalesOrderItemFields
+  }  // class RequisitionFields
 
 }  // namespace Empiria.Orders
+
+

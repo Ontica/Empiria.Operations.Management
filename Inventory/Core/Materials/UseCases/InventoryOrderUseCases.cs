@@ -102,9 +102,6 @@ namespace Empiria.Inventory.UseCases {
       var orderItemType = Orders.OrderItemType.Parse(4059);
       InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, order, location);
 
-      var position = GetItemPosition(order);
-      fields.Position = position;
-
       orderItem.Update(fields);
       order.AddItem(orderItem);
       orderItem.Save();
@@ -293,7 +290,7 @@ namespace Empiria.Inventory.UseCases {
         Description = "Orden de inventario correspondiente " + order.OrderNo,
         RequestedByUID = order.RequestedBy.UID,
         ResponsibleUID = order.Responsible.UID,
-        RelatedOrderId = order.Id,
+        ParentOrderUID = order.UID,
       };
 
       var orderType = Orders.OrderType.Parse(4010);
@@ -321,7 +318,6 @@ namespace Empiria.Inventory.UseCases {
         fields.Description = item.Product.Description;
         fields.ProductUnitUID = item.Product.BaseUnit.UID;
         fields.Quantity = item.Quantity;
-        fields.Position = item.Position;
         fields.Location = "A-001-01-01";
 
         InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, inventoryOrder);
