@@ -46,6 +46,14 @@ namespace Empiria.Orders.Adapters {
       get; internal set;
     }
 
+    public bool CanRequestBudgetModification {
+      get; internal set;
+    }
+
+    public bool CanValidateBudget {
+      get; internal set;
+    }
+
   } // class RequisitionActions
 
 
@@ -84,6 +92,11 @@ namespace Empiria.Orders.Adapters {
 
     protected internal RequisitionDescriptor(Requisition requisition) : base(requisition) {
       BaseBudgetName = requisition.BaseBudgetType.DisplayName;
+      Budgets = requisition.Budgets.MapToNamedEntityList();
+    }
+
+    public FixedList<NamedEntityDto> Budgets {
+      get; private set;
     }
 
   } // class RequisitionDescriptor

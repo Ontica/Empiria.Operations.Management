@@ -42,7 +42,7 @@ namespace Empiria.Orders.Adapters {
     }
 
 
-    static private RequisitionDescriptor MapToDescriptor(Requisition requisition) {
+    static internal RequisitionDescriptor MapToDescriptor(Requisition requisition) {
       return new RequisitionDescriptor(requisition);
     }
 
@@ -63,6 +63,8 @@ namespace Empiria.Orders.Adapters {
       return new RequisitionActions {
         CanEditDocuments = true,
         CanRequestBudget = true,
+        CanRequestBudgetModification = true,
+        CanValidateBudget = true,
         CanActivate = true,
         CanDelete = true,
         CanEditItems = true,
