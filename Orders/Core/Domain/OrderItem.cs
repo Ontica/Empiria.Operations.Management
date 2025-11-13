@@ -395,7 +395,7 @@ namespace Empiria.Orders {
       } else if (Description.Length == 0 && !BudgetAccount.IsEmptyInstance) {
         Description = BudgetAccount.Name;
 
-      } else {
+      } else if (Description.Length == 0) {
         Description = "Sin descripción";
       }
 
