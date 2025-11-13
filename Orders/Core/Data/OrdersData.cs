@@ -69,9 +69,10 @@ namespace Empiria.Orders.Data {
         o.Justification, o.ProductUnit.Id, o.RequestedQty, o.Quantity, o.UnitPrice, o.Discount, o.PriceId,
         o.Currency.Id, o.Budget.Id, o.BudgetAccount.Id, o.BudgetEntry.Id, o.Project.Id, o.Provider.Id,
         o.Requisition.Id, o.RequisitionItem.Id, o.ContractItemId, o.RelatedItem.Id, o.OriginCountry.Id,
-        o.DeliveryPlace.Id, o.ConfigData.ToString(), o.ConditionsData.ToString(), o.SpecificationData.ToString(),
-        o.ExtData.ToString(), o.Keywords, o.RequestedTime, o.RequestedBy.Id, o.RequiredTime, o.ReceivedBy.Id,
-        o.ClosingTime, o.ClosedBy.Id, o.Position, o.PostingTime, o.PostedBy.Id, (char) o.Status);
+        o.SupplyStartDate, o.SupplyEndDate, o.Location.Id, o.DeliveryPlace.Id, o.ConfigData.ToString(),
+        o.ConditionsData.ToString(), o.SpecificationData.ToString(), o.ExtData.ToString(), o.Keywords,
+        o.RequestedTime, o.RequestedBy.Id, o.RequiredTime, o.ReceivedBy.Id, o.ClosingTime, o.ClosedBy.Id,
+        o.Position, o.PostingTime, o.PostedBy.Id, (char) o.Status);
 
       DataWriter.Execute(op);
     }
