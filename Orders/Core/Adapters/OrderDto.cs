@@ -69,6 +69,7 @@ namespace Empiria.Orders.Adapters {
       UID = order.UID;
       Type = order.OrderType.MapToNamedEntity();
       Category = order.Category.MapToNamedEntity();
+      Requisition = RequisitionMapper.MapToDescriptor(order.Requisition);
       OrderNo = order.OrderNo;
       Description = order.Description;
       Justification = order.Justification;
@@ -97,87 +98,91 @@ namespace Empiria.Orders.Adapters {
     }
 
     public string UID {
-      get; private set;
+      get;
     }
 
     public NamedEntityDto Type {
-      get; private set;
+      get;
     }
 
     public NamedEntityDto Category {
-      get; private set;
+      get;
+    }
+
+    public RequisitionDescriptor Requisition {
+      get;
     }
 
     public string OrderNo {
-      get; private set;
+      get;
     }
 
     public string Description {
-      get; private set;
+      get;
     }
 
     public string Justification {
-      get; private set;
+      get;
     }
 
     public FixedList<string> Identificators {
-      get; private set;
+      get;
     }
 
     public FixedList<string> Tags {
-      get; private set;
+      get;
     }
 
     public NamedEntityDto RequestedBy {
-      get; private set;
+      get;
     }
 
     public NamedEntityDto Responsible {
-      get; private set;
+      get;
     }
 
     public NamedEntityDto Beneficiary {
-      get; private set;
+      get;
     }
 
     public bool IsForMultipleBeneficiaries {
-      get; private set;
+      get;
     }
 
     public NamedEntityDto Provider {
-      get; private set;
+      get;
     }
 
     public FixedList<NamedEntityDto> ProvidersGroup {
-      get; private set;
+      get;
     }
 
     public NamedEntityDto Project {
-      get; private set;
+      get;
     }
 
     public NamedEntityDto Priority {
-      get; private set;
+      get; protected set;
     }
 
     public DateTime AuthorizationTime {
-      get; private set;
+      get;
     }
 
     public NamedEntityDto AuthorizedBy {
-      get; private set;
+      get;
     }
 
     public DateTime ClosingTime {
-      get; private set;
+      get;
     }
 
     public NamedEntityDto ClosedBy {
-      get; private set;
+      get;
     }
 
     public NamedEntityDto Status {
-      get; private set;
+      get;
     }
 
     public string BaseOrgUnitName {
@@ -199,6 +204,7 @@ namespace Empiria.Orders.Adapters {
       UID = order.UID;
       TypeName = order.OrderType.Name;
       CategoryName = order.Category.Name;
+      RequisitionNo = order.Requisition.OrderNo;
       OrderNo = order.OrderNo;
       Description = order.Description;
       BaseOrgUnitName = order.RequestedBy.Name;
@@ -225,6 +231,10 @@ namespace Empiria.Orders.Adapters {
     }
 
     public string CategoryName {
+      get;
+    }
+
+    public string RequisitionNo {
       get;
     }
 

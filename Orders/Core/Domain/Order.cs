@@ -408,6 +408,7 @@ namespace Empiria.Orders {
       fields.EnsureValid();
 
       Category = Patcher.Patch(fields.CategoryUID, Category);
+      Requisition = Patcher.Patch(fields.RequisitionUID, Requisition.Empty);
       Description = Patcher.PatchClean(fields.Description, Description);
       Justification = Patcher.PatchClean(fields.Justification, string.Empty);
       RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);

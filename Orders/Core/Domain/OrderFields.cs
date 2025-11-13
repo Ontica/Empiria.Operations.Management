@@ -24,6 +24,11 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public string RequisitionUID {
+      get; set;
+    } = string.Empty;
+
+
     public string CategoryUID {
       get; set;
     } = string.Empty;
@@ -89,7 +94,6 @@ namespace Empiria.Orders {
 
     public virtual void EnsureValid() {
       Assertion.Require(OrderTypeUID, nameof(OrderTypeUID));
-      Assertion.Require(CategoryUID, nameof(CategoryUID));
       Assertion.Require(Description, nameof(Description));
       Assertion.Require(RequestedByUID, nameof(RequestedByUID));
       Priority = Priority.HasValue ? Priority.Value : StateEnums.Priority.Normal;
