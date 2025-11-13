@@ -33,6 +33,7 @@ namespace Empiria.Orders.Adapters {
       Currency = item.Currency.MapToNamedEntity();
       Budget = item.Budget.MapToNamedEntity();
       BudgetAccount = item.BudgetAccount.MapToNamedEntity();
+      BudgetControlNo = item.BudgetEntry.ControlNo;
       Project = item.Project.MapToNamedEntity();
       Provider = item.Provider.MapToNamedEntity();
       Requisition = item.Requisition.MapToNamedEntity();
@@ -102,6 +103,10 @@ namespace Empiria.Orders.Adapters {
     }
 
     public NamedEntityDto BudgetAccount {
+      get;
+    }
+
+    public string BudgetControlNo {
       get;
     }
 
