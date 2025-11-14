@@ -11,8 +11,6 @@
 using System;
 
 using Empiria.Services;
-
-using Empiria.Financial;
 using Empiria.Parties;
 
 using Empiria.Budgeting.Transactions;
@@ -22,6 +20,7 @@ using Empiria.Budgeting.Transactions.UseCases;
 using Empiria.Procurement.Contracts;
 
 using Empiria.Operations.Integration.Budgeting.Adapters;
+using Empiria.Orders;
 
 namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
@@ -53,10 +52,10 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       fields.EnsureValid();
 
-      var payableEntity = (IPayableEntity) BaseObject.Parse(fields.BaseObjectTypeUID,
-                                                            fields.BaseObjectUID);
+      var budgetable = (Order) BaseObject.Parse(fields.BaseObjectTypeUID,
+                                                fields.BaseObjectUID);
 
-      BudgetTransaction transaction = InvokeBudgetTransactionService(payableEntity,
+      BudgetTransaction transaction = InvokeBudgetTransactionService(budgetable,
                                                                      BudgetTransactionType.ApartarGastoCorriente);
 
 
@@ -93,36 +92,36 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
     #region Helpers
 
-    static private BudgetTransaction InvokeBudgetTransactionService(IPayableEntity payableEntity,
+    static private BudgetTransaction InvokeBudgetTransactionService(Order order,
                                                                     BudgetTransactionType budgetTransactionType) {
 
-      BudgetTransactionFields fields = TransformToBudgetTransactionFields(payableEntity,
+      BudgetTransactionFields fields = TransformToBudgetTransactionFields(order,
                                                                           budgetTransactionType);
 
       using (var usecases = BudgetTransactionEditionUseCases.UseCaseInteractor()) {
-        return usecases.CreateTransaction(payableEntity, fields);
+
+        var txn = usecases.CreateTransaction(fields);
+
+        return BudgetTransaction.Parse(txn.Transaction.UID);
       }
     }
 
 
-    static private BudgetTransactionFields TransformToBudgetTransactionFields(IPayableEntity payableEntity,
+    static private BudgetTransactionFields TransformToBudgetTransactionFields(Order budgetable,
                                                                               BudgetTransactionType transactionType) {
 
       int contractId = -1;
 
-      if (payableEntity is Contract contract) {
-        contractId = contract.Id;
-      }
-      if (payableEntity is ContractOrder contractOrder) {
+      if (budgetable is ContractOrder contractOrder) {
         contractId = contractOrder.Contract.Id;
       }
       return new BudgetTransactionFields {
         TransactionTypeUID = transactionType.UID,
         ContractId = contractId,
-        BaseBudgetUID = payableEntity.Budget.UID,
+        BaseBudgetUID = budgetable.BaseBudget.UID,
         OperationSourceUID = OperationSource.ParseNamedKey("SISTEMA_DE_ADQUISICIONES").UID,
-        Description = payableEntity.Name,
-        BasePartyUID = payableEntity.OrganizationalUnit.UID,
+        Description = budgetable.Description,
+        BasePartyUID = budgetable.RequestedBy.UID,
         RequestedByUID = Party.ParseWithContact(ExecutionServer.CurrentContact).UID,
         ApplicationDate = DateTime.Today
       };
