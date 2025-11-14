@@ -17,7 +17,7 @@ using Empiria.Financial;
 namespace Empiria.Orders {
 
   /// <summary>Represents a payable order.</summary>
-  public class PayableOrder : Order, IPayableEntity, IBudgetingEntity {
+  public class PayableOrder : Order, IPayableEntity {
 
     #region Constructors and parsers
 
@@ -38,11 +38,6 @@ namespace Empiria.Orders {
 
     #region IPayableEntity interface
 
-    INamedEntity IPayableEntity.Type {
-      get {
-        return base.GetEmpiriaType();
-      }
-    }
 
     string IPayableEntity.EntityNo {
       get {

@@ -15,7 +15,7 @@ using Empiria.Budgeting;
 namespace Empiria.Orders {
 
   /// <summary>Represents a requisition of good and services. A requisition is an aggregate of orders.</summary>
-  public class Requisition : Order, IBudgetingEntity {
+  public class Requisition : Order {
 
     #region Constructors and parsers
 
@@ -45,20 +45,6 @@ namespace Empiria.Orders {
     #endregion Properties
 
     #region Methods
-
-    internal protected virtual void AddItem(PayableOrderItem orderItem) {
-      Assertion.Require(orderItem, nameof(orderItem));
-
-      base.AddItem(orderItem);
-    }
-
-
-    internal protected virtual void RemoveItem(PayableOrderItem orderItem) {
-      Assertion.Require(orderItem, nameof(orderItem));
-
-      base.RemoveItem(orderItem);
-    }
-
 
     internal protected void Update(RequisitionFields fields) {
       Assertion.Require(fields, nameof(fields));

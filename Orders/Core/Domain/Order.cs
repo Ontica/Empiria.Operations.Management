@@ -28,7 +28,7 @@ namespace Empiria.Orders {
 
   /// <summary>Represents an abstract order.</summary>
   [PartitionedType(typeof(OrderType))]
-  abstract public class Order : BaseObject, INamedEntity {
+  abstract public class Order : BaseObject, IBudgetable, INamedEntity {
 
     #region Fields
 
