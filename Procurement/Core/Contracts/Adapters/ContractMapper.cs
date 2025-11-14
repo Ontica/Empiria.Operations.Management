@@ -12,8 +12,6 @@ using Empiria.StateEnums;
 
 using Empiria.Documents;
 using Empiria.History;
-
-using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 
 namespace Empiria.Procurement.Contracts.Adapters {
@@ -38,15 +36,17 @@ namespace Empiria.Procurement.Contracts.Adapters {
       return new ContractDto {
         UID = contract.UID,
         ContractCategory = contract.ContractCategory.MapToNamedEntity(),
+        Requisition = contract.Requisition.MapToNamedEntity(),
         ContractNo = contract.ContractNo,
         Name = contract.Name,
         Description = contract.Description,
+        Justification = contract.Justification,
         Supplier = contract.Supplier.MapToNamedEntity(),
         SuppliersGroup = contract.Supplier is Parties.Group group ?
                                 group.Members.MapToNamedEntityList() : new FixedList<NamedEntityDto>(),
         ManagedByOrgUnit = contract.ManagedByOrgUnit.MapToNamedEntity(),
         IsForMultipleOrgUnits = contract.IsForMultipleOrgUnits,
-        BudgetType = contract.BudgetType.MapToNamedEntity(),
+        BudgetType = contract.Budgets[0].BudgetType.MapToNamedEntity(),
         Budgets = contract.Budgets.MapToNamedEntityList(),
         FromDate = contract.FromDate,
         ToDate = contract.ToDate,
@@ -78,6 +78,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         UID = contract.UID,
         ContractCategory = contract.ContractCategory.Name,
         ContractNo = contract.ContractNo,
+        RequisitionNo = contract.Requisition.OrderNo,
         Name = contract.Name,
         Description = contract.Description,
         ManagedByOrgUnit = contract.ManagedByOrgUnit.FullName,
@@ -85,7 +86,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         FromDate = contract.FromDate,
         ToDate = contract.ToDate,
         SignDate = contract.SignDate,
-        BudgetType = contract.BudgetType.DisplayName,
+        BudgetType = contract.Budgets[0].BudgetType.Name,
         Currency = contract.Currency.Name,
         MinTotal = contract.MinTotal,
         MaxTotal = contract.MaxTotal,
@@ -110,9 +111,11 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
 
     static private FixedList<BudgetTransactionDescriptorDto> MapBudgetTransactions(Contract contract) {
-      FixedList<BudgetTransaction> transactions = BudgetTransaction.GetFor(contract);
+      //FixedList<BudgetTransaction> transactions = BudgetTransaction.GetFor(contract);
 
-      return BudgetTransactionMapper.MapToDescriptor(transactions);
+      //return BudgetTransactionMapper.MapToDescriptor(transactions);
+
+      return new FixedList<BudgetTransactionDescriptorDto>();
     }
 
     #endregion Helpers

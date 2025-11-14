@@ -21,12 +21,13 @@ using Empiria.Financial;
 using Empiria.Budgeting;
 
 using Empiria.Procurement.Contracts.Data;
+using Empiria.Orders;
 
 namespace Empiria.Procurement.Contracts {
 
   /// <summary>Represents a contract.</summary>
   [PartitionedType(typeof(ContractType))]
-  public class Contract : BaseObject, IBudgetingEntity, INamedEntity {
+  public class Contract : BaseObject, INamedEntity {
 
     #region Fields
 
@@ -67,6 +68,12 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
+    [DataField("CONTRACT_REQUISITION_ID")]
+    public Requisition Requisition {
+      get; private set;
+    }
+
+
     [DataField("CONTRACT_NO")]
     public string ContractNo {
       get; private set;
@@ -81,6 +88,12 @@ namespace Empiria.Procurement.Contracts {
 
     [DataField("CONTRACT_DESCRIPTION")]
     public string Description {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_JUSTIFICATION")]
+    public string Justification {
       get; private set;
     }
 
@@ -135,7 +148,6 @@ namespace Empiria.Procurement.Contracts {
         ExtData.SetIf("isForMultipleOrgUnits", value, true);
       }
     }
-
 
     [DataField("CONTRACT_BUDGET_TYPE_ID")]
     public BudgetType BudgetType {
@@ -219,6 +231,7 @@ namespace Empiria.Procurement.Contracts {
         ExtData = JsonObject.Parse(ExtData.ToString());
       }
     }
+
 
     #endregion Properties
 
@@ -386,6 +399,7 @@ namespace Empiria.Procurement.Contracts {
       FromDate = fields.FromDate;
       ToDate = fields.ToDate;
       SignDate = fields.SignDate;
+
       BudgetType = BudgetType.Parse(fields.BudgetTypeUID);
       Budgets = fields.BudgetsUIDs.Select(x => Budget.Parse(x)).ToFixedList();
       Currency = Patcher.Patch(fields.CurrencyUID, Currency);

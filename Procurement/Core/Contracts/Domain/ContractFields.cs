@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+using Empiria.Budgeting;
 
 namespace Empiria.Procurement.Contracts {
 
@@ -17,6 +18,11 @@ namespace Empiria.Procurement.Contracts {
 
     [Newtonsoft.Json.JsonProperty(PropertyName = "ContractTypeUID")]
     public string ContractCategoryUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string RequisitionUID {
       get; set;
     } = string.Empty;
 
@@ -32,6 +38,11 @@ namespace Empiria.Procurement.Contracts {
 
 
     public string Description {
+      get; set;
+    } = string.Empty;
+
+
+    public string Justification {
       get; set;
     } = string.Empty;
 
@@ -88,11 +99,14 @@ namespace Empiria.Procurement.Contracts {
 
     internal void EnsureValid() {
       Assertion.Require(ContractCategoryUID, "Necesito la clasificación o categoría del contrato.");
+      Assertion.Require(RequisitionUID, "Necesito el número del requisición.");
+      Assertion.Require(ContractNo, "Necesito el número del contrato.");
       Assertion.Require(Name, "Necesito el nombre del contrato.");
       Assertion.Require(CurrencyUID, "Necesito la moneda del contrato.");
-      Assertion.Require(BudgetTypeUID, "Necesito se seleccione el tipo de presupuesto.");
-      Assertion.Require(BudgetsUIDs.Length > 0, "Necesito se seleccione el presupuesto " +
-                                                "que se utilizará para el contrato.");
+      Assertion.Require(BudgetsUIDs.Length > 0, "Necesito se seleccionen el o los presupuestos a " +
+                                                "los que aplica el contrato");
+
+      BudgetTypeUID = BudgetTypeUID ?? Budget.Parse(BudgetsUIDs[0]).UID;
     }
 
   }  // class ContractFields

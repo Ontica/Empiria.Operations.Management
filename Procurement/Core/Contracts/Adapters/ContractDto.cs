@@ -85,6 +85,11 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
+    public NamedEntityDto Requisition {
+      get;
+      internal set;
+    }
+
     public string ContractNo {
       get; internal set;
     }
@@ -94,6 +99,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
     public string Description {
+      get; internal set;
+    }
+
+    public string Justification {
       get; internal set;
     }
 
@@ -170,6 +179,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
     public string ContractNo {
+      get; internal set;
+    }
+
+    public string RequisitionNo {
       get; internal set;
     }
 
