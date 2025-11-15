@@ -8,19 +8,15 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
-
 using Empiria.Services;
 using Empiria.Parties;
 
+using Empiria.Orders;
+
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
-using Empiria.Budgeting.Transactions.UseCases;
-
-using Empiria.Procurement.Contracts;
 
 using Empiria.Operations.Integration.Budgeting.Adapters;
-using Empiria.Orders;
 
 namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
@@ -52,12 +48,13 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       fields.EnsureValid();
 
-      var budgetable = (Order) BaseObject.Parse(fields.BaseObjectTypeUID,
-                                                fields.BaseObjectUID);
+      var order = Order.Parse(fields.BaseObjectUID);
 
-      BudgetTransaction transaction = InvokeBudgetTransactionService(budgetable,
-                                                                     BudgetTransactionType.ApartarGastoCorriente);
+      var builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.ApartarGastoCorriente, order);
 
+      BudgetTransaction transaction = builder.Build();
+
+      transaction.Save();
 
       return BudgetTransactionMapper.MapToDescriptor(transaction);
     }
@@ -89,45 +86,6 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
     }
 
     #endregion Use cases
-
-    #region Helpers
-
-    static private BudgetTransaction InvokeBudgetTransactionService(Order order,
-                                                                    BudgetTransactionType budgetTransactionType) {
-
-      BudgetTransactionFields fields = TransformToBudgetTransactionFields(order,
-                                                                          budgetTransactionType);
-
-      using (var usecases = BudgetTransactionEditionUseCases.UseCaseInteractor()) {
-
-        var txn = usecases.CreateTransaction(fields);
-
-        return BudgetTransaction.Parse(txn.Transaction.UID);
-      }
-    }
-
-
-    static private BudgetTransactionFields TransformToBudgetTransactionFields(Order budgetable,
-                                                                              BudgetTransactionType transactionType) {
-
-      int contractId = -1;
-
-      if (budgetable is ContractOrder contractOrder) {
-        contractId = contractOrder.Contract.Id;
-      }
-      return new BudgetTransactionFields {
-        TransactionTypeUID = transactionType.UID,
-        ContractId = contractId,
-        BaseBudgetUID = budgetable.BaseBudget.UID,
-        OperationSourceUID = OperationSource.ParseNamedKey("SISTEMA_DE_ADQUISICIONES").UID,
-        Description = budgetable.Description,
-        BasePartyUID = budgetable.RequestedBy.UID,
-        RequestedByUID = Party.ParseWithContact(ExecutionServer.CurrentContact).UID,
-        ApplicationDate = DateTime.Today
-      };
-    }
-
-    #endregion Helpers
 
   }  // class BudgetingProcurementUseCases
 
