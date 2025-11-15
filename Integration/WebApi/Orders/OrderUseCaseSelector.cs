@@ -134,6 +134,17 @@ namespace Empiria.Operations.Integration.Orders {
     }
 
 
+    static internal FixedList<PayableOrderItemDto> GetAvailableOrderItems(string orderUID, string keywords) {
+      Assertion.Require(orderUID, nameof(orderUID));
+
+      keywords = keywords ?? string.Empty;
+
+      var order = Order.Parse(orderUID);
+
+      return PayableOrderMapper.Map(order.Requisition.GetItems<PayableOrderItem>());
+    }
+
+
     static internal OrderHolderDto GetOrder(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
@@ -245,6 +256,7 @@ namespace Empiria.Operations.Integration.Orders {
         return usecases.SuspendOrder(order.UID);
       }
     }
+
   }  // class OrderUseCaseSelector
 
 } // namespace Empiria.Operations.Integration.Orders

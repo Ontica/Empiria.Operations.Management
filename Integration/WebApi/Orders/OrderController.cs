@@ -9,14 +9,11 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System.Web.Http;
-
 using Empiria.Json;
-using Empiria.WebApi;
-
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
-
 using Empiria.Procurement.Contracts;
+using Empiria.WebApi;
 
 namespace Empiria.Operations.Integration.Orders.WebApi {
 
@@ -89,6 +86,21 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
       return new SingleObjectModel(base.Request, order);
     }
+
+
+    [HttpGet]
+    [Route("v8/order-management/orders/{orderUID:guid}/available-items")]
+    public CollectionModel GetAvailableOrderItems([FromUri] string orderUID,
+                                                  [FromUri] string keywords = "") {
+
+      keywords = keywords ?? string.Empty;
+
+      FixedList<PayableOrderItemDto> availableItems =
+              OrderUseCaseSelector.GetAvailableOrderItems(orderUID, keywords);
+
+      return new CollectionModel(base.Request, availableItems);
+    }
+
 
 
     [HttpPost]

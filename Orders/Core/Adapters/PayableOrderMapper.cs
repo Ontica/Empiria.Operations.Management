@@ -37,13 +37,13 @@ namespace Empiria.Orders.Adapters {
     }
 
 
-    private static PayableOrderDescriptor MapToDescriptor(PayableOrder order) {
-      return new PayableOrderDescriptor(order);
-    }
-
-    static internal FixedList<PayableOrderItemDto> Map(FixedList<PayableOrderItem> orderItems) {
+    static public FixedList<PayableOrderItemDto> Map(FixedList<PayableOrderItem> orderItems) {
       return orderItems.Select(x => Map(x))
                        .ToFixedList();
+    }
+
+    static private PayableOrderDescriptor MapToDescriptor(PayableOrder order) {
+      return new PayableOrderDescriptor(order);
     }
 
 
