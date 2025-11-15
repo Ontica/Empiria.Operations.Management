@@ -25,8 +25,8 @@ namespace Empiria.Tests.Procurement.Contracts {
       foreach (var sut in contracts) {
         Assert.NotNull(sut);
         Assert.NotNull(sut.ContractCategory);
-        Assert.NotNull(sut.ManagedByOrgUnit);
-        Assert.NotNull(sut.Supplier);
+        Assert.NotNull(sut.RequestedBy);
+        Assert.NotNull(sut.Provider);
         Assert.NotNull(sut.Parent);
         Assert.NotNull(sut.GetItems());
 
@@ -40,8 +40,8 @@ namespace Empiria.Tests.Procurement.Contracts {
 
       Assert.NotNull(sut);
       Assert.NotNull(sut.ContractCategory);
-      Assert.NotNull(sut.ManagedByOrgUnit);
-      Assert.NotNull(sut.Supplier);
+      Assert.NotNull(sut.RequestedBy);
+      Assert.NotNull(sut.Provider);
       Assert.NotNull(sut.Parent);
       Assert.NotNull(sut.GetItems());
 

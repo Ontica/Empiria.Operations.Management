@@ -20,8 +20,10 @@ using Empiria.Financial;
 
 using Empiria.Budgeting;
 
-using Empiria.Procurement.Contracts.Data;
 using Empiria.Orders;
+using Empiria.Projects;
+
+using Empiria.Procurement.Contracts.Data;
 
 namespace Empiria.Procurement.Contracts {
 
@@ -98,8 +100,20 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
+    [DataField("CONTRACT_BUDGET_TYPE_ID")]
+    public BudgetType BudgetType {
+      get; private set;
+    }
+
+
     [DataField("CONTRACT_CURRENCY_ID")]
     public Currency Currency {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_PROJECT_ID")]
+    public Project Project {
       get; private set;
     }
 
@@ -119,6 +133,114 @@ namespace Empiria.Procurement.Contracts {
     [DataField("CONTRACT_SIGN_DATE")]
     public DateTime SignDate {
       get; private set;
+    } = ExecutionServer.DateMaxValue;
+
+
+    [DataField("CONTRACT_REQUESTED_BY_ID")]
+    public Party RequestedBy {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_RESPONSIBLE_ID")]
+    public Party Responsible {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_BENEFICIARY_ID")]
+    public Party Beneficiary {
+      get; private set;
+    }
+
+
+    public bool IsForMultipleBeneficiaries {
+      get {
+        return ExtData.Get("multipleBeneficiaries", false);
+      }
+      set {
+        ExtData.SetIf("multipleBeneficiaries", value, true);
+      }
+    }
+
+
+    [DataField("CONTRACT_PROVIDER_ID")]
+    public Party Provider {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_NOTES")]
+    public string Notes {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_EXT_DATA")]
+    public JsonObject ExtData {
+      get; private set;
+    }
+
+
+    public string Keywords {
+      get {
+        return EmpiriaString.BuildKeywords(ContractNo, Name, Description, Justification, Notes,
+                                           RequestedBy.Keywords, Beneficiary.Keywords, Provider.Keywords,
+                                           BudgetType.Name);
+      }
+    }
+
+
+    [DataField("CONTRACT_PARENT_ID", Default = -1)]
+    private int _parentId;
+
+    public Contract Parent {
+      get {
+        if (this.IsEmptyInstance) {
+          return this;
+        }
+        return Parse(_parentId);
+      }
+      private set {
+        _parentId = value.Id;
+      }
+    }
+
+
+    public bool HasParent {
+      get {
+        return !Parent.IsEmptyInstance;
+      }
+    }
+
+
+    [DataField("CONTRACT_CLOSING_TIME")]
+    public DateTime ClosingTime {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_CLOSED_BY_ID")]
+    public Party ClosedBy {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_POSTING_TIME")]
+    public DateTime PostingTime {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_POSTED_BY_ID")]
+    public Party PostedBy {
+      get; private set;
+    }
+
+
+    [DataField("CONTRACT_STATUS", Default = EntityStatus.Pending)]
+    public EntityStatus Status {
+      get; private set;
     }
 
 
@@ -130,94 +252,6 @@ namespace Empiria.Procurement.Contracts {
 
     [DataField("CONTRACT_MAX_TOTAL")]
     public decimal MaxTotal {
-      get; private set;
-    }
-
-
-    [DataField("CONTRACT_MGMT_ORG_UNIT_ID")]
-    public OrganizationalUnit ManagedByOrgUnit {
-      get; private set;
-    }
-
-
-    public bool IsForMultipleOrgUnits {
-      get {
-        return ExtData.Get("isForMultipleOrgUnits", false);
-      }
-      set {
-        ExtData.SetIf("isForMultipleOrgUnits", value, true);
-      }
-    }
-
-    [DataField("CONTRACT_BUDGET_TYPE_ID")]
-    public BudgetType BudgetType {
-      get; private set;
-    }
-
-
-    [DataField("CONTRACT_CUSTOMER_ID")]
-    public Party Customer {
-      get; private set;
-    }
-
-
-    [DataField("CONTRACT_SUPPLIER_ID")]
-    public Party Supplier {
-      get; private set;
-    }
-
-
-    [DataField("CONTRACT_PARENT_ID", Default = -1)]
-    private int ParentId {
-      get; set;
-    } = -1;
-
-
-    public Contract Parent {
-      get {
-        if (this.IsEmptyInstance || this.ParentId == this.Id) {
-          return this;
-        }
-        return Contract.Parse(this.ParentId);
-      }
-    }
-
-
-    public bool HasParent {
-      get {
-        return !Parent.IsEmptyInstance && Parent.Distinct(this);
-      }
-    }
-
-
-    [DataField("CONTRACT_EXT_DATA")]
-    private JsonObject ExtData {
-      get; set;
-    }
-
-
-    public string Keywords {
-      get {
-        return EmpiriaString.BuildKeywords(this.ContractNo, this.Name, this.Description,
-                                           ManagedByOrgUnit.Name, ManagedByOrgUnit.Code);
-      }
-    }
-
-
-    [DataField("CONTRACT_POSTED_BY_ID")]
-    public Party PostedBy {
-      get; private set;
-    }
-
-
-    [DataField("CONTRACT_POSTING_TIME")]
-    public DateTime PostingTime {
-      get; private set;
-    }
-
-
-    [DataField("CONTRACT_STATUS", Default = EntityStatus.Pending)]
-    public EntityStatus Status {
       get; private set;
     }
 
@@ -259,7 +293,7 @@ namespace Empiria.Procurement.Contracts {
         this.PostingTime = DateTime.Now;
       }
 
-      ContractData.WriteContract(this, this.ExtData.ToString());
+      ContractData.WriteContract(this);
 
       foreach (ContractItem item in GetItems()) {
         item.Save();
@@ -309,7 +343,7 @@ namespace Empiria.Procurement.Contracts {
       if (Status == EntityStatus.Suspended) {
         return true;
       }
-      if (ContractNo.Length != 0 && !Supplier.IsEmptyInstance &&
+      if (ContractNo.Length != 0 && !Provider.IsEmptyInstance &&
           FromDate != ExecutionServer.DateMaxValue &&
           ToDate != ExecutionServer.DateMaxValue &&
           SignDate != ExecutionServer.DateMaxValue) {
@@ -385,17 +419,17 @@ namespace Empiria.Procurement.Contracts {
 
       fields.EnsureValid();
 
-      Party lastSupplier = Supplier;
-      bool lastIsForMultipleOrgUnits = IsForMultipleOrgUnits;
+      Party lastProvider = Provider;
 
       ContractCategory = Patcher.Patch(fields.ContractCategoryUID, ContractCategory);
+      Requisition = Patcher.Patch(fields.RequisitionUID, Requisition);
+
       ContractNo = EmpiriaString.Clean(fields.ContractNo);
       Name = Patcher.PatchClean(fields.Name, Name);
       Description = EmpiriaString.Clean(fields.Description);
-      ManagedByOrgUnit = Patcher.Patch(fields.ManagedByOrgUnitUID, ManagedByOrgUnit);
-      IsForMultipleOrgUnits = fields.IsForMultipleOrgUnits;
-      Customer = fields.CustomerUID.Length != 0 ? Party.Parse(fields.CustomerUID) : Organization.Primary;
-      Supplier = fields.SupplierUID.Length != 0 ? Party.Parse(fields.SupplierUID) : Party.Empty;
+      Justification = EmpiriaString.Clean(fields.Justification);
+      Notes = EmpiriaString.Clean(fields.Notes);
+
       FromDate = fields.FromDate;
       ToDate = fields.ToDate;
       SignDate = fields.SignDate;
@@ -403,8 +437,16 @@ namespace Empiria.Procurement.Contracts {
       BudgetType = BudgetType.Parse(fields.BudgetTypeUID);
       Budgets = fields.BudgetsUIDs.Select(x => Budget.Parse(x)).ToFixedList();
       Currency = Patcher.Patch(fields.CurrencyUID, Currency);
+      Project = Patcher.Patch(fields.ProjectUID, Project.Empty);
 
-      if (Supplier.Distinct(lastSupplier)) {
+      RequestedBy = Patcher.Patch(fields.RequestedByUID, Requisition.RequestedBy);
+      Responsible = Patcher.Patch(fields.ResponsibleUID, Requisition.Responsible);
+      Beneficiary = Patcher.Patch(fields.BeneficiaryUID, Requisition.Beneficiary);
+      IsForMultipleBeneficiaries = fields.IsForMultipleBeneficiaries;
+
+      Provider = Patcher.Patch(fields.ProviderUID, Provider);
+
+      if (Provider.Distinct(lastProvider)) {
         UpdateSupplierForAllItems();
       }
     }
@@ -429,7 +471,7 @@ namespace Empiria.Procurement.Contracts {
 
     private void UpdateSupplierForAllItems() {
       foreach (ContractItem item in GetItems()) {
-        item.SetSupplier(Supplier);
+        item.SetSupplier(Provider);
       }
     }
 

@@ -41,20 +41,27 @@ namespace Empiria.Procurement.Contracts.Adapters {
         Name = contract.Name,
         Description = contract.Description,
         Justification = contract.Justification,
-        Supplier = contract.Supplier.MapToNamedEntity(),
-        SuppliersGroup = contract.Supplier is Parties.Group group ?
-                                group.Members.MapToNamedEntityList() : new FixedList<NamedEntityDto>(),
-        ManagedByOrgUnit = contract.ManagedByOrgUnit.MapToNamedEntity(),
-        IsForMultipleOrgUnits = contract.IsForMultipleOrgUnits,
-        BudgetType = contract.Budgets[0].BudgetType.MapToNamedEntity(),
-        Budgets = contract.Budgets.MapToNamedEntityList(),
+        Notes = contract.Notes,
+
         FromDate = contract.FromDate,
         ToDate = contract.ToDate,
         SignDate = contract.SignDate,
+
+        BudgetType = contract.Budgets[0].BudgetType.MapToNamedEntity(),
+        Budgets = contract.Budgets.MapToNamedEntityList(),
         Currency = contract.Currency.MapToNamedEntity(),
         MinTotal = contract.MinTotal,
         MaxTotal = contract.MaxTotal,
         Total = contract.MaxTotal,
+
+        RequestedBy = contract.RequestedBy.MapToNamedEntity(),
+        Beneficiary = contract.Beneficiary.MapToNamedEntity(),
+        IsForMultipleBeneficiaries = contract.IsForMultipleBeneficiaries,
+        Responsible = contract.Responsible.MapToNamedEntity(),
+        Provider = contract.Provider.MapToNamedEntity(),
+        ProvidersGroup = contract.Provider is Parties.Group group ?
+                                group.Members.MapToNamedEntityList() : new FixedList<NamedEntityDto>(),
+        Project = contract.Project.MapToNamedEntity(),
         Status = contract.Status.MapToDto()
       };
     }
@@ -81,12 +88,14 @@ namespace Empiria.Procurement.Contracts.Adapters {
         RequisitionNo = contract.Requisition.OrderNo,
         Name = contract.Name,
         Description = contract.Description,
-        ManagedByOrgUnit = contract.ManagedByOrgUnit.FullName,
-        Supplier = contract.Supplier.Name,
+        RequestedBy = contract.RequestedBy.Name,
+        Responsible = contract.Responsible.Name,
+        Beneficiary = contract.Beneficiary.Name,
+        Provider = contract.Provider.Name,
         FromDate = contract.FromDate,
         ToDate = contract.ToDate,
         SignDate = contract.SignDate,
-        BudgetType = contract.Budgets[0].BudgetType.Name,
+        BudgetType = contract.Budgets[0].BudgetType.DisplayName,
         Currency = contract.Currency.Name,
         MinTotal = contract.MinTotal,
         MaxTotal = contract.MaxTotal,

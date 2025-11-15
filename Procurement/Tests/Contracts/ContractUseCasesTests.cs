@@ -46,10 +46,10 @@ namespace Empiria.Tests.Procurement.Contracts {
         Name = "BANOBRAS-2023-O-00ABCD",
         Description = "Fábrica de Software 2023-2025",
         CurrencyUID = TestingConstants.CONTRACT_CURRENCY_UID,
-        ManagedByOrgUnitUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
+        RequestedByUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
         BudgetTypeUID = TestingConstants.CONTRACT_BUDGET_TYPE_UID,
         BudgetsUIDs = new string[] { TestingConstants.CONTRACT_BUDGET_UID },
-        SupplierUID = TestingConstants.SUPPLIER_UID,
+        ProviderUID = TestingConstants.SUPPLIER_UID,
       };
 
       ContractHolderDto sut = _usecases.CreateContract(fields);
@@ -71,9 +71,9 @@ namespace Empiria.Tests.Procurement.Contracts {
         FromDate = new DateTime(2022, 09, 01),
         ToDate = new DateTime(2024, 08, 31),
         SignDate = new DateTime(2022, 09, 01),
-        ManagedByOrgUnitUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
+        RequestedByUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
         BudgetTypeUID = TestingConstants.CONTRACT_BUDGET_TYPE_UID,
-        SupplierUID = TestingConstants.SUPPLIER_UID,
+        ProviderUID = TestingConstants.SUPPLIER_UID,
       };
 
       ContractHolderDto sut = _usecases.UpdateContract(TestingConstants.CONTRACT_UID, fields);

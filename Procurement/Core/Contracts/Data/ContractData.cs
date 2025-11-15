@@ -34,13 +34,13 @@ namespace Empiria.Procurement.Contracts.Data {
     }
 
 
-    static internal void WriteContract(Contract o, string extensionData) {
+    static internal void WriteContract(Contract o) {
       var op = DataOperation.Parse("write_OMS_Contract",
-                     o.Id, o.UID, o.ContractType.Id, o.ContractCategory.Id, o.Requisition.Id,
-                     o.ContractNo, o.Name, o.Description, o.Justification, o.Currency.Id,
-                     o.FromDate, o.ToDate, o.SignDate, o.ManagedByOrgUnit.Id,
-                     o.BudgetType.Id, o.Customer.Id, o.Supplier.Id, extensionData,
-                     o.Keywords, o.Parent.Id, o.PostedBy.Id, o.PostingTime, (char) o.Status);
+          o.Id, o.UID, o.ContractType.Id, o.ContractCategory.Id, o.Requisition.Id,
+          o.ContractNo, o.Name, o.Description, o.Justification, o.BudgetType.Id, o.Currency.Id,
+          o.FromDate, o.ToDate, o.SignDate, o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id,
+          o.Provider.Id, o.Project.Id, o.Notes, o.ExtData.ToString(), o.Keywords, o.Parent.Id,
+          o.ClosedBy.Id, o.ClosingTime, o.PostingTime, o.PostedBy.Id, (char) o.Status);
 
       DataWriter.Execute(op);
     }

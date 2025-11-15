@@ -106,20 +106,35 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto Supplier {
+    public string Notes {
       get; internal set;
     }
 
-    public FixedList<NamedEntityDto> SuppliersGroup {
+    public NamedEntityDto RequestedBy {
       get; internal set;
     }
 
-
-    public NamedEntityDto ManagedByOrgUnit {
+    public NamedEntityDto Responsible {
       get; internal set;
     }
 
-    public bool IsForMultipleOrgUnits {
+    public NamedEntityDto Beneficiary {
+      get; internal set;
+    }
+
+    public bool IsForMultipleBeneficiaries {
+      get; internal set;
+    }
+
+    public NamedEntityDto Provider {
+      get; internal set;
+    }
+
+    public FixedList<NamedEntityDto> ProvidersGroup {
+      get; internal set;
+    }
+
+    public NamedEntityDto Project {
       get; internal set;
     }
 
@@ -194,13 +209,22 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public string Supplier {
+    public string RequestedBy {
       get; internal set;
     }
 
-    public string ManagedByOrgUnit {
+    public string Responsible {
       get; internal set;
     }
+
+    public string Beneficiary {
+      get; internal set;
+    }
+
+    public string Provider {
+      get; internal set;
+    }
+
 
     public DateTime FromDate {
       get; internal set;

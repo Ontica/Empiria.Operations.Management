@@ -47,7 +47,17 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
+    public string Notes {
+      get; set;
+    } = string.Empty;
+
+
     public string BudgetTypeUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string CurrencyUID {
       get; set;
     } = string.Empty;
 
@@ -57,14 +67,33 @@ namespace Empiria.Procurement.Contracts {
     } = new string[0];
 
 
-    public string ManagedByOrgUnitUID {
+    public string RequestedByUID {
       get; set;
     } = string.Empty;
 
 
-    public bool IsForMultipleOrgUnits {
+    public string ResponsibleUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string BeneficiaryUID {
+      get; set;
+    } = string.Empty;
+
+    public bool IsForMultipleBeneficiaries {
       get; set;
     } = false;
+
+
+    public string ProviderUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string ProjectUID {
+      get; set;
+    } = string.Empty;
 
 
     public DateTime FromDate {
@@ -82,31 +111,23 @@ namespace Empiria.Procurement.Contracts {
     } = ExecutionServer.DateMaxValue;
 
 
-    public string CustomerUID {
-      get; set;
-    } = string.Empty;
-
-
-    public string SupplierUID {
-      get; set;
-    } = string.Empty;
-
-
-    public string CurrencyUID {
-      get; set;
-    } = string.Empty;
-
-
     internal void EnsureValid() {
       Assertion.Require(ContractCategoryUID, "Necesito la clasificación o categoría del contrato.");
       Assertion.Require(RequisitionUID, "Necesito el número del requisición.");
       Assertion.Require(ContractNo, "Necesito el número del contrato.");
       Assertion.Require(Name, "Necesito el nombre del contrato.");
-      Assertion.Require(CurrencyUID, "Necesito la moneda del contrato.");
-      Assertion.Require(BudgetsUIDs.Length > 0, "Necesito se seleccionen el o los presupuestos a " +
-                                                "los que aplica el contrato");
 
-      BudgetTypeUID = BudgetTypeUID ?? Budget.Parse(BudgetsUIDs[0]).UID;
+      Assertion.Require(CurrencyUID, "Necesito la moneda del contrato.");
+      Assertion.Require(BudgetsUIDs.Length > 0, "Necesito se seleccione el presupuesto o presupuestos " +
+                                                "asociados al contrato");
+
+      BudgetTypeUID = BudgetTypeUID.Length == 0 ? Budget.Parse(BudgetsUIDs[0]).UID : BudgetTypeUID;
+
+      Assertion.Require(FromDate, "Necesito la fecha de inicio del contrato.");
+      Assertion.Require(ToDate, "Necesito la fecha de fin del contrato.");
+      Assertion.Require(SignDate, "Necesito la fecha de firma del contrato.");
+
+      Assertion.Require(ProviderUID, "Necesito se proporcione al proveedor del contrato.");
     }
 
   }  // class ContractFields
