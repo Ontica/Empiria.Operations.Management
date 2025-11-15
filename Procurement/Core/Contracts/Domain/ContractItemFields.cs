@@ -55,7 +55,7 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
-    public string RequesterOrgUnitUID {
+    public string RequestedByUID {
       get; set;
     } = string.Empty;
 
@@ -75,7 +75,7 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
-    public string SupplierUID {
+    public string ProviderUID {
       get; set;
     } = string.Empty;
 

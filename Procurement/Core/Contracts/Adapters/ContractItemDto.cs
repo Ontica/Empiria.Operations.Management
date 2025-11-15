@@ -53,7 +53,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto RequesterOrgUnit {
+    public NamedEntityDto RequestedBy {
       get; internal set;
     }
 
@@ -69,7 +69,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public NamedEntityDto Supplier {
+    public NamedEntityDto Provider {
       get; internal set;
     }
 

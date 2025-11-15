@@ -23,6 +23,7 @@ using Empiria.Time;
 using Empiria.Budgeting;
 
 using Empiria.Procurement.Contracts.Data;
+using Empiria.Orders;
 
 namespace Empiria.Procurement.Contracts {
 
@@ -125,13 +126,13 @@ namespace Empiria.Procurement.Contracts {
 
 
     [DataField("CONTRACT_ITEM_REQUISITION_ITEM_ID")]
-    internal int RequisitionItemId {
+    internal PayableOrderItem RequisitionItem {
       get; private set;
-    } = -1;
+    }
 
 
     [DataField("CONTRACT_ITEM_REQUESTER_ORG_UNIT_ID")]
-    public OrganizationalUnit RequesterOrgUnit {
+    public Party RequestedBy {
       get; private set;
     }
 
@@ -155,7 +156,7 @@ namespace Empiria.Procurement.Contracts {
 
 
     [DataField("CONTRACT_ITEM_SUPPLIER_ID")]
-    public Party Supplier {
+    public Party Provider {
       get; private set;
     }
 
@@ -257,10 +258,10 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    internal void SetSupplier(Party supplier) {
-      Assertion.Require(supplier, nameof(supplier));
+    internal void SetProvider(Party provider) {
+      Assertion.Require(provider, nameof(provider));
 
-      this.Supplier = supplier;
+      this.Provider = provider;
 
       MarkAsDirty();
     }
@@ -278,12 +279,12 @@ namespace Empiria.Procurement.Contracts {
       this.MaxQuantity = fields.MaxQuantity;
       this.UnitPrice = fields.UnitPrice;
       this.Currency = Patcher.Patch(fields.CurrencyUID, Contract.Currency);
-      this.RequisitionItemId = -1;
-      this.RequesterOrgUnit = Patcher.Patch(fields.RequesterOrgUnitUID, Contract.ManagedByOrgUnit);
+      this.RequisitionItem = Patcher.Patch(fields.RequisitionItemUID, RequisitionItem);
+      this.RequestedBy = Patcher.Patch(fields.RequestedByUID, Contract.RequestedBy);
       this.Budget = Patcher.Patch(fields.BudgetUID, Budget);
       this.BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, BudgetAccount);
-      this.Project = Patcher.Patch(fields.ProjectUID, Project.Empty);
-      this.Supplier = Patcher.Patch(fields.SupplierUID, Contract.Supplier);
+      this.Project = Patcher.Patch(fields.ProjectUID, Contract.Project);
+      this.Provider = Patcher.Patch(fields.ProviderUID, Contract.Provider);
       this.PeriodicityType = Patcher.Patch(fields.PeriodicityTypeUID, PeriodicityType);
 
       MarkAsDirty();

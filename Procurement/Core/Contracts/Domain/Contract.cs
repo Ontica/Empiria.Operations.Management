@@ -15,13 +15,13 @@ using System.Linq;
 using Empiria.Json;
 using Empiria.Ontology;
 using Empiria.Parties;
+using Empiria.Projects;
 using Empiria.StateEnums;
 using Empiria.Financial;
 
 using Empiria.Budgeting;
 
 using Empiria.Orders;
-using Empiria.Projects;
 
 using Empiria.Procurement.Contracts.Data;
 
@@ -471,7 +471,7 @@ namespace Empiria.Procurement.Contracts {
 
     private void UpdateSupplierForAllItems() {
       foreach (ContractItem item in GetItems()) {
-        item.SetSupplier(Provider);
+        item.SetProvider(Provider);
       }
     }
 

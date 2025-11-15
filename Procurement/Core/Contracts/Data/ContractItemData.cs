@@ -35,8 +35,8 @@ namespace Empiria.Procurement.Contracts.Data {
                   o.Id, o.UID, o.ContractItemType.Id, o.Contract.Id,
                   o.Description, o.Product.Id, o.ProductUnit.Id,
                   o.MinQuantity, o.MaxQuantity, o.UnitPrice, o.Currency.Id,
-                  o.RequisitionItemId, o.RequesterOrgUnit.Id,
-                  o.Budget.Id, o.BudgetAccount.Id, o.Project.Id, o.Supplier.Id,
+                  o.RequisitionItem.Id, o.RequestedBy.Id,
+                  o.Budget.Id, o.BudgetAccount.Id, o.Project.Id, o.Provider.Id,
                   o.PeriodicityRule.ToString(), extensionData,
                   o.Keywords, o.Position, o.PostedBy.Id, o.PostingTime, (char) o.Status);
 

@@ -30,11 +30,11 @@ namespace Empiria.Procurement.Contracts.Adapters {
         MinQuantity = contractItem.MinQuantity,
         MaxQuantity = contractItem.MaxQuantity,
         UnitPrice = contractItem.UnitPrice,
-        RequesterOrgUnit = contractItem.RequesterOrgUnit.MapToNamedEntity(),
+        RequestedBy = contractItem.RequestedBy.MapToNamedEntity(),
         Budget = contractItem.Budget.MapToNamedEntity(),
         BudgetAccount = contractItem.BudgetAccount.MapToNamedEntity(),
         Project = contractItem.Project.MapToNamedEntity(),
-        Supplier = contractItem.Supplier.MapToNamedEntity(),
+        Provider = contractItem.Provider.MapToNamedEntity(),
         PeriodicityType = contractItem.PeriodicityType.MapToNamedEntity(),
       };
     }
