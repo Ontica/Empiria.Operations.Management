@@ -113,7 +113,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         return string.Empty;
       }
 
-      var category = ContractCategory.Parse(categoryUID);
+      var category = FormerContractCategory.Parse(categoryUID);
 
       return $"CONTRACT_CATEGORY_ID = '{category.Id}'";
     }

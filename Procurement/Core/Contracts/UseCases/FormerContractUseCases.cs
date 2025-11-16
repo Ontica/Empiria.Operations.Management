@@ -16,16 +16,16 @@ using Empiria.Procurement.Contracts.Adapters;
 namespace Empiria.Procurement.Contracts.UseCases {
 
   /// <summary>Use cases for contract management.</summary>
-  public class ContractUseCases : UseCase {
+  public class FormerContractUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected ContractUseCases() {
+    protected FormerContractUseCases() {
       // no-op
     }
 
-    static public ContractUseCases UseCaseInteractor() {
-      return UseCase.CreateInstance<ContractUseCases>();
+    static public FormerContractUseCases UseCaseInteractor() {
+      return UseCase.CreateInstance<FormerContractUseCases>();
     }
 
     #endregion Constructors and parsers
@@ -37,7 +37,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       fields.EnsureValid();
 
-      var contract = new Contract(ContractType.Procurement);
+      var contract = new FormerContract(FormerContractType.Procurement);
 
       contract.Update(fields);
 
@@ -50,7 +50,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
     public ContractHolderDto DeleteContract(string contractUID) {
       Assertion.Require(contractUID, nameof(contractUID));
 
-      var contract = Contract.Parse(contractUID);
+      var contract = FormerContract.Parse(contractUID);
 
       contract.Delete();
 
@@ -63,14 +63,14 @@ namespace Empiria.Procurement.Contracts.UseCases {
     public ContractHolderDto GetContract(string contractUID) {
       Assertion.Require(contractUID, nameof(contractUID));
 
-      var contract = Contract.Parse(contractUID);
+      var contract = FormerContract.Parse(contractUID);
 
       return ContractMapper.Map(contract);
     }
 
 
     public FixedList<NamedEntityDto> GetContractCategories() {
-      var contractTypes = ContractCategory.GetList();
+      var contractTypes = FormerContractCategory.GetList();
 
       return contractTypes.MapToNamedEntityList();
     }
@@ -82,7 +82,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
       string filter = query.MapToFilterString();
       string sortBy = query.MapToSortString();
 
-      FixedList<Contract> contracts = ContractData.GetContracts(filter, sortBy);
+      FixedList<FormerContract> contracts = ContractData.GetContracts(filter, sortBy);
 
       return ContractMapper.MapToDescriptor(contracts);
     }
@@ -94,7 +94,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       fields.EnsureValid();
 
-      var contract = Contract.Parse(ContractUID);
+      var contract = FormerContract.Parse(ContractUID);
 
       contract.Update(fields);
 

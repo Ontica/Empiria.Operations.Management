@@ -17,7 +17,7 @@ namespace Empiria.Procurement.Contracts.Data {
 
     #region Methods
 
-    static internal FixedList<ContractOrder> GetContractOrders(Contract contract) {
+    static internal FixedList<ContractOrder> GetContractOrders(FormerContract contract) {
       var sql = "SELECT * FROM OMS_ORDERS " +
                 $"WHERE ORDER_CONTRACT_ID = {contract.Id} AND " +
                  "ORDER_STATUS <> 'X'";
@@ -28,7 +28,7 @@ namespace Empiria.Procurement.Contracts.Data {
     }
 
 
-    static internal string GetNextContractOrderNo(Contract contract) {
+    static internal string GetNextContractOrderNo(FormerContract contract) {
       Assertion.Require(contract, nameof(contract));
 
       string sql = "SELECT MAX(ORDER_NO) " +

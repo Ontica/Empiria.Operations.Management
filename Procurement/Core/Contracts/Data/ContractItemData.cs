@@ -17,7 +17,7 @@ namespace Empiria.Procurement.Contracts.Data {
   /// <summary>Provides data read and write methods for contract item instances.</summary>
   static internal class ContractItemData {
 
-    static internal List<ContractItem> GetContractItems(Contract contract) {
+    static internal List<FormerContractItem> GetContractItems(FormerContract contract) {
       Assertion.Require(contract, nameof(contract));
 
       var sql = "SELECT * FROM OMS_CONTRACT_ITEMS " +
@@ -26,11 +26,11 @@ namespace Empiria.Procurement.Contracts.Data {
 
       var op = DataOperation.Parse(sql);
 
-      return DataReader.GetList<ContractItem>(op);
+      return DataReader.GetList<FormerContractItem>(op);
     }
 
 
-    static internal void WriteContractItem(ContractItem o, string extensionData) {
+    static internal void WriteContractItem(FormerContractItem o, string extensionData) {
       var op = DataOperation.Parse("write_OMS_Contract_Item",
                   o.Id, o.UID, o.ContractItemType.Id, o.Contract.Id,
                   o.Description, o.Product.Id, o.ProductUnit.Id,

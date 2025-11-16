@@ -13,13 +13,13 @@ namespace Empiria.Procurement.Contracts.Adapters {
   /// <summary>Provides data mapping services for ContractItem instances.</summary>
   static internal class ContractItemMapper {
 
-    static internal FixedList<ContractItemDto> Map(FixedList<ContractItem> contractsItem) {
+    static internal FixedList<ContractItemDto> Map(FixedList<FormerContractItem> contractsItem) {
       return contractsItem.Select(x => Map(x))
                       .ToFixedList();
     }
 
 
-    static internal ContractItemDto Map(ContractItem contractItem) {
+    static internal ContractItemDto Map(FormerContractItem contractItem) {
       return new ContractItemDto {
         UID = contractItem.UID,
         ContractItemType = contractItem.ContractItemType.MapToNamedEntity(),

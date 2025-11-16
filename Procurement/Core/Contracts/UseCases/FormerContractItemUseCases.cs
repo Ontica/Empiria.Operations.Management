@@ -17,16 +17,16 @@ using Empiria.Budgeting;
 namespace Empiria.Procurement.Contracts.UseCases {
 
   /// <summary>Use cases for contract items management.</summary>
-  public class ContractItemUseCases : UseCase {
+  public class FormerContractItemUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected ContractItemUseCases() {
+    protected FormerContractItemUseCases() {
       // no-op
     }
 
-    static public ContractItemUseCases UseCaseInteractor() {
-      return UseCase.CreateInstance<ContractItemUseCases>();
+    static public FormerContractItemUseCases UseCaseInteractor() {
+      return UseCase.CreateInstance<FormerContractItemUseCases>();
     }
 
     #endregion Constructors and parsers
@@ -39,9 +39,9 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       fields.EnsureValid();
 
-      var contract = Contract.Parse(contractUID);
+      var contract = FormerContract.Parse(contractUID);
 
-      ContractItem contractItem = contract.AddItem(fields);
+      FormerContractItem contractItem = contract.AddItem(fields);
 
       contract.Save();
 
@@ -53,7 +53,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       Assertion.Require(contractItemUID, nameof(contractItemUID));
 
-      var contractItem = ContractItem.Parse(contractItemUID);
+      var contractItem = FormerContractItem.Parse(contractItemUID);
 
       return ContractItemMapper.Map(contractItem);
     }
@@ -65,10 +65,10 @@ namespace Empiria.Procurement.Contracts.UseCases {
       Assertion.Require(contractUID, nameof(contractUID));
       keywords = keywords ?? string.Empty;
 
-      var contract = Contract.Parse(contractUID);
+      var contract = FormerContract.Parse(contractUID);
       var budget = Budget.Parse(budgetUID);
 
-      FixedList<ContractItem> items = contract.GetItems()
+      FixedList<FormerContractItem> items = contract.GetItems()
                                               .FindAll(x => x.Budget.Equals(budget));
 
       return ContractItemMapper.Map(items);
@@ -79,9 +79,9 @@ namespace Empiria.Procurement.Contracts.UseCases {
       Assertion.Require(contractUID, nameof(contractUID));
       Assertion.Require(contractItemUID, nameof(contractItemUID));
 
-      var contract = Contract.Parse(contractUID);
+      var contract = FormerContract.Parse(contractUID);
 
-      ContractItem contractItem = contract.RemoveItem(contractItemUID);
+      FormerContractItem contractItem = contract.RemoveItem(contractItemUID);
 
       contract.Save();
       contractItem.Save();
@@ -99,9 +99,9 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       fields.EnsureValid();
 
-      var contract = Contract.Parse(contractUID);
+      var contract = FormerContract.Parse(contractUID);
 
-      ContractItem contractItem = contract.GetItem(contractItemUID);
+      FormerContractItem contractItem = contract.GetItem(contractItemUID);
 
       contract.UpdateItem(contractItem, fields);
 

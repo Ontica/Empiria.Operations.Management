@@ -22,12 +22,12 @@ namespace Empiria.Tests.Procurement.Contracts {
 
     #region Use cases initialization
 
-    private readonly ContractUseCases _usecases;
+    private readonly FormerContractUseCases _usecases;
 
     public ContractUseCasesTests() {
       TestsCommonMethods.Authenticate();
 
-      _usecases = ContractUseCases.UseCaseInteractor();
+      _usecases = FormerContractUseCases.UseCaseInteractor();
     }
 
     ~ContractUseCasesTests() {

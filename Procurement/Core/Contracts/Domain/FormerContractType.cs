@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Module   : Contracts Management                       Component : Domain Layer                            *
 *  Assembly : Empiria.Procurement.Core.dll               Pattern   : Power type                              *
-*  Type     : ContractItemType                           License   : Please read LICENSE.txt file            *
+*  Type     : ContractType                               License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Power type that describes a contract item.                                                     *
+*  Summary  : Power type that describes a contract.                                                          *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -14,34 +14,32 @@ using Empiria.Ontology;
 
 namespace Empiria.Procurement.Contracts {
 
-  /// <summary>Power type that describes a contract item.</summary>
-  [Powertype(typeof(ContractItem))]
-  public sealed class ContractItemType : Powertype {
+  /// <summary>Power type that describes a contract.</summary>
+  [Powertype(typeof(FormerContract))]
+  public sealed class FormerContractType : Powertype {
 
     #region Constructors and parsers
 
-    private ContractItemType() {
+    private FormerContractType() {
       // Empiria powertype types always have this constructor.
     }
 
-    static public new ContractItemType Parse(int typeId) => Parse<ContractItemType>(typeId);
+    static public new FormerContractType Parse(int typeId) => Parse<FormerContractType>(typeId);
 
-    static public new ContractItemType Parse(string typeName) => Parse<ContractItemType>(typeName);
+    static public new FormerContractType Parse(string typeName) => Parse<FormerContractType>(typeName);
 
-    static public FixedList<ContractItemType> GetList() {
+    static public FixedList<FormerContractType> GetList() {
       return Empty.GetAllSubclasses()
-            .Select(x => (ContractItemType) x)
+            .Select(x => (FormerContractType) x)
             .ToFixedList();
     }
 
-    static public ContractItemType Empty => Parse("ObjectTypeInfo.ContractItem");
+    static public FormerContractType Empty => Parse("ObjectTypeInfo.Contract");
 
-    static public ContractItemType NoPayable => Parse("ObjectTypeInfo.ContractItem.NoPayable");
-
-    static public ContractItemType Payable => Parse("ObjectTypeInfo.ContractItem.Payable");
+    static public FormerContractType Procurement => Parse("ObjectTypeInfo.Contract.Procurement");
 
     #endregion Constructors and parsers
 
-  } // class ContractItemType
+  } // class ContractType
 
 }  // namespace Empiria.Procurement.Contracts

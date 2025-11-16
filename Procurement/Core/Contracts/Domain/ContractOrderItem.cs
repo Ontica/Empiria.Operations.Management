@@ -22,7 +22,7 @@ namespace Empiria.Procurement.Contracts {
     }
 
     internal ContractOrderItem(ContractOrder order,
-                               ContractItem contractItem) : base(OrderItemType.ContractOrderItemType, order) {
+                               FormerContractItem contractItem) : base(OrderItemType.ContractOrderItemType, order) {
 
       Assertion.Require(contractItem, nameof(contractItem));
 
@@ -48,9 +48,9 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    public ContractItem ContractItem {
+    public FormerContractItem ContractItem {
       get {
-        return ContractItem.Parse(base.ContractItemId);
+        return FormerContractItem.Parse(base.ContractItemId);
       }
     }
 
@@ -63,7 +63,7 @@ namespace Empiria.Procurement.Contracts {
 
       fields.EnsureValid();
 
-      var contractItem = ContractItem.Parse(fields.ContractItemUID);
+      var contractItem = FormerContractItem.Parse(fields.ContractItemUID);
 
       // ToDo: validate quantity
 

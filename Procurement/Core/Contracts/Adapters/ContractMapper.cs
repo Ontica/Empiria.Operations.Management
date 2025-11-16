@@ -19,7 +19,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
   /// <summary>Provides data mapping services for Contract instances.</summary>
   static internal class ContractMapper {
 
-    static internal ContractHolderDto Map(Contract contract) {
+    static internal ContractHolderDto Map(FormerContract contract) {
       return new ContractHolderDto {
         Contract = MapContract(contract),
         Items = ContractItemMapper.Map(contract.GetItems()),
@@ -32,7 +32,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
 
-    static internal ContractDto MapContract(Contract contract) {
+    static internal ContractDto MapContract(FormerContract contract) {
       return new ContractDto {
         UID = contract.UID,
         ContractCategory = contract.ContractCategory.MapToNamedEntity(),
@@ -67,20 +67,20 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
 
-    static internal FixedList<ContractDto> MapContracts(FixedList<Contract> contracts) {
+    static internal FixedList<ContractDto> MapContracts(FixedList<FormerContract> contracts) {
       return contracts.Select(x => MapContract(x))
                       .ToFixedList();
     }
 
 
-    static internal FixedList<ContractDescriptor> MapToDescriptor(FixedList<Contract> contracts) {
+    static internal FixedList<ContractDescriptor> MapToDescriptor(FixedList<FormerContract> contracts) {
       return contracts.Select(contract => MapToDescriptor(contract))
                        .ToFixedList();
     }
 
 
 
-    static internal ContractDescriptor MapToDescriptor(Contract contract) {
+    static internal ContractDescriptor MapToDescriptor(FormerContract contract) {
       return new ContractDescriptor {
         UID = contract.UID,
         ContractCategory = contract.ContractCategory.Name,
@@ -106,7 +106,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     #region Helpers
 
-    static private ContractActions MapActions(Contract contract) {
+    static private ContractActions MapActions(FormerContract contract) {
       return new ContractActions {
         CanActivate = contract.CanActivate(),
         CanDelete = contract.CanDelete(),
@@ -119,7 +119,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
 
-    static private FixedList<BudgetTransactionDescriptorDto> MapBudgetTransactions(Contract contract) {
+    static private FixedList<BudgetTransactionDescriptorDto> MapBudgetTransactions(FormerContract contract) {
       //FixedList<BudgetTransaction> transactions = BudgetTransaction.GetFor(contract);
 
       //return BudgetTransactionMapper.MapToDescriptor(transactions);

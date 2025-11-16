@@ -15,16 +15,16 @@ using Empiria.Procurement.Contracts.Adapters;
 namespace Empiria.Procurement.Contracts.UseCases {
 
   /// <summary>Use cases for contract supply orders.</summary>
-  public class ContractOrderUseCases : UseCase {
+  public class FormerContractOrderUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected ContractOrderUseCases() {
+    protected FormerContractOrderUseCases() {
       // no-op
     }
 
-    static public ContractOrderUseCases UseCaseInteractor() {
-      return UseCase.CreateInstance<ContractOrderUseCases>();
+    static public FormerContractOrderUseCases UseCaseInteractor() {
+      return UseCase.CreateInstance<FormerContractOrderUseCases>();
     }
 
     #endregion Constructors and parsers
@@ -36,7 +36,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       fields.EnsureValid();
 
-      var contract = Contract.Parse(fields.ContractUID);
+      var contract = FormerContract.Parse(fields.ContractUID);
 
       var order = new ContractOrder(contract);
 
@@ -53,7 +53,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
       Assertion.Require(fields, nameof(fields));
 
       var contractOrder = ContractOrder.Parse(orderUID);
-      var contractItem = ContractItem.Parse(fields.ContractItemUID);
+      var contractItem = FormerContractItem.Parse(fields.ContractItemUID);
 
       var item = new ContractOrderItem(contractOrder, contractItem);
 

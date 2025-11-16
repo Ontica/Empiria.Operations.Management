@@ -28,18 +28,18 @@ using Empiria.Orders;
 namespace Empiria.Procurement.Contracts {
 
   /// <summary>Represents a contract item.</summary>
-  [PartitionedType(typeof(ContractItemType))]
-  public class ContractItem : BaseObject, IPositionable, INamedEntity {
+  [PartitionedType(typeof(FormerContractItemType))]
+  public class FormerContractItem : BaseObject, IPositionable, INamedEntity {
 
     #region Constructors and parsers
 
-    private ContractItem(ContractItemType contractItemType) : base(contractItemType) {
+    private FormerContractItem(FormerContractItemType contractItemType) : base(contractItemType) {
       // Required by Empiria Framework.
     }
 
 
-    public ContractItem(ContractItemType contractItemType,
-                        Contract contract, ContractItemFields fields) : this(contractItemType) {
+    public FormerContractItem(FormerContractItemType contractItemType,
+                        FormerContract contract, ContractItemFields fields) : this(contractItemType) {
       Assertion.Require(contract, nameof(contract));
       Assertion.Require(fields, nameof(fields));
 
@@ -49,25 +49,25 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    static internal ContractItem Parse(string contractItemUID) => ParseKey<ContractItem>(contractItemUID);
+    static internal FormerContractItem Parse(string contractItemUID) => ParseKey<FormerContractItem>(contractItemUID);
 
-    static internal ContractItem Parse(int id) => ParseId<ContractItem>(id);
+    static internal FormerContractItem Parse(int id) => ParseId<FormerContractItem>(id);
 
-    static public ContractItem Empty => ParseEmpty<ContractItem>();
+    static public FormerContractItem Empty => ParseEmpty<FormerContractItem>();
 
     #endregion Constructors and parsers
 
     #region Properties
 
-    public ContractItemType ContractItemType {
+    public FormerContractItemType ContractItemType {
       get {
-        return (ContractItemType) base.GetEmpiriaType();
+        return (FormerContractItemType) base.GetEmpiriaType();
       }
     }
 
 
     [DataField("CONTRACT_ITEM_CONTRACT_ID")]
-    public Contract Contract {
+    public FormerContract Contract {
       get; private set;
     }
 

@@ -21,7 +21,7 @@ namespace Empiria.Tests.Procurement.Contracts {
 
     [Fact]
     public void Should_Create_A_ContractOrder() {
-      var contract = Contract.Parse(1);
+      var contract = FormerContract.Parse(1);
 
       var sut = new ContractOrder(contract);
 

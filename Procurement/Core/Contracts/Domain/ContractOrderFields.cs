@@ -15,15 +15,8 @@ namespace Empiria.Procurement.Contracts {
   /// <summary>Input fields DTO used for update procurement contract's orders.</summary>
   public class ContractOrderFields : PayableOrderFields {
 
-    public string ContractUID {
-      get; set;
-    } = string.Empty;
-
-
     public override void EnsureValid() {
       base.EnsureValid();
-
-      Assertion.Require(ContractUID, nameof(ContractUID));
     }
 
   }  // class ContractOrderFields

@@ -23,7 +23,7 @@ namespace Empiria.Procurement.Contracts {
       // Required by Empiria Framework for all partitioned types.
     }
 
-    internal ContractOrder(Contract contract) : base(OrderType.ContractOrder) {
+    internal ContractOrder(FormerContract contract) : base(OrderType.ContractOrder) {
       Assertion.Require(contract, nameof(contract));
       Assertion.Require(!contract.IsEmptyInstance, nameof(contract));
 
@@ -34,7 +34,7 @@ namespace Empiria.Procurement.Contracts {
 
     static internal new ContractOrder Parse(string uid) => ParseKey<ContractOrder>(uid);
 
-    static internal FixedList<ContractOrder> GetListFor(Contract contract) {
+    static internal FixedList<ContractOrder> GetListFor(FormerContract contract) {
       Assertion.Require(contract, nameof(contract));
 
       return ContractOrdersData.GetContractOrders(contract);
@@ -46,8 +46,8 @@ namespace Empiria.Procurement.Contracts {
 
     #region Properties
 
-    [DataField("ORDER_CONTRACT_ID")]
-    public Contract Contract {
+    // [DataField("ORDER_CONTRACT_ID")]
+    public new FormerContract Contract {
       get; private set;
     }
 

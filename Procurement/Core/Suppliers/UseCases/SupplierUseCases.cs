@@ -49,7 +49,7 @@ namespace Empiria.Procurement.Suppliers.UseCases {
       string sortBy = query.MapToSortString();
 
 
-      FixedList<Contract> contracts = ContractData.GetContracts(filter, sortBy);
+      FixedList<FormerContract> contracts = ContractData.GetContracts(filter, sortBy);
 
       return ContractMapper.MapContracts(contracts);
     }

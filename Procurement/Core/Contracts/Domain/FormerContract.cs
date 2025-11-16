@@ -28,44 +28,44 @@ using Empiria.Procurement.Contracts.Data;
 namespace Empiria.Procurement.Contracts {
 
   /// <summary>Represents a contract.</summary>
-  [PartitionedType(typeof(ContractType))]
-  public class Contract : BaseObject, INamedEntity {
+  [PartitionedType(typeof(FormerContractType))]
+  public class FormerContract : BaseObject, INamedEntity {
 
     #region Fields
 
-    private Lazy<List<ContractItem>> _items = new Lazy<List<ContractItem>>();
+    private Lazy<List<FormerContractItem>> _items = new Lazy<List<FormerContractItem>>();
 
     #endregion Fields
 
     #region Constructors and parsers
 
-    public Contract(ContractType contractType) : base(contractType) {
+    public FormerContract(FormerContractType contractType) : base(contractType) {
       // Required by Empiria Framework.
     }
 
-    static internal Contract Parse(int contractId) => ParseId<Contract>(contractId);
+    static internal FormerContract Parse(int contractId) => ParseId<FormerContract>(contractId);
 
-    static public Contract Parse(string contractUID) => ParseKey<Contract>(contractUID);
+    static public FormerContract Parse(string contractUID) => ParseKey<FormerContract>(contractUID);
 
-    static public Contract Empty => ParseEmpty<Contract>();
+    static public FormerContract Empty => ParseEmpty<FormerContract>();
 
     protected override void OnLoad() {
-      _items = new Lazy<List<ContractItem>>(() => ContractItemData.GetContractItems(this));
+      _items = new Lazy<List<FormerContractItem>>(() => ContractItemData.GetContractItems(this));
     }
 
     #endregion Constructors and parsers
 
     #region Properties
 
-    public ContractType ContractType {
+    public FormerContractType ContractType {
       get {
-        return (ContractType) base.GetEmpiriaType();
+        return (FormerContractType) base.GetEmpiriaType();
       }
     }
 
 
     [DataField("CONTRACT_CATEGORY_ID")]
-    public ContractCategory ContractCategory {
+    public FormerContractCategory ContractCategory {
       get; private set;
     }
 
@@ -194,7 +194,7 @@ namespace Empiria.Procurement.Contracts {
     [DataField("CONTRACT_PARENT_ID", Default = -1)]
     private int _parentId;
 
-    public Contract Parent {
+    public FormerContract Parent {
       get {
         if (this.IsEmptyInstance) {
           return this;
@@ -295,7 +295,7 @@ namespace Empiria.Procurement.Contracts {
 
       ContractData.WriteContract(this);
 
-      foreach (ContractItem item in GetItems()) {
+      foreach (FormerContractItem item in GetItems()) {
         item.Save();
       }
     }
@@ -321,10 +321,10 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    internal ContractItem AddItem(ContractItemFields fields) {
+    internal FormerContractItem AddItem(ContractItemFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      var contractItem = new ContractItem(ContractItemType.Payable, this, fields);
+      var contractItem = new FormerContractItem(FormerContractItemType.Payable, this, fields);
 
       _items.Value.Add(contractItem);
 
@@ -379,8 +379,8 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    internal ContractItem GetItem(string contractItemUID) {
-      ContractItem contractItem = _items.Value.Find(x => x.UID == contractItemUID);
+    internal FormerContractItem GetItem(string contractItemUID) {
+      FormerContractItem contractItem = _items.Value.Find(x => x.UID == contractItemUID);
 
       Assertion.Require(contractItem, $"Contract item {contractItemUID} not found.");
 
@@ -388,15 +388,15 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    internal FixedList<ContractItem> GetItems() {
+    internal FixedList<FormerContractItem> GetItems() {
       return _items.Value.ToFixedList();
     }
 
 
-    internal ContractItem RemoveItem(string contractItemUID) {
+    internal FormerContractItem RemoveItem(string contractItemUID) {
       Assertion.Require(contractItemUID, nameof(contractItemUID));
 
-      ContractItem contractItem = GetItem(contractItemUID);
+      FormerContractItem contractItem = GetItem(contractItemUID);
 
       int removedItemPosition = contractItem.Position;
 
@@ -451,7 +451,7 @@ namespace Empiria.Procurement.Contracts {
       }
     }
 
-    internal ContractItem UpdateItem(ContractItem contractItem, ContractItemFields fields) {
+    internal FormerContractItem UpdateItem(FormerContractItem contractItem, ContractItemFields fields) {
       Assertion.Require(contractItem, nameof(contractItem));
       Assertion.Require(contractItem.Contract.Equals(this), "Wrong ContractItem.Contract instance.");
       Assertion.Require(fields, nameof(fields));
@@ -470,7 +470,7 @@ namespace Empiria.Procurement.Contracts {
     #region Helpers
 
     private void UpdateSupplierForAllItems() {
-      foreach (ContractItem item in GetItems()) {
+      foreach (FormerContractItem item in GetItems()) {
         item.SetProvider(Provider);
       }
     }

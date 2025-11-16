@@ -26,7 +26,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
     [Route("v8/procurement/contracts/{contractUID:guid}")]
     public SingleObjectModel GetContract([FromUri] string contractUID) {
 
-      using (var usecases = ContractUseCases.UseCaseInteractor()) {
+      using (var usecases = FormerContractUseCases.UseCaseInteractor()) {
         ContractHolderDto contract = usecases.GetContract(contractUID);
 
         return new SingleObjectModel(base.Request, contract);
@@ -39,7 +39,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
     [Route("v8/procurement/contracts/categories")]
     public CollectionModel GetContractCategories() {
 
-      using (var usecases = ContractUseCases.UseCaseInteractor()) {
+      using (var usecases = FormerContractUseCases.UseCaseInteractor()) {
         FixedList<NamedEntityDto> categories = usecases.GetContractCategories();
 
         return new CollectionModel(base.Request, categories);
@@ -53,7 +53,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
       base.RequireBody(query);
 
-      using (var usecases = ContractUseCases.UseCaseInteractor()) {
+      using (var usecases = FormerContractUseCases.UseCaseInteractor()) {
         FixedList<ContractDescriptor> contracts = usecases.SearchContracts(query);
 
         return new CollectionModel(base.Request, contracts);
@@ -70,7 +70,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
       base.RequireBody(fields);
 
-      using (var usecases = ContractUseCases.UseCaseInteractor()) {
+      using (var usecases = FormerContractUseCases.UseCaseInteractor()) {
         ContractHolderDto contract = usecases.CreateContract(fields);
 
         return new SingleObjectModel(base.Request, contract);
@@ -82,7 +82,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
     [Route("v8/procurement/contracts/{contractUID:guid}")]
     public NoDataModel DeleteContract([FromUri] string contractUID) {
 
-      using (var usecases = ContractUseCases.UseCaseInteractor()) {
+      using (var usecases = FormerContractUseCases.UseCaseInteractor()) {
         _ = usecases.DeleteContract(contractUID);
 
         return new NoDataModel(base.Request);
@@ -97,7 +97,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
       base.RequireBody(fields);
 
-      using (var usecases = ContractUseCases.UseCaseInteractor()) {
+      using (var usecases = FormerContractUseCases.UseCaseInteractor()) {
         ContractHolderDto contract = usecases.UpdateContract(contractUID, fields);
 
         return new SingleObjectModel(base.Request, contract);

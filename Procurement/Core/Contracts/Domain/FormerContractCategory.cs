@@ -11,23 +11,23 @@
 namespace Empiria.Procurement.Contracts {
 
   /// <summary>Describes a contract category.</summary>
-  public class ContractCategory : GeneralObject {
+  public class FormerContractCategory : GeneralObject {
 
     #region Constructors and parsers
 
-    static internal ContractCategory Parse(int id) {
-      return ParseId<ContractCategory>(id);
+    static internal FormerContractCategory Parse(int id) {
+      return ParseId<FormerContractCategory>(id);
     }
 
-    static internal ContractCategory Parse(string uid) {
-      return ParseKey<ContractCategory>(uid);
+    static internal FormerContractCategory Parse(string uid) {
+      return ParseKey<FormerContractCategory>(uid);
     }
 
-    static internal FixedList<ContractCategory> GetList() {
-      return GetList<ContractCategory>().ToFixedList();
+    static internal FixedList<FormerContractCategory> GetList() {
+      return GetList<FormerContractCategory>().ToFixedList();
     }
 
-    static internal ContractCategory Empty => ParseEmpty<ContractCategory>();
+    static internal FormerContractCategory Empty => ParseEmpty<FormerContractCategory>();
 
     #endregion Constructors and parsers
 

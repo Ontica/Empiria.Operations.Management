@@ -29,7 +29,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
       base.RequireBody(fields);
 
-      using (var usecases = ContractItemUseCases.UseCaseInteractor()) {
+      using (var usecases = FormerContractItemUseCases.UseCaseInteractor()) {
         ContractItemDto contractItem = usecases.AddContractItem(contractUID, fields);
 
         return new SingleObjectModel(base.Request, contractItem);
@@ -45,7 +45,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
       keywords = keywords ?? string.Empty;
 
-      using (var usecases = ContractItemUseCases.UseCaseInteractor()) {
+      using (var usecases = FormerContractItemUseCases.UseCaseInteractor()) {
         FixedList<ContractItemDto> itemsToOrder = usecases.GetContractItemsToOrder(contractUID,
                                                                                    budgetUID,
                                                                                    keywords);
@@ -59,7 +59,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
     public NoDataModel RemoveContractItem([FromUri] string contractUID,
                                           [FromUri] string contractItemUID) {
 
-      using (var usecases = ContractItemUseCases.UseCaseInteractor()) {
+      using (var usecases = FormerContractItemUseCases.UseCaseInteractor()) {
         _ = usecases.RemoveContractItem(contractUID, contractItemUID);
 
         return new NoDataModel(this.Request);
@@ -75,7 +75,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
 
       base.RequireBody(fields);
 
-      using (var usecases = ContractItemUseCases.UseCaseInteractor()) {
+      using (var usecases = FormerContractItemUseCases.UseCaseInteractor()) {
         ContractItemDto contractItem = usecases.UpdateContractItem(contractUID,
                                                                    contractItemUID,
                                                                    fields);
