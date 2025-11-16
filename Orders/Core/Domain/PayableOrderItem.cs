@@ -35,11 +35,11 @@ namespace Empiria.Orders {
 
     #region Properties
 
-    public new PayableOrder Order {
-      get {
-        return (PayableOrder) base.Order;
-      }
-    }
+    //public new Order Order {
+    //  get {
+    //    return (PayableOrder) base.Order;
+    //  }
+    //}
 
 
     #endregion Properties

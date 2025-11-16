@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+
 using Empiria.StateEnums;
 
 namespace Empiria.Orders {
@@ -26,6 +27,16 @@ namespace Empiria.Orders {
 
 
     public string RequisitionUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string ContractUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string ParentOrderUID {
       get; set;
     } = string.Empty;
 
@@ -99,11 +110,6 @@ namespace Empiria.Orders {
     }
 
 
-    public string ParentOrderUID {
-      get; set;
-    } = string.Empty;
-
-
     public string Observations {
       get; set;
     } = string.Empty;
@@ -118,9 +124,34 @@ namespace Empiria.Orders {
       get; set;
     } = string.Empty;
 
+    public string Name {
+      get; set;
+    } = string.Empty;
+
+
+    public DateTime RequiredTime {
+      get; set;
+    } = ExecutionServer.DateMaxValue;
+
+
+    public string CurrencyUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string SourceUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string DeliveryPlaceUID {
+      get; set;
+    } = string.Empty;
+
 
     public virtual void EnsureValid() {
       Assertion.Require(OrderTypeUID, nameof(OrderTypeUID));
+      Name = Name.Length == 0 ? Description : Name;
       Assertion.Require(Description, nameof(Description));
       Assertion.Require(RequestedByUID, nameof(RequestedByUID));
       Priority = Priority.HasValue ? Priority.Value : StateEnums.Priority.Normal;

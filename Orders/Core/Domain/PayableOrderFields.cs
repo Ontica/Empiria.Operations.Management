@@ -18,16 +18,10 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
-    public string CurrencyUID {
-      get; set;
-    } = string.Empty;
-
-
     public override void EnsureValid() {
       base.EnsureValid();
 
       Assertion.Require(BudgetUID, nameof(BudgetUID));
-      Assertion.Require(CurrencyUID, nameof(CurrencyUID));
     }
 
   }  // class PayableOrderFields

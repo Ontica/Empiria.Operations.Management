@@ -75,9 +75,60 @@ namespace Empiria.Orders {
     }
 
 
+    [DataField("ORDER_REQUISITION_ID")]
+    private int _requisitionId;
+    public Requisition Requisition {
+      get {
+        if (this.IsEmptyInstance && this is Requisition) {
+          return (Requisition) this;
+        }
+        return Requisition.Parse(_requisitionId);
+      }
+      private set {
+        _requisitionId = value.Id;
+      }
+    }
+
+
+    [DataField("ORDER_CONTRACT_ID")]
+    private int _contractId;
+    public Order Contract {
+      get {
+        if (this.IsEmptyInstance) {
+          return this;
+        }
+        return Order.Parse(_contractId);
+      }
+      private set {
+        _contractId = value.Id;
+      }
+    }
+
+
+    [DataField("ORDER_PARENT_ID")]
+    private int _parentId;
+    public Order ParentOrder {
+      get {
+        if (this.IsEmptyInstance) {
+          return this;
+        }
+        return Parse(_parentId);
+      }
+      private set {
+        _parentId = value.Id;
+      }
+    }
+
+
     [DataField("ORDER_NO")]
     public string OrderNo {
       get; protected set;
+    }
+
+
+    [DataField("ORDER_NAME")]
+    public string Name {
+      get; private set;
     }
 
 
@@ -92,39 +143,15 @@ namespace Empiria.Orders {
       }
     }
 
-    [DataField("ORDER_JUSTIFICATION")]
-    public string Justification {
+    [DataField("ORDER_OBSERVATIONS")]
+    public string Observations {
       get; private set;
     }
 
 
-    public string Observations {
-      get {
-        return SpecificationsData.Get("notes", string.Empty);
-      }
-      private set {
-        SpecificationsData.SetIfValue("notes", value);
-      }
-    }
-
-
-    public string GuaranteeNotes {
-      get {
-        return ConditionsData.Get("notes", string.Empty);
-      }
-      private set {
-        ConditionsData.SetIfValue("notes", value);
-      }
-    }
-
-
-    public string DeliveryNotes {
-      get {
-        return DeliveryData.Get("notes", string.Empty);
-      }
-      private set {
-        DeliveryData.SetIfValue("notes", value);
-      }
+    [DataField("ORDER_JUSTIFICATION")]
+    public string Justification {
+      get; private set;
     }
 
 
@@ -147,89 +174,33 @@ namespace Empiria.Orders {
       }
     }
 
+
+    [DataField("ORDER_START_DATE")]
     public DateTime StartDate {
-      get {
-        return ExtData.Get("startDate", ExecutionServer.DateMaxValue);
-      }
-      set {
-        ExtData.SetIf("startDate", value, !ExecutionServer.IsMinOrMaxDate(value));
-      }
+      get; private set;
     }
 
 
+    [DataField("ORDER_END_DATE")]
     public DateTime EndDate {
-      get {
-        return ExtData.Get("endDate", ExecutionServer.DateMaxValue);
-      }
-      set {
-        ExtData.SetIf("endDate", value, !ExecutionServer.IsMinOrMaxDate(value));
-      }
-    }
-
-
-    [DataField("ORDER_REQUISITION_ID")]
-    private int _requisitionId;
-    public Requisition Requisition {
-      get {
-        if (this.IsEmptyInstance && this is Requisition) {
-          return (Requisition) this;
-        }
-        return Requisition.Parse(_requisitionId);
-      }
-      private set {
-        _requisitionId = value.Id;
-      }
-    }
-
-
-    [DataField("ORDER_PARENT_ID")]
-    private int _parentId;
-    public Order ParentOrder {
-      get {
-        if (this.IsEmptyInstance) {
-          return this;
-        }
-        return Parse(_parentId);
-      }
-      private set {
-        _parentId = value.Id;
-      }
-    }
-
-
-    [DataField("ORDER_CONTRACT_ID")]
-    public int ContractId {
       get; private set;
-    }
-
-
-    [DataField("ORDER_PROJECT_ID")]
-    public Project Project {
-      get; private set;
-    }
-
-
-    public BudgetType BaseBudgetType {
-      get {
-        return BaseBudget.BudgetType;
-      }
-    }
-
-
-    [DataField("ORDER_BASE_BUDGET_ID")]
-    public Budget BaseBudget {
-      get; protected set;
-    }
-
-
-    [DataField("ORDER_CURRENCY_ID")]
-    public Currency Currency {
-      get; protected set;
     }
 
 
     [DataField("ORDER_REQUESTED_BY_ID")]
     public Party RequestedBy {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_REQUESTED_TIME")]
+    public DateTime RequestedTime {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_REQUIRED_TIME")]
+    public DateTime RequiredTime {
       get; private set;
     }
 
@@ -257,6 +228,41 @@ namespace Empiria.Orders {
     }
 
 
+    [DataField("ORDER_DELIVERY_PLACE_ID")]
+    public Location DeliveryPlace {
+      get; protected set;
+    }
+
+    [DataField("ORDER_PROJECT_ID")]
+    public Project Project {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_GEO_ORIGIN_ID")]
+    public Location Origin {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_CURRENCY_ID")]
+    public Currency Currency {
+      get; protected set;
+    }
+
+
+    [DataField("ORDER_BUDGET_TYPE_ID")]
+    public BudgetType BudgetType {
+      get; protected set;
+    }
+
+
+    [DataField("ORDER_BASE_BUDGET_ID")]
+    public Budget BaseBudget {
+      get; protected set;
+    }
+
+
     [DataField("ORDER_SOURCE_ID")]
     public OperationSource Source {
       get; private set;
@@ -268,15 +274,18 @@ namespace Empiria.Orders {
       get; private set;
     }
 
+
     [DataField("ORDER_CONDITIONS_EXT_DATA")]
     protected internal JsonObject ConditionsData {
       get; private set;
     }
 
+
     [DataField("ORDER_SPECIFICATION_EXT_DATA")]
     protected internal JsonObject SpecificationsData {
       get; private set;
     }
+
 
     [DataField("ORDER_DELIVERY_EXT_DATA")]
     protected internal JsonObject DeliveryData {
@@ -299,32 +308,11 @@ namespace Empiria.Orders {
     }
 
 
-    [DataField("ORDER_RECORDING_TIME")]
-    public DateTime RecordingTime {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_RECORDED_BY_ID")]
-    public Party RecordedBy {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_APPLICATION_DATE")]
-    public DateTime ApplicationDate {
-      get; private set;
-    }
-
-    [DataField("ORDER_APPLIED_BY_ID")]
-    public Party AppliedBy {
-      get; private set;
-    }
-
     [DataField("ORDER_AUTHORIZATION_TIME")]
     public DateTime AuthorizationTime {
       get; private set;
     }
+
 
     [DataField("ORDER_AUTHORIZED_BY_ID")]
     public Party AuthorizedBy {
@@ -355,11 +343,31 @@ namespace Empiria.Orders {
       get; private set;
     }
 
+
     [DataField("ORDER_STATUS", Default = EntityStatus.Pending)]
     public EntityStatus Status {
       get; private set;
     }
 
+
+    public string GuaranteeNotes {
+      get {
+        return ConditionsData.Get("notes", string.Empty);
+      }
+      private set {
+        ConditionsData.SetIfValue("notes", value);
+      }
+    }
+
+
+    public string DeliveryNotes {
+      get {
+        return DeliveryData.Get("notes", string.Empty);
+      }
+      private set {
+        DeliveryData.SetIfValue("notes", value);
+      }
+    }
 
     public bool IsForMultipleBeneficiaries {
       get {
@@ -460,31 +468,39 @@ namespace Empiria.Orders {
 
       Category = Patcher.Patch(fields.CategoryUID, Category);
       Requisition = Patcher.Patch(fields.RequisitionUID, Requisition.Empty);
+      ParentOrder = Patcher.Patch(fields.ParentOrderUID, Empty);
+      Contract = Patcher.Patch(fields.ContractUID, Empty);
+      Name = Patcher.PatchClean(fields.Name, Name);
       Description = Patcher.PatchClean(fields.Description, Description);
+      Observations = EmpiriaString.Clean(fields.Observations);
       Justification = Patcher.PatchClean(fields.Justification, string.Empty);
 
-      Observations = EmpiriaString.Clean(fields.Observations);
-      GuaranteeNotes = EmpiriaString.Clean(fields.GuaranteeNotes);
-      DeliveryNotes = EmpiriaString.Clean(fields.DeliveryNotes);
-
-      EndDate = Patcher.Patch(fields.EndDate, ExecutionServer.DateMaxValue);
+      _identificators = EmpiriaString.Tagging(fields.Identificators);
+      _tags = EmpiriaString.Tagging(fields.Tags);
 
       StartDate = Patcher.Patch(fields.StartDate, ExecutionServer.DateMaxValue);
       EndDate = Patcher.Patch(fields.EndDate, ExecutionServer.DateMaxValue);
 
       RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);
+      RequiredTime = Patcher.Patch(fields.RequiredTime, DateTime.MaxValue);
+
       Responsible = Patcher.Patch(fields.ResponsibleUID, RequestedBy);
       Beneficiary = Patcher.Patch(fields.BeneficiaryUID, RequestedBy);
       IsForMultipleBeneficiaries = fields.IsForMultipleBeneficiaries;
-
       Provider = Patcher.Patch(fields.ProviderUID, Provider);
 
-      Project = Patcher.Patch(fields.ProjectUID, Project);
-      Priority = fields.Priority.Value;
-      ParentOrder = Patcher.Patch(fields.ParentOrderUID, Empty);
+      Currency = Patcher.Patch(fields.CurrencyUID, Currency.Default);
 
-      _tags = EmpiriaString.Tagging(fields.Tags);
-      _identificators = EmpiriaString.Tagging(fields.Identificators);
+      Source = Patcher.Patch(fields.SourceUID, Source);
+      DeliveryPlace = Patcher.Patch(fields.DeliveryPlaceUID, DeliveryPlace);
+      Project = Patcher.Patch(fields.ProjectUID, Project);
+
+      Priority = fields.Priority.Value;
+
+
+      GuaranteeNotes = EmpiriaString.Clean(fields.GuaranteeNotes);
+      DeliveryNotes = EmpiriaString.Clean(fields.DeliveryNotes);
+
     }
 
     #endregion Methods

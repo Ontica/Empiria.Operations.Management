@@ -49,15 +49,15 @@ namespace Empiria.Orders.Data {
 
     static internal void WriteOrder(Order o) {
       var op = DataOperation.Parse("write_OMS_Order",
-        o.Id, o.UID, o.OrderType.Id, o.Category.Id, o.OrderNo, o.Description, o.Justification,
+        o.Id, o.UID, o.OrderType.Id, o.Category.Id, o.Requisition.Id, o.Contract.Id, o.ParentOrder.Id,
+        o.OrderNo, o.Name, o.Description, o.Observations, o.Justification,
         EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
-        o.Requisition.Id, o.ParentOrder.Id, o.ContractId, o.Project.Id,
-        o.BaseBudgetType.Id, o.BaseBudget.Id, o.Currency.Id, o.RequestedBy.Id, o.Responsible.Id,
-        o.Beneficiary.Id, o.Provider.Id, o.Warehouse.Id, o.Source.Id, (char) o.Priority,
-        o.ConditionsData.ToString(), o.SpecificationsData.ToString(), o.DeliveryData.ToString(), o.ExtData.ToString(),
-        o.Keywords, o.RecordingTime, o.RecordedBy.Id, o.ApplicationDate, o.AppliedBy.Id,
-        o.AuthorizationTime, o.AuthorizedBy.Id, o.ClosingTime, o.ClosedBy.Id,
-        o.PostingTime, o.PostedBy.Id, (char) o.Status);
+        o.StartDate, o.EndDate, o.RequestedBy.Id, o.RequestedTime, o.RequiredTime,
+        o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id, o.Warehouse.Id, o.DeliveryPlace.Id,
+        o.Project.Id, o.Origin.Id, o.Currency.Id, o.BudgetType.Id, o.BaseBudget.Id,
+        o.Source.Id, (char) o.Priority, o.ConditionsData.ToString(), o.SpecificationsData.ToString(),
+        o.DeliveryData.ToString(), o.ExtData.ToString(), o.Keywords, o.AuthorizationTime, o.AuthorizedBy.Id,
+        o.ClosingTime, o.ClosedBy.Id, o.PostingTime, o.PostedBy.Id, (char) o.Status);
 
       DataWriter.Execute(op);
     }

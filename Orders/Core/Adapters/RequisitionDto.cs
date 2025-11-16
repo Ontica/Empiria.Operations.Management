@@ -61,7 +61,7 @@ namespace Empiria.Orders.Adapters {
   public class RequisitionDto : OrderDto {
 
     protected internal RequisitionDto(Requisition requisition) : base(requisition) {
-      BudgetType = requisition.BaseBudgetType.MapToNamedEntity();
+      BudgetType = requisition.BudgetType.MapToNamedEntity();
       Budgets = requisition.Budgets.MapToNamedEntityList();
       Currency = requisition.Currency.MapToNamedEntity();
       Total = requisition.GetTotal();
@@ -91,7 +91,7 @@ namespace Empiria.Orders.Adapters {
   public class RequisitionDescriptor : OrderDescriptor {
 
     protected internal RequisitionDescriptor(Requisition requisition) : base(requisition) {
-      BaseBudgetName = requisition.BaseBudgetType.DisplayName;
+      BaseBudgetName = requisition.BudgetType.DisplayName;
       Budgets = requisition.Budgets.MapToNamedEntityList();
     }
 
