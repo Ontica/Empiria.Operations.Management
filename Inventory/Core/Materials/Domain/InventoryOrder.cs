@@ -71,10 +71,6 @@ namespace Empiria.Inventory {
 
     #region Methods
 
-    protected override void OnSave() {
-      InventoryOrderData.WriteOrder(this,this.Conditions.ToString(), this.Specifications.ToString(), this.Delivery.ToString(), this.ExtData.ToString());
-    }
-
     internal protected virtual void AddItem(InventoryOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
 
