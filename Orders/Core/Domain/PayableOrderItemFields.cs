@@ -16,12 +16,9 @@ namespace Empiria.Orders {
     public override void EnsureValid() {
       base.EnsureValid();
 
-      BudgetAccountUID = Patcher.CleanUID(BudgetAccountUID);
-
       Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");
       Assertion.Require(Discount >= 0, "El descuento no puede ser negativo.");
       Assertion.Require(((Quantity * UnitPrice) - Discount) >= 0, "El total del concepto no puede ser negativo.");
-      Assertion.Require(BudgetAccountUID, "Necesito la cuenta presupuestal a la que se aplicará el concepto.");
     }
 
   }  // class PayableOrderItemFields
