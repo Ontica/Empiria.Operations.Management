@@ -108,12 +108,12 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
-    public DateTime SupplyStartDate {
+    public DateTime StartDate {
       get; set;
     } = ExecutionServer.DateMaxValue;
 
 
-    public DateTime SupplyEndDate {
+    public DateTime EndDate {
       get; set;
     } = ExecutionServer.DateMaxValue;
 
@@ -131,6 +131,8 @@ namespace Empiria.Orders {
       Assertion.Require(ProductUID.Length != 0 || BudgetAccountUID.Length != 0 || Description.Length != 0,
                         "Necesito se proporcione el producto, su cuenta presupuestal o su descripción.");
       Assertion.Require(Quantity > 0, "Necesito se proporcione la cantidad mínima.");
+      Assertion.Require(StartDate <= EndDate,
+                        $"{nameof(StartDate)} must be less than or equal to {nameof(EndDate)}");
     }
 
   }  // class OrderItemFields

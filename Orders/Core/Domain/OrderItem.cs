@@ -195,6 +195,10 @@ namespace Empiria.Orders {
           return this;
         }
 
+        if (_requisitionItemId == -1) {
+          return Empty;
+        }
+
         return Parse(_requisitionItemId);
       }
       private set {
@@ -233,13 +237,13 @@ namespace Empiria.Orders {
 
 
     [DataField("ORDER_ITEM_SUPPLY_START_DATE")]
-    public DateTime SupplyStartDate {
+    public DateTime StartDate {
       get; private set;
     }
 
 
     [DataField("ORDER_ITEM_SUPPLY_END_DATE")]
-    public DateTime SupplyEndDate {
+    public DateTime EndDate {
       get; private set;
     }
 
@@ -385,8 +389,11 @@ namespace Empiria.Orders {
       Product = Patcher.Patch(fields.ProductUID, Product.Empty);
       ProductCode = Patcher.PatchClean(fields.ProductCode, Product.InternalCode);
 
+      Requisition = Patcher.Patch(fields.RequisitionUID, Order.Requisition);
+      RequisitionItem = Patcher.Patch(fields.RequisitionItemUID, Empty);
+
       Budget = Patcher.Patch(fields.BudgetUID, Order.BaseBudget);
-      BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, BudgetAccount.Empty);
+      BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, RequisitionItem.BudgetAccount);
 
       Description = EmpiriaString.Clean(fields.Description);
       if (Description.Length == 0 && !Product.IsEmptyInstance) {
@@ -417,14 +424,13 @@ namespace Empiria.Orders {
 
       Project = Patcher.Patch(fields.ProjectUID, Order.Project);
       Provider = Patcher.Patch(fields.ProviderUID, Order.Provider);
-      Requisition = Patcher.Patch(fields.RequisitionUID, Order.Requisition);
-      RequisitionItem = Patcher.Patch(fields.RequisitionItemUID, Empty);
+
       RelatedItem = Patcher.Patch(fields.RelatedItemUID, Empty);
 
       OriginCountry = Patcher.Patch(fields.OriginCountryUID, Location.Empty);
 
-      SupplyStartDate = Patcher.Patch(fields.SupplyStartDate, ExecutionServer.DateMaxValue);
-      SupplyEndDate = Patcher.Patch(fields.SupplyEndDate, ExecutionServer.DateMaxValue);
+      StartDate = Patcher.Patch(fields.StartDate, ExecutionServer.DateMaxValue);
+      EndDate = Patcher.Patch(fields.EndDate, ExecutionServer.DateMaxValue);
 
       RequestedBy = Patcher.Patch(fields.RequestedByUID, Order.RequestedBy);
       RequiredTime = Patcher.Patch(fields.RequiredTime, ExecutionServer.DateMaxValue);

@@ -37,11 +37,13 @@ namespace Empiria.Orders.Adapters {
       Project = item.Project.MapToNamedEntity();
       Provider = item.Provider.MapToNamedEntity();
       Requisition = item.Requisition.MapToNamedEntity();
-      RequisitionItem = item.RequisitionItem.MapToNamedEntity();
+      if (!item.RequisitionItem.IsEmptyInstance && item.RequisitionItem is PayableOrderItem rqp) {
+        RequisitionItem = PayableOrderMapper.Map(rqp);
+      }
       RelatedItem = item.RelatedItem.MapToNamedEntity();
       OriginCountry = item.OriginCountry.MapToNamedEntity();
-      SupplyStartDate = item.SupplyStartDate;
-      SupplyEndDate = item.SupplyEndDate;
+      StartDate = item.StartDate;
+      EndDate = item.EndDate;
       RequiredTime = item.RequiredTime;
       Status = item.Status.MapToDto();
     }
@@ -122,7 +124,7 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
-    public NamedEntityDto RequisitionItem {
+    public PayableOrderItemDto RequisitionItem {
       get;
     }
 
@@ -134,11 +136,11 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
-    public DateTime SupplyStartDate {
+    public DateTime StartDate {
       get;
     }
 
-    public DateTime SupplyEndDate {
+    public DateTime EndDate {
       get;
     }
 
