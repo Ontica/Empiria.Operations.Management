@@ -24,7 +24,7 @@ namespace Empiria.Orders.Adapters {
       get; set;
     }
 
-    public FixedList<OrderItem> Items {
+    public FixedList<OrderItemDto> Items {
       get; set;
     }
 
@@ -75,16 +75,19 @@ namespace Empiria.Orders.Adapters {
       Justification = order.Justification;
       Identificators = order.Identificators;
       Tags = order.Tags;
+      StartDate = order.StartDate;
+      EndDate = order.EndDate;
+      RequestedBy = order.RequestedBy.MapToNamedEntity();
       Responsible = order.Responsible.MapToNamedEntity();
       Beneficiary = order.Beneficiary.MapToNamedEntity();
       IsForMultipleBeneficiaries = order.IsForMultipleBeneficiaries;
       Provider = order.Provider.MapToNamedEntity();
+
       if (order.Provider is Parties.Group group) {
         ProvidersGroup = group.Members.MapToNamedEntityList();
       } else {
         ProvidersGroup = new FixedList<NamedEntityDto>();
       }
-      RequestedBy = order.RequestedBy.MapToNamedEntity();
       Project = order.Project.MapToNamedEntity();
       Priority = order.Priority.MapToDto();
       AuthorizationTime = order.AuthorizationTime;
@@ -95,7 +98,12 @@ namespace Empiria.Orders.Adapters {
 
       BaseBudgetName = order.BaseBudget.Name;
       BaseOrgUnitName = order.RequestedBy.Name;
+
+      Observations = order.Observations;
+      GuaranteeNotes = order.GuaranteeNotes;
+      DeliveryNotes = order.DeliveryNotes;
     }
+
 
     public string UID {
       get;
@@ -130,6 +138,14 @@ namespace Empiria.Orders.Adapters {
     }
 
     public FixedList<string> Tags {
+      get;
+    }
+
+    public DateTime StartDate {
+      get;
+    }
+
+    public DateTime EndDate {
       get;
     }
 
@@ -182,6 +198,18 @@ namespace Empiria.Orders.Adapters {
     }
 
     public NamedEntityDto Status {
+      get;
+    }
+
+    public string Observations {
+      get;
+    }
+
+    public string GuaranteeNotes {
+      get;
+    }
+
+    public string DeliveryNotes {
       get;
     }
 

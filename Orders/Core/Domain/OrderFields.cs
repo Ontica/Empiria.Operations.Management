@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
 using Empiria.StateEnums;
 
 namespace Empiria.Orders {
@@ -53,6 +54,17 @@ namespace Empiria.Orders {
       get; set;
     } = new string[0];
 
+
+    public DateTime StartDate {
+      get; set;
+    } = ExecutionServer.DateMaxValue;
+
+
+    public DateTime EndDate {
+      get; set;
+    } = ExecutionServer.DateMaxValue;
+
+
     public string RequestedByUID {
       get; set;
     } = string.Empty;
@@ -92,11 +104,34 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public string Observations {
+      get; set;
+    } = string.Empty;
+
+
+    public string GuaranteeNotes {
+      get; set;
+    } = string.Empty;
+
+
+    public string DeliveryNotes {
+      get; set;
+    } = string.Empty;
+
+
     public virtual void EnsureValid() {
       Assertion.Require(OrderTypeUID, nameof(OrderTypeUID));
       Assertion.Require(Description, nameof(Description));
       Assertion.Require(RequestedByUID, nameof(RequestedByUID));
       Priority = Priority.HasValue ? Priority.Value : StateEnums.Priority.Normal;
+      Assertion.Require(StartDate <= EndDate,
+                        $"{nameof(StartDate)} must be less than or equal to {nameof(EndDate)}");
+      Assertion.Require(Observations.Length <= 3800,
+          "El texto de las observaciones es demasiado largo. Máximo de 3800 caracteres");
+      Assertion.Require(GuaranteeNotes.Length <= 3800,
+          "El texto de las garantías es demasiado largo. Máximo de 3800 caracteres");
+      Assertion.Require(DeliveryNotes.Length <= 3800,
+          "El texto de las condiciones de entrega es demasiado largo. Máximo de 3800 caracteres");
     }
 
   }  // class OrderFields

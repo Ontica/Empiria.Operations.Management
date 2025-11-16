@@ -54,7 +54,7 @@ namespace Empiria.Orders.Data {
         o.Requisition.Id, o.ParentOrder.Id, o.ContractId, o.Project.Id,
         o.BaseBudgetType.Id, o.BaseBudget.Id, o.Currency.Id, o.RequestedBy.Id, o.Responsible.Id,
         o.Beneficiary.Id, o.Provider.Id, o.Warehouse.Id, o.Source.Id, (char) o.Priority,
-        o.Conditions.ToString(), o.Specifications.ToString(), o.Delivery.ToString(), o.ExtData.ToString(),
+        o.ConditionsData.ToString(), o.SpecificationsData.ToString(), o.DeliveryData.ToString(), o.ExtData.ToString(),
         o.Keywords, o.RecordingTime, o.RecordedBy.Id, o.ApplicationDate, o.AppliedBy.Id,
         o.AuthorizationTime, o.AuthorizedBy.Id, o.ClosingTime, o.ClosedBy.Id,
         o.PostingTime, o.PostedBy.Id, (char) o.Status);
@@ -69,7 +69,7 @@ namespace Empiria.Orders.Data {
         o.Justification, o.ProductUnit.Id, o.RequestedQty, o.Quantity, o.UnitPrice, o.Discount, o.PriceId,
         o.Currency.Id, o.Budget.Id, o.BudgetAccount.Id, o.BudgetEntry.Id, o.Project.Id, o.Provider.Id,
         o.Requisition.Id, o.RequisitionItem.Id, o.ContractItemId, o.RelatedItem.Id, o.OriginCountry.Id,
-        o.SupplyStartDate, o.SupplyEndDate, o.Location.Id, o.DeliveryPlace.Id, o.ConfigData.ToString(),
+        o.StartDate, o.EndDate, o.Location.Id, o.DeliveryPlace.Id, o.ConfigData.ToString(),
         o.ConditionsData.ToString(), o.SpecificationData.ToString(), o.ExtData.ToString(), o.Keywords,
         o.RequestedTime, o.RequestedBy.Id, o.RequiredTime, o.ReceivedBy.Id, o.ClosingTime, o.ClosedBy.Id,
         o.Position, o.PostingTime, o.PostedBy.Id, (char) o.Status);

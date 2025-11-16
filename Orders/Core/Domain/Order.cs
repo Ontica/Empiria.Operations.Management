@@ -98,6 +98,36 @@ namespace Empiria.Orders {
     }
 
 
+    public string Observations {
+      get {
+        return SpecificationsData.Get("notes", string.Empty);
+      }
+      private set {
+        SpecificationsData.SetIfValue("notes", value);
+      }
+    }
+
+
+    public string GuaranteeNotes {
+      get {
+        return ConditionsData.Get("notes", string.Empty);
+      }
+      private set {
+        ConditionsData.SetIfValue("notes", value);
+      }
+    }
+
+
+    public string DeliveryNotes {
+      get {
+        return DeliveryData.Get("notes", string.Empty);
+      }
+      private set {
+        DeliveryData.SetIfValue("notes", value);
+      }
+    }
+
+
     [DataField("ORDER_IDENTIFICATORS")]
     private string _identificators = string.Empty;
 
@@ -116,6 +146,26 @@ namespace Empiria.Orders {
         return _tags.Split(' ').ToFixedList();
       }
     }
+
+    public DateTime StartDate {
+      get {
+        return ExtData.Get("startDate", ExecutionServer.DateMaxValue);
+      }
+      set {
+        ExtData.SetIf("startDate", value, !ExecutionServer.IsMinOrMaxDate(value));
+      }
+    }
+
+
+    public DateTime EndDate {
+      get {
+        return ExtData.Get("endDate", ExecutionServer.DateMaxValue);
+      }
+      set {
+        ExtData.SetIf("endDate", value, !ExecutionServer.IsMinOrMaxDate(value));
+      }
+    }
+
 
     [DataField("ORDER_REQUISITION_ID")]
     private int _requisitionId;
@@ -219,17 +269,17 @@ namespace Empiria.Orders {
     }
 
     [DataField("ORDER_CONDITIONS_EXT_DATA")]
-    protected internal JsonObject Conditions {
+    protected internal JsonObject ConditionsData {
       get; private set;
     }
 
     [DataField("ORDER_SPECIFICATION_EXT_DATA")]
-    protected internal JsonObject Specifications {
+    protected internal JsonObject SpecificationsData {
       get; private set;
     }
 
     [DataField("ORDER_DELIVERY_EXT_DATA")]
-    protected internal JsonObject Delivery {
+    protected internal JsonObject DeliveryData {
       get; private set;
     }
 
@@ -309,6 +359,7 @@ namespace Empiria.Orders {
     public EntityStatus Status {
       get; private set;
     }
+
 
     public bool IsForMultipleBeneficiaries {
       get {
@@ -411,11 +462,23 @@ namespace Empiria.Orders {
       Requisition = Patcher.Patch(fields.RequisitionUID, Requisition.Empty);
       Description = Patcher.PatchClean(fields.Description, Description);
       Justification = Patcher.PatchClean(fields.Justification, string.Empty);
+
+      Observations = EmpiriaString.Clean(fields.Observations);
+      GuaranteeNotes = EmpiriaString.Clean(fields.GuaranteeNotes);
+      DeliveryNotes = EmpiriaString.Clean(fields.DeliveryNotes);
+
+      EndDate = Patcher.Patch(fields.EndDate, ExecutionServer.DateMaxValue);
+
+      StartDate = Patcher.Patch(fields.StartDate, ExecutionServer.DateMaxValue);
+      EndDate = Patcher.Patch(fields.EndDate, ExecutionServer.DateMaxValue);
+
       RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);
       Responsible = Patcher.Patch(fields.ResponsibleUID, RequestedBy);
       Beneficiary = Patcher.Patch(fields.BeneficiaryUID, RequestedBy);
       IsForMultipleBeneficiaries = fields.IsForMultipleBeneficiaries;
+
       Provider = Patcher.Patch(fields.ProviderUID, Provider);
+
       Project = Patcher.Patch(fields.ProjectUID, Project);
       Priority = fields.Priority.Value;
       ParentOrder = Patcher.Patch(fields.ParentOrderUID, Empty);
