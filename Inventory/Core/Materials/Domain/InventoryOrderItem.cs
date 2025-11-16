@@ -56,10 +56,6 @@ namespace Empiria.Inventory {
 
     #region Methods
 
-    protected override void OnSave() {
-      InventoryOrderData.WriteOrderItem(this, this.ContractItemId, this.ExtData.ToString());
-    }
-
 
     internal void DelItem() {
       base.Delete();

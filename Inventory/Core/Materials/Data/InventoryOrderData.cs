@@ -144,7 +144,7 @@ namespace Empiria.Inventory.Data {
     internal static FixedList<InventoryEntriesReport> GetProductEntryInventoryReportByLocation(string locationName) {
 
       var sql = $"SELECT * FROM vw_Inventory_Report " +
-                 $" inner join Common_Storage on Inv_Entry_Location_Id = Object_Id " + 
+                 $" inner join Common_Storage on Inv_Entry_Location_Id = Object_Id " +
                  $" WHERE Object_Type_Id = 275 and Object_Name = {locationName} ORDER BY Product_Name ";
 
       var op = DataOperation.Parse(sql);
@@ -228,34 +228,6 @@ namespace Empiria.Inventory.Data {
           entry.EntryTime, entry.Tags, entry.ExtData,
           entry.Keywords, entry.Position, entry.PostedBy.Id,
           entry.PostingTime, (char) entry.Status);
-
-      DataWriter.Execute(op);
-    }
-
-
-    static internal void WriteOrder(InventoryOrder o, string conditions, string specifications, string delivery, string extensionData) {
-      var op = DataOperation.Parse("write_OMS_Order", o.Id, o.UID, o.OrderType.Id, o.Category.Id,
-        o.OrderNo, o.Description, o.Justification, EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
-         -1, o.ParentOrder.Id, o.ContractId, o.Project.Id, o.BaseBudgetType.Id,
-        o.BaseBudget.Id, 600, o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
-        o.Source.Id, (char) o.Priority, conditions, specifications, delivery, extensionData,
-        o.Keywords, o.RecordingTime, o.RecordedBy.Id, o.ApplicationDate, o.AppliedBy.Id,
-        o.AuthorizationTime, o.AuthorizedBy.Id, o.ClosingTime, o.ClosedBy.Id, o.PostedBy.Id,
-       o.PostingTime, (char) o.Status, o.Warehouse.Id);
-
-      DataWriter.Execute(op);
-    }
-
-
-    static internal void WriteOrderItem(InventoryOrderItem o, int contractItemID, string extensionData) {
-      var op = DataOperation.Parse("write_OMS_Order_Item",
-                     o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Product.Id, o.SkuId, o.ProductCode,
-                     o.Description, o.Justification, o.ProductUnit.Id, o.RequestedQty, o.Quantity, o.UnitPrice,
-                     o.Discount, o.PriceId, o.Currency.Id, o.Budget.Id, o.BudgetAccount.Id, o.BudgetEntry.Id, o.Project.Id, 
-                     o.Provider.Id, o.Requisition.Id, o.RequisitionItem.Id, contractItemID, o.RelatedItem.Id, o.OriginCountry.Id, 
-                     o.StartDate, o.EndDate, o.Location.Id, o.DeliveryPlace.Id, "", "", "", extensionData,
-                     o.Keywords, o.RequestedTime, o.RequestedBy.Id, o.RequiredTime, o.ReceivedBy.Id, o.ClosingTime, o.ClosedBy.Id, o.Position,
-                     o.PostingTime, o.PostedBy.Id, (char) o.Status);
 
       DataWriter.Execute(op);
     }
