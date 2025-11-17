@@ -11,9 +11,6 @@
 using Empiria.Services;
 
 using Empiria.Parties;
-
-using Empiria.Procurement.Contracts;
-using Empiria.Procurement.Contracts.Data;
 using Empiria.Procurement.Contracts.Adapters;
 
 using Empiria.Procurement.Suppliers.Adapters;
@@ -37,23 +34,6 @@ namespace Empiria.Procurement.Suppliers.UseCases {
     #endregion Constructors and parsers
 
     #region Use cases
-
-    public FixedList<ContractDto> GetSupplierContractsToOrder(string supplierUID) {
-      Assertion.Require(supplierUID, nameof(supplierUID));
-
-      var query = new ContractQuery {
-        SupplierUID = supplierUID
-      };
-
-      string filter = query.MapToFilterString();
-      string sortBy = query.MapToSortString();
-
-
-      FixedList<FormerContract> contracts = ContractData.GetContracts(filter, sortBy);
-
-      return ContractMapper.MapContracts(contracts);
-    }
-
 
     public SupplierHolderDto GetSupplier(string supplierUID) {
       Assertion.Require(supplierUID, nameof(supplierUID));

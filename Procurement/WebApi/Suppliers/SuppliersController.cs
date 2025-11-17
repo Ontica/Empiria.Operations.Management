@@ -12,8 +12,6 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
-using Empiria.Procurement.Contracts.Adapters;
-
 using Empiria.Procurement.Suppliers.UseCases;
 using Empiria.Procurement.Suppliers.Adapters;
 
@@ -23,18 +21,6 @@ namespace Empiria.Procurement.Suppliers.WebApi {
   public class SuppliersController : WebApiController {
 
     #region Query web apis
-
-    [HttpGet]
-    [Route("v8/procurement/suppliers/{supplierUID:guid}/contracts/to-order")]
-    public CollectionModel GetSupplierContractsToOrder([FromUri] string supplierUID) {
-
-      using (var usecases = SupplierUseCases.UseCaseInteractor()) {
-        FixedList<ContractDto> contracts = usecases.GetSupplierContractsToOrder(supplierUID);
-
-        return new CollectionModel(base.Request, contracts);
-      }
-    }
-
 
     [HttpGet]
     [Route("v8/procurement/suppliers/{supplierUID:guid}")]
