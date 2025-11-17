@@ -19,8 +19,8 @@ namespace Empiria.Orders.Adapters {
   /// <summary>Maps payable orders and their order items to their corresponding DTOs.</summary>
   static public class PayableOrderMapper {
 
-    static internal FixedList<PayableOrderDescriptor> Map(FixedList<Order> orders) {
-      return orders.Select(x => MapToDescriptor((PayableOrder) x))
+    static internal FixedList<PayableOrderDescriptor> Map(FixedList<PayableOrder> orders) {
+      return orders.Select(x => MapToDescriptor(x))
                    .ToFixedList();
     }
 
