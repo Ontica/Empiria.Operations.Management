@@ -17,7 +17,7 @@ namespace Empiria.Procurement.Contracts.Data {
 
     #region Methods
 
-    static internal FixedList<ContractOrder> GetContractOrders(FormerContract contract) {
+    static internal FixedList<ContractOrder> GetContractOrders(Contract contract) {
       var sql = "SELECT * FROM OMS_ORDERS " +
                 $"WHERE ORDER_CONTRACT_ID = {contract.Id} AND " +
                  "ORDER_STATUS <> 'X'";
@@ -28,7 +28,7 @@ namespace Empiria.Procurement.Contracts.Data {
     }
 
 
-    static internal string GetNextContractOrderNo(FormerContract contract) {
+    static internal string GetNextContractOrderNo(Contract contract) {
       Assertion.Require(contract, nameof(contract));
 
       string sql = "SELECT MAX(ORDER_NO) " +
@@ -52,20 +52,6 @@ namespace Empiria.Procurement.Contracts.Data {
       }
 
       return $"{contract.ContractNo} - 01";
-    }
-
-
-    static internal void WriteOrder(ContractOrder o, string extensionData) {
-      var op = DataOperation.Parse("write_OMS_Order",
-                     o.Id, o.UID, o.OrderType.Id, o.Category.Id, o.OrderNo, o.Description,
-                     EmpiriaString.Tagging(o.Identificators), EmpiriaString.Tagging(o.Tags),
-                     o.RequestedBy.Id, o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id,
-                     o.BaseBudget.Id, o.Requisition.Id, o.Contract.Id, o.Project.Id, o.Currency.Id,
-                     o.Source.Id, (char) o.Priority, o.AuthorizationTime, o.AuthorizedBy.Id,
-                     o.ClosingTime, o.ClosedBy.Id, extensionData, o.Keywords,
-                     o.PostedBy.Id, o.PostingTime, (char) o.Status);
-
-      DataWriter.Execute(op);
     }
 
     #endregion Methods

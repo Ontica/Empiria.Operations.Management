@@ -22,13 +22,13 @@ namespace Empiria.Procurement.Contracts {
     }
 
     internal ContractOrderItem(ContractOrder order,
-                               FormerContractItem contractItem) : base(OrderItemType.ContractOrderItemType, order) {
+                               ContractItem contractItem) : base(OrderItemType.ContractOrderItemType, order) {
 
       Assertion.Require(contractItem, nameof(contractItem));
 
       _ = order.Contract.GetItem(contractItem.UID);
 
-      base.ContractItemId = contractItem.Id;
+      base.ContractItem = contractItem;
     }
 
     static internal new ContractOrderItem Parse(int id) => ParseId<ContractOrderItem>(id);
@@ -47,13 +47,6 @@ namespace Empiria.Procurement.Contracts {
       }
     }
 
-
-    public FormerContractItem ContractItem {
-      get {
-        return FormerContractItem.Parse(base.ContractItemId);
-      }
-    }
-
     #endregion Properties
 
     #region Methods
@@ -62,17 +55,6 @@ namespace Empiria.Procurement.Contracts {
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();
-
-      var contractItem = FormerContractItem.Parse(fields.ContractItemUID);
-
-      // ToDo: validate quantity
-
-      fields.ProductUID = contractItem.Product.UID;
-      fields.ProductUnitUID = contractItem.ProductUnit.UID;
-      fields.CurrencyUID = contractItem.Currency.UID;
-      fields.BudgetAccountUID = contractItem.BudgetAccount.UID;
-      fields.Description = Patcher.PatchClean(fields.Description, contractItem.Description);
-      fields.ProjectUID = Patcher.Patch(fields.ProjectUID, contractItem.Project.UID);
 
       base.Update(fields);
     }

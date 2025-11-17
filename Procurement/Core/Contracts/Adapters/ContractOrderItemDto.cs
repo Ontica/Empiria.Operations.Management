@@ -16,7 +16,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
   public class ContractOrderItemDto : PayableOrderItemDto {
 
     internal ContractOrderItemDto(ContractOrderItem item) : base(item) {
-      ContractItem = ContractItemMapper.Map(item.ContractItem);
+      ContractItem = ContractItemMapper.Map((ContractItem) item.ContractItem);
     }
 
     public ContractItemDto ContractItem {

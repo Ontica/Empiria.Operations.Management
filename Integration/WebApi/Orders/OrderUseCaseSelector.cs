@@ -52,7 +52,7 @@ namespace Empiria.Operations.Integration.Orders {
 
       if (orderType.Equals(OrderType.ContractOrder)) {
 
-        using (var usecases = FormerContractOrderUseCases.UseCaseInteractor()) {
+        using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
           return usecases.CreateContractOrder((ContractOrderFields) fields);
         }
       }
@@ -76,7 +76,7 @@ namespace Empiria.Operations.Integration.Orders {
       }
 
       if (order is ContractOrder) {
-        using (var usecases = FormerContractOrderUseCases.UseCaseInteractor()) {
+        using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
           return usecases.CreateContractOrderItem(order.UID, (ContractOrderItemFields) orderItemFields);
         }
       }
@@ -99,7 +99,7 @@ namespace Empiria.Operations.Integration.Orders {
       }
 
       if (order is ContractOrder) {
-        using (var usecases = FormerContractOrderUseCases.UseCaseInteractor()) {
+        using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
           return usecases.DeleteContractOrder(order.UID);
         }
       }
@@ -123,7 +123,7 @@ namespace Empiria.Operations.Integration.Orders {
       }
 
       if (order is ContractOrder) {
-        using (var usecases = FormerContractOrderUseCases.UseCaseInteractor()) {
+        using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
           return usecases.DeleteContractOrderItem(order.UID, orderItemUID);
         }
       }
@@ -157,7 +157,7 @@ namespace Empiria.Operations.Integration.Orders {
       }
 
       if (order is ContractOrder) {
-        using (var usecases = FormerContractOrderUseCases.UseCaseInteractor()) {
+        using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
           return usecases.GetContractOrder(order.UID);
         }
       }
@@ -206,7 +206,7 @@ namespace Empiria.Operations.Integration.Orders {
 
       if (order is ContractOrder) {
 
-        using (var usecases = FormerContractOrderUseCases.UseCaseInteractor()) {
+        using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
           return usecases.UpdateContractOrder((ContractOrderFields) fields);
         }
       }
@@ -231,7 +231,7 @@ namespace Empiria.Operations.Integration.Orders {
       }
 
       if (order is ContractOrder) {
-        using (var usecases = FormerContractOrderUseCases.UseCaseInteractor()) {
+        using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
           return usecases.UpdateContractOrderItem(order.UID, orderItemUID, (ContractOrderItemFields) fields);
         }
       }
