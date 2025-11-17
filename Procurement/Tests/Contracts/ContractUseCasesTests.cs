@@ -22,12 +22,12 @@ namespace Empiria.Tests.Procurement.Contracts {
 
     #region Use cases initialization
 
-    private readonly FormerContractUseCases _usecases;
+    private readonly ContractUseCases _usecases;
 
     public ContractUseCasesTests() {
       TestsCommonMethods.Authenticate();
 
-      _usecases = FormerContractUseCases.UseCaseInteractor();
+      _usecases = ContractUseCases.UseCaseInteractor();
     }
 
     ~ContractUseCasesTests() {
@@ -41,7 +41,6 @@ namespace Empiria.Tests.Procurement.Contracts {
     [Fact]
     public void Should_Add_A_Contract() {
       var fields = new ContractFields {
-        ContractCategoryUID = TestingConstants.CONTRACT_TYPE_UID,
         ContractNo = "DAGA/146/2023",
         Name = "BANOBRAS-2023-O-00ABCD",
         Description = "Fábrica de Software 2023-2025",
@@ -63,13 +62,12 @@ namespace Empiria.Tests.Procurement.Contracts {
     [Fact]
     public void Should_Update_A_Contract() {
       var fields = new ContractFields {
-        ContractCategoryUID = TestingConstants.CONTRACT_TYPE_UID,
         ContractNo = "DAGA/031/2022",
         Name = "BANOBRAS-2024-O-XXXXXX",
         Description = "Servicios de soporte técnico y mantenimiento al Sistema Fiduciario que opera en Banobras YATLA",
         CurrencyUID = TestingConstants.CONTRACT_CURRENCY_UID,
-        FromDate = new DateTime(2022, 09, 01),
-        ToDate = new DateTime(2024, 08, 31),
+        StartDate = new DateTime(2022, 09, 01),
+        EndDate = new DateTime(2024, 08, 31),
         SignDate = new DateTime(2022, 09, 01),
         RequestedByUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
         BudgetTypeUID = TestingConstants.CONTRACT_BUDGET_TYPE_UID,
@@ -88,20 +86,6 @@ namespace Empiria.Tests.Procurement.Contracts {
     public void Should_Read_A_Contract() {
 
       ContractHolderDto sut = _usecases.GetContract(TestingConstants.CONTRACT_UID);
-
-      Assert.NotNull(sut);
-
-    }
-
-
-    [Fact]
-    public void Should_Search_Contracts() {
-
-      var query = new ContractQuery {
-        Keywords = "test",
-      };
-
-      var sut = _usecases.SearchContracts(query);
 
       Assert.NotNull(sut);
 

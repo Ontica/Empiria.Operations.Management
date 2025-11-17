@@ -8,24 +8,25 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Services;
-
-using Empiria.Procurement.Contracts.Data;
+using Empiria.Orders;
+using Empiria.Orders.Adapters;
+using Empiria.Orders.Data;
 using Empiria.Procurement.Contracts.Adapters;
+using Empiria.Services;
 
 namespace Empiria.Procurement.Contracts.UseCases {
 
   /// <summary>Use cases for contract management.</summary>
-  public class FormerContractUseCases : UseCase {
+  public class ContractUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected FormerContractUseCases() {
+    protected ContractUseCases() {
       // no-op
     }
 
-    static public FormerContractUseCases UseCaseInteractor() {
-      return UseCase.CreateInstance<FormerContractUseCases>();
+    static public ContractUseCases UseCaseInteractor() {
+      return UseCase.CreateInstance<ContractUseCases>();
     }
 
     #endregion Constructors and parsers
@@ -37,7 +38,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       fields.EnsureValid();
 
-      var contract = new FormerContract(FormerContractType.Procurement);
+      var contract = new Contract(OrderType.Contract);
 
       contract.Update(fields);
 
@@ -50,7 +51,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
     public ContractHolderDto DeleteContract(string contractUID) {
       Assertion.Require(contractUID, nameof(contractUID));
 
-      var contract = FormerContract.Parse(contractUID);
+      var contract = Contract.Parse(contractUID);
 
       contract.Delete();
 
@@ -63,26 +64,30 @@ namespace Empiria.Procurement.Contracts.UseCases {
     public ContractHolderDto GetContract(string contractUID) {
       Assertion.Require(contractUID, nameof(contractUID));
 
-      var contract = FormerContract.Parse(contractUID);
+      var contract = Contract.Parse(contractUID);
 
       return ContractMapper.Map(contract);
     }
 
 
     public FixedList<NamedEntityDto> GetContractCategories() {
-      var contractTypes = FormerContractCategory.GetList();
+      var contractTypes = OrderCategory.GetList();
 
       return contractTypes.MapToNamedEntityList();
     }
 
 
-    public FixedList<ContractDescriptor> SearchContracts(ContractQuery query) {
+    public FixedList<ContractDescriptor> SearchContracts(OrdersQuery query) {
       Assertion.Require(query, nameof(query));
 
-      string filter = query.MapToFilterString();
-      string sortBy = query.MapToSortString();
+      query.OrderTypeUID = Contract.Empty.GetEmpiriaType().Name;
 
-      FixedList<FormerContract> contracts = ContractData.GetContracts(filter, sortBy);
+      query.EnsureIsValid();
+
+      var filter = query.MapToFilterString();
+      var sort = query.MapToSortString();
+
+      FixedList<Contract> contracts = OrdersData.Search<Contract>(filter, sort);
 
       return ContractMapper.MapToDescriptor(contracts);
     }
@@ -94,7 +99,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       fields.EnsureValid();
 
-      var contract = FormerContract.Parse(ContractUID);
+      var contract = Contract.Parse(ContractUID);
 
       contract.Update(fields);
 

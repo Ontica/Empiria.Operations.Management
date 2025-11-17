@@ -27,7 +27,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
     public NoDataModel RemoveContractDocument([FromUri] string contractUID,
                                               [FromUri] string documentUID) {
 
-      var contract = FormerContract.Parse(contractUID);
+      var contract = Contract.Parse(contractUID);
       var document = DocumentServices.GetDocument(documentUID);
 
       DocumentServices.RemoveDocument(contract, document);
@@ -40,7 +40,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
     [Route("v8/procurement/contracts/{contractUID:guid}/documents")]
     public SingleObjectModel StoreContractDocument([FromUri] string contractUID) {
 
-      var contract = FormerContract.Parse(contractUID);
+      var contract = Contract.Parse(contractUID);
 
       DocumentFields fields = GetFormDataFromHttpRequest<DocumentFields>("document");
 
@@ -59,7 +59,7 @@ namespace Empiria.Procurement.Contracts.WebApi {
                                                     [FromBody] DocumentFields fields) {
       base.RequireBody(fields);
 
-      var contract = FormerContract.Parse(contractUID);
+      var contract = Contract.Parse(contractUID);
       var document = DocumentServices.GetDocument(documentUID);
 
       var documentDto = DocumentServices.UpdateDocument(contract, document, fields);

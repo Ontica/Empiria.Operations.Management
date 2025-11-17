@@ -13,6 +13,8 @@ using System;
 using Empiria.Documents;
 using Empiria.History;
 
+using Empiria.Orders.Adapters;
+
 using Empiria.Budgeting.Transactions.Adapters;
 
 namespace Empiria.Procurement.Contracts.Adapters {
@@ -61,10 +63,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public bool CanRequestBudget {
-      get; internal set;
-    }
-
     public bool CanSuspend {
       get; internal set;
     }
@@ -74,192 +72,73 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
 
   /// <summary>Data transfer object used to return contracts information.</summary>
-  public class ContractDto {
+  public class ContractDto : OrderDto {
 
-    public string UID {
-      get; internal set;
+    internal ContractDto(Contract contract) : base(contract) {
+      ContractNo = contract.ContractNo;
+
+
+      SignDate = contract.SignDate;
+      BudgetType = contract.BudgetType.MapToNamedEntity();
+      Budgets = contract.Budgets.MapToNamedEntityList();
+      MinTotal = contract.MinTotal;
+      MaxTotal = contract.MaxTotal;
     }
 
-    [Newtonsoft.Json.JsonProperty(PropertyName = "ContractType")]
-    public NamedEntityDto ContractCategory {
-      get; internal set;
-    }
-
-    public NamedEntityDto Requisition {
-      get;
-      internal set;
-    }
 
     public string ContractNo {
-      get; internal set;
+      get;
     }
 
-    public string Name {
-      get; internal set;
-    }
-
-    public string Description {
-      get; internal set;
-    }
-
-    public string Justification {
-      get; internal set;
-    }
-
-    public string Notes {
-      get; internal set;
-    }
-
-    public NamedEntityDto RequestedBy {
-      get; internal set;
-    }
-
-    public NamedEntityDto Responsible {
-      get; internal set;
-    }
-
-    public NamedEntityDto Beneficiary {
-      get; internal set;
-    }
-
-    public bool IsForMultipleBeneficiaries {
-      get; internal set;
-    }
-
-    public NamedEntityDto Provider {
-      get; internal set;
-    }
-
-    public FixedList<NamedEntityDto> ProvidersGroup {
-      get; internal set;
-    }
-
-    public NamedEntityDto Project {
-      get; internal set;
-    }
-
-    public DateTime FromDate {
-      get; internal set;
-    }
-
-    public DateTime ToDate {
-      get; internal set;
-    }
 
     public DateTime SignDate {
-      get; internal set;
+      get;
     }
 
     public NamedEntityDto BudgetType {
-      get; internal set;
+      get;
     }
 
     public FixedList<NamedEntityDto> Budgets {
-      get; internal set;
-    }
-
-    public NamedEntityDto Currency {
-      get; internal set;
+      get;
     }
 
     public decimal MinTotal {
-      get; internal set;
+      get;
     }
 
     public decimal MaxTotal {
-      get; internal set;
-    }
-
-    public decimal Total {
-      get; internal set;
-    }
-
-    public NamedEntityDto Status {
-      get; internal set;
+      get;
     }
 
   }  // class ContractDto
 
 
   /// Output Dto used to return minimal contract data
-  public class ContractDescriptor {
+  public class ContractDescriptor : OrderDescriptor {
 
-    public string UID {
-      get; internal set;
+    internal ContractDescriptor(Contract contract) : base(contract) {
+      ContractNo = contract.ContractNo;
+      SignDate = contract.SignDate;
+      MinTotal = contract.MinTotal;
+      MaxTotal = contract.MaxTotal;
     }
 
-    [Newtonsoft.Json.JsonProperty(PropertyName = "ContractType")]
-    public string ContractCategory {
-      get; internal set;
-    }
 
     public string ContractNo {
-      get; internal set;
-    }
-
-    public string RequisitionNo {
-      get; internal set;
-    }
-
-    public string Name {
-      get; internal set;
-    }
-
-    public string Description {
-      get; internal set;
-    }
-
-    public string RequestedBy {
-      get; internal set;
-    }
-
-    public string Responsible {
-      get; internal set;
-    }
-
-    public string Beneficiary {
-      get; internal set;
-    }
-
-    public string Provider {
-      get; internal set;
-    }
-
-
-    public DateTime FromDate {
-      get; internal set;
-    }
-
-    public DateTime ToDate {
-      get; internal set;
+      get;
     }
 
     public DateTime SignDate {
-      get; internal set;
-    }
-
-    public string BudgetType {
-      get; internal set;
-    }
-
-    public string Currency {
-      get; internal set;
+      get;
     }
 
     public decimal MinTotal {
-      get; internal set;
+      get;
     }
 
     public decimal MaxTotal {
-      get; internal set;
-    }
-
-    public decimal Total {
-      get; internal set;
-    }
-
-    public string StatusName {
-      get; internal set;
+      get;
     }
 
   } // class ContractDescriptor

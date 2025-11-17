@@ -19,7 +19,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
   /// <summary>Provides data mapping services for Contract instances.</summary>
   static internal class ContractMapper {
 
-    static internal ContractHolderDto Map(FormerContract contract) {
+    static internal ContractHolderDto Map(Contract contract) {
       return new ContractHolderDto {
         Contract = MapContract(contract),
         Items = ContractItemMapper.Map(contract.GetItems()),
@@ -32,94 +32,43 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
 
-    static internal ContractDto MapContract(FormerContract contract) {
-      return new ContractDto {
-        UID = contract.UID,
-        ContractCategory = contract.ContractCategory.MapToNamedEntity(),
-        Requisition = contract.Requisition.MapToNamedEntity(),
-        ContractNo = contract.ContractNo,
-        Name = contract.Name,
-        Description = contract.Description,
-        Justification = contract.Justification,
-        Notes = contract.Notes,
-
-        FromDate = contract.FromDate,
-        ToDate = contract.ToDate,
-        SignDate = contract.SignDate,
-
-        BudgetType = contract.Budgets[0].BudgetType.MapToNamedEntity(),
-        Budgets = contract.Budgets.MapToNamedEntityList(),
-        Currency = contract.Currency.MapToNamedEntity(),
-        MinTotal = contract.MinTotal,
-        MaxTotal = contract.MaxTotal,
-        Total = contract.MaxTotal,
-
-        RequestedBy = contract.RequestedBy.MapToNamedEntity(),
-        Beneficiary = contract.Beneficiary.MapToNamedEntity(),
-        IsForMultipleBeneficiaries = contract.IsForMultipleBeneficiaries,
-        Responsible = contract.Responsible.MapToNamedEntity(),
-        Provider = contract.Provider.MapToNamedEntity(),
-        ProvidersGroup = contract.Provider is Parties.Group group ?
-                                group.Members.MapToNamedEntityList() : new FixedList<NamedEntityDto>(),
-        Project = contract.Project.MapToNamedEntity(),
-        Status = contract.Status.MapToDto()
-      };
+    static internal ContractDto MapContract(Contract contract) {
+      return new ContractDto(contract);
     }
 
 
-    static internal FixedList<ContractDto> MapContracts(FixedList<FormerContract> contracts) {
+    static internal FixedList<ContractDto> MapContracts(FixedList<Contract> contracts) {
       return contracts.Select(x => MapContract(x))
                       .ToFixedList();
     }
 
 
-    static internal FixedList<ContractDescriptor> MapToDescriptor(FixedList<FormerContract> contracts) {
+    static internal FixedList<ContractDescriptor> MapToDescriptor(FixedList<Contract> contracts) {
       return contracts.Select(contract => MapToDescriptor(contract))
                        .ToFixedList();
     }
 
 
 
-    static internal ContractDescriptor MapToDescriptor(FormerContract contract) {
-      return new ContractDescriptor {
-        UID = contract.UID,
-        ContractCategory = contract.ContractCategory.Name,
-        ContractNo = contract.ContractNo,
-        RequisitionNo = contract.Requisition.OrderNo,
-        Name = contract.Name,
-        Description = contract.Description,
-        RequestedBy = contract.RequestedBy.Name,
-        Responsible = contract.Responsible.Name,
-        Beneficiary = contract.Beneficiary.Name,
-        Provider = contract.Provider.Name,
-        FromDate = contract.FromDate,
-        ToDate = contract.ToDate,
-        SignDate = contract.SignDate,
-        BudgetType = contract.Budgets[0].BudgetType.DisplayName,
-        Currency = contract.Currency.Name,
-        MinTotal = contract.MinTotal,
-        MaxTotal = contract.MaxTotal,
-        Total = contract.MaxTotal,
-        StatusName = contract.Status.GetName()
-      };
+    static internal ContractDescriptor MapToDescriptor(Contract contract) {
+      return new ContractDescriptor(contract);
     }
 
     #region Helpers
 
-    static private ContractActions MapActions(FormerContract contract) {
+    static private ContractActions MapActions(Contract contract) {
       return new ContractActions {
         CanActivate = contract.CanActivate(),
         CanDelete = contract.CanDelete(),
         CanEditItems = contract.CanUpdate(),
         CanEditDocuments = contract.CanUpdate(),
-        CanRequestBudget = contract.CanRequestBudget(),
         CanSuspend = contract.CanSuspend(),
         CanUpdate = contract.Status == EntityStatus.Pending
       };
     }
 
 
-    static private FixedList<BudgetTransactionDescriptorDto> MapBudgetTransactions(FormerContract contract) {
+    static private FixedList<BudgetTransactionDescriptorDto> MapBudgetTransactions(Contract contract) {
       //FixedList<BudgetTransaction> transactions = BudgetTransaction.GetFor(contract);
 
       //return BudgetTransactionMapper.MapToDescriptor(transactions);
