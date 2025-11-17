@@ -8,73 +8,39 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Orders.Adapters;
+
 namespace Empiria.Procurement.Contracts.Adapters {
 
   /// <summary>Data transfer object used to return contracts information.</summary>
-  public class ContractItemDto {
+  public class ContractItemDto : OrderItemDto {
 
-    internal ContractItemDto() {
-      // no op
-    }
-
-    public string UID {
-      get; internal set;
-    }
-
-    public NamedEntityDto ContractItemType {
-      get; internal set;
+    internal ContractItemDto(ContractItem item) : base(item) {
+      Contract = item.Contract.MapToNamedEntity();
+      MinQuantity = item.MinQuantity;
+      MaxQuantity = item.MaxQuantity;
+      RequestedBy = item.RequestedBy.MapToNamedEntity();
+      Provider = item.Provider.MapToNamedEntity();
     }
 
     public NamedEntityDto Contract {
-      get; internal set;
-    }
-
-    public NamedEntityDto Product {
-      get; internal set;
-    }
-
-    public string Description {
-      get; internal set;
-    }
-
-    public NamedEntityDto ProductUnit {
-      get; internal set;
+      get;
     }
 
     public decimal MinQuantity {
-      get; internal set;
+      get;
     }
 
     public decimal MaxQuantity {
-      get; internal set;
-    }
-
-    public decimal UnitPrice {
-      get; internal set;
+      get;
     }
 
     public NamedEntityDto RequestedBy {
-      get; internal set;
-    }
-
-    public NamedEntityDto Budget {
-      get; internal set;
-    }
-
-    public NamedEntityDto BudgetAccount {
-      get; internal set;
-    }
-
-    public NamedEntityDto Project {
-      get; internal set;
+      get;
     }
 
     public NamedEntityDto Provider {
-      get; internal set;
-    }
-
-    public NamedEntityDto PeriodicityType {
-      get; internal set;
+      get;
     }
 
   }  // class ContractItemDto

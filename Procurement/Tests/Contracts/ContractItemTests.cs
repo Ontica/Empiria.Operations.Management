@@ -20,7 +20,7 @@ namespace Empiria.Tests.Procurement.Contracts {
 
     [Fact]
     public void Should_Read_All_Contract_Items() {
-      var items = BaseObject.GetFullList<FormerContractItem>();
+      var items = BaseObject.GetFullList<ContractItem>();
 
       foreach (var sut in items) {
         Assert.NotNull(sut);
@@ -31,7 +31,7 @@ namespace Empiria.Tests.Procurement.Contracts {
 
     [Fact]
     public void Should_Read_Empty_ContractItem() {
-      var sut = FormerContractItem.Empty;
+      var sut = ContractItem.Empty;
 
       Assert.NotNull(sut);
       Assert.NotNull(sut.Contract);

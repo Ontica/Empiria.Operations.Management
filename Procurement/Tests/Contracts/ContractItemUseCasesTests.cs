@@ -21,12 +21,12 @@ namespace Empiria.Tests.Procurement.Contracts {
 
     #region Use cases initialization
 
-    private readonly FormerContractItemUseCases _itemusecases;
+    private readonly ContractItemUseCases _itemusecases;
 
     public ContractItemUseCasesTests() {
       TestsCommonMethods.Authenticate();
 
-      _itemusecases = FormerContractItemUseCases.UseCaseInteractor();
+      _itemusecases = ContractItemUseCases.UseCaseInteractor();
     }
 
     ~ContractItemUseCasesTests() {
@@ -48,8 +48,7 @@ namespace Empiria.Tests.Procurement.Contracts {
         MinQuantity = 2,
         UnitPrice = 20,
         BudgetAccountUID = TestingConstants.CONTRACT_BUDGET_ACCOUNT_UID,
-        ProjectUID = TestingConstants.CONTRACT_ITEM_PROJECT_UID,
-        PeriodicityTypeUID = TestingConstants.CONTRACT_ITEM_PYM_PER_UID
+        ProjectUID = TestingConstants.CONTRACT_ITEM_PROJECT_UID
       };
 
       ContractItemDto sut = _itemusecases.AddContractItem(TestingConstants.CONTRACT_UID, fields);
@@ -87,8 +86,7 @@ namespace Empiria.Tests.Procurement.Contracts {
         MinQuantity = 5,
         UnitPrice = 20,
         BudgetAccountUID = TestingConstants.CONTRACT_BUDGET_ACCOUNT_UID,
-        ProjectUID = TestingConstants.CONTRACT_ITEM_PROJECT_UID,
-        PeriodicityTypeUID = TestingConstants.CONTRACT_ITEM_PYM_PER_UID
+        ProjectUID = TestingConstants.CONTRACT_ITEM_PROJECT_UID
       };
 
       ContractItemDto sut = _itemusecases.UpdateContractItem(TestingConstants.CONTRACT_UID,

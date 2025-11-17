@@ -13,30 +13,14 @@ namespace Empiria.Procurement.Contracts.Adapters {
   /// <summary>Provides data mapping services for ContractItem instances.</summary>
   static internal class ContractItemMapper {
 
-    static internal FixedList<ContractItemDto> Map(FixedList<FormerContractItem> contractsItem) {
+    static internal FixedList<ContractItemDto> Map(FixedList<ContractItem> contractsItem) {
       return contractsItem.Select(x => Map(x))
                       .ToFixedList();
     }
 
 
-    static internal ContractItemDto Map(FormerContractItem contractItem) {
-      return new ContractItemDto {
-        UID = contractItem.UID,
-        ContractItemType = contractItem.ContractItemType.MapToNamedEntity(),
-        Contract = contractItem.Contract.MapToNamedEntity(),
-        Product = contractItem.Product.MapToNamedEntity(),
-        Description = contractItem.Description,
-        ProductUnit = contractItem.ProductUnit.MapToNamedEntity(),
-        MinQuantity = contractItem.MinQuantity,
-        MaxQuantity = contractItem.MaxQuantity,
-        UnitPrice = contractItem.UnitPrice,
-        RequestedBy = contractItem.RequestedBy.MapToNamedEntity(),
-        Budget = contractItem.Budget.MapToNamedEntity(),
-        BudgetAccount = contractItem.BudgetAccount.MapToNamedEntity(),
-        Project = contractItem.Project.MapToNamedEntity(),
-        Provider = contractItem.Provider.MapToNamedEntity(),
-        PeriodicityType = contractItem.PeriodicityType.MapToNamedEntity(),
-      };
+    static internal ContractItemDto Map(ContractItem contractItem) {
+      return new ContractItemDto(contractItem);
     }
 
   }  // class ContractItemMapper

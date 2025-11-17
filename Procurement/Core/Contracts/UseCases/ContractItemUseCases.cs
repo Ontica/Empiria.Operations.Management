@@ -11,22 +11,21 @@
 using Empiria.Services;
 
 using Empiria.Procurement.Contracts.Adapters;
-using System;
 using Empiria.Budgeting;
 
 namespace Empiria.Procurement.Contracts.UseCases {
 
   /// <summary>Use cases for contract items management.</summary>
-  public class FormerContractItemUseCases : UseCase {
+  public class ContractItemUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected FormerContractItemUseCases() {
+    protected ContractItemUseCases() {
       // no-op
     }
 
-    static public FormerContractItemUseCases UseCaseInteractor() {
-      return UseCase.CreateInstance<FormerContractItemUseCases>();
+    static public ContractItemUseCases UseCaseInteractor() {
+      return UseCase.CreateInstance<ContractItemUseCases>();
     }
 
     #endregion Constructors and parsers
@@ -39,9 +38,9 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       fields.EnsureValid();
 
-      var contract = FormerContract.Parse(contractUID);
+      var contract = Contract.Parse(contractUID);
 
-      FormerContractItem contractItem = contract.AddItem(fields);
+      ContractItem contractItem = contract.AddItem(fields);
 
       contract.Save();
 
@@ -53,7 +52,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       Assertion.Require(contractItemUID, nameof(contractItemUID));
 
-      var contractItem = FormerContractItem.Parse(contractItemUID);
+      var contractItem = ContractItem.Parse(contractItemUID);
 
       return ContractItemMapper.Map(contractItem);
     }
@@ -65,10 +64,10 @@ namespace Empiria.Procurement.Contracts.UseCases {
       Assertion.Require(contractUID, nameof(contractUID));
       keywords = keywords ?? string.Empty;
 
-      var contract = FormerContract.Parse(contractUID);
+      var contract = Contract.Parse(contractUID);
       var budget = Budget.Parse(budgetUID);
 
-      FixedList<FormerContractItem> items = contract.GetItems()
+      FixedList<ContractItem> items = contract.GetItems()
                                               .FindAll(x => x.Budget.Equals(budget));
 
       return ContractItemMapper.Map(items);
@@ -79,9 +78,9 @@ namespace Empiria.Procurement.Contracts.UseCases {
       Assertion.Require(contractUID, nameof(contractUID));
       Assertion.Require(contractItemUID, nameof(contractItemUID));
 
-      var contract = FormerContract.Parse(contractUID);
+      var contract = Contract.Parse(contractUID);
 
-      FormerContractItem contractItem = contract.RemoveItem(contractItemUID);
+      ContractItem contractItem = contract.RemoveItem(contractItemUID);
 
       contract.Save();
       contractItem.Save();
@@ -99,9 +98,9 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       fields.EnsureValid();
 
-      var contract = FormerContract.Parse(contractUID);
+      var contract = Contract.Parse(contractUID);
 
-      FormerContractItem contractItem = contract.GetItem(contractItemUID);
+      ContractItem contractItem = contract.GetItem(contractItemUID);
 
       contract.UpdateItem(contractItem, fields);
 
