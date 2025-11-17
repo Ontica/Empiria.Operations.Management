@@ -71,12 +71,14 @@ namespace Empiria.Orders.Adapters {
       Category = order.Category.MapToNamedEntity();
       Requisition = RequisitionMapper.MapToDescriptor(order.Requisition);
       OrderNo = order.OrderNo;
+      Name = order.Name;
       Description = order.Description;
       Justification = order.Justification;
       Identificators = order.Identificators;
       Tags = order.Tags;
       StartDate = order.StartDate;
       EndDate = order.EndDate;
+      Currency = order.Currency.MapToNamedEntity();
       RequestedBy = order.RequestedBy.MapToNamedEntity();
       Responsible = order.Responsible.MapToNamedEntity();
       Beneficiary = order.Beneficiary.MapToNamedEntity();
@@ -125,6 +127,10 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
+    public string Name {
+      get;
+    }
+
     public string Description {
       get;
     }
@@ -146,6 +152,10 @@ namespace Empiria.Orders.Adapters {
     }
 
     public DateTime EndDate {
+      get;
+    }
+
+    public NamedEntityDto Currency {
       get;
     }
 
@@ -234,6 +244,7 @@ namespace Empiria.Orders.Adapters {
       CategoryName = order.Category.Name;
       RequisitionNo = order.Requisition.OrderNo;
       OrderNo = order.OrderNo;
+      Name = order.Name;
       Description = order.Description;
       BaseOrgUnitName = order.RequestedBy.Name;
       BaseBudgetName = order.BaseBudget.Name;
@@ -270,6 +281,10 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
+    public string Name {
+      get;
+    }
+
     public string Description {
       get;
     }
@@ -283,7 +298,7 @@ namespace Empiria.Orders.Adapters {
     }
 
     public string ProviderName {
-      get; private set;
+      get;
     }
 
     public string ProjectName {

@@ -26,7 +26,7 @@ namespace Empiria.Orders.Adapters {
       Description = item.Description;
       Justification = item.Justification;
       ProductUnit = item.ProductUnit.MapToNamedEntity();
-      RequestedQty = item.RequestedQty;
+      RequestedQty = item.RequestedQuantity;
       Quantity = item.Quantity;
       UnitPrice = item.UnitPrice;
       Discount = item.Discount;
@@ -35,7 +35,6 @@ namespace Empiria.Orders.Adapters {
       BudgetAccount = item.BudgetAccount.MapToNamedEntity();
       BudgetControlNo = item.BudgetEntry.ControlNo;
       Project = item.Project.MapToNamedEntity();
-      Provider = item.Provider.MapToNamedEntity();
       Requisition = item.Requisition.MapToNamedEntity();
       if (!item.RequisitionItem.IsEmptyInstance && item.RequisitionItem is PayableOrderItem rqp) {
         RequisitionItem = PayableOrderMapper.Map(rqp);
@@ -113,10 +112,6 @@ namespace Empiria.Orders.Adapters {
     }
 
     public NamedEntityDto Project {
-      get;
-    }
-
-    public NamedEntityDto Provider {
       get;
     }
 

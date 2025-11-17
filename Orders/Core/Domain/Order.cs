@@ -114,7 +114,7 @@ namespace Empiria.Orders {
         }
         return Parse(_parentId);
       }
-      private set {
+      protected set {
         _parentId = value.Id;
       }
     }
@@ -247,7 +247,7 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_CURRENCY_ID")]
     public Currency Currency {
-      get; protected set;
+      get; private set;
     }
 
 
@@ -373,7 +373,7 @@ namespace Empiria.Orders {
       get {
         return ExtData.Get("multipleBeneficiaries", false);
       }
-      set {
+      private set {
         ExtData.SetIf("multipleBeneficiaries", value, value);
       }
     }
@@ -478,8 +478,8 @@ namespace Empiria.Orders {
       _identificators = EmpiriaString.Tagging(fields.Identificators);
       _tags = EmpiriaString.Tagging(fields.Tags);
 
-      StartDate = Patcher.Patch(fields.StartDate, ExecutionServer.DateMaxValue);
-      EndDate = Patcher.Patch(fields.EndDate, ExecutionServer.DateMaxValue);
+      StartDate = fields.StartDate ?? ExecutionServer.DateMaxValue;
+      EndDate = fields.EndDate ?? ExecutionServer.DateMaxValue;
 
       RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);
       RequiredTime = Patcher.Patch(fields.RequiredTime, DateTime.MaxValue);

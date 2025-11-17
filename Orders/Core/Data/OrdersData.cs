@@ -65,13 +65,15 @@ namespace Empiria.Orders.Data {
 
     static internal void WriteOrderItem(OrderItem o) {
       var op = DataOperation.Parse("write_OMS_Order_Item",
-        o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Product.Id, o.SkuId, o.ProductCode, o.Description,
-        o.Justification, o.ProductUnit.Id, o.RequestedQty, o.Quantity, o.UnitPrice, o.Discount, o.PriceId,
-        o.Currency.Id, o.Budget.Id, o.BudgetAccount.Id, o.BudgetEntry.Id, o.Project.Id, o.Provider.Id,
-        o.Requisition.Id, o.RequisitionItem.Id, o.ContractItemId, o.RelatedItem.Id, o.OriginCountry.Id,
-        o.StartDate, o.EndDate, o.Location.Id, o.DeliveryPlace.Id, o.ConfigData.ToString(),
-        o.ConditionsData.ToString(), o.SpecificationData.ToString(), o.ExtData.ToString(), o.Keywords,
-        o.RequestedTime, o.RequestedBy.Id, o.RequiredTime, o.ReceivedBy.Id, o.ClosingTime, o.ClosedBy.Id,
+        o.Id, o.UID, o.OrderItemType.Id, o.Order.Id, o.Requisition.Id, o.Contract.Id,
+        o.RequisitionItem.Id, o.ContractItem.Id, o.RelatedItem.Id, o.SkuId, o.Product.Id,
+        o.ProductCode, o.ProductName, o.Description, o.Justification, o.ProductUnit.Id,
+        o.RequestedQuantity, o.MinQuantity, o.MaxQuantity, o.Quantity, o.StartDate, o.EndDate,
+        o.Currency.Id, o.UnitPrice, o.Discount, o.PriceId, o.Project.Id,
+        o.Budget.Id, o.BudgetAccount.Id, o.BudgetEntry.Id, o.OriginCountry.Id, o.Location.Id,
+        o.ConfigData.ToString(), o.ConditionsData.ToString(), o.SpecificationData.ToString(),
+        o.ExtData.ToString(), o.Keywords, o.RequestedBy.Id, o.RequestedTime, o.RequiredTime,
+        o.Responsible.Id, o.Beneficiary.Id, o.Provider.Id, o.ReceivedBy.Id, o.ClosingTime, o.ClosedBy.Id,
         o.Position, o.PostingTime, o.PostedBy.Id, (char) o.Status);
 
       DataWriter.Execute(op);

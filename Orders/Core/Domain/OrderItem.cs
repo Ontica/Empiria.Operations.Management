@@ -67,9 +67,73 @@ namespace Empiria.Orders {
     }
 
 
-    [DataField("ORDER_ITEM_PRODUCT_ID")]
-    public Product Product {
+    [DataField("ORDER_ITEM_REQUISITION_ID")]
+    public Requisition Requisition {
       get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_CONTRACT_ID")]
+    protected internal Order Contract {
+      get; set;
+    }
+
+
+    [DataField("ORDER_ITEM_REQUISITION_ITEM_ID")]
+    private int _requisitionItemId;
+
+    public OrderItem RequisitionItem {
+      get {
+        if (this.IsEmptyInstance) {
+          return this;
+        }
+
+        if (_requisitionItemId == -1) {
+          return Empty;
+        }
+
+        return Parse(_requisitionItemId);
+      }
+      private set {
+        _requisitionItemId = value.Id;
+      }
+    }
+
+
+    [DataField("ORDER_ITEM_CONTRACT_ITEM_ID")]
+    private int _contractItemId;
+
+    public OrderItem ContractItem {
+      get {
+        if (this.IsEmptyInstance) {
+          return this;
+        }
+
+        if (_contractItemId == -1) {
+          return Empty;
+        }
+
+        return Parse(_contractItemId);
+      }
+      protected set {
+        _contractItemId = value.Id;
+      }
+    }
+
+
+    [DataField("ORDER_ITEM_RELATED_ITEM_ID")]
+    private int _relatedItemId;
+    public OrderItem RelatedItem {
+      get {
+        if (this.IsEmptyInstance) {
+          return this;
+        }
+
+        return Parse(_relatedItemId);
+      }
+      protected set {
+        _relatedItemId = value.Id;
+      }
     }
 
 
@@ -79,8 +143,20 @@ namespace Empiria.Orders {
     } = -1;
 
 
+    [DataField("ORDER_ITEM_PRODUCT_ID")]
+    public Product Product {
+      get; private set;
+    }
+
+
     [DataField("ORDER_ITEM_PRODUCT_CODE")]
     public string ProductCode {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_PRODUCT_NAME")]
+    public string ProductName {
       get; private set;
     }
 
@@ -98,6 +174,9 @@ namespace Empiria.Orders {
 
     string INamedEntity.Name {
       get {
+        if (ProductName.Length != 0) {
+          return ProductName;
+        }
         if (Description.Length != 0) {
           return Description;
         }
@@ -113,13 +192,43 @@ namespace Empiria.Orders {
 
 
     [DataField("ORDER_ITEM_REQUESTED_QTY")]
-    public decimal RequestedQty {
+    public decimal RequestedQuantity {
       get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_MIN_QTY")]
+    protected internal decimal MinQuantity {
+      get; set;
+    }
+
+
+    [DataField("ORDER_ITEM_MAX_QTY")]
+    protected internal decimal MaxQuantity {
+      get; set;
     }
 
 
     [DataField("ORDER_ITEM_QTY")]
     public decimal Quantity {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_START_DATE")]
+    public DateTime StartDate {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_END_DATE")]
+    public DateTime EndDate {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_CURRENCY_ID")]
+    public Currency Currency {
       get; private set;
     }
 
@@ -147,8 +256,8 @@ namespace Empiria.Orders {
     } = -1;
 
 
-    [DataField("ORDER_ITEM_CURRENCY_ID")]
-    public Currency Currency {
+    [DataField("ORDER_ITEM_PROJECT_ID")]
+    public Project Project {
       get; private set;
     }
 
@@ -164,98 +273,21 @@ namespace Empiria.Orders {
       get; private set;
     }
 
+
     [DataField("ORDER_ITEM_BUDGET_ENTRY_ID")]
     public BudgetEntry BudgetEntry {
       get; private set;
     }
 
-    [DataField("ORDER_ITEM_PROJECT_ID")]
-    public Project Project {
-      get; private set;
-    }
 
-
-    [DataField("ORDER_ITEM_PROVIDER_ID")]
-    public Party Provider {
-      get; private set;
-    }
-
-    [DataField("ORDER_ITEM_REQUISITION_ID")]
-    public Requisition Requisition {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_ITEM_REQUISITION_ITEM_ID")]
-    private int _requisitionItemId;
-
-    public OrderItem RequisitionItem {
-      get {
-        if (this.IsEmptyInstance) {
-          return this;
-        }
-
-        if (_requisitionItemId == -1) {
-          return Empty;
-        }
-
-        return Parse(_requisitionItemId);
-      }
-      private set {
-        _requisitionItemId = value.Id;
-      }
-    }
-
-
-    [DataField("ORDER_ITEM_CONTRACT_ITEM_ID")]
-    protected internal int ContractItemId {
-      get; protected set;
-    }
-
-
-    [DataField("ORDER_ITEM_RELATED_ITEM_ID")]
-    private int _relatedItemId;
-
-    public OrderItem RelatedItem {
-      get {
-        if (this.IsEmptyInstance) {
-          return this;
-        }
-
-        return Parse(_relatedItemId);
-      }
-      protected set {
-        _relatedItemId = value.Id;
-      }
-    }
-
-
-    [DataField("ORDER_ITEM_ORIGIN_COUNTRY_ID")]
+    [DataField("ORDER_ITEM_GEO_ORIGIN_ID")]
     public Location OriginCountry {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_ITEM_SUPPLY_START_DATE")]
-    public DateTime StartDate {
-      get; private set;
-    }
-
-
-    [DataField("ORDER_ITEM_SUPPLY_END_DATE")]
-    public DateTime EndDate {
       get; private set;
     }
 
 
     [DataField("ORDER_ITEM_LOCATION_ID")]
     public Location Location {
-      get; protected set;
-    }
-
-
-    [DataField("ORDER_ITEM_DELIVERY_PLACE_ID")]
-    public Location DeliveryPlace {
       get; protected set;
     }
 
@@ -286,9 +318,14 @@ namespace Empiria.Orders {
 
     public string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(Description, Product.Keywords, ProductCode,
-                                           Requisition.Keywords, Order.Keywords, Justification);
+        return EmpiriaString.BuildKeywords(ProductName, Description, Product.Keywords, ProductCode, Requisition.Keywords,
+                                           Order.Keywords, Contract.Keywords, Justification);
       }
+    }
+
+    [DataField("ORDER_ITEM_REQUESTED_BY_ID")]
+    public Party RequestedBy {
+      get; protected set;
     }
 
 
@@ -298,15 +335,27 @@ namespace Empiria.Orders {
     }
 
 
-    [DataField("ORDER_ITEM_REQUESTED_BY_ID")]
-    public Party RequestedBy {
+    [DataField("ORDER_ITEM_REQUIRED_TIME")]
+    public DateTime RequiredTime {
       get; private set;
     }
 
 
-    [DataField("ORDER_ITEM_REQUIRED_TIME")]
-    public DateTime RequiredTime {
+    [DataField("ORDER_ITEM_RESPONSIBLE_ID")]
+    public Party Responsible {
       get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_BENEFICIARY_ID")]
+    public Party Beneficiary {
+      get; private set;
+    }
+
+
+    [DataField("ORDER_ITEM_PROVIDER_ID")]
+    public Party Provider {
+      get; protected set;
     }
 
 
@@ -360,7 +409,7 @@ namespace Empiria.Orders {
       Assertion.Require(this.Status == EntityStatus.Active,
                   $"No se puede cerrar una orden item que está en estado {this.Status.GetName()}.");
 
-      this.Status = StateEnums.EntityStatus.Closed;
+      this.Status = EntityStatus.Closed;
     }
 
 
@@ -392,6 +441,9 @@ namespace Empiria.Orders {
       Requisition = Patcher.Patch(fields.RequisitionUID, Order.Requisition);
       RequisitionItem = Patcher.Patch(fields.RequisitionItemUID, Empty);
 
+      ContractItem = Patcher.Patch(fields.ContractItemUID, Empty);
+      RelatedItem = Patcher.Patch(fields.RelatedItemUID, Empty);
+
       Budget = Patcher.Patch(fields.BudgetUID, Order.BaseBudget);
       BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, RequisitionItem.BudgetAccount);
 
@@ -406,34 +458,37 @@ namespace Empiria.Orders {
         Description = "Sin descripción";
       }
 
+      ProductName = Patcher.Patch(fields.ProductName, Description);
+
       Justification = EmpiriaString.Clean(fields.Justification);
 
       ProductUnit = Patcher.Patch(fields.ProductUnitUID, ProductUnit);
 
       Quantity = fields.Quantity;
 
-      if (RequestedQty != 0) {
-        RequestedQty = fields.RequestedQty;
+      if (RequestedQuantity != 0) {
+        RequestedQuantity = fields.RequestedQty;
       } else {
-        RequestedQty = Quantity;
+        RequestedQuantity = Quantity;
       }
 
+      Currency = Patcher.Patch(fields.CurrencyUID, Order.Currency);
       UnitPrice = fields.UnitPrice;
       Discount = fields.Discount;
-      Currency = Patcher.Patch(fields.CurrencyUID, Order.Currency);
 
       Project = Patcher.Patch(fields.ProjectUID, Order.Project);
-      Provider = Patcher.Patch(fields.ProviderUID, Order.Provider);
-
-      RelatedItem = Patcher.Patch(fields.RelatedItemUID, Empty);
 
       OriginCountry = Patcher.Patch(fields.OriginCountryUID, Location.Empty);
 
-      StartDate = Patcher.Patch(fields.StartDate, ExecutionServer.DateMaxValue);
-      EndDate = Patcher.Patch(fields.EndDate, ExecutionServer.DateMaxValue);
+      StartDate = fields.StartDate.HasValue ? fields.StartDate.Value : ExecutionServer.DateMaxValue;
+      EndDate = fields.EndDate.HasValue ? fields.EndDate.Value : ExecutionServer.DateMaxValue;
 
-      RequestedBy = Patcher.Patch(fields.RequestedByUID, Order.RequestedBy);
       RequiredTime = Patcher.Patch(fields.RequiredTime, ExecutionServer.DateMaxValue);
+      Responsible = Patcher.Patch(fields.ResponsibleUID, Order.Responsible);
+      Beneficiary = Patcher.Patch(fields.BeneficiaryUID, Order.Beneficiary);
+      ReceivedBy = Patcher.Patch(fields.ReceivedByUID, Party.Empty);
+      Location = Patcher.Patch(fields.LocationUID, Location.Empty);
+      OriginCountry = Patcher.Patch(fields.OriginCountryUID, Location.Empty);
 
       MarkAsDirty();
     }

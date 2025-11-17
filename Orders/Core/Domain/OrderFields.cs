@@ -66,12 +66,12 @@ namespace Empiria.Orders {
     } = new string[0];
 
 
-    public DateTime StartDate {
+    public DateTime? StartDate {
       get; set;
     } = ExecutionServer.DateMaxValue;
 
 
-    public DateTime EndDate {
+    public DateTime? EndDate {
       get; set;
     } = ExecutionServer.DateMaxValue;
 
@@ -155,8 +155,16 @@ namespace Empiria.Orders {
       Assertion.Require(Description, nameof(Description));
       Assertion.Require(RequestedByUID, nameof(RequestedByUID));
       Priority = Priority.HasValue ? Priority.Value : StateEnums.Priority.Normal;
-      Assertion.Require(StartDate <= EndDate,
-                        $"{nameof(StartDate)} must be less than or equal to {nameof(EndDate)}");
+
+      if (!StartDate.HasValue) {
+        StartDate = ExecutionServer.DateMaxValue;
+      }
+      if (!EndDate.HasValue) {
+        EndDate = ExecutionServer.DateMaxValue;
+      }
+
+      Assertion.Require(StartDate.Value <= EndDate.Value,
+                        $"{nameof(StartDate.Value)} must be less than or equal to {nameof(EndDate.Value)}");
       Assertion.Require(Observations.Length <= 3800,
           "El texto de las observaciones es demasiado largo. Máximo de 3800 caracteres");
       Assertion.Require(GuaranteeNotes.Length <= 3800,

@@ -124,12 +124,6 @@ namespace Empiria.Orders {
       }
       base.BaseBudget = Budget.Parse(fields.BudgetUID);
 
-      if (fields.CurrencyUID.Length == 0) {
-        base.Currency = Currency.Default;
-      } else {
-        base.Currency = Currency.Parse(fields.CurrencyUID);
-      }
-
       base.Update(fields);
     }
 

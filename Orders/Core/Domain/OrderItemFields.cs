@@ -78,16 +78,6 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
-    public string ProviderUID {
-      get; set;
-    } = string.Empty;
-
-
-    public string RequestedByUID {
-      get; set;
-    } = string.Empty;
-
-
     public string RequisitionUID {
       get; set;
     } = string.Empty;
@@ -108,12 +98,12 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
-    public DateTime StartDate {
+    public DateTime? StartDate {
       get; set;
     } = ExecutionServer.DateMaxValue;
 
 
-    public DateTime EndDate {
+    public DateTime? EndDate {
       get; set;
     } = ExecutionServer.DateMaxValue;
 
@@ -121,6 +111,36 @@ namespace Empiria.Orders {
     public DateTime RequiredTime {
       get; set;
     } = ExecutionServer.DateMaxValue;
+
+
+    public string ProductName {
+      get; set;
+    } = string.Empty;
+
+
+    public string ContractItemUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string ResponsibleUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string BeneficiaryUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string ReceivedByUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string LocationUID {
+      get; set;
+    } = string.Empty;
 
 
     public virtual void EnsureValid() {
@@ -131,8 +151,14 @@ namespace Empiria.Orders {
       Assertion.Require(ProductUID.Length != 0 || BudgetAccountUID.Length != 0 || Description.Length != 0,
                         "Necesito se proporcione el producto, su cuenta presupuestal o su descripción.");
       Assertion.Require(Quantity > 0, "Necesito se proporcione la cantidad mínima.");
-      Assertion.Require(StartDate <= EndDate,
-                        $"{nameof(StartDate)} must be less than or equal to {nameof(EndDate)}");
+      if (!StartDate.HasValue) {
+        StartDate = ExecutionServer.DateMaxValue;
+      }
+      if (!EndDate.HasValue) {
+        EndDate = ExecutionServer.DateMaxValue;
+      }
+      Assertion.Require(StartDate.Value <= EndDate.Value,
+                        $"{nameof(StartDate.Value)} must be less than or equal to {nameof(EndDate.Value)}");
     }
 
   }  // class OrderItemFields
