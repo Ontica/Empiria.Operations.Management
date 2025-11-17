@@ -31,7 +31,7 @@ namespace Empiria.Orders.Data {
     }
 
 
-    static internal FixedList<Order> Search(string filter, string sort) {
+    static internal FixedList<T> Search<T>(string filter, string sort) where T : Order {
       var sql = "SELECT * FROM OMS_ORDERS";
 
       if (!string.IsNullOrWhiteSpace(filter)) {
@@ -43,7 +43,7 @@ namespace Empiria.Orders.Data {
 
       var op = DataOperation.Parse(sql);
 
-      return DataReader.GetFixedList<Order>(op);
+      return DataReader.GetFixedList<T>(op);
     }
 
 

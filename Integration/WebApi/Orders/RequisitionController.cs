@@ -26,8 +26,6 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     [Route("v8/order-management/requisitions/available")]
     public CollectionModel SearchRequisitions([FromBody] OrdersQuery query) {
 
-      query.OrderTypeUID = "ObjectTypeInfo.Order.Requisition";
-
       using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
         var requisitions = usecases.SearchRequisitions(query);
 

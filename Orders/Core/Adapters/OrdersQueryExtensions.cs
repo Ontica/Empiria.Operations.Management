@@ -141,7 +141,7 @@ namespace Empiria.Orders.Adapters {
         return string.Empty;
       }
 
-      return $"CONTRACT_NO LIKE '%{orderNo}%'";
+      return $"ORDER_NO LIKE '%{orderNo}%'";
     }
 
 

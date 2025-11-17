@@ -74,7 +74,7 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
         filter.AppendAnd(SearchExpression.ParseAndLikeKeywords("ORDER_KEYWORDS", query.Keywords));
       }
 
-      return Orders.Data.OrdersData.Search(filter.ToString(), "ORDER_NO")
+      return Orders.Data.OrdersData.Search<Order>(filter.ToString(), "ORDER_NO")
                                    .MapToNamedEntityList();
     }
 

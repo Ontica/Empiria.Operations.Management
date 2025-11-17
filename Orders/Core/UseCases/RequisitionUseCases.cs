@@ -125,14 +125,14 @@ namespace Empiria.Orders.UseCases {
     public FixedList<RequisitionDescriptor> SearchRequisitions(OrdersQuery query) {
       Assertion.Require(query, nameof(query));
 
+      query.OrderTypeUID = Requisition.Empty.GetEmpiriaType().Name;
+
       query.EnsureIsValid();
 
       var filter = query.MapToFilterString();
       var sort = query.MapToSortString();
 
-      FixedList<Requisition> requisitions = OrdersData.Search(filter, sort)
-                                                      .Select(x => (Requisition) x)
-                                                      .ToFixedList();
+      FixedList<Requisition> requisitions = OrdersData.Search<Requisition>(filter, sort);
 
       return RequisitionMapper.Map(requisitions);
     }

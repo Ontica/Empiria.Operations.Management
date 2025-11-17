@@ -128,7 +128,7 @@ namespace Empiria.Orders.UseCases {
       var filter = query.MapToFilterString();
       var sort = query.MapToSortString();
 
-      FixedList<Order> orders = OrdersData.Search(filter, sort);
+      FixedList<PayableOrder> orders = OrdersData.Search<PayableOrder>(filter, sort);
 
       return PayableOrderMapper.Map(orders);
     }
