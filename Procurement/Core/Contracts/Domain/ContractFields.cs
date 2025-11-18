@@ -28,7 +28,7 @@ namespace Empiria.Procurement.Contracts {
     } = string.Empty;
 
 
-    public string[] BudgetsUIDs {
+    public string[] Budgets {
       get; set;
     } = new string[0];
 
@@ -40,14 +40,13 @@ namespace Empiria.Procurement.Contracts {
 
     public override void EnsureValid() {
       Assertion.Require(RequisitionUID, "Necesito el número del requisición.");
-      Assertion.Require(ContractNo, "Necesito el número del contrato.");
       Assertion.Require(Name, "Necesito el nombre del contrato.");
 
       Assertion.Require(CurrencyUID, "Necesito la moneda del contrato.");
-      Assertion.Require(BudgetsUIDs.Length > 0, "Necesito se seleccione el presupuesto o presupuestos " +
-                                                "asociados al contrato");
+      Assertion.Require(Budgets.Length > 0, "Necesito se seleccione el presupuesto o presupuestos " +
+                                            "asociados al contrato");
 
-      BudgetTypeUID = BudgetTypeUID.Length == 0 ? Budget.Parse(BudgetsUIDs[0]).UID : BudgetTypeUID;
+      BudgetTypeUID = BudgetTypeUID.Length == 0 ? Budget.Parse(Budgets[0]).UID : BudgetTypeUID;
 
       Assertion.Require(StartDate, "Necesito la fecha de inicio del contrato.");
       Assertion.Require(EndDate, "Necesito la fecha de fin del contrato.");

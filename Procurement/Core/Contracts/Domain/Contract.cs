@@ -185,10 +185,18 @@ namespace Empiria.Procurement.Contracts {
 
       fields.EnsureValid();
 
-      BudgetType = BudgetType.Parse(fields.BudgetTypeUID);
-      Budgets = fields.BudgetsUIDs.Select(x => Budget.Parse(x)).ToFixedList();
-      OrderNo = fields.ContractNo;
+      OrderNo = Patcher.Patch(fields.ContractNo, "Sin número asignado");
       SignDate = fields.SignDate;
+
+      FixedList<Budget> budgets = fields.Budgets.Select(x => Budget.Parse(x))
+                                                .ToFixedList()
+                                                .Sort((x, y) => x.Year.CompareTo(y.Year));
+
+      BaseBudget = budgets.First();
+
+      BudgetType = BaseBudget.BudgetType;
+
+      Budgets = budgets;
 
       base.Update(fields);
     }

@@ -38,7 +38,7 @@ namespace Empiria.Orders {
         return ExtData.GetFixedList<Budget>("budgets", false);
       }
       private set {
-        base.ExtData.SetIf("budgets", value.Select(x => (object) x.Id).ToList(), true);
+        base.ExtData.SetIf("budgets", value.Select(x => (object) x.Id).ToList(), value.Count != 0);
       }
     }
 
@@ -56,6 +56,8 @@ namespace Empiria.Orders {
                                                 .Sort((x, y) => x.Year.CompareTo(y.Year));
 
       BaseBudget = budgets.First();
+
+      BudgetType = BaseBudget.BudgetType;
 
       Budgets = budgets;
 
