@@ -24,15 +24,15 @@ namespace Empiria.Orders {
     static public OrderCategory Parse(string uid) => ParseKey<OrderCategory>(uid);
 
     static public FixedList<OrderCategory> GetList() {
-      return BaseObject.GetList<OrderCategory>()
-                       .ToFixedList();
+      return GetList<OrderCategory>()
+            .ToFixedList();
     }
 
     internal static FixedList<OrderCategory> GetListFor(OrderType orderType) {
       Assertion.Require(orderType, nameof(orderType));
 
-      return BaseObject.GetFullList<OrderCategory>()
-                       .FindAll(x => x.OrderType.Equals(orderType));
+      return GetFullList<OrderCategory>()
+             .FindAll(x => x.OrderType.Equals(orderType) || x.OrderType.Equals(OrderType.Empty));
     }
 
     static public OrderCategory Empty => ParseEmpty<OrderCategory>();
@@ -44,13 +44,6 @@ namespace Empiria.Orders {
     public OrderType OrderType {
       get {
         return base.ExtData.Get("orderTypeId", OrderType.Empty);
-      }
-    }
-
-
-    public bool IsAssignable {
-      get {
-        return base.ExtData.Get("isAssignable", true);
       }
     }
 
@@ -67,7 +60,7 @@ namespace Empiria.Orders {
         if (this.IsEmptyInstance) {
           return string.Empty;
         }
-        return EmpiriaString.BuildKeywords(Name, OrderType.DisplayName, Parent.Keywords);
+        return EmpiriaString.BuildKeywords(base.Keywords, OrderType.DisplayName, Parent.Keywords);
       }
     }
 
