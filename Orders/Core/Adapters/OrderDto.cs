@@ -69,7 +69,9 @@ namespace Empiria.Orders.Adapters {
       UID = order.UID;
       Type = order.OrderType.MapToNamedEntity();
       Category = order.Category.MapToNamedEntity();
-      Requisition = RequisitionMapper.MapToDescriptor(order.Requisition);
+      if (!order.Requisition.IsEmptyInstance) {
+        Requisition = RequisitionMapper.MapToDescriptor(order.Requisition);
+      }
       OrderNo = order.OrderNo;
       Name = order.Name;
       Description = order.Description;

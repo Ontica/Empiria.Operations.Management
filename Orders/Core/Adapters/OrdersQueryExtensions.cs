@@ -29,7 +29,7 @@ namespace Empiria.Orders.Adapters {
 
       string orderTypeFilter = BuildOrderTypeFilter(query.OrderTypeUID);
 
-      string responsibleFilter = BuildResponsibleFilter(query.ResponsibleUID);
+      string requestedByFilter = BuildRequestedByFilter(query.RequestedByUID);
 
       string providerFilter = BuildProviderFilter(query.ProviderUID);
 
@@ -51,7 +51,7 @@ namespace Empiria.Orders.Adapters {
 
       var filter = new Filter(orderTypeFilter);
 
-      filter.AppendAnd(responsibleFilter);
+      filter.AppendAnd(requestedByFilter);
 
       filter.AppendAnd(providerFilter);
 
@@ -183,21 +183,23 @@ namespace Empiria.Orders.Adapters {
     }
 
 
-    static private string BuildResponsibleFilter(string responsibleUID) {
-      if (responsibleUID.Length == 0) {
+    static private string BuildRequestedByFilter(string requestedByUID) {
+      if (requestedByUID.Length == 0) {
         return string.Empty;
       }
 
-      var responsible = Party.Parse(responsibleUID);
+      var requestedBy = Party.Parse(requestedByUID);
 
-      return $"ORDER_RESPONSIBLE_ID = {responsible.Id}";
+      return $"ORDER_REQUESTED_BY_ID = {requestedBy.Id}";
     }
 
 
     static private string BuildStatusFilter(EntityStatus status) {
+
       if (status == EntityStatus.All) {
         return "ORDER_STATUS <> 'X' ";
       }
+
       if (status == EntityStatus.Deleted) {
         return "ORDER_STATUS = 'X' AND ORDER_ID <> -1";
       }

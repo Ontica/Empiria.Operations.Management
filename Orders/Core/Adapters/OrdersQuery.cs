@@ -20,6 +20,11 @@ namespace Empiria.Orders.Adapters {
     } = string.Empty;
 
 
+    public string RequestedByUID {
+      get; set;
+    } = string.Empty;
+
+
     public string OrderNo {
       get; set;
     } = string.Empty;
@@ -31,11 +36,6 @@ namespace Empiria.Orders.Adapters {
 
 
     public string Keywords {
-      get; set;
-    } = string.Empty;
-
-
-    public string ResponsibleUID {
       get; set;
     } = string.Empty;
 
