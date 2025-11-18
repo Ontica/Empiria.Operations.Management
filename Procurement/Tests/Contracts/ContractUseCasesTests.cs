@@ -54,9 +54,9 @@ namespace Empiria.Tests.Procurement.Contracts {
       ContractHolderDto sut = _usecases.CreateContract(fields);
 
       Assert.NotNull(sut);
-      Assert.NotNull(sut.Contract.UID);
-      Assert.Equal(fields.ContractNo, sut.Contract.ContractNo);
-      Assert.Equal(fields.Name, sut.Contract.Name);
+      Assert.NotNull(sut.Order.UID);
+      Assert.Equal(fields.ContractNo, sut.Order.ContractNo);
+      Assert.Equal(fields.Name, sut.Order.Name);
     }
 
     [Fact]
@@ -77,9 +77,9 @@ namespace Empiria.Tests.Procurement.Contracts {
       ContractHolderDto sut = _usecases.UpdateContract(TestingConstants.CONTRACT_UID, fields);
 
       Assert.NotNull(sut);
-      Assert.NotNull(sut.Contract.UID);
-      Assert.Equal(fields.ContractNo, sut.Contract.ContractNo);
-      Assert.Equal(fields.Name, sut.Contract.Name);
+      Assert.NotNull(sut.Order.UID);
+      Assert.Equal(fields.ContractNo, sut.Order.ContractNo);
+      Assert.Equal(fields.Name, sut.Order.Name);
     }
 
     [Fact]

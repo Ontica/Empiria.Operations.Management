@@ -17,6 +17,10 @@ namespace Empiria.Orders.Adapters {
   /// <summary>Data transfer object used to return requisitions.</summary>
   public class RequisitionHolderDto : OrderHolderDto {
 
+    public new RequisitionDto Order {
+      get; internal set;
+    }
+
     public new FixedList<PayableOrderItemDto> Items {
       get; set;
     }

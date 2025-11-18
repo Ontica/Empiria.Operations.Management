@@ -10,22 +10,19 @@
 
 using System;
 
-using Empiria.Documents;
-using Empiria.History;
-
 using Empiria.Orders.Adapters;
 
 using Empiria.Budgeting.Transactions.Adapters;
 
 namespace Empiria.Procurement.Contracts.Adapters {
 
-  public class ContractHolderDto {
+  public class ContractHolderDto : OrderHolderDto {
 
-    public ContractDto Contract {
+    public new ContractDto Order {
       get; internal set;
     }
 
-    public FixedList<ContractItemDto> Items {
+    public new FixedList<ContractItemDto> Items {
       get; internal set;
     }
 
@@ -33,41 +30,11 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public FixedList<ContractOrderDescriptor> Orders {
-      get; internal set;
-    }
-
-    public FixedList<DocumentDto> Documents {
-      get; internal set;
-    }
-
-    public FixedList<HistoryEntryDto> History {
-      get; internal set;
-    }
-
-    public ContractActions Actions {
+    public FixedList<ContractOrderDescriptor> Payables {
       get; internal set;
     }
 
   }  // class ContractHolderDto
-
-
-
-  public class ContractActions : BaseActions {
-
-    public bool CanActivate {
-      get; internal set;
-    }
-
-    public bool CanEditItems {
-      get; internal set;
-    }
-
-    public bool CanSuspend {
-      get; internal set;
-    }
-
-  } // class ContractActions
 
 
 
@@ -76,8 +43,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     internal ContractDto(Contract contract) : base(contract) {
       ContractNo = contract.ContractNo;
-
-
       SignDate = contract.SignDate;
       BudgetType = contract.BudgetType.MapToNamedEntity();
       Budgets = contract.Budgets.MapToNamedEntityList();

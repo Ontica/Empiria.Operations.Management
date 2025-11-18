@@ -12,7 +12,9 @@ using Empiria.StateEnums;
 
 using Empiria.Documents;
 using Empiria.History;
+
 using Empiria.Budgeting.Transactions.Adapters;
+using Empiria.Orders.Adapters;
 
 namespace Empiria.Procurement.Contracts.Adapters {
 
@@ -21,10 +23,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     static internal ContractHolderDto Map(Contract contract) {
       return new ContractHolderDto {
-        Contract = MapContract(contract),
+        Order = MapContract(contract),
         Items = ContractItemMapper.Map(contract.GetItems()),
         BudgetTransactions = MapBudgetTransactions(contract),
-        Orders = ContractOrderMapper.MapToDescriptor(ContractOrder.GetListFor(contract)),
+        Payables = ContractOrderMapper.MapToDescriptor(ContractOrder.GetListFor(contract)),
         Documents = DocumentServices.GetAllEntityDocuments(contract),
         History = HistoryServices.GetEntityHistory(contract),
         Actions = MapActions(contract)
@@ -56,8 +58,8 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     #region Helpers
 
-    static private ContractActions MapActions(Contract contract) {
-      return new ContractActions {
+    static private OrderActions MapActions(Contract contract) {
+      return new OrderActions {
         CanActivate = contract.CanActivate(),
         CanDelete = contract.CanDelete(),
         CanEditItems = contract.CanUpdate(),
