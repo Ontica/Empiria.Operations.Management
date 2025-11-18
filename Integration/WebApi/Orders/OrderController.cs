@@ -9,10 +9,14 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System.Web.Http;
+
 using Empiria.Json;
+
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
+
 using Empiria.Procurement.Contracts;
+
 using Empiria.WebApi;
 
 namespace Empiria.Operations.Integration.Orders.WebApi {
@@ -172,8 +176,11 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
       if (orderType.Equals(OrderType.Empty)) {
         throw Assertion.EnsureNoReachThisCode("orderTypeUID can not be empty.");
 
-      } else if (orderType.Name.Contains("Requisition")) {
+      } else if (orderType.Equals(OrderType.Requisition)) {
         return JsonConverter.ToObject<RequisitionFields>(json.ToString());
+
+      } else if (orderType.Equals(OrderType.Contract)) {
+        return JsonConverter.ToObject<ContractFields>(json.ToString());
 
       } else if (orderType.Equals(OrderType.ContractOrder)) {
         return JsonConverter.ToObject<ContractOrderFields>(json.ToString());
@@ -196,8 +203,12 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
       var order = Order.Parse(orderUID);
 
-      if (order is ContractOrder) {
+      if (order is Contract) {
+        return JsonConverter.ToObject<ContractItemFields>(json.ToString());
+
+      } else if (order is ContractOrder) {
         return JsonConverter.ToObject<ContractOrderItemFields>(json.ToString());
+
       } else {
         return JsonConverter.ToObject<PayableOrderItemFields>(json.ToString());
       }

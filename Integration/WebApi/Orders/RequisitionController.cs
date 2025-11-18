@@ -27,7 +27,7 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     public CollectionModel SearchRequisitions([FromBody] OrdersQuery query) {
 
       using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
-        var requisitions = usecases.SearchRequisitions(query);
+        var requisitions = usecases.Search(query);
 
         return new CollectionModel(base.Request, requisitions);
       }

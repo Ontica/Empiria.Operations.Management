@@ -113,7 +113,7 @@ namespace Empiria.Orders.UseCases {
     }
 
 
-    public RequisitionHolderDto GetRequisition(string requisitionUID) {
+    public RequisitionHolderDto Get(string requisitionUID) {
       Assertion.Require(requisitionUID, nameof(requisitionUID));
 
       var requisition = Requisition.Parse(requisitionUID);
@@ -122,7 +122,7 @@ namespace Empiria.Orders.UseCases {
     }
 
 
-    public FixedList<RequisitionDescriptor> SearchRequisitions(OrdersQuery query) {
+    public FixedList<RequisitionDescriptor> Search(OrdersQuery query) {
       Assertion.Require(query, nameof(query));
 
       query.OrderTypeUID = Requisition.Empty.GetEmpiriaType().Name;

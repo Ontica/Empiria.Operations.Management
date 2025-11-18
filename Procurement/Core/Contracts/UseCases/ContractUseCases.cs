@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
 using Empiria.Orders.Data;
@@ -27,6 +28,10 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
     static public ContractUseCases UseCaseInteractor() {
       return UseCase.CreateInstance<ContractUseCases>();
+    }
+
+    public OrderHolderDto Activate(string uID) {
+      throw new NotImplementedException();
     }
 
     #endregion Constructors and parsers
@@ -92,6 +97,9 @@ namespace Empiria.Procurement.Contracts.UseCases {
       return ContractMapper.MapToDescriptor(contracts);
     }
 
+    public OrderHolderDto Suspend(string uID) {
+      throw new NotImplementedException();
+    }
 
     public ContractHolderDto UpdateContract(string ContractUID,
                                             ContractFields fields) {
