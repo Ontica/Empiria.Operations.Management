@@ -33,7 +33,7 @@ namespace Empiria.Procurement.Contracts {
     } = new string[0];
 
 
-    public DateTime SignDate {
+    public DateTime? SignDate {
       get; set;
     } = ExecutionServer.DateMaxValue;
 
@@ -50,7 +50,6 @@ namespace Empiria.Procurement.Contracts {
 
       Assertion.Require(StartDate, "Necesito la fecha de inicio del contrato.");
       Assertion.Require(EndDate, "Necesito la fecha de fin del contrato.");
-      Assertion.Require(SignDate, "Necesito la fecha de firma del contrato.");
 
       Assertion.Require(ProviderUID, "Necesito se proporcione al proveedor del contrato.");
 

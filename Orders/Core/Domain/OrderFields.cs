@@ -46,6 +46,11 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public string Name {
+      get; set;
+    } = string.Empty;
+
+
     public string Description {
       get; set;
     } = string.Empty;
@@ -124,11 +129,6 @@ namespace Empiria.Orders {
       get; set;
     } = string.Empty;
 
-    public string Name {
-      get; set;
-    } = string.Empty;
-
-
     public DateTime RequiredTime {
       get; set;
     } = ExecutionServer.DateMaxValue;
@@ -151,8 +151,9 @@ namespace Empiria.Orders {
 
     public virtual void EnsureValid() {
       Assertion.Require(OrderTypeUID, nameof(OrderTypeUID));
-      Name = Name.Length == 0 ? Description : Name;
-      Assertion.Require(Description, nameof(Description));
+
+      Assertion.Require(Name, "Necesito se proporcione el nombre");
+
       Assertion.Require(RequestedByUID, nameof(RequestedByUID));
       Priority = Priority.HasValue ? Priority.Value : StateEnums.Priority.Normal;
 

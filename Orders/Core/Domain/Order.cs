@@ -470,10 +470,10 @@ namespace Empiria.Orders {
       Requisition = Patcher.Patch(fields.RequisitionUID, Requisition.Empty);
       ParentOrder = Patcher.Patch(fields.ParentOrderUID, Empty);
       Contract = Patcher.Patch(fields.ContractUID, Empty);
-      Name = Patcher.PatchClean(fields.Name, Name);
-      Description = Patcher.PatchClean(fields.Description, Description);
+      Name = Patcher.PatchClean(fields.Name, "Sin nombre asignado");
+      Description = EmpiriaString.Clean(fields.Description);
       Observations = EmpiriaString.Clean(fields.Observations);
-      Justification = Patcher.PatchClean(fields.Justification, string.Empty);
+      Justification = EmpiriaString.Clean(fields.Justification);
 
       _identificators = EmpiriaString.Tagging(fields.Identificators);
       _tags = EmpiriaString.Tagging(fields.Tags);

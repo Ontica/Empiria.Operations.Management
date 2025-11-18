@@ -47,7 +47,7 @@ namespace Empiria.Tests.Procurement.Contracts {
         CurrencyUID = TestingConstants.CONTRACT_CURRENCY_UID,
         RequestedByUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
         BudgetTypeUID = TestingConstants.CONTRACT_BUDGET_TYPE_UID,
-        BudgetsUIDs = new string[] { TestingConstants.CONTRACT_BUDGET_UID },
+        Budgets = new string[] { TestingConstants.CONTRACT_BUDGET_UID },
         ProviderUID = TestingConstants.SUPPLIER_UID,
       };
 

@@ -89,16 +89,14 @@ namespace Empiria.Procurement.Contracts {
       }
     }
 
-
     public FixedList<Budget> Budgets {
       get {
         return ExtData.GetFixedList<Budget>("budgets", false);
       }
       private set {
-        ExtData.Set("budgets", value.Select(x => x.Id));
+        ExtData.SetIf("budgets", value.Select(x => (object) x.Id).ToList(), value.Count != 0);
       }
     }
-
 
     #endregion Properties
 
@@ -186,7 +184,7 @@ namespace Empiria.Procurement.Contracts {
       fields.EnsureValid();
 
       OrderNo = Patcher.Patch(fields.ContractNo, "Sin número asignado");
-      SignDate = fields.SignDate;
+      SignDate = fields.SignDate.HasValue ? fields.SignDate.Value : ExecutionServer.DateMaxValue;
 
       FixedList<Budget> budgets = fields.Budgets.Select(x => Budget.Parse(x))
                                                 .ToFixedList()
