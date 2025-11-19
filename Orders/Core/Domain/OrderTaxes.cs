@@ -50,7 +50,15 @@ namespace Empiria.Orders {
 
       fields.EnsureValid();
 
-      var taxEntry = new OrderTaxEntry(_order, fields.GetTaxType(), fields.Total);
+      var taxEntry = _taxEntries.Value.Find(x => x.TaxType.UID == fields.TaxTypeUID);
+
+      if (taxEntry != null) {
+        taxEntry.Sum(fields.Total);
+
+        return taxEntry;
+      }
+
+      taxEntry = new OrderTaxEntry(_order, fields.GetTaxType(), fields.Total);
 
       _taxEntries.Value.Add(taxEntry);
 

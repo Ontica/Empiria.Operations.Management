@@ -106,7 +106,7 @@ namespace Empiria.Orders {
     }
 
 
-    [DataField("ORDER_STATUS", Default = EntityStatus.Active)]
+    [DataField("ORDER_TAX_STATUS", Default = EntityStatus.Active)]
     public EntityStatus Status {
       get; private set;
     }
@@ -115,12 +115,21 @@ namespace Empiria.Orders {
 
     #region Methods
 
+    internal void Sum(decimal amount) {
+      Assertion.Require(amount > 0.00m, nameof(amount));
+
+      BaseAmount = 0;
+      Total += amount;
+    }
+
+
     internal void Delete() {
       Assertion.Require(Order.Status != EntityStatus.Closed,
                        "Can not delete tax entry because the order is closed.");
 
       Status = EntityStatus.Deleted;
     }
+
 
     protected override void OnSave() {
       if (base.IsNew) {
