@@ -33,11 +33,6 @@ namespace Empiria.Inventory {
                                   .ToUpperInvariant();
     }
 
-
-    internal InventoryOrder() {
-      //no-op
-    }
-
     static public new InventoryOrder Parse(int id) => ParseId<InventoryOrder>(id);
 
     static public new InventoryOrder Parse(string uid) => ParseKey<InventoryOrder>(uid);

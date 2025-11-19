@@ -24,10 +24,6 @@ namespace Empiria.Procurement.Orders {
                                   .ToUpperInvariant();
     }
 
-    internal SalesOrder() {
-      //no-op
-    }
-
     static public new SalesOrder Parse(int id) => ParseId<SalesOrder>(id);
 
     static public new SalesOrder Parse(string uid) => ParseKey<SalesOrder>(uid);
