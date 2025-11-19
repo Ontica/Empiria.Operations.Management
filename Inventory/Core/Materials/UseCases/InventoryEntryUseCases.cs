@@ -139,7 +139,7 @@ namespace Empiria.Inventory.UseCases {
 
     public void OutputInventoryEntriesVW(InventoryOrder order) {
 
-      foreach (var item in order.Items) {
+      foreach (var item in order.GetItems<InventoryOrderItem>()) {
 
         var inventoryEntry = new InventoryEntry(order, item);
 

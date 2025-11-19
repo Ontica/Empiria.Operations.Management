@@ -309,7 +309,7 @@ namespace Empiria.Inventory.UseCases {
 
       var items = order.GetItems<OrderItem>();
 
-      var orderItemType = Orders.OrderItemType.Parse(4059);
+      var orderItemType = OrderItemType.Parse(4059);
 
       foreach (var item in items) {
         InventoryOrderItemFields fields = new InventoryOrderItemFields();
@@ -338,7 +338,7 @@ namespace Empiria.Inventory.UseCases {
 
     public void OutputInventoryEntriesVW(InventoryOrder order) {
 
-      foreach (var item in order.Items) {
+      foreach (var item in order.GetItems<InventoryOrderItem>()) {
 
         var inventoryEntry = new InventoryEntry(order, item);
 

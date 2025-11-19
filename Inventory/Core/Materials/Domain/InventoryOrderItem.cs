@@ -56,12 +56,6 @@ namespace Empiria.Inventory {
 
     #region Methods
 
-
-    internal void DelItem() {
-      base.Delete();
-    }
-
-
     internal void Update(InventoryOrderItemFields fields) {
       Assertion.Require(fields, nameof(fields));
 

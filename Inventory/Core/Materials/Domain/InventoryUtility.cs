@@ -9,7 +9,9 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System.Linq;
+
 using Empiria.Inventory.Adapters;
+
 using Empiria.StateEnums;
 
 namespace Empiria.Inventory {
@@ -29,7 +31,7 @@ namespace Empiria.Inventory {
 
       bool existClosedEntries = false;
 
-      foreach (var item in order.Items) {
+      foreach (var item in order.GetItems<InventoryOrderItem>()) {
         foreach (var entry in item.Entries) {
           if (entry.Status == InventoryStatus.Cerrado) {
             existClosedEntries = true;
@@ -74,9 +76,7 @@ namespace Empiria.Inventory {
 
       InventoryOrder inventoryOrder = InventoryOrder.Parse(orderUID);
 
-      inventoryOrder.Items = inventoryOrder.GetItems<InventoryOrderItem>();
-
-      GetInventoryEntriesByItem(inventoryOrder.Items);
+      GetInventoryEntriesByItem(inventoryOrder.GetItems<InventoryOrderItem>());
 
       return inventoryOrder;
     }

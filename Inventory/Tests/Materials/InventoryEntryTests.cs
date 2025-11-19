@@ -160,7 +160,7 @@ namespace Empiria.Tests.Inventory {
 
       var order = Order.Parse(orderUID);
 
-      foreach (var item in items) {
+      foreach (var item in order.GetItems<InventoryOrderItem>()) {
 
         var inventoryEntry = new InventoryEntry(order, item);
 
@@ -195,9 +195,9 @@ namespace Empiria.Tests.Inventory {
 
       TestsCommonMethods.Authenticate();
 
-      var items = InventoryOrder.Parse(5898).Items;
+      var order = InventoryOrder.Parse(5898);
 
-      foreach (var item in items) {
+      foreach (var item in order.GetItems<InventoryOrderItem>()) {
 
         var inventoryEntry = InventoryEntry.TryParseWithOrderItemId(item.Id);
 
@@ -205,7 +205,7 @@ namespace Empiria.Tests.Inventory {
         inventoryEntry.Save();
       }
 
-      Assert.NotNull(items);
+      Assert.NotNull(order.Items);
     }
 
     #region Helpers

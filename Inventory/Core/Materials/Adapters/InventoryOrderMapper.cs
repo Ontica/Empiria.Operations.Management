@@ -52,7 +52,7 @@ namespace Empiria.Inventory.Adapters {
 
       return new InventoryHolderDto {
         Order = MapToOrderDto(order),
-        Items = MapToOrderItemsDto(order.Items),
+        Items = MapToOrderItemsDto(order.GetItems<InventoryOrderItem>()),
         Actions = actions
       };
     }

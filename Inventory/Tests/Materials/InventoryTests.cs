@@ -9,16 +9,21 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+
+using Xunit;
+
+using Empiria.Locations;
+
+using Empiria.Parties;
+using Empiria.Products;
+using Empiria.StateEnums;
+
+using Empiria.Orders;
+
 using Empiria.Inventory;
 using Empiria.Inventory.Adapters;
 using Empiria.Inventory.Data;
 using Empiria.Inventory.UseCases;
-using Empiria.Locations;
-using Empiria.Orders;
-using Empiria.Parties;
-using Empiria.Products;
-using Empiria.StateEnums;
-using Xunit;
 
 namespace Empiria.Tests.Inventory {
 
@@ -169,7 +174,7 @@ namespace Empiria.Tests.Inventory {
 
     private void OutputInventoryEntriesVW(InventoryOrder order) {
 
-      foreach (var item in order.Items) {
+      foreach (var item in order.GetItems<InventoryOrderItem>()) {
 
         var inventoryEntry = new InventoryEntry(order, item);
 
@@ -359,7 +364,7 @@ namespace Empiria.Tests.Inventory {
         Description = "12 de nov prueba update",
         RequestedByUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd",
         ResponsibleUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1",
-        Priority = Empiria.StateEnums.Priority.Normal       
+        Priority = Empiria.StateEnums.Priority.Normal
       };
 
       TestsCommonMethods.Authenticate();
@@ -407,7 +412,7 @@ namespace Empiria.Tests.Inventory {
       //TG5F38X34
       var order = InventoryOrder.Parse("75dadef4-0bc3-417b-a7e2-5b34f670f0a4");
 
-      foreach (var item in order.Items) {
+      foreach (var item in order.GetItems<InventoryOrderItem>()) {
         var entry = InventoryOrderData.GetInventoryEntry(item.Id);
         entry.UpdatePosition(item.Position);
         entry.Save();

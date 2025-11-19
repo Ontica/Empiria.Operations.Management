@@ -10,7 +10,6 @@
 
 using Empiria.Locations;
 using Empiria.Orders;
-using Empiria.Inventory.Data;
 
 namespace Empiria.Inventory {
 
@@ -50,18 +49,6 @@ namespace Empiria.Inventory {
     }
 
 
-    private FixedList<InventoryOrderItem> _items;
-
-    public FixedList<InventoryOrderItem> Items {
-      get {
-        return _items ?? (_items = InventoryOrderData.GetInventoryOrderItems(this));
-      }
-      set {
-        _items = value;
-      }
-    }
-
-
     #endregion Properties
 
     #region Methods
@@ -69,14 +56,12 @@ namespace Empiria.Inventory {
     internal protected virtual void AddItem(InventoryOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
 
-      base.AddItem(orderItem);
-
-      this.Items = GetItems<InventoryOrderItem>();
+      base.Items.Add(orderItem);
     }
 
 
     internal void CloseItems() {
-      foreach (var item in Items) {
+      foreach (var item in base.GetItems<InventoryOrderItem>()) {
         item.Close();
         item.Save();
       }
@@ -93,9 +78,7 @@ namespace Empiria.Inventory {
     internal protected virtual void RemoveItem(InventoryOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
 
-      base.RemoveItem(orderItem);
-
-      this.Items = GetItems<InventoryOrderItem>();
+      base.Items.Remove(orderItem);
     }
 
 
@@ -116,8 +99,8 @@ namespace Empiria.Inventory {
     #region Helpers
 
     private void DeleteItems() {
-      foreach (var item in this.Items) {
-        item.DelItem();
+      foreach (var item in base.GetItems<InventoryOrderItem>()) {
+        Items.Remove(item);
         item.Save();
       }
     }
