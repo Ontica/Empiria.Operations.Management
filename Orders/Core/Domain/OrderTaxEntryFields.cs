@@ -10,7 +10,7 @@
 
 using Empiria.Financial;
 
-namespace Empiria.Orders.UseCases {
+namespace Empiria.Orders {
 
   /// <summary>Input fields used to add or update an order tax entry.</summary>
   public class OrderTaxEntryFields {
@@ -37,7 +37,11 @@ namespace Empiria.Orders.UseCases {
 
     internal void EnsureValid() {
       Assertion.Require(OrderUID, nameof(OrderUID));
-      Assertion.Require(TaxTypeUID, nameof(TaxTypeUID));
+
+      if (string.IsNullOrEmpty(UID)) {
+        Assertion.Require(TaxTypeUID, nameof(TaxTypeUID));
+      }
+
       Assertion.Require(Total > 0m, $"{nameof(Total)} must be non-negative.");
     }
 
@@ -48,4 +52,4 @@ namespace Empiria.Orders.UseCases {
 
   }  // class OrderTaxEntryFields
 
-}  // namespace Empiria.Orders.UseCases
+}  // namespace Empiria.Orders
