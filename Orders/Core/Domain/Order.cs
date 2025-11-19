@@ -23,6 +23,7 @@ using Empiria.Budgeting;
 using Empiria.Financial;
 
 using Empiria.Orders.Data;
+using Empiria.Orders.UseCases;
 
 namespace Empiria.Orders {
 
@@ -33,6 +34,7 @@ namespace Empiria.Orders {
     #region Fields
 
     private Lazy<List<OrderItem>> _items = new Lazy<List<OrderItem>>();
+    private Lazy<List<OrderTaxEntry>> _taxEntries = new Lazy<List<OrderTaxEntry>>();
 
     #endregion Fields
 
@@ -56,6 +58,7 @@ namespace Empiria.Orders {
 
     protected override void OnLoad() {
       _items = new Lazy<List<OrderItem>>(() => OrdersData.GetOrderItems(this));
+      _taxEntries = new Lazy<List<OrderTaxEntry>>(() => OrdersData.GetOrderTaxEntries(this));
     }
 
     #endregion Constructors and parsers
@@ -195,7 +198,7 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_REQUESTED_TIME")]
     public DateTime RequestedTime {
-      get; private set;
+      get; internal set;
     }
 
 
@@ -504,6 +507,51 @@ namespace Empiria.Orders {
     }
 
     #endregion Methods
+
+    #region Taxes Methods
+
+    internal OrderTaxEntry AddTaxEntry(OrderTaxEntryFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      var taxEntry = new OrderTaxEntry(this, fields.GetTaxType(), fields.Total);
+
+      _taxEntries.Value.Add(taxEntry);
+
+      return taxEntry;
+    }
+
+    internal OrderTaxEntry RemoveTaxEntry(string taxEntryUID) {
+      Assertion.Require(taxEntryUID, nameof(taxEntryUID));
+
+      var taxEntry = _taxEntries.Value.Find(x => x.UID == taxEntryUID);
+
+      Assertion.Require(taxEntry, $"Order tax entry {taxEntryUID} not found.");
+
+      taxEntry.Delete();
+
+      _taxEntries.Value.Remove(taxEntry);
+
+      return taxEntry;
+    }
+
+
+    internal OrderTaxEntry UpdateTaxEntry(OrderTaxEntryFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      var taxEntry = _taxEntries.Value.Find(x => x.UID == fields.TaxTypeUID);
+
+      Assertion.Require(taxEntry, "Order tax entry not found.");
+
+      taxEntry.Update(fields.Total);
+
+      return taxEntry;
+    }
+
+    #endregion Taxes Methods
 
   }  // class Order
 
