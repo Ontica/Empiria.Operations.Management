@@ -1,7 +1,7 @@
-﻿/* Empiria Integrated Operations Management ******************************************************************
+﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
-*  Module   : Orders Management Integration                 Component : Web Api Layer                        *
-*  Assembly : Empiria.Operations.Integration.WebApi.dll     Pattern   : Web Api Controller                   *
+*  Module   : Orders Management                             Component : Web Api Layer                        *
+*  Assembly : Empiria.Orders.WebApi.dll                     Pattern   : Web Api Controller                   *
 *  Type     : OrderDocumentsController                      License   : Please read LICENSE.txt file         *
 *                                                                                                            *
 *  Summary  : Web API used to retrive and update order documents.                                            *
