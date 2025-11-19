@@ -19,11 +19,9 @@ namespace Empiria.Orders.Adapters {
       get; set;
     }
 
-
     public FixedList<OrderTaxEntryDto> Taxes {
       get; internal set;
     }
-
 
     public FixedList<BudgetTransactionDescriptorDto> BudgetTransactions {
       get; internal set;

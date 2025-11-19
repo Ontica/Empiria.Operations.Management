@@ -38,7 +38,7 @@ namespace Empiria.Orders.UseCases {
 
       var order = Order.Parse(fields.OrderUID);
 
-      OrderTaxEntry taxEntry = order.AddTaxEntry(fields);
+      OrderTaxEntry taxEntry = order.Taxes.AddTax(fields);
 
       taxEntry.Save();
 
@@ -52,7 +52,7 @@ namespace Empiria.Orders.UseCases {
 
       var order = Order.Parse(orderUID);
 
-      OrderTaxEntry taxEntry = order.RemoveTaxEntry(taxEntryUID);
+      OrderTaxEntry taxEntry = order.Taxes.RemoveTax(taxEntryUID);
 
       taxEntry.Save();
 
@@ -67,7 +67,7 @@ namespace Empiria.Orders.UseCases {
 
       var order = Order.Parse(fields.OrderUID);
 
-      OrderTaxEntry taxEntry = order.UpdateTaxEntry(fields);
+      OrderTaxEntry taxEntry = order.Taxes.UpdateTax(fields);
 
       taxEntry.Save();
 

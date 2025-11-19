@@ -23,7 +23,6 @@ using Empiria.Budgeting;
 using Empiria.Financial;
 
 using Empiria.Orders.Data;
-using Empiria.Orders.UseCases;
 
 namespace Empiria.Orders {
 
@@ -34,7 +33,7 @@ namespace Empiria.Orders {
     #region Fields
 
     private Lazy<List<OrderItem>> _items = new Lazy<List<OrderItem>>();
-    private Lazy<List<OrderTaxEntry>> _taxEntries = new Lazy<List<OrderTaxEntry>>();
+    private OrderTaxes _taxes;
 
     #endregion Fields
 
@@ -44,10 +43,7 @@ namespace Empiria.Orders {
       // Required by Empiria Framework for all partitioned types.
 
       OrderNo = "Por asignar";
-    }
-
-    public Order() {
-      //no-op
+      _taxes = new OrderTaxes(this);
     }
 
     static public Order Parse(int id) => ParseId<Order>(id);
@@ -58,7 +54,6 @@ namespace Empiria.Orders {
 
     protected override void OnLoad() {
       _items = new Lazy<List<OrderItem>>(() => OrdersData.GetOrderItems(this));
-      _taxEntries = new Lazy<List<OrderTaxEntry>>(() => OrdersData.GetOrderTaxEntries(this));
     }
 
     #endregion Constructors and parsers
@@ -381,6 +376,12 @@ namespace Empiria.Orders {
       }
     }
 
+    public OrderTaxes Taxes {
+      get {
+        return _taxes;
+      }
+    }
+
     #endregion Properties
 
     #region Methods
@@ -435,8 +436,7 @@ namespace Empiria.Orders {
 
 
     public decimal GetTotal() {
-      return _items.Value.Sum(x => x.Subtotal) +
-             _taxEntries.Value.Sum(x => x.Total);
+      return _items.Value.Sum(x => x.Subtotal) + Taxes.Total;
     }
 
 
@@ -509,57 +509,6 @@ namespace Empiria.Orders {
     }
 
     #endregion Methods
-
-    #region Taxes Methods
-
-    internal OrderTaxEntry AddTaxEntry(OrderTaxEntryFields fields) {
-      Assertion.Require(fields, nameof(fields));
-
-      fields.EnsureValid();
-
-      var taxEntry = new OrderTaxEntry(this, fields.GetTaxType(), fields.Total);
-
-      _taxEntries.Value.Add(taxEntry);
-
-      return taxEntry;
-    }
-
-
-    internal FixedList<OrderTaxEntry> GetTaxes() {
-      return _taxEntries.Value.ToFixedList();
-    }
-
-
-    internal OrderTaxEntry RemoveTaxEntry(string taxEntryUID) {
-      Assertion.Require(taxEntryUID, nameof(taxEntryUID));
-
-      var taxEntry = _taxEntries.Value.Find(x => x.UID == taxEntryUID);
-
-      Assertion.Require(taxEntry, $"Order tax entry {taxEntryUID} not found.");
-
-      taxEntry.Delete();
-
-      _taxEntries.Value.Remove(taxEntry);
-
-      return taxEntry;
-    }
-
-
-    internal OrderTaxEntry UpdateTaxEntry(OrderTaxEntryFields fields) {
-      Assertion.Require(fields, nameof(fields));
-
-      fields.EnsureValid();
-
-      var taxEntry = _taxEntries.Value.Find(x => x.UID == fields.TaxTypeUID);
-
-      Assertion.Require(taxEntry, "Order tax entry not found.");
-
-      taxEntry.Update(fields.Total);
-
-      return taxEntry;
-    }
-
-    #endregion Taxes Methods
 
   }  // class Order
 

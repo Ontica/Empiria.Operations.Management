@@ -236,7 +236,6 @@ namespace Empiria.Orders.Adapters {
   }  // class OrderDto
 
 
-
   /// <summary>Output Dto used to return minimal order data.</summary>
   abstract public class OrderDescriptor {
 
