@@ -31,6 +31,18 @@ namespace Empiria.Orders.Data {
     }
 
 
+    static internal List<OrderTaxEntry> GetOrderTaxEntries(Order order) {
+      var sql = "SELECT * FROM OMS_ORDER_TAXES " +
+                $"WHERE ORDER_TAX_ORDER_ID = {order.Id} AND " +
+                 "ORDER_TAX_STATUS <> 'X' " +
+                 "ORDER BY ORDER_TAX_ID";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetList<OrderTaxEntry>(op);
+    }
+
+
     static internal FixedList<T> Search<T>(string filter, string sort) where T : Order {
       var sql = "SELECT * FROM OMS_ORDERS";
 
@@ -77,6 +89,16 @@ namespace Empiria.Orders.Data {
         o.Position, o.PostingTime, o.PostedBy.Id, (char) o.Status);
 
       DataWriter.Execute(op);
+    }
+
+
+    static internal void WriteOrderTax(OrderTaxEntry o) {
+      var op = DataOperation.Parse("write_OMS_Order_Tax",
+        o.Id, o.UID, o.TaxType.Id, o.Order.Id, o.OrderItem.Id, o.BaseAmount, o.Total,
+        o.ExtData.ToString(), o.PostedBy.Id, o.PostingTime, (char) o.Status);
+
+      DataWriter.Execute(op);
+
     }
 
     #endregion Methods
