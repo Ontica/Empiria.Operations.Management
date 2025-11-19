@@ -399,6 +399,7 @@ namespace Empiria.Orders {
       Assertion.Require(orderItem.Order.Equals(this), "OrderItem.Order instance mismatch.");
 
       _items.Value.Add(orderItem);
+      _taxes.ApplyTaxes(orderItem);
     }
 
 
@@ -455,6 +456,8 @@ namespace Empiria.Orders {
       orderItem.Delete();
 
       _items.Value.Remove(orderItem);
+
+      _taxes.UnapplyTaxes(orderItem);
     }
 
 

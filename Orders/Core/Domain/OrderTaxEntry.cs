@@ -115,14 +115,6 @@ namespace Empiria.Orders {
 
     #region Methods
 
-    internal void Sum(decimal amount) {
-      Assertion.Require(amount > 0.00m, nameof(amount));
-
-      BaseAmount = 0;
-      Total += amount;
-    }
-
-
     internal void Delete() {
       Assertion.Require(Order.Status != EntityStatus.Closed,
                        "Can not delete tax entry because the order is closed.");
@@ -137,6 +129,12 @@ namespace Empiria.Orders {
         PostingTime = DateTime.Now;
       }
       OrdersData.WriteOrderTax(this);
+    }
+
+
+    internal void Sum(decimal amount) {
+      BaseAmount = 0;
+      Total += amount;
     }
 
 

@@ -12,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Empiria.Financial;
+
 using Empiria.Orders.Data;
 
 namespace Empiria.Orders {
@@ -66,6 +68,24 @@ namespace Empiria.Orders {
     }
 
 
+    internal void ApplyTaxes(OrderItem orderItem) {
+      Assertion.Require(orderItem, nameof(orderItem));
+
+      FixedList<TaxType> taxTypes = TaxType.AppliableFor(orderItem.Product);
+
+      foreach (var taxType in taxTypes) {
+        var fields = new OrderTaxEntryFields {
+          OrderUID = _order.UID,
+          TaxTypeUID = taxType.UID,
+          Total = orderItem.Subtotal * taxType.Rate
+        };
+
+        OrderTaxEntry taxEntry = AddTax(fields);
+        taxEntry.Save();
+      }
+    }
+
+
     internal FixedList<OrderTaxEntry> GetList() {
       return _taxEntries.Value.ToFixedList();
     }
@@ -92,6 +112,25 @@ namespace Empiria.Orders {
       _taxEntries.Value.Remove(taxEntry);
 
       return taxEntry;
+    }
+
+
+    internal void UnapplyTaxes(OrderItem orderItem) {
+      Assertion.Require(orderItem, nameof(orderItem));
+
+      FixedList<TaxType> taxTypes = TaxType.AppliableFor(orderItem.Product);
+
+      foreach (var taxType in taxTypes) {
+
+        var taxEntry = _taxEntries.Value.Find(x => x.TaxType.Equals(taxType));
+
+        if (taxEntry != null) {
+          decimal amount = -1 * (orderItem.Subtotal * taxType.Rate);
+
+          taxEntry.Sum(amount);
+          taxEntry.Save();
+        }
+      }
     }
 
 
