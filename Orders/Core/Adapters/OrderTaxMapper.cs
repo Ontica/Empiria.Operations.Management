@@ -23,7 +23,7 @@ namespace Empiria.Orders.Adapters {
       return new OrderTaxEntryDto {
         UID = taxEntry.UID,
         OrderUID = taxEntry.Order.UID,
-        TaxTypeName = taxEntry.TaxType.Name,
+        TaxType = taxEntry.TaxType.MapToNamedEntity(),
         BaseAmount = taxEntry.BaseAmount,
         Total = taxEntry.Total
       };

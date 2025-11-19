@@ -21,7 +21,7 @@ namespace Empiria.Orders.Adapters {
       get; internal set;
     }
 
-    public string TaxTypeName {
+    public NamedEntityDto TaxType {
       get; internal set;
     }
 
