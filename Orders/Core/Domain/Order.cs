@@ -435,8 +435,10 @@ namespace Empiria.Orders {
 
 
     public decimal GetTotal() {
-      return _items.Value.Sum(x => x.Subtotal);
+      return _items.Value.Sum(x => x.Subtotal) +
+             _taxEntries.Value.Sum(x => x.Total);
     }
+
 
     protected override void OnSave() {
       if (base.IsNew) {
@@ -521,6 +523,12 @@ namespace Empiria.Orders {
 
       return taxEntry;
     }
+
+
+    internal FixedList<OrderTaxEntry> GetTaxes() {
+      return _taxEntries.Value.ToFixedList();
+    }
+
 
     internal OrderTaxEntry RemoveTaxEntry(string taxEntryUID) {
       Assertion.Require(taxEntryUID, nameof(taxEntryUID));

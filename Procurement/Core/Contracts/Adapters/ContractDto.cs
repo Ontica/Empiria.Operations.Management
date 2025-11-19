@@ -26,6 +26,12 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
+
+    public FixedList<OrderTaxEntryDto> Taxes {
+      get; internal set;
+    }
+
+
     public FixedList<BudgetTransactionDescriptorDto> BudgetTransactions {
       get; internal set;
     }

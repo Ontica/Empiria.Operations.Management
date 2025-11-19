@@ -29,6 +29,7 @@ namespace Empiria.Orders.Adapters {
       return new PayableOrderHolderDto {
         Order = new PayableOrderDto(order),
         Items = Map(order.GetItems<PayableOrderItem>()),
+        Taxes = OrderTaxMapper.Map(order.GetTaxes()),
         BudgetTransactions = MapBudgetTransactions(order),
         Documents = DocumentServices.GetAllEntityDocuments(order),
         History = HistoryServices.GetEntityHistory(order),

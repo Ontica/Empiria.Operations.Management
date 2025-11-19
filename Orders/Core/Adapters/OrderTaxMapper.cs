@@ -13,6 +13,12 @@ namespace Empiria.Orders.Adapters {
   /// <summary>Maps order tax entries between domain and dto objects.</summary>
   static internal class OrderTaxMapper {
 
+    static internal FixedList<OrderTaxEntryDto> Map(FixedList<OrderTaxEntry> taxEntries) {
+      return taxEntries.Select(x => Map(x))
+                       .ToFixedList();
+    }
+
+
     static public OrderTaxEntryDto Map(OrderTaxEntry taxEntry) {
       return new OrderTaxEntryDto {
         UID = taxEntry.UID,

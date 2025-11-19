@@ -25,6 +25,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
       return new ContractHolderDto {
         Order = MapContract(contract),
         Items = ContractItemMapper.Map(contract.GetItems()),
+        Taxes = OrderTaxMapper.Map(contract.GetTaxes()),
         BudgetTransactions = MapBudgetTransactions(contract),
         Payables = ContractOrderMapper.MapToDescriptor(ContractOrder.GetListFor(contract)),
         Documents = DocumentServices.GetAllEntityDocuments(contract),
@@ -49,7 +50,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
       return contracts.Select(contract => MapToDescriptor(contract))
                        .ToFixedList();
     }
-
 
 
     static internal ContractDescriptor MapToDescriptor(Contract contract) {
