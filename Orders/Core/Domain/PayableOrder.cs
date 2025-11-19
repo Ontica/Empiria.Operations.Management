@@ -100,15 +100,15 @@ namespace Empiria.Orders {
     internal protected virtual void AddItem(PayableOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
 
-      base.AddItem(orderItem);
+      base.Items.Add(orderItem);
     }
 
 
-    internal protected virtual void RemoveItem(PayableOrderItem orderItem) {
-      Assertion.Require(orderItem, nameof(orderItem));
+    //internal protected virtual void RemoveItem(PayableOrderItem orderItem) {
+    //  Assertion.Require(orderItem, nameof(orderItem));
 
-      base.RemoveItem(orderItem);
-    }
+    //  base.RemoveItem(orderItem);
+    //}
 
 
     internal protected void Update(PayableOrderFields fields) {

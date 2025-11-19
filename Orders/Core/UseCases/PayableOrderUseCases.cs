@@ -103,7 +103,7 @@ namespace Empiria.Orders.UseCases {
 
       var item = order.GetItem<PayableOrderItem>(orderItemUID);
 
-      order.RemoveItem(item);
+      order.Items.Remove(item);
 
       item.Save();
 
@@ -174,6 +174,8 @@ namespace Empiria.Orders.UseCases {
       item.Update(fields);
 
       item.Save();
+
+      order.Items.Update(item);
 
       return PayableOrderMapper.Map(item);
     }

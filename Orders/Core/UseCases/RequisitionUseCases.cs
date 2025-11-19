@@ -76,7 +76,7 @@ namespace Empiria.Orders.UseCases {
 
       item.Update(fields);
 
-      requisition.AddItem(item);
+      requisition.Items.Add(item);
 
       item.Save();
 
@@ -105,7 +105,7 @@ namespace Empiria.Orders.UseCases {
 
       var item = requisition.GetItem<PayableOrderItem>(itemUID);
 
-      requisition.RemoveItem(item);
+      requisition.Items.Remove(item);
 
       item.Save();
 

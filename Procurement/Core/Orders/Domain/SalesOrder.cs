@@ -37,7 +37,7 @@ namespace Empiria.Procurement.Orders {
     internal protected virtual void AddItem(SalesOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
 
-      base.AddItem(orderItem);
+      base.Items.Add(orderItem);
     }
 
 
@@ -49,7 +49,7 @@ namespace Empiria.Procurement.Orders {
     internal protected virtual void RemoveItem(SalesOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));
 
-      base.RemoveItem(orderItem);
+      base.Items.Remove(orderItem);
     }
 
 

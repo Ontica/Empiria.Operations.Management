@@ -107,7 +107,7 @@ namespace Empiria.Procurement.Contracts {
 
       var contractItem = new ContractItem(OrderItemType.ContractItemPayable, this, fields);
 
-      base.AddItem(contractItem);
+      base.Items.Add(contractItem);
 
       return contractItem;
     }
@@ -172,7 +172,7 @@ namespace Empiria.Procurement.Contracts {
 
       ContractItem contractItem = GetItem(contractItemUID);
 
-      base.RemoveItem(contractItem);
+      base.Items.Remove(contractItem);
 
       return contractItem;
     }

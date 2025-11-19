@@ -79,7 +79,7 @@ namespace Empiria.Procurement.Contracts {
     internal void RemoveItem(ContractOrderItem contractOrderItem) {
       Assertion.Require(contractOrderItem, nameof(contractOrderItem));
 
-      base.RemoveItem(contractOrderItem);
+      base.Items.Remove(contractOrderItem);
     }
 
     #endregion Methods

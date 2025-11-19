@@ -9,8 +9,6 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using Empiria.Json;
 using Empiria.Locations;
@@ -32,8 +30,8 @@ namespace Empiria.Orders {
 
     #region Fields
 
-    private Lazy<List<OrderItem>> _items = new Lazy<List<OrderItem>>();
-    private OrderTaxes _taxes;
+    private readonly OrderItems _items;
+    private readonly OrderTaxes _taxes;
 
     #endregion Fields
 
@@ -43,6 +41,8 @@ namespace Empiria.Orders {
       // Required by Empiria Framework for all partitioned types.
 
       OrderNo = "Por asignar";
+
+      _items = new OrderItems(this);
       _taxes = new OrderTaxes(this);
     }
 
@@ -51,10 +51,6 @@ namespace Empiria.Orders {
     static public Order Parse(string uid) => ParseKey<Order>(uid);
 
     static public Order Empty => ParseEmpty<Order>();
-
-    protected override void OnLoad() {
-      _items = new Lazy<List<OrderItem>>(() => OrdersData.GetOrderItems(this));
-    }
 
     #endregion Constructors and parsers
 
@@ -376,6 +372,14 @@ namespace Empiria.Orders {
       }
     }
 
+
+    public OrderItems Items {
+      get {
+        return _items;
+      }
+    }
+
+
     public OrderTaxes Taxes {
       get {
         return _taxes;
@@ -391,15 +395,6 @@ namespace Empiria.Orders {
                   $"No se puede activar una orden que no está suspendida.");
 
       this.Status = EntityStatus.Active;
-    }
-
-
-    public virtual void AddItem(OrderItem orderItem) {
-      Assertion.Require(orderItem, nameof(orderItem));
-      Assertion.Require(orderItem.Order.Equals(this), "OrderItem.Order instance mismatch.");
-
-      _items.Value.Add(orderItem);
-      _taxes.ApplyTaxes(orderItem);
     }
 
 
@@ -422,7 +417,7 @@ namespace Empiria.Orders {
 
 
     public T GetItem<T>(string orderItemUID) where T : OrderItem {
-      var item = _items.Value.Find(x => x.UID == orderItemUID);
+      var item = _items.Get(orderItemUID);
 
       Assertion.Require(item, $"Order item {orderItemUID} not found.");
 
@@ -431,13 +426,13 @@ namespace Empiria.Orders {
 
 
     public FixedList<T> GetItems<T>() where T : OrderItem {
-      return _items.Value.Select(x => (T) x)
-                         .ToFixedList();
+      return _items.GetItems().Select(x => (T) x)
+                              .ToFixedList();
     }
 
 
     public decimal GetTotal() {
-      return _items.Value.Sum(x => x.Subtotal) + Taxes.Total;
+      return Items.Subtotal + Taxes.Total;
     }
 
 
@@ -447,17 +442,6 @@ namespace Empiria.Orders {
         PostingTime = DateTime.Now;
       }
       OrdersData.WriteOrder(this);
-    }
-
-
-    public virtual void RemoveItem(OrderItem orderItem) {
-      Assertion.Require(orderItem, nameof(orderItem));
-
-      orderItem.Delete();
-
-      _items.Value.Remove(orderItem);
-
-      _taxes.UnapplyTaxes(orderItem);
     }
 
 
