@@ -19,6 +19,37 @@ namespace Empiria.Orders.Data {
 
     #region Methods
 
+    static internal string GenerateOrderNo(Order order) {
+      Assertion.Require(order, nameof(order));
+
+      if (order.OrderNo != Order.PENDING_ORDER_NO) {
+        return order.OrderNo;
+      }
+
+      string orderPrefix = order.OrderType.Prefix;
+
+      int year = order.BaseBudget.Year;
+
+      string prefix = $"{orderPrefix}-{year}";
+
+      string sql = "SELECT MAX(ORDER_NO) " +
+                   "FROM OMS_ORDERS " +
+                  $"WHERE ORDER_NO LIKE '{prefix}-%'";
+
+      string lastUniqueID = DataReader.GetScalar(DataOperation.Parse(sql), string.Empty);
+
+      if (lastUniqueID.Length != 0) {
+
+        int consecutive = int.Parse(lastUniqueID.Split('-')[2]) + 1;
+
+        return $"{prefix}-{consecutive:00000}";
+
+      } else {
+        return $"{prefix}-00001";
+      }
+    }
+
+
     static internal List<OrderItem> GetOrderItems(Order order) {
       var sql = "SELECT * FROM OMS_ORDER_ITEMS " +
                 $"WHERE ORDER_ITEM_ORDER_ID = {order.Id} AND " +

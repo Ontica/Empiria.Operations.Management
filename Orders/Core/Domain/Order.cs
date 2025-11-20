@@ -30,6 +30,8 @@ namespace Empiria.Orders {
 
     #region Fields
 
+    static internal readonly string PENDING_ORDER_NO = "Por asignar";
+
     private readonly OrderItems _items;
     private readonly OrderTaxes _taxes;
 
@@ -40,7 +42,7 @@ namespace Empiria.Orders {
     protected Order(OrderType orderType) : base(orderType) {
       // Required by Empiria Framework for all partitioned types.
 
-      OrderNo = "Por asignar";
+      OrderNo = PENDING_ORDER_NO;
 
       _items = new OrderItems(this);
       _taxes = new OrderTaxes(this);
@@ -413,10 +415,15 @@ namespace Empiria.Orders {
     #region Methods
 
     internal protected virtual void Activate() {
-      Assertion.Require(this.Status == EntityStatus.Suspended,
-                  $"No se puede activar una orden que no está suspendida.");
+      Assertion.Require(this.Status == EntityStatus.Pending,
+                  $"No se puede activar una orden que no está pendiente.");
 
-      this.Status = EntityStatus.Active;
+      RequestedTime = DateTime.Now;
+      Status = EntityStatus.Active;
+
+      if (OrderNo == PENDING_ORDER_NO) {
+        OrderNo = OrdersData.GenerateOrderNo(this);
+      }
     }
 
 

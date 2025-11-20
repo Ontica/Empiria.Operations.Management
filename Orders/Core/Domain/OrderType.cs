@@ -40,9 +40,19 @@ namespace Empiria.Orders {
 
     static public OrderType ContractOrder => Parse("ObjectTypeInfo.Order.PayableOrder.ContractOrder");
 
-    public static OrderType Requisition => Parse("ObjectTypeInfo.Order.Requisition");
+    static public OrderType Requisition => Parse("ObjectTypeInfo.Order.Requisition");
 
     #endregion Constructors and parsers
+
+    #region Properties
+
+    public string Prefix {
+      get {
+        return "REQ";
+      }
+    }
+
+    #endregion Properties
 
   } // class OrderType
 
