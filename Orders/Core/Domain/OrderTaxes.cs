@@ -86,7 +86,7 @@ namespace Empiria.Orders {
     }
 
 
-    internal FixedList<OrderTaxEntry> GetList() {
+    public FixedList<OrderTaxEntry> GetList() {
       return _taxEntries.Value.ToFixedList();
     }
 
