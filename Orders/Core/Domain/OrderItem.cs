@@ -281,7 +281,7 @@ namespace Empiria.Orders {
 
 
     [DataField("ORDER_ITEM_GEO_ORIGIN_ID")]
-    public Location OriginCountry {
+    public Country OriginCountry {
       get; private set;
     }
 
@@ -478,7 +478,7 @@ namespace Empiria.Orders {
 
       Project = Patcher.Patch(fields.ProjectUID, Order.Project);
 
-      OriginCountry = Patcher.Patch(fields.OriginCountryUID, Location.Empty);
+      OriginCountry = Patcher.Patch(fields.OriginCountryUID, Country.Empty);
 
       StartDate = fields.StartDate.HasValue ? fields.StartDate.Value : ExecutionServer.DateMaxValue;
       EndDate = fields.EndDate.HasValue ? fields.EndDate.Value : ExecutionServer.DateMaxValue;
@@ -488,7 +488,7 @@ namespace Empiria.Orders {
       Beneficiary = Patcher.Patch(fields.BeneficiaryUID, Order.Beneficiary);
       ReceivedBy = Patcher.Patch(fields.ReceivedByUID, Party.Empty);
       Location = Patcher.Patch(fields.LocationUID, Location.Empty);
-      OriginCountry = Patcher.Patch(fields.OriginCountryUID, Location.Empty);
+      OriginCountry = Patcher.Patch(fields.OriginCountryUID, Country.Empty);
 
       MarkAsDirty();
     }
