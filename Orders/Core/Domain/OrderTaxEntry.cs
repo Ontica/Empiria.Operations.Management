@@ -20,7 +20,7 @@ using Empiria.Orders.Data;
 namespace Empiria.Orders {
 
   /// <summary>Represents a tax applied to an order.</summary>
-  public class OrderTaxEntry : BaseObject {
+  public class OrderTaxEntry : BaseObject, ITaxEntry {
 
     #region Constructors and parsers
 

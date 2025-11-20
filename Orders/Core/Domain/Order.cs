@@ -386,6 +386,13 @@ namespace Empiria.Orders {
       }
     }
 
+    FixedList<ITaxEntry> IBudgetable.Taxes {
+      get {
+        return _taxes.GetList().Select(x => (ITaxEntry) x)
+                               .ToFixedList();
+      }
+    }
+
     #endregion Properties
 
     #region Methods
