@@ -16,6 +16,7 @@ using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.Projects;
 using Empiria.StateEnums;
+using Empiria.Time;
 
 using Empiria.Budgeting;
 using Empiria.Financial;
@@ -135,7 +136,7 @@ namespace Empiria.Orders {
 
     string INamedEntity.Name {
       get {
-        return Description;
+        return $"{OrderNo} : {Name}";
       }
     }
 
@@ -348,13 +349,22 @@ namespace Empiria.Orders {
 
     public string GuaranteeNotes {
       get {
-        return ConditionsData.Get("notes", string.Empty);
+        return ConditionsData.Get("guarantees", string.Empty);
       }
       private set {
-        ConditionsData.SetIfValue("notes", value);
+        ConditionsData.SetIfValue("guarantees", value);
       }
     }
 
+
+    public string PenaltyNotes {
+      get {
+        return ConditionsData.Get("penalties", string.Empty);
+      }
+      private set {
+        ConditionsData.SetIfValue("penalties", value);
+      }
+    }
 
     public string DeliveryNotes {
       get {
@@ -364,6 +374,17 @@ namespace Empiria.Orders {
         DeliveryData.SetIfValue("notes", value);
       }
     }
+
+
+    public int EstimatedMonths {
+      get {
+        return ExtData.Get("estimatedMonths", GetMonthsDuration());
+      }
+      private set {
+        ExtData.SetIf("estimatedMonths", value, value != GetMonthsDuration());
+      }
+    }
+
 
     public bool IsForMultipleBeneficiaries {
       get {
@@ -518,13 +539,24 @@ namespace Empiria.Orders {
 
       Priority = fields.Priority.Value;
 
-
       GuaranteeNotes = EmpiriaString.Clean(fields.GuaranteeNotes);
+      PenaltyNotes = EmpiriaString.Clean(fields.PenaltyNotes);
       DeliveryNotes = EmpiriaString.Clean(fields.DeliveryNotes);
 
+      if (fields.EstimatedMonths > 0 || fields.EstimatedMonths != GetMonthsDuration()) {
+        EstimatedMonths = fields.EstimatedMonths;
+      }
     }
 
     #endregion Methods
+
+    #region Helpers
+
+    private int GetMonthsDuration() {
+      return YearMonth.GetMonths(StartDate, EndDate);
+    }
+
+    #endregion Helpers
 
   }  // class Order
 

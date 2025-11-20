@@ -80,7 +80,7 @@ namespace Empiria.Orders.Adapters {
       Tags = order.Tags;
       StartDate = order.StartDate;
       EndDate = order.EndDate;
-
+      EstimatedMonths = order.EstimatedMonths;
       Currency = order.Currency.MapToNamedEntity();
       Subtotal = order.Subtotal;
       Taxes = order.Taxes.Total;
@@ -110,6 +110,7 @@ namespace Empiria.Orders.Adapters {
 
       Observations = order.Observations;
       GuaranteeNotes = order.GuaranteeNotes;
+      PenaltyNotes = order.PenaltyNotes;
       DeliveryNotes = order.DeliveryNotes;
     }
 
@@ -159,6 +160,10 @@ namespace Empiria.Orders.Adapters {
     }
 
     public DateTime EndDate {
+      get;
+    }
+
+    public int EstimatedMonths {
       get;
     }
 
@@ -235,6 +240,10 @@ namespace Empiria.Orders.Adapters {
     }
 
     public string GuaranteeNotes {
+      get;
+    }
+
+    public string PenaltyNotes {
       get;
     }
 

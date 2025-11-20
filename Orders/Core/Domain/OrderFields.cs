@@ -11,6 +11,7 @@
 using System;
 
 using Empiria.StateEnums;
+using Empiria.Time;
 
 namespace Empiria.Orders {
 
@@ -125,9 +126,20 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public string PenaltyNotes {
+      get; set;
+    } = string.Empty;
+
+
     public string DeliveryNotes {
       get; set;
     } = string.Empty;
+
+
+    public int EstimatedMonths {
+      get; set;
+    }
+
 
     public DateTime RequiredTime {
       get; set;
@@ -160,16 +172,22 @@ namespace Empiria.Orders {
       if (!StartDate.HasValue) {
         StartDate = ExecutionServer.DateMaxValue;
       }
+
       if (!EndDate.HasValue) {
         EndDate = ExecutionServer.DateMaxValue;
       }
 
       Assertion.Require(StartDate.Value <= EndDate.Value,
                         $"{nameof(StartDate.Value)} must be less than or equal to {nameof(EndDate.Value)}");
+
+      Assertion.Require(EstimatedMonths == 0 || EstimatedMonths <= YearMonth.GetMonths(StartDate.Value, EndDate.Value),
+                       "La duración estimada en meses no puede sobrepasar los meses de la vigencia o período.");
+
       Assertion.Require(Observations.Length <= 3800,
           "El texto de las observaciones es demasiado largo. Máximo de 3800 caracteres");
-      Assertion.Require(GuaranteeNotes.Length <= 3800,
-          "El texto de las garantías es demasiado largo. Máximo de 3800 caracteres");
+      Assertion.Require(GuaranteeNotes.Length + PenaltyNotes.Length <= 3800,
+          "El texto de las garantías en conjunto con el de las penalidades " +
+          "es demasiado largo. Máximo de 3800 caracteres entre los dos");
       Assertion.Require(DeliveryNotes.Length <= 3800,
           "El texto de las condiciones de entrega es demasiado largo. Máximo de 3800 caracteres");
     }
