@@ -71,19 +71,14 @@ namespace Empiria.Orders.Adapters {
     protected internal RequisitionDto(Requisition requisition) : base(requisition) {
       BudgetType = requisition.BudgetType.MapToNamedEntity();
       Budgets = requisition.Budgets.MapToNamedEntityList();
-      Total = requisition.GetTotal();
     }
 
     public NamedEntityDto BudgetType {
-      get; private set;
+      get;
     }
 
     public FixedList<NamedEntityDto> Budgets {
-      get; private set;
-    }
-
-    public decimal Total {
-      get; private set;
+      get;
     }
 
   }  // class RequisitionDto
@@ -99,7 +94,7 @@ namespace Empiria.Orders.Adapters {
     }
 
     public FixedList<NamedEntityDto> Budgets {
-      get; private set;
+      get;
     }
 
   } // class RequisitionDescriptor

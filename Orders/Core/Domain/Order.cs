@@ -380,11 +380,26 @@ namespace Empiria.Orders {
     }
 
 
+    public decimal Subtotal {
+      get {
+        return Items.Subtotal;
+      }
+    }
+
+
     public OrderTaxes Taxes {
       get {
         return _taxes;
       }
     }
+
+
+    public decimal Total {
+      get {
+        return Subtotal + Taxes.Total;
+      }
+    }
+
 
     FixedList<ITaxEntry> IBudgetable.Taxes {
       get {

@@ -80,7 +80,12 @@ namespace Empiria.Orders.Adapters {
       Tags = order.Tags;
       StartDate = order.StartDate;
       EndDate = order.EndDate;
+
       Currency = order.Currency.MapToNamedEntity();
+      Subtotal = order.Subtotal;
+      Taxes = order.Taxes.Total;
+      Total = order.GetTotal();
+
       RequestedBy = order.RequestedBy.MapToNamedEntity();
       Responsible = order.Responsible.MapToNamedEntity();
       Beneficiary = order.Beneficiary.MapToNamedEntity();
@@ -158,6 +163,18 @@ namespace Empiria.Orders.Adapters {
     }
 
     public NamedEntityDto Currency {
+      get;
+    }
+
+    public decimal Subtotal {
+      get;
+    }
+
+    public decimal Taxes {
+      get;
+    }
+
+    public decimal Total {
       get;
     }
 
@@ -252,6 +269,8 @@ namespace Empiria.Orders.Adapters {
       ProviderName = order.Provider.Name;
       ProjectName = order.Project.Name;
       CurrencyName = order.Currency.ISOCode;
+      Subtotal = order.Subtotal;
+      Taxes = order.Taxes.Total;
       Total = order.GetTotal();
       PriorityUID = order.Priority.ToString();
       PriorityName = order.Priority.GetName();
@@ -307,6 +326,14 @@ namespace Empiria.Orders.Adapters {
     }
 
     public string CurrencyName {
+      get;
+    }
+
+    public decimal Subtotal {
+      get;
+    }
+
+    public decimal Taxes {
       get;
     }
 

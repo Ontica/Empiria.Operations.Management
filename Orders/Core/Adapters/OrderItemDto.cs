@@ -27,10 +27,11 @@ namespace Empiria.Orders.Adapters {
       Justification = item.Justification;
       ProductUnit = item.ProductUnit.MapToNamedEntity();
       RequestedQty = item.RequestedQuantity;
+      Currency = item.Currency.MapToNamedEntity();
       Quantity = item.Quantity;
       UnitPrice = item.UnitPrice;
       Discount = item.Discount;
-      Currency = item.Currency.MapToNamedEntity();
+      Subtotal = item.Subtotal;
       Budget = item.Budget.MapToNamedEntity();
       BudgetAccount = item.BudgetAccount.MapToNamedEntity();
       BudgetControlNo = item.BudgetEntry.ControlNo;
@@ -83,6 +84,10 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
+    public NamedEntityDto Currency {
+      get;
+    }
+
     public decimal Quantity {
       get; set;
     }
@@ -95,7 +100,7 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
-    public NamedEntityDto Currency {
+    public decimal Subtotal {
       get;
     }
 
