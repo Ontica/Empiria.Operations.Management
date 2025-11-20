@@ -1,7 +1,7 @@
 ﻿/* Empiria Operations ****************************************************************************************
 *                                                                                                            *
 *  Module   : Orders Management                          Component : Domain Layer                            *
-*  Assembly : Empiria.Orders.Core.dll                    Pattern   : Information Holder                      *
+*  Assembly : Empiria.Orders.Core.dll                    Pattern   : Separated aggregator                    *
 *  Type     : OrderTaxes                                 License   : Please read LICENSE.txt file            *
 *                                                                                                            *
 *  Summary  : Collection of taxes for an order.                                                              *

@@ -59,6 +59,7 @@ namespace Empiria.Tests.Procurement.Contracts {
       Assert.Equal(fields.Name, sut.Order.Name);
     }
 
+
     [Fact]
     public void Should_Update_A_Contract() {
       var fields = new ContractFields {

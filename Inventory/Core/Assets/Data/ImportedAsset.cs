@@ -5,7 +5,7 @@ namespace Empiria.Inventory.Assets.Data {
   internal class ImportedAsset {
 
     static internal FixedList<ImportedAsset> GetList() {
-      var op = DataOperation.Parse("SELECT * FROM Z_ACTIVO_FIJO WHERE ASSET_TYPE_ID <> -2");
+      var op = DataOperation.Parse("SELECT * FROM Z_ACTIVO_FIJO");
 
       return DataReader.GetPlainObjectFixedList<ImportedAsset>(op);
     }
