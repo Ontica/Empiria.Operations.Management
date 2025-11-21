@@ -26,11 +26,25 @@ namespace Empiria.Orders.WebApi {
   /// <summary>Web API used to retrive and update orders bills.</summary>
   public class OrderBillsController : WebApiController {
 
+    #region Query web apis
+
+    [HttpGet]
+    [Route("v8/order-management/orders/bill-types")]
+    public CollectionModel GetBillTypes() {
+
+      var billTypes = DocumentProduct.GetList<DocumentProduct>()
+                     .FindAll(x => x.InternalCode.StartsWith("CFDI-"));
+
+      return new CollectionModel(base.Request, billTypes.MapToNamedEntityList());
+    }
+
+    #endregion Query web apis
+
     #region Command web apis
 
     [HttpPost]
     [Route("v8/order-management/orders/{orderUID:guid}/bills")]
-    public SingleObjectModel AttachBill([FromUri] string orderUID) {
+    public SingleObjectModel AddBill([FromUri] string orderUID) {
 
       var order = Order.Parse(orderUID);
 
@@ -82,6 +96,38 @@ namespace Empiria.Orders.WebApi {
       }
 
       return new SingleObjectModel(Request, BillMapper.MapToBillDto(bill));
+    }
+
+
+    [HttpGet]
+    [Route("v8/order-management/orders/{orderUID:guid}/bills")]
+    public CollectionModel GetBills([FromUri] string orderUID) {
+
+      var order = Order.Parse(orderUID);
+
+      FixedList<Bill> bills = Bill.GetListFor((IPayableEntity) order);
+
+      return new CollectionModel(this.Request, BillMapper.MapToBillDto(bills));
+    }
+
+
+
+    [HttpDelete]
+    [Route("v8/order-management/orders/{orderUID:guid}/bills/{billUID:guid}")]
+    public NoDataModel RemoveBill([FromUri] string orderUID,
+                                  [FromUri] string billUID) {
+
+      var order = Order.Parse(orderUID);
+
+      Bill bill = Bill.Parse(billUID);
+
+      bill.Delete();
+
+      bill.Save();
+
+      DocumentServices.RemoveAllDocuments(bill);
+
+      return new NoDataModel(this.Request);
     }
 
     #endregion Command web apis
