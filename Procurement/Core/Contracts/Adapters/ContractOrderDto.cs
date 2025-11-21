@@ -38,7 +38,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
 
   /// <summary>Output Dto used to return minimal contract supply order data.</summary>
-  public class ContractOrderDescriptor : PayableOrderDescriptor {
+  public class ContractOrderDescriptor : OrderDescriptor {
 
     internal ContractOrderDescriptor(ContractOrder order) : base(order) {
       ContractNo = order.Contract.ContractNo;

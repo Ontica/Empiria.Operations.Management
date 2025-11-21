@@ -19,13 +19,14 @@ namespace Empiria.Orders.Adapters {
   /// <summary>Maps payable orders and their order items to their corresponding DTOs.</summary>
   static public class PayableOrderMapper {
 
-    static internal FixedList<PayableOrderDescriptor> Map(FixedList<PayableOrder> orders) {
+    static internal FixedList<OrderDescriptor> Map(FixedList<PayableOrder> orders) {
       return orders.Select(x => MapToDescriptor(x))
                    .ToFixedList();
     }
 
 
     static public PayableOrderHolderDto Map(PayableOrder order) {
+
       return new PayableOrderHolderDto {
         Order = new PayableOrderDto(order),
         Items = Map(order.GetItems<PayableOrderItem>()),
@@ -43,8 +44,14 @@ namespace Empiria.Orders.Adapters {
                        .ToFixedList();
     }
 
-    static private PayableOrderDescriptor MapToDescriptor(PayableOrder order) {
-      return new PayableOrderDescriptor(order);
+    static internal FixedList<OrderDescriptor> MapToDescriptor(FixedList<Order> orders) {
+      return orders.Select(x => MapToDescriptor(x))
+                   .ToFixedList();
+    }
+
+
+    static public OrderDescriptor MapToDescriptor(Order order) {
+      return new OrderDescriptor(order);
     }
 
 

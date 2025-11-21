@@ -120,7 +120,7 @@ namespace Empiria.Orders.UseCases {
     }
 
 
-    public FixedList<PayableOrderDescriptor> SearchOrders(OrdersQuery query) {
+    public FixedList<OrderDescriptor> SearchOrders(OrdersQuery query) {
       Assertion.Require(query, nameof(query));
 
       query.EnsureIsValid();

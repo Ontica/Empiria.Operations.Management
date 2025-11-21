@@ -263,11 +263,11 @@ namespace Empiria.Orders.Adapters {
 
 
   /// <summary>Output Dto used to return minimal order data.</summary>
-  abstract public class OrderDescriptor {
+  public class OrderDescriptor {
 
-    protected OrderDescriptor(Order order) {
+    public OrderDescriptor(Order order) {
       UID = order.UID;
-      TypeName = order.OrderType.Name;
+      TypeName = order.OrderType.DisplayName;
       CategoryName = order.Category.Name;
       RequisitionNo = order.Requisition.OrderNo;
       OrderNo = order.OrderNo;
@@ -281,12 +281,10 @@ namespace Empiria.Orders.Adapters {
       Subtotal = order.Subtotal;
       Taxes = order.Taxes.Total;
       Total = order.GetTotal();
+      StartDate = order.StartDate;
+      EndDate = order.EndDate;
       PriorityUID = order.Priority.ToString();
       PriorityName = order.Priority.GetName();
-      AuthorizationTime = order.AuthorizationTime;
-      AuthorizedByName = order.AuthorizedBy.Name;
-      ClosingTime = order.ClosingTime;
-      ClosedByName = order.ClosedBy.Name;
       StatusName = order.Status.GetName();
     }
 
@@ -319,7 +317,7 @@ namespace Empiria.Orders.Adapters {
     }
 
     public string BaseOrgUnitName {
-      get; protected set;
+      get;
     }
 
     public string BaseBudgetName {
@@ -350,27 +348,19 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
+    public DateTime StartDate {
+      get;
+    }
+
+    public DateTime EndDate {
+      get;
+    }
+
     public string PriorityUID {
-      get; private set;
+      get;
     }
 
     public string PriorityName {
-      get; private set;
-    }
-
-    public DateTime AuthorizationTime {
-      get;
-    }
-
-    public string AuthorizedByName {
-      get;
-    }
-
-    public DateTime ClosingTime {
-      get;
-    }
-
-    public string ClosedByName {
       get;
     }
 

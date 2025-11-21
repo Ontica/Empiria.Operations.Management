@@ -28,12 +28,13 @@ namespace Empiria.Orders.Adapters {
 
 
     static public RequisitionHolderDto Map(Requisition requisition) {
+
       return new RequisitionHolderDto {
         Order = new RequisitionDto(requisition),
         Items = Map(requisition.GetItems<PayableOrderItem>()),
         Taxes = OrderTaxMapper.Map(requisition.Taxes.GetList()),
         BudgetTransactions = MapBudgetTransactions(requisition),
-        Payables = new FixedList<OrderDescriptor>(),
+        Orders = new FixedList<OrderDescriptor>(),
         PaymentOrders = new FixedList<PaymentOrderDescriptor>(),
         Bills = new FixedList<Billing.Adapters.BillDescriptorDto>(),
         Documents = DocumentServices.GetAllEntityDocuments(requisition),

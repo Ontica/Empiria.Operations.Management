@@ -228,7 +228,6 @@ namespace Empiria.Operations.Integration.Orders {
 
         using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
           return usecases.SearchOrders(query)
-                         .Select(x => (OrderDescriptor) x)
                          .ToFixedList();
         }
       }

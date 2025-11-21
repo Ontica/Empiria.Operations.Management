@@ -16,7 +16,7 @@ namespace Empiria.Orders.Adapters {
   public class PayableOrderHolderDto : OrderHolderDto {
 
     public new FixedList<PayableOrderItemDto> Items {
-      get; set;
+      get; internal set;
     }
 
     public FixedList<OrderTaxEntryDto> Taxes {
@@ -56,16 +56,5 @@ namespace Empiria.Orders.Adapters {
     }
 
   }  // class PayableOrderDto
-
-
-
-  /// <summary>Output Dto used to return minimal payable order data.</summary>
-  public class PayableOrderDescriptor : OrderDescriptor {
-
-    protected internal PayableOrderDescriptor(PayableOrder order) : base(order) {
-
-    }
-
-  } // class PayableOrderDescriptor
 
 }  // namespace Empiria.Orders.Adapters
