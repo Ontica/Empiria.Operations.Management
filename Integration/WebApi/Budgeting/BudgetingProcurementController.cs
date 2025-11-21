@@ -14,6 +14,8 @@ using Empiria.WebApi;
 
 using Empiria.Budgeting.Transactions.Adapters;
 
+using Empiria.Payments.Payables.Adapters;
+
 using Empiria.Operations.Integration.Budgeting.Adapters;
 using Empiria.Operations.Integration.Budgeting.UseCases;
 
@@ -55,7 +57,7 @@ namespace Empiria.Operations.Integration.Budgeting.WebApi {
       base.RequireBody(query);
 
       using (var usecases = BudgetingProcurementUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> list = usecases.SearchRelatedDocumentsForTransactionEdition(query);
+        FixedList<PayableEntityDto> list = usecases.SearchRelatedDocumentsForTransactionEdition(query);
 
         return new CollectionModel(base.Request, list);
       }

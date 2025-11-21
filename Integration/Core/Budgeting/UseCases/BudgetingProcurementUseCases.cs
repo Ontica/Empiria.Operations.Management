@@ -12,9 +12,12 @@ using Empiria.Services;
 using Empiria.Parties;
 
 using Empiria.Orders;
+using Empiria.Orders.Data;
 
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
+
+using Empiria.Payments.Payables.Adapters;
 
 using Empiria.Operations.Integration.Budgeting.Adapters;
 
@@ -60,7 +63,7 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
     }
 
 
-    public FixedList<NamedEntityDto> SearchRelatedDocumentsForTransactionEdition(RelatedDocumentsQuery query) {
+    public FixedList<PayableEntityDto> SearchRelatedDocumentsForTransactionEdition(RelatedDocumentsQuery query) {
       Assertion.Require(query, nameof(query));
 
       var filter = new Filter();
@@ -74,10 +77,11 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
         filter.AppendAnd(SearchExpression.ParseAndLikeKeywords("ORDER_KEYWORDS", query.Keywords));
       }
 
-      return Orders.Data.OrdersData.Search<Order>(filter.ToString(), "ORDER_NO")
-                                   .MapToNamedEntityList();
-    }
+      FixedList<Order> orders = OrdersData.Search<Order>(filter.ToString(), "ORDER_NO");
 
+      return orders.Select(x => MapToPayableEntity(x))
+                   .ToFixedList();
+    }
 
     public BudgetValidationResultDto ValidateBudget(BudgetRequestFields fields) {
       Assertion.Require(fields, nameof(fields));
@@ -86,6 +90,23 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
     }
 
     #endregion Use cases
+
+    #region Helpers
+
+    static private PayableEntityDto MapToPayableEntity(Order order) {
+      return new PayableEntityDto {
+        UID = order.UID.ToString(),
+        Type = order.OrderType.MapToNamedEntity(),
+        EntityNo = order.OrderNo,
+        Name = order.Name,
+        Description = order.Description,
+        Budget = order.BaseBudget.MapToNamedEntity(),
+        Currency = order.Currency.MapToNamedEntity(),
+        Total = order.Total
+      };
+    }
+
+    #endregion Helpers
 
   }  // class BudgetingProcurementUseCases
 
