@@ -74,6 +74,19 @@ namespace Empiria.Orders.Data {
     }
 
 
+    static internal FixedList<Order> GetRequisitionOrders(Requisition requisition) {
+      var sql = "SELECT * FROM OMS_ORDERS " +
+                $"WHERE ORDER_REQUISITION_ID = {requisition.Id} AND " +
+                "ORDER_STATUS <> 'X' " +
+                "ORDER BY ORDER_NO";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<Order>(op);
+    }
+
+
+
     static internal FixedList<T> Search<T>(string filter, string sort) where T : Order {
       var sql = "SELECT * FROM OMS_ORDERS";
 

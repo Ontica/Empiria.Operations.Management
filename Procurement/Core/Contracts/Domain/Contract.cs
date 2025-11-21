@@ -16,6 +16,8 @@ using Empiria.Budgeting;
 
 using Empiria.Orders;
 
+using Empiria.Procurement.Contracts.Data;
+
 namespace Empiria.Procurement.Contracts {
 
   public class Contract : Order {
@@ -164,6 +166,11 @@ namespace Empiria.Procurement.Contracts {
 
     internal FixedList<ContractItem> GetItems() {
       return base.GetItems<ContractItem>();
+    }
+
+
+    internal FixedList<ContractOrder> GetOrders() {
+      return ContractOrdersData.GetContractOrders(this);
     }
 
 

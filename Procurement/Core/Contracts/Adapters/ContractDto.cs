@@ -34,6 +34,12 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
+
+    public FixedList<OrderDescriptor> Orders {
+      get; internal set;
+    }
+
+
     public FixedList<ContractOrderDescriptor> Payables {
       get; internal set;
     }

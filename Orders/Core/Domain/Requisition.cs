@@ -12,6 +12,8 @@ using System.Linq;
 
 using Empiria.Budgeting;
 
+using Empiria.Orders.Data;
+
 namespace Empiria.Orders {
 
   /// <summary>Represents a requisition of good and services. A requisition is an aggregate of orders.</summary>
@@ -45,6 +47,10 @@ namespace Empiria.Orders {
     #endregion Properties
 
     #region Methods
+
+    internal FixedList<Order> GetOrders() {
+      return OrdersData.GetRequisitionOrders(this);
+    }
 
     internal protected void Update(RequisitionFields fields) {
       Assertion.Require(fields, nameof(fields));
