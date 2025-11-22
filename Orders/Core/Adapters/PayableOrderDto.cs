@@ -8,6 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Billing.Adapters;
+
 using Empiria.Budgeting.Transactions.Adapters;
 
 namespace Empiria.Orders.Adapters {
@@ -27,12 +29,20 @@ namespace Empiria.Orders.Adapters {
       get; internal set;
     }
 
+    public FixedList<BillDto> Bills {
+      get; internal set;
+    }
+
   }  // class PayableOrderHolderDto
 
 
   public class PayableOrderActions : OrderActions {
 
     public bool CanRequestBudget {
+      get; internal set;
+    }
+
+    public bool CanEditBills {
       get; internal set;
     }
 

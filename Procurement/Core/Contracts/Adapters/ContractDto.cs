@@ -10,6 +10,8 @@
 
 using System;
 
+using Empiria.Billing.Adapters;
+
 using Empiria.Orders.Adapters;
 
 using Empiria.Budgeting.Transactions.Adapters;
@@ -41,6 +43,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
 
     public FixedList<ContractOrderDescriptor> Payables {
+      get; internal set;
+    }
+
+    public FixedList<BillDto> Bills {
       get; internal set;
     }
 

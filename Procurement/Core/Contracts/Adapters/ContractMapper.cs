@@ -8,11 +8,13 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-
 using Empiria.Documents;
 using Empiria.History;
 
 using Empiria.StateEnums;
+
+using Empiria.Billing;
+using Empiria.Billing.Adapters;
 
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
@@ -26,9 +28,12 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     static internal ContractHolderDto Map(Contract contract) {
 
-      var orders = contract.GetOrders()
-                           .Select(x => (Order) x)
-                           .ToFixedList();
+      FixedList<Order> orders = contract.GetOrders()
+                                        .Select(x => (Order) x)
+                                        .ToFixedList();
+
+      FixedList<Bill> bills = contract.GetOrders()
+                                      .SelectFlat(x => Bill.GetListFor(x));
 
       return new ContractHolderDto {
         Order = MapContract(contract),
@@ -37,6 +42,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         BudgetTransactions = MapBudgetTransactions(contract),
         Orders = PayableOrderMapper.MapToDescriptor(orders),
         Payables = ContractOrderMapper.MapToDescriptor(ContractOrder.GetListFor(contract)),
+        Bills = BillMapper.MapToBillDto(bills),
         Documents = DocumentServices.GetAllEntityDocuments(contract),
         History = HistoryServices.GetEntityHistory(contract),
         Actions = MapActions(contract)

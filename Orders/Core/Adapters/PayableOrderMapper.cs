@@ -11,6 +11,9 @@
 using Empiria.Documents;
 using Empiria.History;
 
+using Empiria.Billing;
+using Empiria.Billing.Adapters;
+
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 
@@ -26,12 +29,14 @@ namespace Empiria.Orders.Adapters {
 
 
     static public PayableOrderHolderDto Map(PayableOrder order) {
+      FixedList<Bill> bills = Bill.GetListFor(order);
 
       return new PayableOrderHolderDto {
         Order = new PayableOrderDto(order),
         Items = Map(order.GetItems<PayableOrderItem>()),
         Taxes = OrderTaxMapper.Map(order.Taxes.GetList()),
         BudgetTransactions = MapBudgetTransactions(order),
+        Bills = BillMapper.MapToBillDto(bills),
         Documents = DocumentServices.GetAllEntityDocuments(order),
         History = HistoryServices.GetEntityHistory(order),
         Actions = MapActions(order),
@@ -63,6 +68,7 @@ namespace Empiria.Orders.Adapters {
 
     static private PayableOrderActions MapActions(PayableOrder order) {
       return new PayableOrderActions {
+        CanEditBills = true,
         CanEditDocuments = true,
         CanRequestBudget = true,
         CanActivate = true,
