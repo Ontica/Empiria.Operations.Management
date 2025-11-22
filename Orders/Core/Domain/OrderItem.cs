@@ -444,8 +444,7 @@ namespace Empiria.Orders {
       ContractItem = Patcher.Patch(fields.ContractItemUID, Empty);
       RelatedItem = Patcher.Patch(fields.RelatedItemUID, Empty);
 
-      Budget = Patcher.Patch(fields.BudgetUID, Order.BaseBudget);
-      BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, RequisitionItem.BudgetAccount);
+      Justification = EmpiriaString.Clean(fields.Justification);
 
       Description = EmpiriaString.Clean(fields.Description);
       if (Description.Length == 0 && !Product.IsEmptyInstance) {
@@ -460,8 +459,6 @@ namespace Empiria.Orders {
 
       ProductName = Patcher.Patch(fields.ProductName, Description);
 
-      Justification = EmpiriaString.Clean(fields.Justification);
-
       ProductUnit = Patcher.Patch(fields.ProductUnitUID, ProductUnit);
 
       Quantity = fields.Quantity;
@@ -472,31 +469,32 @@ namespace Empiria.Orders {
         RequestedQuantity = Quantity;
       }
 
+      StartDate = Patcher.Patch(fields.StartDate, Requisition.StartDate);
+      EndDate = Patcher.Patch(fields.EndDate, Requisition.EndDate);
+
       Currency = Patcher.Patch(fields.CurrencyUID, Order.Currency);
       UnitPrice = fields.UnitPrice;
       Discount = fields.Discount;
 
       Project = Patcher.Patch(fields.ProjectUID, Order.Project);
 
-      OriginCountry = Patcher.Patch(fields.OriginCountryUID, Country.Empty);
-
-      StartDate = fields.StartDate.HasValue ? fields.StartDate.Value : ExecutionServer.DateMaxValue;
-      EndDate = fields.EndDate.HasValue ? fields.EndDate.Value : ExecutionServer.DateMaxValue;
+      Budget = Patcher.Patch(fields.BudgetUID, Order.BaseBudget);
+      BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, RequisitionItem.BudgetAccount);
 
       RequiredTime = Patcher.Patch(fields.RequiredTime, ExecutionServer.DateMaxValue);
       Responsible = Patcher.Patch(fields.ResponsibleUID, Order.Responsible);
       Beneficiary = Patcher.Patch(fields.BeneficiaryUID, Order.Beneficiary);
       ReceivedBy = Patcher.Patch(fields.ReceivedByUID, Party.Empty);
+
+      OriginCountry = Patcher.Patch(fields.OriginCountryUID, Country.Default);
       Location = Patcher.Patch(fields.LocationUID, Location.Empty);
-      OriginCountry = Patcher.Patch(fields.OriginCountryUID, Country.Empty);
 
       MarkAsDirty();
     }
 
 
     internal protected virtual void UpdateQuantity(decimal quantity) {
-      Assertion.Require(quantity > 0,
-                  $"La cantidad debe de ser mayor que 0.");
+      Assertion.Require(quantity > 0, $"La cantidad debe de ser mayor que 0.");
 
       this.Quantity = quantity;
     }

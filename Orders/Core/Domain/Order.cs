@@ -520,8 +520,8 @@ namespace Empiria.Orders {
       _identificators = EmpiriaString.Tagging(fields.Identificators);
       _tags = EmpiriaString.Tagging(fields.Tags);
 
-      StartDate = fields.StartDate ?? ExecutionServer.DateMaxValue;
-      EndDate = fields.EndDate ?? ExecutionServer.DateMaxValue;
+      StartDate = Patcher.Patch(fields.StartDate, ExecutionServer.DateMaxValue);
+      EndDate = Patcher.Patch(fields.EndDate, ExecutionServer.DateMaxValue);
 
       RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);
       RequiredTime = Patcher.Patch(fields.RequiredTime, DateTime.MaxValue);
