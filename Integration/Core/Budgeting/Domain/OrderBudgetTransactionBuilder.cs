@@ -88,6 +88,7 @@ namespace Empiria.Operations.Integration.Budgeting {
                                                BalanceColumn balanceColumn,
                                                bool isDeposit) {
       return new BudgetEntryFields {
+        BudgetUID = entry.Budget.UID,
         BudgetAccountUID = entry.BudgetAccount.UID,
         BalanceColumnUID = balanceColumn.UID,
         Description = entry.Description,
@@ -99,9 +100,9 @@ namespace Empiria.Operations.Integration.Budgeting {
         ProductQty = entry.Quantity,
         ProjectUID = entry.Project.UID,
         PartyUID = entry.RequestedBy.UID,
-        Year = _order.BaseBudget.Year,
-        Month = _order.RequestedTime.Month,
-        Day = _order.RequestedTime.Day,
+        Year = entry.StartDate.Year,
+        Month = entry.StartDate.Month,
+        Day = entry.StartDate.Day,
         EntityTypeId = entry.GetEmpiriaType().Id,
         EntityId = entry.Id,
         CurrencyUID = entry.Currency.UID,
