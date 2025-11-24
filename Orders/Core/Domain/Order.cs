@@ -436,7 +436,11 @@ namespace Empiria.Orders {
     #region Methods
 
     internal protected virtual void Activate() {
-      Assertion.Require(this.Status == EntityStatus.Pending,
+      if (Status == EntityStatus.Active) {
+        return;
+      }
+
+      Assertion.Require(Status == EntityStatus.Pending,
                   $"No se puede activar una orden que no está pendiente.");
 
       RequestedTime = DateTime.Now;
