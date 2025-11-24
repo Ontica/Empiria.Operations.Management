@@ -54,7 +54,8 @@ namespace Empiria.Orders.Data {
       var sql = "SELECT * FROM OMS_ORDER_ITEMS " +
                 $"WHERE ORDER_ITEM_ORDER_ID = {order.Id} AND " +
                        "ORDER_ITEM_STATUS <> 'X' " +
-                "ORDER BY ORDER_ITEM_POSITION";
+                "ORDER BY ORDER_ITEM_POSITION, ORDER_ITEM_START_DATE, ORDER_ITEM_END_DATE, " +
+                         "ORDER_ITEM_PRODUCT_NAME";
 
       var op = DataOperation.Parse(sql);
 
