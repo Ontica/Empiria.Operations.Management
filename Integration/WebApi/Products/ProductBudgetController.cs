@@ -11,8 +11,6 @@
 using System.Web.Http;
 
 using Empiria.WebApi;
-
-using Empiria.Operations.Integration.Budgeting.Adapters;
 using Empiria.Operations.Integration.Products.Adapters;
 
 using Empiria.Operations.Integration.Products.UseCases;
@@ -75,26 +73,6 @@ namespace Empiria.Operations.Integration.Products.WebApi {
         FixedList<NamedEntityDto> segments = usecases.SearchAvailableProductBudgetSegments(query);
 
         return new CollectionModel(Request, segments);
-      }
-    }
-
-
-    [HttpPost]
-    [Route("v8/product-management/products/{productUID:guid}/budget-accounts")]
-    public CollectionModel SearchBudgetAccountsForProduct([FromUri] string productUID,
-                                                          [FromBody] BudgetAccountsForProductQuery query) {
-
-      base.RequireBody(query);
-
-      Assertion.Require(query.ProductUID.Length == 0 || query.ProductUID == productUID,
-                        "ProductUID mismatch.");
-
-      query.ProductUID = productUID;
-
-      using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> budgetAccounts = usecases.SearchProductBudgetAccounts(query);
-
-        return new CollectionModel(Request, budgetAccounts);
       }
     }
 

@@ -9,8 +9,6 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.Services;
-
-using Empiria.Parties;
 using Empiria.Products;
 
 using Empiria.Budgeting;
@@ -100,29 +98,6 @@ namespace Empiria.Operations.Integration.Products.UseCases {
 
       return segments.Remove(current)
                      .MapToNamedEntityList();
-    }
-
-
-    public FixedList<NamedEntityDto> SearchProductBudgetAccounts(BudgetAccountsForProductQuery query) {
-      Assertion.Require(query, nameof(query));
-
-      query.EnsureValid();
-
-      var product = Product.Parse(query.ProductUID);
-      var orgUnit = OrganizationalUnit.Parse(query.OrgUnitUID);
-      var budget = Budget.Parse(query.BudgetUID);
-
-      var segments = FormerBudgetAcctSegmentLink.GetBudgetAccountSegmentsForProduct(product);
-
-      if (segments.Count == 0) {
-        return new FixedList<NamedEntityDto>();
-      }
-
-      var searcher = new FormerBudgetAccountSearcher(budget.BudgetType, string.Empty);
-
-      FixedList<FormerBudgetAccount> accounts = searcher.Search(orgUnit, segments);
-
-      return accounts.MapToNamedEntityList();
     }
 
     #endregion Use cases
