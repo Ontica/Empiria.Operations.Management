@@ -12,6 +12,7 @@ using Empiria.Services;
 
 using Empiria.Orders;
 
+using Empiria.Payments.Adapters;
 using Empiria.Payments.Payables.Adapters;
 
 namespace Empiria.Payments.Payables.Services {
@@ -38,9 +39,7 @@ namespace Empiria.Payments.Payables.Services {
 
       query.EnsureIsValid();
 
-      // ToDo: Change this fixed code to search for any payable types
-
-      var payableType = PayableType.Parse(query.PayableTypeUID);
+      // ToDo: Change this fixed code to search for any payable entities
 
       var orders = BaseObject.GetFullList<PayableOrder>()
                              .ToFixedList()

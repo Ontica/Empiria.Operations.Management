@@ -12,8 +12,11 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
+using Empiria.Payments.Adapters;
+
 using Empiria.Payments.Payables.Adapters;
 using Empiria.Payments.Payables.Services;
+
 
 namespace Empiria.Payments.Payables.WebApi {
 

@@ -18,7 +18,7 @@ namespace Empiria.Payments.Payables.Adapters {
     } = string.Empty;
 
 
-    public string PayableTypeUID {
+    public string PayableEntityTypeUID {
       get; set;
     } = string.Empty;
 
@@ -33,9 +33,7 @@ namespace Empiria.Payments.Payables.Adapters {
   static public class PayableEntitiesQueryExtensions {
 
     static public void EnsureIsValid(this PayableEntitiesQuery query) {
-      Assertion.Require(query.PayableTypeUID, nameof(query.PayableTypeUID));
 
-      _ = PayableType.Parse(query.PayableTypeUID);
     }
 
   }

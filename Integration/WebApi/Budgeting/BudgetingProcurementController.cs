@@ -14,7 +14,7 @@ using Empiria.WebApi;
 
 using Empiria.Budgeting.Transactions.Adapters;
 
-using Empiria.Payments.Payables.Adapters;
+using Empiria.Payments.Adapters;
 
 using Empiria.Operations.Integration.Budgeting.Adapters;
 using Empiria.Operations.Integration.Budgeting.UseCases;

@@ -17,7 +17,7 @@ using Empiria.Orders.Data;
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 
-using Empiria.Payments.Payables.Adapters;
+using Empiria.Payments.Adapters;
 
 using Empiria.Operations.Integration.Budgeting.Adapters;
 
