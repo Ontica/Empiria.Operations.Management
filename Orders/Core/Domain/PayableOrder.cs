@@ -8,8 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System.Collections.Generic;
-
 using Empiria.Budgeting;
 
 using Empiria.Financial;
@@ -37,7 +35,6 @@ namespace Empiria.Orders {
     #endregion Constructors and parsers
 
     #region IPayableEntity interface
-
 
     string IPayableEntity.EntityNo {
       get {
@@ -86,9 +83,10 @@ namespace Empiria.Orders {
     }
 
 
-    IEnumerable<IPayableEntityItem> IPayableEntity.Items {
+    FixedList<IPayableEntityItem> IPayableEntity.Items {
       get {
         return base.GetItems<PayableOrderItem>()
+                   .Select(x => (IPayableEntityItem) x)
                    .ToFixedList();
       }
     }
