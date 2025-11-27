@@ -10,9 +10,10 @@
 
 using Empiria.Services;
 
-using Empiria.Orders.Data;
+using Empiria.Budgeting;
 
 using Empiria.Orders.Adapters;
+using Empiria.Orders.Data;
 
 namespace Empiria.Orders.UseCases {
 
@@ -75,6 +76,8 @@ namespace Empiria.Orders.UseCases {
       var item = new PayableOrderItem(OrderItemType.PurchaseOrderItemType, requisition);
 
       item.Update(fields);
+
+      EnsureCanAddItem(requisition, item);
 
       requisition.Items.Add(item);
 
@@ -175,6 +178,8 @@ namespace Empiria.Orders.UseCases {
 
       var item = requisition.GetItem<PayableOrderItem>(itemUID);
 
+      EnsureCanUpdateItem(requisition, item, BudgetAccount.Parse(fields.BudgetAccountUID));
+
       item.Update(fields);
 
       item.Save();
@@ -182,7 +187,50 @@ namespace Empiria.Orders.UseCases {
       return PayableOrderMapper.Map(item);
     }
 
+
     #endregion Use cases
+
+    #region Business rules
+
+    private void EnsureCanAddItem(Requisition requisition, PayableOrderItem orderItem) {
+      if (!requisition.IsMultiYear) {
+        return;
+      }
+
+      if (requisition.Items.Count == 0) {
+        return;
+      }
+
+      var firstItem = requisition.Items.GetItems()[0] as PayableOrderItem;
+
+      Assertion.Require(orderItem.BudgetAccount.Equals(firstItem.BudgetAccount),
+                        "La cuenta presupuestal de todos los elementos de la requisición " +
+                        "debe ser la misma, debido a que las suficiencias presupuestales plurianuales " +
+                        "deben cumplir con dicho requisito.");
+    }
+
+
+    private void EnsureCanUpdateItem(Requisition requisition, PayableOrderItem item,
+                                     BudgetAccount budgetAccount) {
+      if (!requisition.IsMultiYear) {
+        return;
+      }
+
+      if (requisition.Items.Count == 1) {
+        return;
+      }
+
+      var distinctItems = requisition.Items.GetItems()
+                                           .FindAll(x => x.BudgetAccount.Distinct(budgetAccount));
+
+      Assertion.Require(distinctItems.Count == 0,
+                        "La cuenta presupuestal de todos los elementos de la requisición " +
+                        "debe ser la misma, debido a que las suficiencias presupuestales plurianuales " +
+                        "deben cumplir con dicho requisito.");
+
+    }
+
+    #endregion Business rules
 
   }  // class RequisitionUseCases
 
