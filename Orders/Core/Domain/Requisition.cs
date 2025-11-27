@@ -44,6 +44,12 @@ namespace Empiria.Orders {
       }
     }
 
+    public bool IsMultiYear {
+      get {
+        return Budgets.Count > 1;
+      }
+    }
+
     #endregion Properties
 
     #region Methods
@@ -51,6 +57,7 @@ namespace Empiria.Orders {
     internal FixedList<Order> GetOrders() {
       return OrdersData.GetRequisitionOrders(this);
     }
+
 
     internal protected void Update(RequisitionFields fields) {
       Assertion.Require(fields, nameof(fields));
