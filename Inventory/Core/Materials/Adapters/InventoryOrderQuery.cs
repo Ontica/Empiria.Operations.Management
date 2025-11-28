@@ -52,7 +52,7 @@ namespace Empiria.Inventory.Adapters {
       var filter = new Filter(status);
 
       filter.AppendAnd(keywords);
-      filter.AppendAnd("Order_Type_Id = 4010");
+      filter.AppendAnd("Order_Type_Id = 4011");
       filter.AppendAnd(warehouse);
       filter.AppendAnd(inventoryType);
 

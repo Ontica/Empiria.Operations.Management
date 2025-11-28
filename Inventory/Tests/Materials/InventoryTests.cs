@@ -228,7 +228,7 @@ namespace Empiria.Tests.Inventory {
     public void Should_Get_InventoryOrder() {
 
       TestsCommonMethods.Authenticate();
-      var orderUID = "d2413b35-8d79-4f89-9f7c-174c903b2510";
+      var orderUID = "a33c76c7-c266-43ff-bfb2-2b2b820b312a";
 
       Assertion.Require(orderUID, nameof(orderUID));
       //var x = ExecutionServer.CurrentPrincipal.Permissions;
@@ -457,7 +457,7 @@ namespace Empiria.Tests.Inventory {
         ParentOrderUID = order.UID,
       };
 
-      var orderType = OrderType.Parse(4010);
+      var orderType = OrderType.Parse(4011);
 
       InventoryOrder inventoryOrder = new InventoryOrder(fields.WarehouseUID, orderType);
 
