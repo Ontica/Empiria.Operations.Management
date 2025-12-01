@@ -13,10 +13,10 @@ using System.Web.Http;
 using Empiria.WebApi;
 
 using Empiria.Payments.Adapters;
+using Empiria.Payments.UseCases;
 
 using Empiria.Payments.Payables.Adapters;
 using Empiria.Payments.Payables.Services;
-
 
 namespace Empiria.Payments.Payables.WebApi {
 
@@ -24,6 +24,30 @@ namespace Empiria.Payments.Payables.WebApi {
   public class PayableEntityController : WebApiController {
 
     #region Query web apis
+
+    [HttpPost]
+    [Route("v2/payments-management/payables/search")]   // ToDo: Remove this deprecated route in future versions.
+    public CollectionModel SearchPaymentOrders([FromBody] PaymentOrdersQuery query) {
+
+      using (var usecases = PaymentOrderUseCases.UseCaseInteractor()) {
+        FixedList<PaymentOrderDescriptor> paymentOrders = usecases.SearchPaymentOrders(query);
+
+        return new CollectionModel(base.Request, paymentOrders);
+      }
+    }
+
+
+    [HttpGet]
+    [Route("v2/payments-management/payment-order-types")]  // ToDo: Remove on next version
+    [Route("v2/payments-management/payables/payable-types")]
+    public CollectionModel GetPayableEntityTypes() {
+      using (var services = PayableEntityServices.ServiceInteractor()) {
+        FixedList<NamedEntityDto> payableEntityTypes = services.GetPayableEntityTypes();
+
+        return new CollectionModel(Request, payableEntityTypes);
+      }
+    }
+
 
     [HttpPost]
     [Route("v2/payments-management/payable-entities/search")]

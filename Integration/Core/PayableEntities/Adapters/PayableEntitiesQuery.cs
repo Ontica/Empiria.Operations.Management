@@ -29,13 +29,4 @@ namespace Empiria.Payments.Payables.Adapters {
 
   }  // class PayableEntitiesQuery
 
-
-  static public class PayableEntitiesQueryExtensions {
-
-    static public void EnsureIsValid(this PayableEntitiesQuery query) {
-
-    }
-
-  }
-
 }  // namespace Empiria.Payments.Payables.Adapters

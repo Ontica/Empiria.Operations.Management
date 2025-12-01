@@ -34,10 +34,16 @@ namespace Empiria.Payments.Payables.Services {
 
     #region Use cases
 
+    public FixedList<NamedEntityDto> GetPayableEntityTypes() {
+
+      return OrderType.GetList()
+                      .FindAll(x => x.Name.Contains("PayableOrder"))
+                      .MapToNamedEntityList();
+    }
+
+
     public FixedList<PayableEntityDto> SearchPayableEntities(PayableEntitiesQuery query) {
       Assertion.Require(query, nameof(query));
-
-      query.EnsureIsValid();
 
       // ToDo: Change this fixed code to search for any payable entities
 
