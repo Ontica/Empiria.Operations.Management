@@ -12,10 +12,12 @@ using Empiria.Documents;
 using Empiria.History;
 
 using Empiria.Billing;
-using Empiria.Billing.Adapters;
-
+using Empiria.Payments.Orders;
 using Empiria.Budgeting.Transactions;
+
+using Empiria.Billing.Adapters;
 using Empiria.Budgeting.Transactions.Adapters;
+using Empiria.Payments.Orders.Adapters;
 
 namespace Empiria.Orders.Adapters {
 
@@ -37,6 +39,7 @@ namespace Empiria.Orders.Adapters {
         Taxes = OrderTaxMapper.Map(order.Taxes.GetList()),
         BudgetTransactions = MapBudgetTransactions(order),
         Bills = BillMapper.MapToBillDto(bills),
+        Payments = PaymentOrderMapper.MapToDescriptor(PaymentOrder.GetListFor(order)),
         Documents = DocumentServices.GetAllEntityDocuments(order),
         History = HistoryServices.GetEntityHistory(order),
         Actions = MapActions(order),

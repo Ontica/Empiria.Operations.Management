@@ -9,8 +9,8 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.Billing.Adapters;
-
 using Empiria.Budgeting.Transactions.Adapters;
+using Empiria.Payments.Orders.Adapters;
 
 namespace Empiria.Orders.Adapters {
 
@@ -30,6 +30,10 @@ namespace Empiria.Orders.Adapters {
     }
 
     public FixedList<BillDto> Bills {
+      get; internal set;
+    }
+
+    public FixedList<PaymentOrderDescriptor> Payments {
       get; internal set;
     }
 
