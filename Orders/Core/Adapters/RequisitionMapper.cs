@@ -13,13 +13,13 @@ using Empiria.History;
 
 using Empiria.Financial;
 
-using Empiria.Budgeting.Transactions;
-using Empiria.Budgeting.Transactions.Adapters;
-
 using Empiria.Billing;
 using Empiria.Billing.Adapters;
 
-using Empiria.Payments.Orders.Adapters;
+using Empiria.Budgeting.Transactions;
+using Empiria.Budgeting.Transactions.Adapters;
+
+using Empiria.Payments.Adapters;
 
 namespace Empiria.Orders.Adapters {
 
