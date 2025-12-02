@@ -33,7 +33,7 @@ namespace Empiria.Orders.Adapters {
       get; internal set;
     }
 
-    public FixedList<PaymentOrderDescriptor> Payments {
+    public FixedList<PaymentOrderDescriptor> PaymentOrders {
       get; internal set;
     }
 

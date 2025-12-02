@@ -39,7 +39,7 @@ namespace Empiria.Orders.Adapters {
         Taxes = OrderTaxMapper.Map(order.Taxes.GetList()),
         BudgetTransactions = MapBudgetTransactions(order),
         Bills = BillMapper.MapToBillDto(bills),
-        Payments = PaymentOrderMapper.MapToDescriptor(PaymentOrder.GetListFor(order)),
+        PaymentOrders = PaymentOrderMapper.MapToDescriptor(PaymentOrder.GetListFor(order)),
         Documents = DocumentServices.GetAllEntityDocuments(order),
         History = HistoryServices.GetEntityHistory(order),
         Actions = MapActions(order),
