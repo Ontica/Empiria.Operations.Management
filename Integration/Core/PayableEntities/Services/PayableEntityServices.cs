@@ -8,9 +8,13 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System;
+
+using Empiria.Financial;
 using Empiria.Services;
 
 using Empiria.Orders;
+using Empiria.Orders.Adapters;
 
 using Empiria.Payments.Adapters;
 using Empiria.Payments.Payables.Adapters;
@@ -39,6 +43,36 @@ namespace Empiria.Payments.Payables.Services {
       return OrderType.GetList()
                       .FindAll(x => x.Name.Contains("PayableOrder"))
                       .MapToNamedEntityList();
+    }
+
+
+    public PayableOrderHolderDto RequestPayment(string orderUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+
+      var order = (IPayableEntity) PayableOrder.Parse(orderUID);
+
+      var paymentOrder = new PaymentOrder(order);
+
+      var paymentAccount = PaymentAccount.Parse(1);
+
+      var fields = new PaymentOrderFields {
+        PayToUID = order.PayTo.UID,
+        CurrencyUID = order.Currency.UID,
+        Description = order.Name,
+        DueTime = DateTime.Now.AddDays(7),
+        PaymentAccountUID = paymentAccount.UID,
+        PaymentMethodUID = paymentAccount.PaymentMethod.UID,
+        RequestedByUID = order.OrganizationalUnit.UID,
+        RequestedTime = DateTime.Now,
+        ReferenceNumber = order.EntityNo,
+        Total = paymentOrder.Total,
+      };
+
+      paymentOrder.Update(fields);
+
+      paymentOrder.Save();
+
+      return PayableOrderMapper.Map((PayableOrder) order);
     }
 
 

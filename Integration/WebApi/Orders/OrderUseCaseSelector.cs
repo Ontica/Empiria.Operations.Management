@@ -204,17 +204,6 @@ namespace Empiria.Operations.Integration.Orders {
     }
 
 
-    static internal OrderHolderDto RequestOrderPayment(string orderUID) {
-      Assertion.Require(orderUID, nameof(orderUID));
-
-      PayableOrder order = PayableOrder.Parse(orderUID);
-
-      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
-        return usecases.RequestPayment(order);
-      }
-    }
-
-
     static public FixedList<OrderDescriptor> Search(OrdersQuery query) {
       Assertion.Require(query, nameof(query));
 

@@ -120,11 +120,6 @@ namespace Empiria.Orders.UseCases {
     }
 
 
-    public PayableOrderHolderDto RequestPayment(PayableOrder order) {
-      return PayableOrderMapper.Map(order);
-    }
-
-
     public FixedList<OrderDescriptor> SearchOrders(OrdersQuery query) {
       Assertion.Require(query, nameof(query));
 

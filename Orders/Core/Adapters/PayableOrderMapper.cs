@@ -12,11 +12,12 @@ using Empiria.Documents;
 using Empiria.History;
 
 using Empiria.Billing;
-using Empiria.Payments;
-using Empiria.Budgeting.Transactions;
-
 using Empiria.Billing.Adapters;
+
+using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
+
+using Empiria.Payments;
 using Empiria.Payments.Adapters;
 
 namespace Empiria.Orders.Adapters {

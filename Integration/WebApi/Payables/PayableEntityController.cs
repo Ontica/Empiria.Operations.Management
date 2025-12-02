@@ -12,11 +12,13 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
-using Empiria.Payments.Adapters;
-using Empiria.Payments.UseCases;
+using Empiria.Orders.Adapters;
 
 using Empiria.Payments.Payables.Adapters;
 using Empiria.Payments.Payables.Services;
+
+using Empiria.Payments.Adapters;
+using Empiria.Payments.UseCases;
 
 namespace Empiria.Payments.Payables.WebApi {
 
@@ -41,10 +43,24 @@ namespace Empiria.Payments.Payables.WebApi {
     [Route("v2/payments-management/payment-order-types")]  // ToDo: Remove on next version
     [Route("v2/payments-management/payables/payable-types")]
     public CollectionModel GetPayableEntityTypes() {
+
       using (var services = PayableEntityServices.ServiceInteractor()) {
         FixedList<NamedEntityDto> payableEntityTypes = services.GetPayableEntityTypes();
 
         return new CollectionModel(Request, payableEntityTypes);
+      }
+    }
+
+
+    [HttpPost]
+    [Route("v8/order-management/orders/{orderUID:guid}/request-payment")]
+    public SingleObjectModel RequestOrderPayment([FromUri] string orderUID) {
+
+      using (var services = PayableEntityServices.ServiceInteractor()) {
+
+        OrderHolderDto order = services.RequestPayment(orderUID);
+
+        return new SingleObjectModel(base.Request, order);
       }
     }
 
