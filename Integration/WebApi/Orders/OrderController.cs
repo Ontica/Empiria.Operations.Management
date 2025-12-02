@@ -120,6 +120,16 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
 
     [HttpPost]
+    [Route("v8/order-management/orders/{orderUID:guid}/request-payment")]
+    public SingleObjectModel RequestOrderPayment([FromUri] string orderUID) {
+
+      OrderHolderDto order = OrderUseCaseSelector.RequestOrderPayment(orderUID);
+
+      return new SingleObjectModel(base.Request, order);
+    }
+
+
+    [HttpPost]
     [Route("v8/order-management/orders/{orderUID:guid}/suspend")]
     public SingleObjectModel SuspendOrder([FromUri] string orderUID) {
 

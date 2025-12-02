@@ -72,6 +72,7 @@ namespace Empiria.Orders.Adapters {
     static private PayableOrderActions MapActions(PayableOrder order) {
       return new PayableOrderActions {
         CanEditBills = true,
+        CanRequestPayment = true,
         CanEditDocuments = true,
         CanRequestBudget = true,
         CanActivate = true,

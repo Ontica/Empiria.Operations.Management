@@ -50,6 +50,10 @@ namespace Empiria.Orders.Adapters {
       get; internal set;
     }
 
+    public bool CanRequestPayment {
+      get; internal set;
+    }
+
   } // class PayableOrderActions
 
 

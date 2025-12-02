@@ -204,6 +204,17 @@ namespace Empiria.Operations.Integration.Orders {
     }
 
 
+    static internal OrderHolderDto RequestOrderPayment(string orderUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+
+      PayableOrder order = PayableOrder.Parse(orderUID);
+
+      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
+        return usecases.RequestPayment(order);
+      }
+    }
+
+
     static public FixedList<OrderDescriptor> Search(OrdersQuery query) {
       Assertion.Require(query, nameof(query));
 
@@ -230,6 +241,29 @@ namespace Empiria.Operations.Integration.Orders {
           return usecases.SearchOrders(query)
                          .ToFixedList();
         }
+      }
+    }
+
+
+    static internal OrderHolderDto SuspendOrder(string orderUID) {
+      Assertion.Require(orderUID, nameof(orderUID));
+
+      var order = Order.Parse(orderUID);
+
+      if (order is Requisition) {
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.Suspend(order.UID);
+        }
+      }
+
+      if (order is Contract) {
+        using (var usecases = ContractUseCases.UseCaseInteractor()) {
+          return usecases.Suspend(order.UID);
+        }
+      }
+
+      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
+        return usecases.SuspendOrder(order.UID);
       }
     }
 
@@ -291,29 +325,6 @@ namespace Empiria.Operations.Integration.Orders {
 
       using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
         return usecases.UpdateOrderItem(order.UID, orderItemUID, (PayableOrderItemFields) fields);
-      }
-    }
-
-
-    static internal OrderHolderDto SuspendOrder(string orderUID) {
-      Assertion.Require(orderUID, nameof(orderUID));
-
-      var order = Order.Parse(orderUID);
-
-      if (order is Requisition) {
-        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
-          return usecases.Suspend(order.UID);
-        }
-      }
-
-      if (order is Contract) {
-        using (var usecases = ContractUseCases.UseCaseInteractor()) {
-          return usecases.Suspend(order.UID);
-        }
-      }
-
-      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
-        return usecases.SuspendOrder(order.UID);
       }
     }
 
