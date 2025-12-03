@@ -17,6 +17,7 @@ using Empiria.Orders.Data;
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 
+using Empiria.Payments;
 using Empiria.Payments.Adapters;
 
 using Empiria.Operations.Integration.Budgeting.Adapters;
@@ -51,11 +52,34 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       fields.EnsureValid();
 
-      var order = Order.Parse(fields.BaseObjectUID);
+      bool isPaymentOrder = fields.BaseObjectTypeUID.Contains("PaymentOrder");
+      Order order;
 
-      var builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.ApartarGastoCorriente, order);
+
+      if (isPaymentOrder) {
+        var po = PaymentOrder.Parse(fields.BaseObjectUID);
+
+        order = Order.Parse(po.PayableEntity.UID);
+
+      } else {
+        order = Order.Parse(fields.BaseObjectUID);
+      }
+
+      order.Activate();
+
+      order.Save();
+
+      OrderBudgetTransactionBuilder builder;
+
+      if (isPaymentOrder) {
+        builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.ComprometerGastoCorriente, order);
+      } else {
+        builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.ApartarGastoCorriente, order);
+      }
 
       BudgetTransaction transaction = builder.Build();
+
+      transaction.SendToAuthorization();
 
       transaction.Save();
 
