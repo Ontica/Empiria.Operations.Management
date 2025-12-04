@@ -50,7 +50,7 @@ namespace Empiria.Orders {
 
     INamedEntity IPayableEntity.OrganizationalUnit {
       get {
-        return this.Responsible;
+        return this.RequestedBy;
       }
     }
 

@@ -18,8 +18,10 @@ using Empiria.Projects;
 using Empiria.StateEnums;
 using Empiria.Time;
 
-using Empiria.Budgeting;
 using Empiria.Financial;
+
+using Empiria.Budgeting;
+using Empiria.Budgeting.Transactions;
 
 using Empiria.Orders.Data;
 
