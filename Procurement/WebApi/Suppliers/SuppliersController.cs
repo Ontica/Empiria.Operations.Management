@@ -10,6 +10,8 @@
 
 using System.Web.Http;
 
+using System.Threading.Tasks;
+
 using Empiria.WebApi;
 
 using Empiria.Parties;
@@ -45,6 +47,23 @@ namespace Empiria.Procurement.Suppliers.WebApi {
                                                .MapToNamedEntityList(false);
 
       return new CollectionModel(base.Request, kinds);
+    }
+
+
+    [HttpPost]
+    [Route("v8/procurement/suppliers/match-subledger-account")]
+    public async Task<SingleObjectModel> MatchSupplierSubledgerAccount([FromBody] SubledgerAccountQuery fields) {
+
+      using (var usecases = SupplierUseCases.UseCaseInteractor()) {
+        NamedEntityDto subledgerAccount = await usecases.MatchSupplierSubledgerAccount(fields);
+
+        var json = new {
+          number = subledgerAccount.UID,
+          name = subledgerAccount.Name
+        };
+
+        return new SingleObjectModel(base.Request, json);
+      }
     }
 
 
