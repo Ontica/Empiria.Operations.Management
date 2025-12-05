@@ -18,7 +18,7 @@ namespace Empiria.Procurement.Suppliers.Adapters {
   /// <summary>Holds full information for a supplier.</summary>
   public class SupplierHolderDto {
 
-    public SupplierDescriptor Supplier {
+    public SupplierDto Supplier {
       get; internal set;
     }
 
@@ -37,15 +37,40 @@ namespace Empiria.Procurement.Suppliers.Adapters {
   }  // class SupplierHolderDto
 
 
-
-  /// <summary>Output DTO used to return minimal suppliers data to be used in lists.</summary>
-  public class SupplierDescriptor {
+  /// <summary>Output DTO with supplier data.</summary>
+  public class SupplierDto {
 
     public string UID {
       get; internal set;
     }
 
-    public string TypeUID {
+    public NamedEntityDto Type {
+      get; internal set;
+    }
+
+    public string Name {
+      get; internal set;
+    }
+
+    public string TaxCode {
+      get; internal set;
+    }
+
+    public string SubledgerAccount {
+      get; internal set;
+    }
+
+    public NamedEntityDto Status {
+      get; internal set;
+    }
+
+  }  // class SupplierDescriptor
+
+
+  /// <summary>Output DTO used to return minimal suppliers data to be used in lists.</summary>
+  public class SupplierDescriptor {
+
+    public string UID {
       get; internal set;
     }
 
@@ -57,19 +82,11 @@ namespace Empiria.Procurement.Suppliers.Adapters {
       get; internal set;
     }
 
-    public string CommonName {
-      get; internal set;
-    }
-
     public string TaxCode {
       get; internal set;
     }
 
-    public string TaxEntityName {
-      get; internal set;
-    }
-
-    public string TaxZipCode {
+    public string SubledgerAccount {
       get; internal set;
     }
 
