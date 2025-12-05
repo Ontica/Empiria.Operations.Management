@@ -34,6 +34,10 @@ namespace Empiria.Procurement.Suppliers.Adapters {
       get; internal set;
     }
 
+    public BaseActions Actions {
+      get; internal set;
+    }
+
   }  // class SupplierHolderDto
 
 

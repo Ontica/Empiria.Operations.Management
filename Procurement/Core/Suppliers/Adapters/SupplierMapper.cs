@@ -33,6 +33,11 @@ namespace Empiria.Procurement.Suppliers.Adapters {
         PaymentAccounts = PaymentAccountServices.GetPaymentAccounts(supplier.UID),
         Documents = DocumentServices.GetAllEntityDocuments(supplier),
         History = HistoryServices.GetEntityHistory(supplier),
+        Actions = new BaseActions() {
+          CanUpdate = true,
+          CanEditDocuments = true,
+          CanDelete = true
+        }
       };
     }
 
