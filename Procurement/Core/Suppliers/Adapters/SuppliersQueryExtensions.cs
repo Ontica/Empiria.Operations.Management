@@ -16,6 +16,7 @@ namespace Empiria.Procurement.Suppliers.Adapters {
   static internal class SuppliersQueryExtensions {
 
     #region Extension Methods
+
     static internal void EnsureIsValid(this SuppliersQuery query) {
       // no - op
     }

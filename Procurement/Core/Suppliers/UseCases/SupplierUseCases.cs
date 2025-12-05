@@ -11,7 +11,6 @@
 using Empiria.Services;
 
 using Empiria.Parties;
-using Empiria.Procurement.Contracts.Adapters;
 
 using Empiria.Procurement.Suppliers.Adapters;
 using Empiria.Procurement.Suppliers.Data;

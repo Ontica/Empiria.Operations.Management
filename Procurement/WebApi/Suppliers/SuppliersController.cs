@@ -12,8 +12,10 @@ using System.Web.Http;
 
 using Empiria.WebApi;
 
-using Empiria.Procurement.Suppliers.UseCases;
+using Empiria.Parties;
+
 using Empiria.Procurement.Suppliers.Adapters;
+using Empiria.Procurement.Suppliers.UseCases;
 
 namespace Empiria.Procurement.Suppliers.WebApi {
 
@@ -31,6 +33,18 @@ namespace Empiria.Procurement.Suppliers.WebApi {
 
         return new SingleObjectModel(base.Request, supplier);
       }
+    }
+
+
+    [HttpGet]
+    [Route("v8/procurement/suppliers/kinds")]
+    [Route("v8/procurement/suppliers/types")]
+    public CollectionModel GetSupplierKinds() {
+
+      FixedList<NamedEntityDto> kinds = TaxData.GetTaxEntityKinds()
+                                               .MapToNamedEntityList(false);
+
+      return new CollectionModel(base.Request, kinds);
     }
 
 
