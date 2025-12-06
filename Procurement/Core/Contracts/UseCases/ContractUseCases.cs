@@ -9,11 +9,14 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+
+using Empiria.Services;
+
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
 using Empiria.Orders.Data;
+
 using Empiria.Procurement.Contracts.Adapters;
-using Empiria.Services;
 
 namespace Empiria.Procurement.Contracts.UseCases {
 
@@ -75,13 +78,6 @@ namespace Empiria.Procurement.Contracts.UseCases {
     }
 
 
-    public FixedList<NamedEntityDto> GetContractCategories() {
-      var contractTypes = OrderCategory.GetList();
-
-      return contractTypes.MapToNamedEntityList();
-    }
-
-
     public FixedList<ContractDescriptor> SearchContracts(OrdersQuery query) {
       Assertion.Require(query, nameof(query));
 
@@ -97,9 +93,11 @@ namespace Empiria.Procurement.Contracts.UseCases {
       return ContractMapper.MapToDescriptor(contracts);
     }
 
+
     public OrderHolderDto Suspend(string uID) {
       throw new NotImplementedException();
     }
+
 
     public ContractHolderDto UpdateContract(string ContractUID,
                                             ContractFields fields) {
