@@ -26,20 +26,20 @@ namespace Empiria.Operations.Integration.Budgeting.WebApi {
 
     #region Web Apis
 
-    [HttpGet]
-    [Route("v2/budgeting/procurement/requests")]
-    public CollectionModel GetBudgetRequests([FromBody] BudgetRequestFields fields) {
+    [HttpPost]
+    [Route("v2/budgeting/procurement/commit")]
+    public SingleObjectModel CommitBudget([FromBody] BudgetRequestFields fields) {
 
       using (var usecases = BudgetingProcurementUseCases.UseCaseInteractor()) {
-        FixedList<BudgetTransactionDescriptorDto> requests = usecases.GetBudgetRequests(fields);
+        BudgetTransactionDescriptorDto transaction = usecases.CommitBudget(fields);
 
-        return new CollectionModel(base.Request, requests);
+        return new SingleObjectModel(base.Request, transaction);
       }
     }
 
 
     [HttpPost]
-    [Route("v2/budgeting/procurement/requests")]
+    [Route("v2/budgeting/procurement/request")]
     public SingleObjectModel RequestBudget([FromBody] BudgetRequestFields fields) {
 
       using (var usecases = BudgetingProcurementUseCases.UseCaseInteractor()) {

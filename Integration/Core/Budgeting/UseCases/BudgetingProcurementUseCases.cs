@@ -42,8 +42,28 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
     #region Use cases
 
-    public FixedList<BudgetTransactionDescriptorDto> GetBudgetRequests(BudgetRequestFields fields) {
-      return new FixedList<BudgetTransactionDescriptorDto>();
+    public BudgetTransactionDescriptorDto CommitBudget(BudgetRequestFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      var paymentOrder = PaymentOrder.Parse(fields.BaseObjectUID);
+
+      var order = Order.Parse(paymentOrder.PayableEntity.UID);
+
+      order.Activate();
+
+      order.Save();
+
+      var builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.ComprometerGastoCorriente, order);
+
+      BudgetTransaction transaction = builder.Build();
+
+      transaction.SendToAuthorization();
+
+      transaction.Save();
+
+      return BudgetTransactionMapper.MapToDescriptor(transaction);
     }
 
 
@@ -52,30 +72,13 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       fields.EnsureValid();
 
-      bool isPaymentOrder = fields.BaseObjectTypeUID.Contains("PaymentOrder");
-      Order order;
-
-
-      if (isPaymentOrder) {
-        var po = PaymentOrder.Parse(fields.BaseObjectUID);
-
-        order = Order.Parse(po.PayableEntity.UID);
-
-      } else {
-        order = Order.Parse(fields.BaseObjectUID);
-      }
+      Order order = Order.Parse(fields.BaseObjectUID);
 
       order.Activate();
 
       order.Save();
 
-      OrderBudgetTransactionBuilder builder;
-
-      if (isPaymentOrder) {
-        builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.ComprometerGastoCorriente, order);
-      } else {
-        builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.ApartarGastoCorriente, order);
-      }
+      var builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.ApartarGastoCorriente, order);
 
       BudgetTransaction transaction = builder.Build();
 
@@ -106,6 +109,7 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
       return orders.Select(x => MapToPayableEntity(x))
                    .ToFixedList();
     }
+
 
     public BudgetValidationResultDto ValidateBudget(BudgetRequestFields fields) {
       Assertion.Require(fields, nameof(fields));
