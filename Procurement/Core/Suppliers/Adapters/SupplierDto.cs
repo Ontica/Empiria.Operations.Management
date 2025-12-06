@@ -11,6 +11,8 @@
 using Empiria.Documents;
 using Empiria.History;
 
+using Empiria.Billing.Adapters;
+
 using Empiria.Financial.Adapters;
 
 namespace Empiria.Procurement.Suppliers.Adapters {
@@ -23,6 +25,10 @@ namespace Empiria.Procurement.Suppliers.Adapters {
     }
 
     public FixedList<PaymentAccountDto> PaymentAccounts {
+      get; internal set;
+    }
+
+    public FixedList<BillDto> Bills {
       get; internal set;
     }
 

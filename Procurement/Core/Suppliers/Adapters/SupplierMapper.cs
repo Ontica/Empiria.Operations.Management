@@ -28,9 +28,12 @@ namespace Empiria.Procurement.Suppliers.Adapters {
 
 
     static internal SupplierHolderDto Map(Party supplier) {
+      var bills = Billing.Bill.GetListFor(supplier);
+
       return new SupplierHolderDto {
         Supplier = MapToDto(supplier),
         PaymentAccounts = PaymentAccountServices.GetPaymentAccounts(supplier.UID),
+        Bills = Billing.Adapters.BillMapper.MapToBillDto(bills),
         Documents = DocumentServices.GetAllEntityDocuments(supplier),
         History = HistoryServices.GetEntityHistory(supplier),
         Actions = new BaseActions() {
