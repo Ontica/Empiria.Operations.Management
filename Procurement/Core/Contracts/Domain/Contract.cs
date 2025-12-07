@@ -16,8 +16,6 @@ using Empiria.Budgeting;
 
 using Empiria.Orders;
 
-using Empiria.Procurement.Contracts.Data;
-
 namespace Empiria.Procurement.Contracts {
 
   public class Contract : Order {
@@ -104,14 +102,10 @@ namespace Empiria.Procurement.Contracts {
 
     #region Methods
 
-    internal ContractItem AddItem(ContractItemFields fields) {
-      Assertion.Require(fields, nameof(fields));
-
-      var contractItem = new ContractItem(OrderItemType.ContractItemPayable, this, fields);
+    internal protected virtual void AddItem(ContractItem contractItem) {
+      Assertion.Require(contractItem, nameof(contractItem));
 
       base.Items.Add(contractItem);
-
-      return contractItem;
     }
 
 
@@ -166,11 +160,6 @@ namespace Empiria.Procurement.Contracts {
 
     internal FixedList<ContractItem> GetItems() {
       return base.GetItems<ContractItem>();
-    }
-
-
-    internal FixedList<ContractOrder> GetOrders() {
-      return ContractOrdersData.GetContractOrders(this);
     }
 
 

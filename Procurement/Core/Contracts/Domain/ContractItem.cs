@@ -18,19 +18,13 @@ namespace Empiria.Procurement.Contracts {
 
     #region Constructors and parsers
 
-    private ContractItem(OrderItemType contractItemType) : base(contractItemType) {
-      // Required by Empiria Framework.
+    protected ContractItem(OrderItemType contractItemType) : base(contractItemType) {
+      // Required by Empiria Framework for all partitioned types.
     }
 
 
-    public ContractItem(OrderItemType contractItemType,
-                        Contract contract, ContractItemFields fields) : this(contractItemType) {
-      Assertion.Require(contract, nameof(contract));
-      Assertion.Require(fields, nameof(fields));
-
-      Contract = contract;
-
-      Update(fields);
+    public ContractItem(OrderItemType powertype, Contract contract) : base(powertype, contract) {
+      // no-op
     }
 
 
@@ -46,12 +40,10 @@ namespace Empiria.Procurement.Contracts {
 
     public new Contract Contract {
       get {
-        return (Contract) base.Contract;
-      }
-      private set {
-        base.Contract = value;
+        return (Contract) base.Order;
       }
     }
+
 
     public decimal MinTotal {
       get {
@@ -84,7 +76,6 @@ namespace Empiria.Procurement.Contracts {
 
       fields.EnsureValid();
 
-      Contract = Contract.Parse(fields.ContractUID);
       RequestedBy = Patcher.Patch(fields.RequestedByUID, Order.RequestedBy);
       Provider = Patcher.Patch(fields.ProviderUID, Contract.Provider);
 

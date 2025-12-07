@@ -10,8 +10,10 @@
 
 using Empiria.Services;
 
-using Empiria.Procurement.Contracts.Adapters;
 using Empiria.Budgeting;
+using Empiria.Orders;
+
+using Empiria.Procurement.Contracts.Adapters;
 
 namespace Empiria.Procurement.Contracts.UseCases {
 
@@ -36,13 +38,19 @@ namespace Empiria.Procurement.Contracts.UseCases {
       Assertion.Require(contractUID, nameof(contractUID));
       Assertion.Require(fields, nameof(fields));
 
+      fields.ContractUID = contractUID;
+
       fields.EnsureValid();
 
       var contract = Contract.Parse(contractUID);
 
-      ContractItem contractItem = contract.AddItem(fields);
+      var contractItem = new ContractItem(OrderItemType.ContractItemPayable, contract);
 
-      contract.Save();
+      contractItem.Update(fields);
+
+      contract.AddItem(contractItem);
+
+      contractItem.Save();
 
       return ContractItemMapper.Map(contractItem);
     }
@@ -95,6 +103,8 @@ namespace Empiria.Procurement.Contracts.UseCases {
       Assertion.Require(contractUID, nameof(contractUID));
       Assertion.Require(contractItemUID, nameof(contractItemUID));
       Assertion.Require(fields, nameof(fields));
+
+      fields.ContractUID = contractUID;
 
       fields.EnsureValid();
 
