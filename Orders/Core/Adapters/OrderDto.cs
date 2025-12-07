@@ -109,7 +109,7 @@ namespace Empiria.Orders.Adapters {
 
       BudgetType = order.BudgetType.MapToNamedEntity();
       Budgets = order.Budgets.MapToNamedEntityList();
-      BaseBudgetName = order.BaseBudget.Name;
+      BudgetPeriodName = order.BudgetPeriodName;
 
       Observations = order.Observations;
       GuaranteeNotes = order.GuaranteeNotes;
@@ -190,15 +190,17 @@ namespace Empiria.Orders.Adapters {
       get; protected set;
     }
 
-    public string BaseBudgetName {
-      get;
-    }
 
     public NamedEntityDto BudgetType {
       get;
     }
 
     public FixedList<NamedEntityDto> Budgets {
+      get;
+    }
+
+    [Newtonsoft.Json.JsonProperty(PropertyName = "BaseBudgetName")]
+    public string BudgetPeriodName {
       get;
     }
 
@@ -286,7 +288,7 @@ namespace Empiria.Orders.Adapters {
       Description = order.Description;
       BaseOrgUnitName = order.RequestedBy.Name;
       Budgets = order.Budgets.MapToNamedEntityList();
-      BaseBudgetName = order.BaseBudget.Name;
+      BudgetPeriodName = order.BudgetPeriodName;
       ProviderName = order.Provider.Name;
       ProjectName = order.Project.Name;
       CurrencyName = order.Currency.ISOCode;
@@ -332,11 +334,12 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
-    public string BaseBudgetName {
-      get; protected set;
+    public FixedList<NamedEntityDto> Budgets {
+      get;
     }
 
-    public FixedList<NamedEntityDto> Budgets {
+    [Newtonsoft.Json.JsonProperty(PropertyName = "BaseBudgetName")]
+    public string BudgetPeriodName {
       get;
     }
 

@@ -271,6 +271,20 @@ namespace Empiria.Orders {
     }
 
 
+    public string BudgetPeriodName {
+      get {
+        if (Budgets.Count == 0) {
+          return "No aplica";
+        }
+
+        var periodName = Budgets.Count == 1 ? $"{Budgets.First().Year}" :
+                                              $"{Budgets.First().Year} - {Budgets.Last().Year}";
+
+        return $"{BudgetType.DisplayName} {periodName}";
+      }
+    }
+
+
     public bool IsMultiYear {
       get {
         return Budgets.Count > 1;
