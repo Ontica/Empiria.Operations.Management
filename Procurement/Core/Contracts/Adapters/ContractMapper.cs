@@ -28,12 +28,12 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     static internal ContractHolderDto Map(Contract contract) {
 
-      FixedList<Order> orders = contract.GetOrders()
-                                        .Select(x => (Order) x)
-                                        .ToFixedList();
+      var contractOrders = ContractOrder.GetListFor(contract);
 
-      FixedList<Bill> bills = contract.GetOrders()
-                                      .SelectFlat(x => Bill.GetListFor(x));
+      FixedList<Order> orders = contractOrders.Select(x => (Order) x)
+                                              .ToFixedList();
+
+      FixedList<Bill> bills = contractOrders.SelectFlat(x => Bill.GetListFor(x));
 
       return new ContractHolderDto {
         Order = MapContract(contract),
@@ -41,7 +41,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         Taxes = OrderTaxMapper.Map(contract.Taxes.GetList()),
         BudgetTransactions = MapBudgetTransactions(contract),
         Orders = PayableOrderMapper.MapToDescriptor(orders),
-        Payables = ContractOrderMapper.MapToDescriptor(ContractOrder.GetListFor(contract)),
+        Payables = ContractOrderMapper.MapToDescriptor(contractOrders),
         Bills = BillMapper.MapToBillDto(bills),
         Documents = DocumentServices.GetAllEntityDocuments(contract),
         History = HistoryServices.GetEntityHistory(contract),
