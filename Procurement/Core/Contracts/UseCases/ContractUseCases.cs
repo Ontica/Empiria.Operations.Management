@@ -33,13 +33,44 @@ namespace Empiria.Procurement.Contracts.UseCases {
       return UseCase.CreateInstance<ContractUseCases>();
     }
 
-    public OrderHolderDto Activate(string uID) {
-      throw new NotImplementedException();
-    }
-
     #endregion Constructors and parsers
 
     #region Use cases
+
+    public ContractHolderDto Activate(string contractUID) {
+      Assertion.Require(contractUID, nameof(contractUID));
+
+      var contract = Contract.Parse(contractUID);
+
+      contract.Activate();
+
+      contract.Save();
+
+      return ContractMapper.Map(contract);
+    }
+
+
+    public ContractItemDto AddContractItem(string contractUID, ContractItemFields fields) {
+      Assertion.Require(contractUID, nameof(contractUID));
+      Assertion.Require(fields, nameof(fields));
+
+      fields.ContractUID = contractUID;
+
+      fields.EnsureValid();
+
+      var contract = Contract.Parse(contractUID);
+
+      var contractItem = new ContractItem(OrderItemType.ContractItemPayable, contract);
+
+      contractItem.Update(fields);
+
+      contract.AddItem(contractItem);
+
+      contractItem.Save();
+
+      return ContractItemMapper.Map(contractItem);
+    }
+
 
     public ContractHolderDto CreateContract(ContractFields fields) {
       Assertion.Require(fields, nameof(fields));
@@ -78,6 +109,21 @@ namespace Empiria.Procurement.Contracts.UseCases {
     }
 
 
+    public ContractItemDto RemoveContractItem(string contractUID, string contractItemUID) {
+      Assertion.Require(contractUID, nameof(contractUID));
+      Assertion.Require(contractItemUID, nameof(contractItemUID));
+
+      var contract = Contract.Parse(contractUID);
+
+      ContractItem contractItem = contract.RemoveItem(contractItemUID);
+
+      contract.Save();
+      contractItem.Save();
+
+      return ContractItemMapper.Map(contractItem);
+    }
+
+
     public FixedList<ContractDescriptor> SearchContracts(OrdersQuery query) {
       Assertion.Require(query, nameof(query));
 
@@ -110,6 +156,29 @@ namespace Empiria.Procurement.Contracts.UseCases {
       contract.Save();
 
       return ContractMapper.Map(contract);
+    }
+
+
+    public ContractItemDto UpdateContractItem(string contractUID,
+                                              string contractItemUID,
+                                              ContractItemFields fields) {
+      Assertion.Require(contractUID, nameof(contractUID));
+      Assertion.Require(contractItemUID, nameof(contractItemUID));
+      Assertion.Require(fields, nameof(fields));
+
+      fields.ContractUID = contractUID;
+
+      fields.EnsureValid();
+
+      var contract = Contract.Parse(contractUID);
+
+      ContractItem contractItem = contract.GetItem(contractItemUID);
+
+      contract.UpdateItem(contractItem, fields);
+
+      contract.Save();
+
+      return ContractItemMapper.Map(contractItem);
     }
 
     #endregion Use cases

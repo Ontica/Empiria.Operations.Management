@@ -33,7 +33,7 @@ namespace Empiria.Orders.UseCases {
 
     #region Use cases
 
-    public PayableOrderHolderDto ActivateOrder(string orderUID) {
+    public PayableOrderHolderDto Activate(string orderUID) {
       Assertion.Require(orderUID, nameof(orderUID));
 
       var order = PayableOrder.Parse(orderUID);

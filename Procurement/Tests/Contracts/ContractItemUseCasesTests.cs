@@ -21,12 +21,12 @@ namespace Empiria.Tests.Procurement.Contracts {
 
     #region Use cases initialization
 
-    private readonly ContractItemUseCases _itemusecases;
+    private readonly ContractUseCases _itemusecases;
 
     public ContractItemUseCasesTests() {
       TestsCommonMethods.Authenticate();
 
-      _itemusecases = ContractItemUseCases.UseCaseInteractor();
+      _itemusecases = ContractUseCases.UseCaseInteractor();
     }
 
     ~ContractItemUseCasesTests() {
@@ -55,15 +55,6 @@ namespace Empiria.Tests.Procurement.Contracts {
 
       Assert.NotNull(sut);
       Assert.NotNull(sut.UID);
-    }
-
-
-    [Fact]
-    public void Should_Read_A_Contract_Item() {
-
-      ContractItemDto sut = _itemusecases.GetContractItem(TestingConstants.CONTRACT_ITEM_UID);
-
-      Assert.NotNull(sut);
     }
 
 
