@@ -98,7 +98,7 @@ namespace Empiria.Orders {
         }
         return Order.Parse(_contractId);
       }
-      private set {
+      protected set {
         _contractId = value.Id;
       }
     }

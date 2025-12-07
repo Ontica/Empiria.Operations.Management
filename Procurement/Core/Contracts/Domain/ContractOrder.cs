@@ -47,7 +47,14 @@ namespace Empiria.Procurement.Contracts {
     #region Properties
 
     public new Contract Contract {
-      get; private set;
+      get {
+        return (Contract) base.Contract;
+      }
+      set {
+        Assertion.Require(value, nameof(value));
+
+        base.Contract = value;
+      }
     }
 
 
