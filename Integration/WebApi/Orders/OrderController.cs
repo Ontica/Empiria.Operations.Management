@@ -11,13 +11,12 @@
 using System.Web.Http;
 
 using Empiria.Json;
+using Empiria.WebApi;
 
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
 
 using Empiria.Procurement.Contracts;
-
-using Empiria.WebApi;
 
 namespace Empiria.Operations.Integration.Orders.WebApi {
 
@@ -33,6 +32,22 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
       OrderHolderDto order = OrderUseCaseSelector.ActivateOrder(orderUID);
 
       return new SingleObjectModel(base.Request, order);
+    }
+
+
+    [HttpPost]
+    [Route("v8/order-management/orders/available")]
+    public CollectionModel AvailableOrders([FromBody] OrdersQuery query) {
+
+      var orderType = OrderType.Parse(query.OrderTypeUID);
+
+      if (orderType.Equals(OrderType.ContractOrder)) {
+        query.OrderTypeUID = OrderType.Contract.UID;
+      }
+
+      FixedList<OrderDescriptor> orders = OrderUseCaseSelector.Search(query);
+
+      return new CollectionModel(base.Request, orders);
     }
 
 

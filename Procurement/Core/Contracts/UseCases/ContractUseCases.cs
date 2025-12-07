@@ -81,8 +81,6 @@ namespace Empiria.Procurement.Contracts.UseCases {
     public FixedList<ContractDescriptor> SearchContracts(OrdersQuery query) {
       Assertion.Require(query, nameof(query));
 
-      query.OrderTypeUID = Contract.Empty.GetEmpiriaType().Name;
-
       query.EnsureIsValid();
 
       var filter = query.MapToFilterString();
