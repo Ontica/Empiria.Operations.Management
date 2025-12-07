@@ -74,6 +74,10 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       Order order = Order.Parse(fields.BaseObjectUID);
 
+      var validator = new OrderBudgetTransactionValidator(order);
+
+      validator.EnsureOrderHasAvailableBudget();
+
       order.Activate();
 
       order.Save();
