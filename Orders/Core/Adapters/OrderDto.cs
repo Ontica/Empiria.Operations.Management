@@ -105,8 +105,11 @@ namespace Empiria.Orders.Adapters {
       ClosedBy = order.ClosedBy.MapToNamedEntity();
       Status = order.Status.MapToDto();
 
-      BaseBudgetName = order.BaseBudget.Name;
       BaseOrgUnitName = order.RequestedBy.Name;
+
+      BudgetType = order.BudgetType.MapToNamedEntity();
+      Budgets = order.Budgets.MapToNamedEntityList();
+      BaseBudgetName = order.BaseBudget.Name;
 
       Observations = order.Observations;
       GuaranteeNotes = order.GuaranteeNotes;
@@ -183,6 +186,22 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
+    public string BaseOrgUnitName {
+      get; protected set;
+    }
+
+    public string BaseBudgetName {
+      get;
+    }
+
+    public NamedEntityDto BudgetType {
+      get;
+    }
+
+    public FixedList<NamedEntityDto> Budgets {
+      get;
+    }
+
     public NamedEntityDto RequestedBy {
       get;
     }
@@ -251,14 +270,6 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
-    public string BaseOrgUnitName {
-      get; protected set;
-    }
-
-    public string BaseBudgetName {
-      get; protected set;
-    }
-
   }  // class OrderDto
 
 
@@ -274,6 +285,7 @@ namespace Empiria.Orders.Adapters {
       Name = order.Name;
       Description = order.Description;
       BaseOrgUnitName = order.RequestedBy.Name;
+      Budgets = order.Budgets.MapToNamedEntityList();
       BaseBudgetName = order.BaseBudget.Name;
       ProviderName = order.Provider.Name;
       ProjectName = order.Project.Name;
@@ -322,6 +334,10 @@ namespace Empiria.Orders.Adapters {
 
     public string BaseBudgetName {
       get; protected set;
+    }
+
+    public FixedList<NamedEntityDto> Budgets {
+      get;
     }
 
     public string ProviderName {

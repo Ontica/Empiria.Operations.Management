@@ -12,8 +12,6 @@ using System;
 using System.Linq;
 using Empiria.StateEnums;
 
-using Empiria.Budgeting;
-
 using Empiria.Orders;
 
 namespace Empiria.Procurement.Contracts {
@@ -86,15 +84,6 @@ namespace Empiria.Procurement.Contracts {
     public decimal MaxTotal {
       get {
         return GetItems().Sum(x => x.MaxTotal);
-      }
-    }
-
-    public FixedList<Budget> Budgets {
-      get {
-        return ExtData.GetFixedList<Budget>("budgets", false);
-      }
-      private set {
-        ExtData.SetIf("budgets", value.Select(x => (object) x.Id).ToList(), value.Count != 0);
       }
     }
 
@@ -181,16 +170,6 @@ namespace Empiria.Procurement.Contracts {
 
       OrderNo = Patcher.Patch(fields.ContractNo, "Sin número asignado");
       SignDate = fields.SignDate.HasValue ? fields.SignDate.Value : ExecutionServer.DateMaxValue;
-
-      FixedList<Budget> budgets = fields.Budgets.Select(x => Budget.Parse(x))
-                                                .ToFixedList()
-                                                .Sort((x, y) => x.Year.CompareTo(y.Year));
-
-      BaseBudget = budgets.First();
-
-      BudgetType = BaseBudget.BudgetType;
-
-      Budgets = budgets;
 
       base.Update(fields);
     }

@@ -13,13 +13,9 @@ namespace Empiria.Orders {
   /// <summary>Input fields DTO used to update requisitions.</summary>
   public class RequisitionFields : OrderFields {
 
-    public string[] Budgets {
-      get; set;
-    } = new string[0];
-
-
     public override void EnsureValid() {
       base.EnsureValid();
+
       Assertion.Require(Budgets.Length > 0, "At least one budget must be specified.");
     }
 

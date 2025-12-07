@@ -9,7 +9,9 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+using System.Linq;
 
+using Empiria.Financial;
 using Empiria.Json;
 using Empiria.Locations;
 using Empiria.Ontology;
@@ -17,8 +19,6 @@ using Empiria.Parties;
 using Empiria.Projects;
 using Empiria.StateEnums;
 using Empiria.Time;
-
-using Empiria.Financial;
 
 using Empiria.Budgeting;
 using Empiria.Budgeting.Transactions;
@@ -259,6 +259,21 @@ namespace Empiria.Orders {
     [DataField("ORDER_BASE_BUDGET_ID")]
     public Budget BaseBudget {
       get; protected set;
+    }
+
+    public FixedList<Budget> Budgets {
+      get {
+        return ExtData.GetFixedList<Budget>("budgets", false);
+      }
+      private set {
+        ExtData.SetIf("budgets", value.Select(x => (object) x.Id).ToList(), value.Count != 0);
+      }
+    }
+
+    public bool IsMultiYear {
+      get {
+        return Budgets.Count > 1;
+      }
     }
 
 
@@ -552,6 +567,9 @@ namespace Empiria.Orders {
       if (fields.EstimatedMonths > 0 || fields.EstimatedMonths != GetMonthsDuration()) {
         EstimatedMonths = fields.EstimatedMonths;
       }
+
+      UpdateBudgetData(fields);
+
     }
 
     #endregion Methods
@@ -560,6 +578,19 @@ namespace Empiria.Orders {
 
     private int GetMonthsDuration() {
       return YearMonth.GetMonths(StartDate, EndDate);
+    }
+
+
+    private void UpdateBudgetData(OrderFields fields) {
+      FixedList<Budget> budgets = fields.Budgets.Select(x => Budget.Parse(x))
+                                                .ToFixedList()
+                                                .Sort((x, y) => x.Year.CompareTo(y.Year));
+
+      BaseBudget = budgets.First();
+
+      BudgetType = BaseBudget.BudgetType;
+
+      Budgets = budgets;
     }
 
     #endregion Helpers

@@ -8,10 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System.Linq;
-
-using Empiria.Budgeting;
-
 using Empiria.Orders.Data;
 
 namespace Empiria.Orders {
@@ -33,25 +29,6 @@ namespace Empiria.Orders {
 
     #endregion Constructors and parsers
 
-    #region Properties
-
-    public FixedList<Budget> Budgets {
-      get {
-        return ExtData.GetFixedList<Budget>("budgets", false);
-      }
-      private set {
-        base.ExtData.SetIf("budgets", value.Select(x => (object) x.Id).ToList(), value.Count != 0);
-      }
-    }
-
-    public bool IsMultiYear {
-      get {
-        return Budgets.Count > 1;
-      }
-    }
-
-    #endregion Properties
-
     #region Methods
 
     internal FixedList<Order> GetOrders() {
@@ -63,16 +40,6 @@ namespace Empiria.Orders {
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();
-
-      FixedList<Budget> budgets = fields.Budgets.Select(x => Budget.Parse(x))
-                                                .ToFixedList()
-                                                .Sort((x, y) => x.Year.CompareTo(y.Year));
-
-      BaseBudget = budgets.First();
-
-      BudgetType = BaseBudget.BudgetType;
-
-      Budgets = budgets;
 
       base.Update(fields);
     }

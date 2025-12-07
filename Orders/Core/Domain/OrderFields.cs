@@ -32,6 +32,16 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public string BudgetTypeUID {
+      get; set;
+    } = string.Empty;
+
+
+    public string[] Budgets {
+      get; set;
+    } = new string[0];
+
+
     public string ContractUID {
       get; set;
     } = string.Empty;

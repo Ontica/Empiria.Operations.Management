@@ -61,12 +61,7 @@ namespace Empiria.Orders.Adapters {
   public class PayableOrderDto : OrderDto {
 
     protected internal PayableOrderDto(PayableOrder order) : base(order) {
-      BudgetType = order.BaseBudget.BudgetType.MapToNamedEntity();
       Budget = order.BaseBudget.MapToNamedEntity();
-    }
-
-    public NamedEntityDto BudgetType {
-      get;
     }
 
     public NamedEntityDto Budget {

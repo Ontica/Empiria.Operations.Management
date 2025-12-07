@@ -22,17 +22,6 @@ namespace Empiria.Procurement.Contracts {
       get; set;
     } = string.Empty;
 
-
-    public string BudgetTypeUID {
-      get; set;
-    } = string.Empty;
-
-
-    public string[] Budgets {
-      get; set;
-    } = new string[0];
-
-
     public DateTime? SignDate {
       get; set;
     } = ExecutionServer.DateMaxValue;

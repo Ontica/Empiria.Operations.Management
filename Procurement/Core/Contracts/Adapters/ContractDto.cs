@@ -58,8 +58,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
     internal ContractDto(Contract contract) : base(contract) {
       ContractNo = contract.ContractNo;
       SignDate = contract.SignDate;
-      BudgetType = contract.BudgetType.MapToNamedEntity();
-      Budgets = contract.Budgets.MapToNamedEntityList();
       MinTotal = contract.MinTotal;
       MaxTotal = contract.MaxTotal;
     }
@@ -71,14 +69,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
 
     public DateTime SignDate {
-      get;
-    }
-
-    public NamedEntityDto BudgetType {
-      get;
-    }
-
-    public FixedList<NamedEntityDto> Budgets {
       get;
     }
 
@@ -101,8 +91,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
       SignDate = contract.SignDate;
       MinTotal = contract.MinTotal;
       MaxTotal = contract.MaxTotal;
-      BaseBudgetName = contract.BudgetType.DisplayName;
-      Budgets = contract.Budgets.MapToNamedEntityList();
     }
 
 
@@ -119,10 +107,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
     public decimal MaxTotal {
-      get;
-    }
-
-    public FixedList<NamedEntityDto> Budgets {
       get;
     }
 
