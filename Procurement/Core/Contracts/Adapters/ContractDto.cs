@@ -9,12 +9,9 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
-
 using Empiria.Billing.Adapters;
-
-using Empiria.Orders.Adapters;
-
 using Empiria.Budgeting.Transactions.Adapters;
+using Empiria.Orders.Adapters;
 
 namespace Empiria.Procurement.Contracts.Adapters {
 
@@ -45,6 +42,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
     public FixedList<ContractOrderDescriptor> Payables {
       get; internal set;
     }
+
 
     public FixedList<BillDto> Bills {
       get; internal set;
@@ -103,6 +101,8 @@ namespace Empiria.Procurement.Contracts.Adapters {
       SignDate = contract.SignDate;
       MinTotal = contract.MinTotal;
       MaxTotal = contract.MaxTotal;
+      BaseBudgetName = contract.BudgetType.DisplayName;
+      Budgets = contract.Budgets.MapToNamedEntityList();
     }
 
 
@@ -119,6 +119,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
     public decimal MaxTotal {
+      get;
+    }
+
+    public FixedList<NamedEntityDto> Budgets {
       get;
     }
 
