@@ -113,7 +113,8 @@ namespace Empiria.Orders {
         Assertion.RequireFail("No es posible cambiar el presupuesto o la moneda, " +
                               "debido a que la orden tiene registradas una o más partidas.");
       }
-      base.BaseBudget = Budget.Parse(fields.BudgetUID);
+
+      fields.Budgets = new string[] { fields.BudgetUID };
 
       base.Update(fields);
     }

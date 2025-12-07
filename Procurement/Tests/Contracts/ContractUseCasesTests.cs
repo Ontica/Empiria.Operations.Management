@@ -46,7 +46,6 @@ namespace Empiria.Tests.Procurement.Contracts {
         Description = "Fábrica de Software 2023-2025",
         CurrencyUID = TestingConstants.CONTRACT_CURRENCY_UID,
         RequestedByUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
-        BudgetTypeUID = TestingConstants.CONTRACT_BUDGET_TYPE_UID,
         Budgets = new string[] { TestingConstants.CONTRACT_BUDGET_UID },
         ProviderUID = TestingConstants.SUPPLIER_UID,
       };
@@ -71,7 +70,7 @@ namespace Empiria.Tests.Procurement.Contracts {
         EndDate = new DateTime(2024, 08, 31),
         SignDate = new DateTime(2022, 09, 01),
         RequestedByUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
-        BudgetTypeUID = TestingConstants.CONTRACT_BUDGET_TYPE_UID,
+        Budgets = new string[] { TestingConstants.CONTRACT_BUDGET_UID },
         ProviderUID = TestingConstants.SUPPLIER_UID,
       };
 

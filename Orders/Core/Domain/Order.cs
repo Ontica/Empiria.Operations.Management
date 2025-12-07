@@ -252,13 +252,13 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_BUDGET_TYPE_ID")]
     public BudgetType BudgetType {
-      get; protected set;
+      get; private set;
     }
 
 
     [DataField("ORDER_BASE_BUDGET_ID")]
     public Budget BaseBudget {
-      get; protected set;
+      get; private set;
     }
 
     public FixedList<Budget> Budgets {
@@ -269,6 +269,7 @@ namespace Empiria.Orders {
         ExtData.SetIf("budgets", value.Select(x => (object) x.Id).ToList(), value.Count != 0);
       }
     }
+
 
     public bool IsMultiYear {
       get {
@@ -586,11 +587,20 @@ namespace Empiria.Orders {
                                                 .ToFixedList()
                                                 .Sort((x, y) => x.Year.CompareTo(y.Year));
 
-      BaseBudget = budgets.First();
+      if (budgets.Count != 0) {
+        BaseBudget = budgets.First();
 
-      BudgetType = BaseBudget.BudgetType;
+        BudgetType = BaseBudget.BudgetType;
 
-      Budgets = budgets;
+        Budgets = budgets;
+
+      } else if (!BaseBudget.IsEmptyInstance) {
+
+        Budgets = new FixedList<Budget>(new Budget[] { BaseBudget });
+
+        BudgetType = Budgets[0].BudgetType;
+
+      }
     }
 
     #endregion Helpers

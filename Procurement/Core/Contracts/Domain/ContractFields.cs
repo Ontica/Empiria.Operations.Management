@@ -10,7 +10,6 @@
 
 using System;
 
-using Empiria.Budgeting;
 using Empiria.Orders;
 
 namespace Empiria.Procurement.Contracts {
@@ -21,6 +20,7 @@ namespace Empiria.Procurement.Contracts {
     public string ContractNo {
       get; set;
     } = string.Empty;
+
 
     public DateTime? SignDate {
       get; set;
@@ -34,8 +34,6 @@ namespace Empiria.Procurement.Contracts {
       Assertion.Require(CurrencyUID, "Necesito la moneda del contrato.");
       Assertion.Require(Budgets.Length > 0, "Necesito se seleccione el presupuesto o presupuestos " +
                                             "asociados al contrato");
-
-      BudgetTypeUID = BudgetTypeUID.Length == 0 ? Budget.Parse(Budgets[0]).UID : BudgetTypeUID;
 
       Assertion.Require(StartDate, "Necesito la fecha de inicio del contrato.");
       Assertion.Require(EndDate, "Necesito la fecha de fin del contrato.");
