@@ -9,9 +9,13 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
+using System.Linq;
 
 using Empiria.Financial;
+using Empiria.Parties;
 using Empiria.Services;
+
+using Empiria.Billing;
 
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
@@ -53,7 +57,14 @@ namespace Empiria.Payments.Payables.Services {
 
       var paymentOrder = new PaymentOrder(order);
 
-      var paymentAccount = PaymentAccount.Parse(1);
+      var accounts = PaymentAccount.GetListFor((Party) order.PayTo);
+
+      Assertion.Require(accounts.Count > 0, "El proveedor no tiene cuentas asignadas.");
+
+      var paymentAccount = accounts[0];
+
+      var totalBilled = Bill.GetListFor(order)
+                            .Sum(x => x.BillType.Name.Contains("CreditNote") ? -1 * x.Total : x.Total);
 
       var fields = new PaymentOrderFields {
         PayToUID = order.PayTo.UID,
@@ -65,7 +76,9 @@ namespace Empiria.Payments.Payables.Services {
         RequestedByUID = order.OrganizationalUnit.UID,
         RequestedTime = DateTime.Now,
         ReferenceNumber = order.EntityNo,
-        Total = paymentOrder.Total,
+        Total = totalBilled,
+        PayableEntityTypeUID = order.GetEmpiriaType().UID,
+        PayableEntityUID = order.UID,
       };
 
       paymentOrder.Update(fields);
