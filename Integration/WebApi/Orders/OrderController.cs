@@ -41,10 +41,6 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
       var orderType = OrderType.Parse(query.OrderTypeUID);
 
-      if (orderType.Equals(OrderType.ContractOrder)) {
-        query.OrderTypeUID = OrderType.Contract.UID;
-      }
-
       FixedList<OrderDescriptor> orders = OrderUseCaseSelector.Search(query);
 
       return new CollectionModel(base.Request, orders);
