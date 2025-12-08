@@ -67,6 +67,35 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
     }
 
 
+    public BudgetTransactionDescriptorDto ExcerciseBudget(BudgetRequestFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      var paymentOrder = PaymentOrder.Parse(fields.BaseObjectUID);
+
+      var order = Order.Parse(paymentOrder.PayableEntity.UID);
+
+      var builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.EjercerGastoCorriente, order);
+
+      BudgetTransaction transaction = builder.Build();
+
+      transaction.SendToAuthorization();
+
+      transaction.Save();
+
+      transaction.Authorize();
+
+      transaction.Save();
+
+      transaction.Close();
+
+      transaction.Save();
+
+      return BudgetTransactionMapper.MapToDescriptor(transaction);
+    }
+
+
     public BudgetTransactionDescriptorDto RequestBudget(BudgetRequestFields fields) {
       Assertion.Require(fields, nameof(fields));
 
@@ -118,7 +147,23 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
     public BudgetValidationResultDto ValidateBudget(BudgetRequestFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      return new BudgetValidationResultDto();
+      fields.EnsureValid();
+
+      Order order = Order.Parse(fields.BaseObjectUID);
+
+      var validator = new OrderBudgetTransactionValidator(order);
+
+      try {
+        validator.EnsureOrderHasAvailableBudget();
+      } catch (AssertionFailsException ex) {
+        return new BudgetValidationResultDto {
+          Result = ex.Message
+        };
+      }
+
+      return new BudgetValidationResultDto {
+        Result = "Hay presupusto suficiente para todas las partidas de la requisición."
+      };
     }
 
     #endregion Use cases

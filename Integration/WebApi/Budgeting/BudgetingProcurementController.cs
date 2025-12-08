@@ -39,6 +39,18 @@ namespace Empiria.Operations.Integration.Budgeting.WebApi {
 
 
     [HttpPost]
+    [Route("v2/budgeting/procurement/exercise")]
+    public SingleObjectModel ExerciseBudget([FromBody] BudgetRequestFields fields) {
+
+      using (var usecases = BudgetingProcurementUseCases.UseCaseInteractor()) {
+        BudgetTransactionDescriptorDto transaction = usecases.ExcerciseBudget(fields);
+
+        return new SingleObjectModel(base.Request, transaction);
+      }
+    }
+
+
+    [HttpPost]
     [Route("v2/budgeting/procurement/request")]
     public SingleObjectModel RequestBudget([FromBody] BudgetRequestFields fields) {
 

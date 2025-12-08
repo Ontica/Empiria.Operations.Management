@@ -58,7 +58,8 @@ namespace Empiria.Procurement.Contracts.Adapters {
     static private PayableOrderActions MapActions(ContractOrder order) {
       return new PayableOrderActions {
         CanEditDocuments = true,
-        CanRequestBudget = true,
+        CanCommitBudget = true,
+        CanRequestBudget = false,
         CanActivate = true,
         CanDelete = true,
         CanEditItems = true,

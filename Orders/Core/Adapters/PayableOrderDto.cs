@@ -42,6 +42,10 @@ namespace Empiria.Orders.Adapters {
 
   public class PayableOrderActions : OrderActions {
 
+    public bool CanCommitBudget {
+      get; internal set;
+    }
+
     public bool CanRequestBudget {
       get; internal set;
     }

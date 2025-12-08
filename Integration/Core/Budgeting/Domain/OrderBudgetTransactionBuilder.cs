@@ -87,6 +87,14 @@ namespace Empiria.Operations.Integration.Budgeting {
     private BudgetEntryFields BuildEntryFields(OrderItem entry,
                                                BalanceColumn balanceColumn,
                                                bool isDeposit) {
+
+      DateTime budgetingDate;
+      if (_transactionType.Equals(BudgetTransactionType.ApartarGastoCorriente)) {
+        budgetingDate = entry.StartDate;
+      } else {
+        budgetingDate = DateTime.Today;
+      }
+
       return new BudgetEntryFields {
         BudgetUID = entry.Budget.UID,
         BudgetAccountUID = entry.BudgetAccount.UID,
@@ -100,9 +108,9 @@ namespace Empiria.Operations.Integration.Budgeting {
         ProductQty = entry.Quantity,
         ProjectUID = entry.Project.UID,
         PartyUID = entry.RequestedBy.UID,
-        Year = entry.StartDate.Year,
-        Month = entry.StartDate.Month,
-        Day = entry.StartDate.Day,
+        Year = budgetingDate.Year,
+        Month = budgetingDate.Month,
+        Day = budgetingDate.Day,
         EntityTypeId = entry.GetEmpiriaType().Id,
         EntityId = entry.Id,
         CurrencyUID = entry.Currency.UID,
@@ -128,6 +136,14 @@ namespace Empiria.Operations.Integration.Budgeting {
 
     private BudgetTransactionFields BuildTransactionFields() {
 
+      OperationSource operationSource;
+
+      if (_transactionType.Equals(BudgetTransactionType.ApartarGastoCorriente)) {
+        operationSource = OperationSource.ParseNamedKey("SISTEMA_DE_ADQUISICIONES");
+      } else {
+        operationSource = OperationSource.ParseNamedKey("SISTEMA_DE_PAGOS");
+      }
+
       return new BudgetTransactionFields {
         TransactionTypeUID = _transactionType.UID,
         BaseEntityTypeUID = _order.GetEmpiriaType().UID,
@@ -135,7 +151,7 @@ namespace Empiria.Operations.Integration.Budgeting {
         Justification = _order.Justification,
         Description = _order.Description,
         BaseBudgetUID = _order.BaseBudget.UID,
-        OperationSourceUID = OperationSource.ParseNamedKey("SISTEMA_DE_ADQUISICIONES").UID,
+        OperationSourceUID = operationSource.UID,
         BasePartyUID = _order.RequestedBy.UID,
         RequestedByUID = Party.ParseWithContact(ExecutionServer.CurrentContact).UID,
         ApplicationDate = DateTime.Today
