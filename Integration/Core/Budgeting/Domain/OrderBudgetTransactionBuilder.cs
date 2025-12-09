@@ -92,7 +92,7 @@ namespace Empiria.Operations.Integration.Budgeting {
       if (_transactionType.Equals(BudgetTransactionType.ApartarGastoCorriente)) {
         budgetingDate = entry.StartDate;
       } else {
-        budgetingDate = DateTime.Today;
+        budgetingDate = new DateTime(_transaction.BaseBudget.Year, 1, 1);
       }
 
       return new BudgetEntryFields {
