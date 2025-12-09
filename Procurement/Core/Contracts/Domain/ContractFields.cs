@@ -33,10 +33,10 @@ namespace Empiria.Procurement.Contracts {
 
       Assertion.Require(CurrencyUID, "Necesito la moneda del contrato.");
       Assertion.Require(Budgets.Length > 0, "Necesito se seleccione el presupuesto o presupuestos " +
-                                            "asociados al contrato");
+                                            "asociados al contrato.");
 
-      Assertion.Require(StartDate, "Necesito la fecha de inicio del contrato.");
-      Assertion.Require(EndDate, "Necesito la fecha de fin del contrato.");
+      Assertion.Require(StartDate.HasValue, "Necesito la fecha de inicio del contrato.");
+      Assertion.Require(EndDate.HasValue, "Necesito la fecha de término del contrato.");
 
       Assertion.Require(ProviderUID, "Necesito se proporcione al proveedor del contrato.");
 

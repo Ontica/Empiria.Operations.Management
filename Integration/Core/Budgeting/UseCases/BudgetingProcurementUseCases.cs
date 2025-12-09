@@ -162,7 +162,7 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
       }
 
       return new BudgetValidationResultDto {
-        Result = "Hay presupusto suficiente para todas las partidas de la requisición."
+        Result = "Hay presupuesto disponible para todas las partidas de la requisición."
       };
     }
 

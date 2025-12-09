@@ -172,6 +172,7 @@ namespace Empiria.Orders {
       Assertion.Require(Name, "Necesito se proporcione el nombre");
 
       Assertion.Require(RequestedByUID, nameof(RequestedByUID));
+
       Priority = Priority.HasValue ? Priority.Value : StateEnums.Priority.Normal;
 
       if (!StartDate.HasValue) {
@@ -183,16 +184,19 @@ namespace Empiria.Orders {
       }
 
       Assertion.Require(StartDate.Value <= EndDate.Value,
-                        $"{nameof(StartDate.Value)} must be less than or equal to {nameof(EndDate.Value)}");
+                        $"La fecha final del período o vigencia debe ser " +
+                        $"posterior a la fecha inicial.");
 
       Assertion.Require(EstimatedMonths == 0 || EstimatedMonths <= YearMonth.GetMonths(StartDate.Value, EndDate.Value),
                        "La duración estimada en meses no puede sobrepasar los meses de la vigencia o período.");
 
       Assertion.Require(Observations.Length <= 3800,
           "El texto de las observaciones es demasiado largo. Máximo de 3800 caracteres");
+
       Assertion.Require(GuaranteeNotes.Length + PenaltyNotes.Length <= 3800,
           "El texto de las garantías en conjunto con el de las penalidades " +
           "es demasiado largo. Máximo de 3800 caracteres entre los dos");
+
       Assertion.Require(DeliveryNotes.Length <= 3800,
           "El texto de las condiciones de entrega es demasiado largo. Máximo de 3800 caracteres");
     }

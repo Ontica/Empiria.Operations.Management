@@ -57,16 +57,13 @@ namespace Empiria.Operations.Integration.Budgeting {
 
         var budgetData = currentBudget.Find(x => x.BudgetAccount.Equals(orderBudgetAccount.Key));
 
-        if (budgetData == null) {
-          Assertion.RequireFail($"No existe una cuenta de presupuesto para la " +
-                                $"partida presupuestal {orderBudgetAccount.Key.Name}.");
-        }
+        decimal available = (budgetData != null) ? budgetData.Available : 0m;
 
-        if (orderItemSubtotal > budgetData.Available) {
+        if (orderItemSubtotal > available) {
           Assertion.RequireFail($"No hay presupuesto disponible suficiente " +
                                 $"en la partida {orderBudgetAccount.Key.Name}. " +
                                 $"Solicitado: {orderItemSubtotal.ToString("C2")}, " +
-                                $"Disponible: {budgetData.Available.ToString("C2")}");
+                                $"Disponible: {available.ToString("C2")}");
         }
       }
     }

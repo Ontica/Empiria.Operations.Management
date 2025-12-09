@@ -151,14 +151,17 @@ namespace Empiria.Orders {
       Assertion.Require(ProductUID.Length != 0 || BudgetAccountUID.Length != 0 || Description.Length != 0,
                         "Necesito se proporcione el producto, su cuenta presupuestal o su descripción.");
       Assertion.Require(Quantity > 0, "Necesito se proporcione la cantidad mínima.");
+
       if (!StartDate.HasValue) {
         StartDate = ExecutionServer.DateMaxValue;
       }
       if (!EndDate.HasValue) {
         EndDate = ExecutionServer.DateMaxValue;
       }
+
       Assertion.Require(StartDate.Value <= EndDate.Value,
-                        $"{nameof(StartDate.Value)} must be less than or equal to {nameof(EndDate.Value)}");
+                        $"La fecha final del período o vigencia debe ser " +
+                        $"posterior a la fecha inicial.");
     }
 
   }  // class OrderItemFields
