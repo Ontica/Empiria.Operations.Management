@@ -141,7 +141,7 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
-    public int EstimatedMonths {
+    public int? EstimatedMonths {
       get; set;
     }
 
@@ -187,7 +187,11 @@ namespace Empiria.Orders {
                         $"La fecha final del período o vigencia debe ser " +
                         $"posterior a la fecha inicial.");
 
-      Assertion.Require(EstimatedMonths == 0 || EstimatedMonths <= YearMonth.GetMonths(StartDate.Value, EndDate.Value),
+      if (!EstimatedMonths.HasValue) {
+        EstimatedMonths = YearMonth.GetMonths(StartDate.Value, EndDate.Value);
+      }
+
+      Assertion.Require(EstimatedMonths <= YearMonth.GetMonths(StartDate.Value, EndDate.Value),
                        "La duración estimada en meses no puede sobrepasar los meses de la vigencia o período.");
 
       Assertion.Require(Observations.Length <= 3800,

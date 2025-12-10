@@ -550,7 +550,6 @@ namespace Empiria.Orders {
       Contract = Patcher.Patch(fields.ContractUID, Empty);
       Name = Patcher.PatchClean(fields.Name, "Sin nombre asignado");
       Description = EmpiriaString.Clean(fields.Description);
-      Observations = EmpiriaString.Clean(fields.Observations);
       Justification = EmpiriaString.Clean(fields.Justification);
 
       _identificators = EmpiriaString.Tagging(fields.Identificators);
@@ -575,16 +574,14 @@ namespace Empiria.Orders {
 
       Priority = fields.Priority.Value;
 
-      GuaranteeNotes = EmpiriaString.Clean(fields.GuaranteeNotes);
-      PenaltyNotes = EmpiriaString.Clean(fields.PenaltyNotes);
-      DeliveryNotes = EmpiriaString.Clean(fields.DeliveryNotes);
+      Observations = Patcher.PatchClean(fields.Observations, "N/A");
+      GuaranteeNotes = Patcher.PatchClean(fields.GuaranteeNotes, "N/A");
+      PenaltyNotes = Patcher.PatchClean(fields.PenaltyNotes, "N/A");
+      DeliveryNotes = Patcher.PatchClean(fields.DeliveryNotes, "N/A");
 
-      if (fields.EstimatedMonths > 0 || fields.EstimatedMonths != GetMonthsDuration()) {
-        EstimatedMonths = fields.EstimatedMonths;
-      }
+      EstimatedMonths = Patcher.Patch(fields.EstimatedMonths, GetMonthsDuration());
 
       UpdateBudgetData(fields);
-
     }
 
     #endregion Methods
