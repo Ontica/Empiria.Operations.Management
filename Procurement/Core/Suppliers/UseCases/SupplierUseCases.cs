@@ -10,9 +10,11 @@
 
 using System.Threading.Tasks;
 
+using Empiria.Parties;
 using Empiria.Services;
 
-using Empiria.Parties;
+using Empiria.Financial.Adapters;
+using Empiria.Financial.Services;
 
 using Empiria.FinancialAccounting.ClientServices;
 
@@ -46,6 +48,15 @@ namespace Empiria.Procurement.Suppliers.UseCases {
       var supplier = Party.Parse(supplierUID);
 
       return SupplierMapper.Map(supplier);
+    }
+
+
+    public FixedList<PaymentAccountDto> GetSupplierPaymentAccounts(string supplierUID) {
+      Assertion.Require(supplierUID, nameof(supplierUID));
+
+      var supplier = Party.Parse(supplierUID);
+
+      return PaymentAccountServices.GetPaymentAccounts(supplier.UID);
     }
 
 

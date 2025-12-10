@@ -13,8 +13,9 @@ using System.Web.Http;
 using System.Threading.Tasks;
 
 using Empiria.WebApi;
-
 using Empiria.Parties;
+
+using Empiria.Financial.Adapters;
 
 using Empiria.Procurement.Suppliers.Adapters;
 using Empiria.Procurement.Suppliers.UseCases;
@@ -34,6 +35,18 @@ namespace Empiria.Procurement.Suppliers.WebApi {
         SupplierHolderDto supplier = usecases.GetSupplier(supplierUID);
 
         return new SingleObjectModel(base.Request, supplier);
+      }
+    }
+
+
+    [HttpGet]
+    [Route("v8/procurement/suppliers/{supplierUID:guid}/payment-accounts")]
+    public CollectionModel GetSupplierPaymentAccounts([FromUri] string supplierUID) {
+
+      using (var usecases = SupplierUseCases.UseCaseInteractor()) {
+        FixedList<PaymentAccountDto> accounts = usecases.GetSupplierPaymentAccounts(supplierUID);
+
+        return new CollectionModel(base.Request, accounts);
       }
     }
 
@@ -70,8 +83,6 @@ namespace Empiria.Procurement.Suppliers.WebApi {
     [HttpPost]
     [Route("v8/procurement/suppliers/search")]
     public CollectionModel SearchSuppliers([FromBody] SuppliersQuery query) {
-
-      base.RequireBody(query);
 
       using (var usecases = SupplierUseCases.UseCaseInteractor()) {
         FixedList<SupplierDescriptor> suppliers = usecases.SearchSuppliers(query);
