@@ -44,6 +44,11 @@ namespace Empiria.Operations.Integration.Budgeting {
 
       BuildEntries();
 
+      Assertion.Require(_transaction.Entries.Count > 0,
+                        "No es posible generar la transacción presupuestal debido " +
+                        "a que la orden de compra o requisición no cuenta " +
+                        "con conceptos pendientes de autorizar.");
+
       return _transaction;
     }
 
@@ -65,7 +70,10 @@ namespace Empiria.Operations.Integration.Budgeting {
 
     private void BuildEntries() {
 
-      foreach (var item in _order.GetItems<OrderItem>()) {
+      var orderItems = _order.GetItems<OrderItem>()
+                             .FindAll(x => x.BudgetEntry.IsEmptyInstance);
+
+      foreach (var item in orderItems) {
 
         if (_transaction.BudgetTransactionType.Equals(BudgetTransactionType.ApartarGastoCorriente)) {
           BuildDoubleEntries(item, BalanceColumn.Available, BalanceColumn.Requested);
@@ -90,7 +98,8 @@ namespace Empiria.Operations.Integration.Budgeting {
 
       DateTime budgetingDate;
       if (_transactionType.Equals(BudgetTransactionType.ApartarGastoCorriente)) {
-        budgetingDate = entry.StartDate;
+        budgetingDate = ExecutionServer.IsMinOrMaxDate(entry.StartDate) ?
+                                            entry.Order.StartDate : entry.StartDate;
       } else {
         budgetingDate = new DateTime(_transaction.BaseBudget.Year, 1, 1);
       }

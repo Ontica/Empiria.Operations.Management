@@ -37,7 +37,11 @@ namespace Empiria.Operations.Integration.Budgeting {
     internal void EnsureOrderHasAvailableBudget() {
 
       var orderItems = _order.GetItems<OrderItem>()
-                             .FindAll(x => x.Budget.Equals(_order.BaseBudget));
+                             .FindAll(x => x.Budget.Equals(_order.BaseBudget) &&
+                                           x.BudgetEntry.IsEmptyInstance);
+
+      Assertion.Require(orderItems.Count != 0,
+                        "Todos los conceptos de la requisición ya cuentan con suficiencia presupuestal autorizada.");
 
       var budgetAccounts = orderItems.SelectDistinct(x => x.BudgetAccount);
 
