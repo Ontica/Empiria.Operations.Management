@@ -469,8 +469,8 @@ namespace Empiria.Orders {
         RequestedQuantity = Quantity;
       }
 
-      StartDate = Patcher.Patch(fields.StartDate, Requisition.StartDate);
-      EndDate = Patcher.Patch(fields.EndDate, Requisition.EndDate);
+      StartDate = Patcher.Patch(fields.StartDate, Order.StartDate);
+      EndDate = Patcher.Patch(fields.EndDate, Order.EndDate);
 
       Currency = Patcher.Patch(fields.CurrencyUID, Order.Currency);
       UnitPrice = fields.UnitPrice;
