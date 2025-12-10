@@ -54,11 +54,12 @@ namespace Empiria.Payments.Payables.WebApi {
 
     [HttpPost]
     [Route("v8/order-management/orders/{orderUID:guid}/request-payment")]
-    public SingleObjectModel RequestOrderPayment([FromUri] string orderUID) {
+    public SingleObjectModel RequestOrderPayment([FromUri] string orderUID,
+                                                 [FromBody] PaymentOrderFields fields) {
 
       using (var services = PayableEntityServices.ServiceInteractor()) {
 
-        OrderHolderDto order = services.RequestPayment(orderUID);
+        OrderHolderDto order = services.RequestPayment(orderUID, fields);
 
         return new SingleObjectModel(base.Request, order);
       }

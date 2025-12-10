@@ -50,8 +50,9 @@ namespace Empiria.Payments.Payables.Services {
     }
 
 
-    public PayableOrderHolderDto RequestPayment(string orderUID) {
+    public PayableOrderHolderDto RequestPayment(string orderUID, PaymentOrderFields fields) {
       Assertion.Require(orderUID, nameof(orderUID));
+      Assertion.Require(fields, nameof(fields));
 
       var order = (IPayableEntity) PayableOrder.Parse(orderUID);
 
@@ -66,20 +67,16 @@ namespace Empiria.Payments.Payables.Services {
       var totalBilled = Bill.GetListFor(order)
                             .Sum(x => x.BillType.Name.Contains("CreditNote") ? -1 * x.Total : x.Total);
 
-      var fields = new PaymentOrderFields {
-        PayToUID = order.PayTo.UID,
-        CurrencyUID = order.Currency.UID,
-        Description = order.Name,
-        DueTime = DateTime.Now.AddDays(7),
-        PaymentAccountUID = paymentAccount.UID,
-        PaymentMethodUID = paymentAccount.PaymentMethod.UID,
-        RequestedByUID = order.OrganizationalUnit.UID,
-        RequestedTime = DateTime.Now,
-        ReferenceNumber = order.EntityNo,
-        Total = totalBilled,
-        PayableEntityTypeUID = order.GetEmpiriaType().UID,
-        PayableEntityUID = order.UID,
-      };
+      fields.PayToUID = order.PayTo.UID;
+      fields.CurrencyUID = order.Currency.UID;
+      fields.Description = order.Name;
+      fields.Observations = fields.Description;
+      fields.RequestedByUID = order.OrganizationalUnit.UID;
+      fields.RequestedTime = DateTime.Now;
+      fields.ReferenceNumber = order.EntityNo;
+      fields.Total = totalBilled;
+      fields.PayableEntityTypeUID = order.GetEmpiriaType().UID;
+      fields.PayableEntityUID = order.UID;
 
       paymentOrder.Update(fields);
 
