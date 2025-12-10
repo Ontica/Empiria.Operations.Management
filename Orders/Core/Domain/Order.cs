@@ -517,6 +517,9 @@ namespace Empiria.Orders {
     }
 
 
+    public abstract FixedList<IPayableEntity> GetPayableEntities();
+
+
     public decimal GetTotal() {
       return Items.Subtotal + Taxes.Total;
     }

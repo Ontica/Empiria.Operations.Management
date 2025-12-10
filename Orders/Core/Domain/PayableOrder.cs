@@ -102,6 +102,11 @@ namespace Empiria.Orders {
     }
 
 
+    public override FixedList<IPayableEntity> GetPayableEntities() {
+      return new FixedList<IPayableEntity>(new[] { this });
+    }
+
+
     internal protected void Update(PayableOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 

@@ -10,6 +10,8 @@
 
 using System;
 using System.Linq;
+
+using Empiria.Financial;
 using Empiria.StateEnums;
 
 using Empiria.Orders;
@@ -149,6 +151,13 @@ namespace Empiria.Procurement.Contracts {
 
     internal FixedList<ContractItem> GetItems() {
       return base.GetItems<ContractItem>();
+    }
+
+
+    public override FixedList<IPayableEntity> GetPayableEntities() {
+      return ContractOrder.GetListFor(this)
+                          .Select(x => (IPayableEntity) x)
+                          .ToFixedList();
     }
 
 

@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Financial;
 using Empiria.Orders;
 
 namespace Empiria.Procurement.Orders {
@@ -45,6 +46,10 @@ namespace Empiria.Procurement.Orders {
       return base.GetItems<SalesOrderItem>();
     }
 
+
+    public override FixedList<IPayableEntity> GetPayableEntities() {
+      return new FixedList<IPayableEntity>();
+    }
 
     internal protected virtual void RemoveItem(SalesOrderItem orderItem) {
       Assertion.Require(orderItem, nameof(orderItem));

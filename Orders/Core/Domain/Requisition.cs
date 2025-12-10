@@ -8,6 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Financial;
+
 using Empiria.Orders.Data;
 
 namespace Empiria.Orders {
@@ -33,6 +35,14 @@ namespace Empiria.Orders {
 
     internal FixedList<Order> GetOrders() {
       return OrdersData.GetRequisitionOrders(this);
+    }
+
+
+    public override FixedList<IPayableEntity> GetPayableEntities() {
+      return OrdersData.GetRequisitionOrders(this)
+                       .FindAll(x => x is IPayableEntity)
+                       .Select(x => (IPayableEntity) x)
+                       .ToFixedList();
     }
 
 

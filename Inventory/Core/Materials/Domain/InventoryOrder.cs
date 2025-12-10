@@ -11,6 +11,8 @@
 using Empiria.Locations;
 using Empiria.Orders;
 
+using Empiria.Financial;
+
 namespace Empiria.Inventory {
 
   /// <summary>Represents an inventory order.</summary>
@@ -72,6 +74,11 @@ namespace Empiria.Inventory {
       base.Delete();
 
       this.DeleteItems();
+    }
+
+
+    public override FixedList<IPayableEntity> GetPayableEntities() {
+      return new FixedList<IPayableEntity>();
     }
 
 
