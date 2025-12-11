@@ -80,7 +80,8 @@ namespace Empiria.Procurement.Contracts.Adapters {
         CanEditItems = contract.CanUpdate(),
         CanEditDocuments = contract.CanUpdate(),
         CanSuspend = contract.CanSuspend(),
-        CanUpdate = contract.Status == EntityStatus.Pending
+        CanUpdate = contract.Status == EntityStatus.Pending,
+        CanCommitBudget = true
       };
     }
 

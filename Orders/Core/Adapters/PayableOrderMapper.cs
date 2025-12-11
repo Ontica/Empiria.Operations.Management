@@ -70,13 +70,12 @@ namespace Empiria.Orders.Adapters {
 
     #region Helpers
 
-    static private PayableOrderActions MapActions(PayableOrder order) {
-      return new PayableOrderActions {
+    static private OrderActions MapActions(PayableOrder order) {
+      return new OrderActions {
         CanEditBills = true,
         CanRequestPayment = true,
         CanEditDocuments = true,
         CanCommitBudget = true,
-        CanRequestBudget = false,
         CanActivate = true,
         CanDelete = true,
         CanEditItems = true,

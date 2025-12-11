@@ -40,27 +40,6 @@ namespace Empiria.Orders.Adapters {
   }  // class PayableOrderHolderDto
 
 
-  public class PayableOrderActions : OrderActions {
-
-    public bool CanCommitBudget {
-      get; internal set;
-    }
-
-    public bool CanRequestBudget {
-      get; internal set;
-    }
-
-    public bool CanEditBills {
-      get; internal set;
-    }
-
-    public bool CanRequestPayment {
-      get; internal set;
-    }
-
-  } // class PayableOrderActions
-
-
   /// <summary>Data transfer object used to return payable orders information.</summary>
   public class PayableOrderDto : OrderDto {
 

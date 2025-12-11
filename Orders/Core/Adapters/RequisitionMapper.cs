@@ -67,11 +67,10 @@ namespace Empiria.Orders.Adapters {
 
     #region Helpers
 
-    static private RequisitionActions MapActions(Requisition requisition) {
-      return new RequisitionActions {
+    static private OrderActions MapActions(Requisition requisition) {
+      return new OrderActions {
         CanEditDocuments = true,
         CanRequestBudget = true,
-        CanRequestBudgetModification = true,
         CanValidateBudget = true,
         CanActivate = true,
         CanDelete = true,

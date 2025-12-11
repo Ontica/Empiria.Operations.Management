@@ -58,6 +58,26 @@ namespace Empiria.Orders.Adapters {
       get; set;
     }
 
+    public bool CanCommitBudget {
+      get; set;
+    }
+
+    public bool CanRequestBudget {
+      get; set;
+    }
+
+    public bool CanEditBills {
+      get; set;
+    }
+
+    public bool CanRequestPayment {
+      get; set;
+    }
+
+    public bool CanValidateBudget {
+      get; set;
+    }
+
   } // class OrderActions
 
 

@@ -48,23 +48,6 @@ namespace Empiria.Orders.Adapters {
   }  // class RequisitionHolderDto
 
 
-  public class RequisitionActions : OrderActions {
-
-    public bool CanRequestBudget {
-      get; internal set;
-    }
-
-    public bool CanRequestBudgetModification {
-      get; internal set;
-    }
-
-    public bool CanValidateBudget {
-      get; internal set;
-    }
-
-  } // class RequisitionActions
-
-
   /// <summary>Data transfer object used to return requisition information.</summary>
   public class RequisitionDto : OrderDto {
 

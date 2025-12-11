@@ -55,13 +55,11 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     #region Helpers
 
-    static private PayableOrderActions MapActions(ContractOrder order) {
-      return new PayableOrderActions {
+    static private OrderActions MapActions(ContractOrder order) {
+      return new OrderActions {
         CanEditDocuments = true,
         CanEditBills = true,
         CanRequestPayment = true,
-        CanCommitBudget = true,
-        CanRequestBudget = false,
         CanActivate = true,
         CanDelete = true,
         CanEditItems = true,
