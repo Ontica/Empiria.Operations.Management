@@ -1,10 +1,10 @@
-﻿/* Empiria Financial *****************************************************************************************
+﻿/* Empiria Integrated Operations Management ******************************************************************
 *                                                                                                            *
-*  Module   : Payments Management                        Component : Services Layer                          *
-*  Assembly : Empiria.Payments.Core.dll                  Pattern   : Service interactor class                *
-*  Type     : PayableEntityServices                      License   : Please read LICENSE.txt file            *
+*  Module   : Operations-Payments Integration               Component : Use cases Layer                      *
+*  Assembly : Empiria.Operations.Integration.Core.dll       Pattern   : Use case interactor class            *
+*  Type     : PaymentsProcurementUseCases                   License   : Please read LICENSE.txt file         *
 *                                                                                                            *
-*  Summary  : Services used to retrive and communicate with payable entities.                                *
+*  Summary  : Use cases used to integrate organization's procurement operations with the payments system.    *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -20,35 +20,27 @@ using Empiria.Billing;
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
 
-using Empiria.Payments.Adapters;
-using Empiria.Payments.Payables.Adapters;
+using Empiria.Payments;
 
-namespace Empiria.Payments.Payables.Services {
+namespace Empiria.Operations.Integration.Payments.UseCases {
 
-  /// <summary>Services used to retrive and communicate with payable entities.</summary>
-  public class PayableEntityServices : Service {
+  /// <summary>Use cases used to integrate organization's procurement operations
+  /// with the payments system.</summary>
+  public class PaymentsProcurementUseCases : UseCase {
 
     #region Constructors and parsers
 
-    protected PayableEntityServices() {
+    protected PaymentsProcurementUseCases() {
       // no-op
     }
 
-    static public PayableEntityServices ServiceInteractor() {
-      return CreateInstance<PayableEntityServices>();
+    static public PaymentsProcurementUseCases UseCaseInteractor() {
+      return CreateInstance<PaymentsProcurementUseCases>();
     }
 
     #endregion Constructors and parsers
 
     #region Use cases
-
-    public FixedList<NamedEntityDto> GetPayableEntityTypes() {
-
-      return OrderType.GetList()
-                      .FindAll(x => x.Name.Contains("PayableOrder"))
-                      .MapToNamedEntityList();
-    }
-
 
     public PayableOrderHolderDto RequestPayment(string orderUID, PaymentOrderFields fields) {
       Assertion.Require(orderUID, nameof(orderUID));
@@ -64,6 +56,7 @@ namespace Empiria.Payments.Payables.Services {
 
       var paymentAccount = accounts[0];
 
+      // ToDo: Use bill type operation toknow if adds or substracts
       var totalBilled = Bill.GetListFor(order)
                             .Sum(x => x.BillType.Name.Contains("CreditNote") ? -1 * x.Total : x.Total);
 
@@ -85,21 +78,8 @@ namespace Empiria.Payments.Payables.Services {
       return PayableOrderMapper.Map((PayableOrder) order);
     }
 
-
-    public FixedList<PayableEntityDto> SearchPayableEntities(PayableEntitiesQuery query) {
-      Assertion.Require(query, nameof(query));
-
-      // ToDo: Change this fixed code to search for any payable entities
-
-      var orders = BaseObject.GetFullList<PayableOrder>()
-                             .ToFixedList()
-                             .FindAll(x => x.Status != StateEnums.EntityStatus.Deleted);
-
-      return PayableEntityMapper.Map(orders);
-    }
-
     #endregion Use cases
 
-  }  // class PayableEntityServices
+  }  // class PaymentsProcurementUseCases
 
-}  // namespace Empiria.Payments.Payables.UseCases
+}  // namespace Empiria.Operations.Integration.Payments.UseCases

@@ -10,9 +10,8 @@
 
 using Empiria.Services;
 
-using Empiria.Orders.Data;
-
 using Empiria.Orders.Adapters;
+using Empiria.Orders.Data;
 
 namespace Empiria.Orders.UseCases {
 

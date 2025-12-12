@@ -117,7 +117,6 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     }
 
 
-
     [HttpPost]
     [Route("v8/order-management/orders/search")]
     public CollectionModel SearchOrders([FromBody] OrdersQuery query) {
