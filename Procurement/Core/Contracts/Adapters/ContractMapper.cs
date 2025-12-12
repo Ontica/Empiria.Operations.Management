@@ -19,6 +19,7 @@ using Empiria.Billing.Adapters;
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
 
+using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
 
 namespace Empiria.Procurement.Contracts.Adapters {
@@ -87,11 +88,12 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
 
     static private FixedList<BudgetTransactionDescriptorDto> MapBudgetTransactions(Contract contract) {
-      //FixedList<BudgetTransaction> transactions = BudgetTransaction.GetFor(contract);
+      FixedList<BudgetTransaction> contractTxn = BudgetTransaction.GetFor(contract);
+      FixedList<BudgetTransaction> ordersTxn = ContractOrder.GetListFor(contract).SelectFlat(x => BudgetTransaction.GetFor(x));
 
-      //return BudgetTransactionMapper.MapToDescriptor(transactions);
+      FixedList<BudgetTransaction> transactions = FixedList<BudgetTransaction>.Merge(contractTxn, ordersTxn);
 
-      return new FixedList<BudgetTransactionDescriptorDto>();
+      return BudgetTransactionMapper.MapToDescriptor(transactions);
     }
 
     #endregion Helpers
