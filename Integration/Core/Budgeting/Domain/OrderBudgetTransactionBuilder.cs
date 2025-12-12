@@ -81,8 +81,11 @@ namespace Empiria.Operations.Integration.Budgeting {
         } else if (_transaction.BudgetTransactionType.Equals(BudgetTransactionType.ComprometerGastoCorriente)) {
           BuildDoubleEntries(item, BalanceColumn.Requested, BalanceColumn.Commited);
 
+        } else if (_transaction.BudgetTransactionType.Equals(BudgetTransactionType.AutorizarPagoGastoCorriente)) {
+          BuildDoubleEntries(item, BalanceColumn.Commited, BalanceColumn.ToPay);
+
         } else if (_transaction.BudgetTransactionType.Equals(BudgetTransactionType.EjercerGastoCorriente)) {
-          BuildDoubleEntries(item, BalanceColumn.Commited, BalanceColumn.Exercised);
+          BuildDoubleEntries(item, BalanceColumn.ToPay, BalanceColumn.Exercised);
 
         } else {
           throw Assertion.EnsureNoReachThisCode($"Budget transaction entries rule is undefined: " +
@@ -147,10 +150,11 @@ namespace Empiria.Operations.Integration.Budgeting {
 
       OperationSource operationSource;
 
-      if (_transactionType.Equals(BudgetTransactionType.ApartarGastoCorriente)) {
-        operationSource = OperationSource.ParseNamedKey("SISTEMA_DE_ADQUISICIONES");
-      } else {
+      if (_transactionType.Equals(BudgetTransactionType.AutorizarPagoGastoCorriente) ||
+          _transactionType.Equals(BudgetTransactionType.EjercerGastoCorriente)) {
         operationSource = OperationSource.ParseNamedKey("SISTEMA_DE_PAGOS");
+      } else {
+        operationSource = OperationSource.ParseNamedKey("SISTEMA_DE_ADQUISICIONES");
       }
 
       return new BudgetTransactionFields {

@@ -42,7 +42,7 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
     #region Use cases
 
-    public BudgetTransactionDescriptorDto CommitBudget(BudgetRequestFields fields) {
+    public BudgetTransactionDescriptorDto ApprovePayment(BudgetRequestFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       fields.EnsureValid();
@@ -50,6 +50,29 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
       var paymentOrder = PaymentOrder.Parse(fields.BaseObjectUID);
 
       var order = Order.Parse(paymentOrder.PayableEntity.UID);
+
+      order.Activate();
+
+      order.Save();
+
+      var builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.AutorizarPagoGastoCorriente, order);
+
+      BudgetTransaction transaction = builder.Build();
+
+      transaction.SendToAuthorization();
+
+      transaction.Save();
+
+      return BudgetTransactionMapper.MapToDescriptor(transaction);
+    }
+
+
+    public BudgetTransactionDescriptorDto CommitBudget(BudgetRequestFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      Order order = Order.Parse(fields.BaseObjectUID);
 
       order.Activate();
 

@@ -27,6 +27,18 @@ namespace Empiria.Operations.Integration.Budgeting.WebApi {
     #region Web Apis
 
     [HttpPost]
+    [Route("v2/budgeting/procurement/approve-payment")]
+    public SingleObjectModel ApprovePayment([FromBody] BudgetRequestFields fields) {
+
+      using (var usecases = BudgetingProcurementUseCases.UseCaseInteractor()) {
+        BudgetTransactionDescriptorDto transaction = usecases.ApprovePayment(fields);
+
+        return new SingleObjectModel(base.Request, transaction);
+      }
+    }
+
+
+    [HttpPost]
     [Route("v2/budgeting/procurement/commit")]
     public SingleObjectModel CommitBudget([FromBody] BudgetRequestFields fields) {
 
