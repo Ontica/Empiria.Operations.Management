@@ -4,7 +4,7 @@
 *  Assembly : Empiria.Orders.WebApi.dll                     Pattern   : Web Api Controller                   *
 *  Type     : OrderTaxEntryController                       License   : Please read LICENSE.txt file         *
 *                                                                                                            *
-*  Summary  : Web API used to retrive and update order tax entries.                                          *
+*  Summary  : Web API used to retrieve and update order tax entries.                                         *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -17,7 +17,7 @@ using Empiria.Orders.UseCases;
 
 namespace Empiria.Orders.WebApi {
 
-  /// <summary>Web API used to retrive and update order tax entries.</summary>
+  /// <summary>Web API used to retrieve and update order tax entries.</summary>
   public class OrderTaxEntryController : WebApiController {
 
     #region Web apis

@@ -4,7 +4,7 @@
 *  Assembly : Empiria.Orders.WebApi.dll                    Pattern   : Web api Controller                    *
 *  Type     : OrderBillsController                         License   : Please read LICENSE.txt file          *
 *                                                                                                            *
-*  Summary  : Web API used to retrive and update orders bills.                                               *
+*  Summary  : Web API used to retrieve and update orders bills.                                              *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -23,7 +23,7 @@ using Empiria.Billing.UseCases;
 
 namespace Empiria.Orders.WebApi {
 
-  /// <summary>Web API used to retrive and update orders bills.</summary>
+  /// <summary>Web API used to retrieve and update orders bills.</summary>
   public class OrderBillsController : WebApiController {
 
     #region Query web apis
@@ -54,6 +54,10 @@ namespace Empiria.Orders.WebApi {
       DocumentFields requestFields = GetFormDataFromHttpRequest<DocumentFields>("document");
 
       var documentProduct = DocumentProduct.Parse(requestFields.DocumentProductUID);
+
+      if (!documentProduct.Attributes.Get("isCFDI", false)) {
+        Assertion.RequireFail($"La carga de {documentProduct.Name} estará disponible en breve ...");
+      }
 
       InputFileCollection files = base.GetInputFilesFromHttpRequest(documentProduct.ApplicationContentType);
 

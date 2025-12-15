@@ -4,7 +4,7 @@
 *  Assembly : Empiria.Procurement.WebApi.dll               Pattern   : Web api Controller                    *
 *  Type     : SupplierDocumentsController                  License   : Please read LICENSE.txt file          *
 *                                                                                                            *
-*  Summary  : Web API used to retrive and update supplier documents.                                         *
+*  Summary  : Web API used to retrieve and update supplier documents.                                        *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -19,7 +19,7 @@ using Empiria.Documents;
 
 namespace Empiria.Procurement.Suppliers.WebApi {
 
-  /// <summary>Web API used to retrive and update supplier documents.</summary>
+  /// <summary>Web API used to retrieve and update supplier documents.</summary>
   public class SupplierDocumentsController : WebApiController {
 
     #region Command web apis

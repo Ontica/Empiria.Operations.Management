@@ -4,7 +4,7 @@
 *  Assembly : Empiria.Orders.WebApi.dll                     Pattern   : Web Api Controller                   *
 *  Type     : OrderDocumentsController                      License   : Please read LICENSE.txt file         *
 *                                                                                                            *
-*  Summary  : Web API used to retrive and update order documents.                                            *
+*  Summary  : Web API used to retrieve and update order documents.                                           *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -17,7 +17,7 @@ using Empiria.Documents;
 
 namespace Empiria.Orders.WebApi {
 
-  /// <summary>Web API used to retrive and update order documents.</summary>
+  /// <summary>Web API used to retrieve and update order documents.</summary>
   public class OrderDocumentsController : WebApiController {
 
     #region Web apis

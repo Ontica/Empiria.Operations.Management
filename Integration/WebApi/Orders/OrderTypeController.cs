@@ -34,8 +34,8 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
 
     [HttpGet]
-    [Route("v2/payments-management/payables/payable-types")]  // ToDo: Remove on next version
-    [Route("v2/payments-management/order-types/payable")]
+    [Route("v2/payments-management/payment-order-types")]
+    [Route("v8/order-management/order-types/payable")]
     public CollectionModel GetPayableOrderTypes() {
 
       using (var usecases = OrderTypeUseCases.UseCaseInteractor()) {
@@ -49,7 +49,6 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     /// <summary>Should be deprecated in future versions. Used in create payment orders editor.</summary>
     [HttpPost]
     [Route("v2/payments-management/payable-entities/search")]   // ToDo : Remove on next version
-
     public CollectionModel SearchPayableOrders([FromBody] PayableEntitiesQuery query) {
 
       base.RequireBody(query);
