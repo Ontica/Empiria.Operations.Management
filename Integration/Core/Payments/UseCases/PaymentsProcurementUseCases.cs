@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System;
 using System.Linq;
 
 using Empiria.Financial;
@@ -65,7 +64,6 @@ namespace Empiria.Operations.Integration.Payments.UseCases {
       fields.Description = order.Name;
       fields.Observations = fields.Description;
       fields.RequestedByUID = order.OrganizationalUnit.UID;
-      fields.RequestedTime = DateTime.Now;
       fields.ReferenceNumber = order.EntityNo;
       fields.Total = totalBilled;
       fields.PayableEntityTypeUID = order.GetEmpiriaType().UID;
