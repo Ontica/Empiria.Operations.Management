@@ -21,7 +21,6 @@ using Empiria.StateEnums;
 using Empiria.Time;
 
 using Empiria.Budgeting;
-using Empiria.Budgeting.Transactions;
 
 using Empiria.Orders.Data;
 
@@ -29,7 +28,7 @@ namespace Empiria.Orders {
 
   /// <summary>Represents an abstract order.</summary>
   [PartitionedType(typeof(OrderType))]
-  abstract public class Order : BaseObject, IBudgetable, INamedEntity {
+  abstract public class Order : BaseObject, IBudgetable {
 
     #region Fields
 
