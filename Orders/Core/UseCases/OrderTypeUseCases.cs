@@ -29,6 +29,12 @@ namespace Empiria.Orders.UseCases {
 
     #region Use cases
 
+    public FixedList<NamedEntityDto> GetExpensesTypes() {
+      return ExpensesType.GetList()
+                         .MapToNamedEntityList();
+    }
+
+
     public FixedList<NamedEntityDto> GetOrderTypeCategories(string orderTypeUID) {
       Assertion.Require(orderTypeUID, nameof(orderTypeUID));
 

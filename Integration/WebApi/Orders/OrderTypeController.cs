@@ -9,10 +9,13 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System.Web.Http;
+
+using Empiria.WebApi;
+
 using Empiria.Orders;
 using Empiria.Orders.UseCases;
+
 using Empiria.Payments.Adapters;
-using Empiria.WebApi;
 
 namespace Empiria.Operations.Integration.Orders.WebApi {
 
@@ -22,10 +25,24 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     #region Web Apis
 
     [HttpGet]
+    [Route("v8/order-management/expenses-types")]
+    public CollectionModel GetExpensesTypes() {
+
+      using (var usecases = OrderTypeUseCases.UseCaseInteractor()) {
+
+        FixedList<NamedEntityDto> types = usecases.GetExpensesTypes();
+
+        return new CollectionModel(base.Request, types);
+      }
+    }
+
+
+    [HttpGet]
     [Route("v8/order-management/order-types/{orderTypeUID}/categories")]
     public CollectionModel GetOrderTypeCategories([FromUri] string orderTypeUID) {
 
       using (var usecases = OrderTypeUseCases.UseCaseInteractor()) {
+
         FixedList<NamedEntityDto> categories = usecases.GetOrderTypeCategories(orderTypeUID);
 
         return new CollectionModel(base.Request, categories);
@@ -39,6 +56,7 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     public CollectionModel GetPayableOrderTypes() {
 
       using (var usecases = OrderTypeUseCases.UseCaseInteractor()) {
+
         FixedList<NamedEntityDto> payableOrderTypes = usecases.GetPayableOrderTypes();
 
         return new CollectionModel(Request, payableOrderTypes);
