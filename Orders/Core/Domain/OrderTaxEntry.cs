@@ -15,8 +15,6 @@ using Empiria.Json;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
-using Empiria.Budgeting.Transactions;
-
 using Empiria.Orders.Data;
 
 namespace Empiria.Orders {

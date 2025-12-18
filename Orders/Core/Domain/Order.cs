@@ -21,7 +21,6 @@ using Empiria.StateEnums;
 using Empiria.Time;
 
 using Empiria.Budgeting;
-using Empiria.Budgeting.Transactions;
 
 using Empiria.Orders.Data;
 
@@ -138,7 +137,7 @@ namespace Empiria.Orders {
 
     string INamedEntity.Name {
       get {
-        return $"{OrderNo} : {Name}";
+        return Name;
       }
     }
 
@@ -460,15 +459,6 @@ namespace Empiria.Orders {
       get {
         return _taxes.GetList().Select(x => (ITaxEntry) x)
                                .ToFixedList();
-      }
-    }
-
-
-    FixedList<INamedEntity> IBudgetable.BudgetTransactions {
-      get {
-        return BudgetTransaction.GetFor(this)
-                                .Select(x => (INamedEntity) x)
-                                .ToFixedList();
       }
     }
 

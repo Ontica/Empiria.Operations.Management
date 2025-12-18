@@ -89,7 +89,8 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     static private FixedList<BudgetTransactionDescriptorDto> MapBudgetTransactions(Contract contract) {
       FixedList<BudgetTransaction> contractTxn = BudgetTransaction.GetFor(contract);
-      FixedList<BudgetTransaction> ordersTxn = ContractOrder.GetListFor(contract).SelectFlat(x => BudgetTransaction.GetFor(x));
+      FixedList<BudgetTransaction> ordersTxn = ContractOrder.GetListFor(contract)
+                                                            .SelectFlat(x => BudgetTransaction.GetFor(x));
 
       FixedList<BudgetTransaction> transactions = FixedList<BudgetTransaction>.Merge(contractTxn, ordersTxn);
 
