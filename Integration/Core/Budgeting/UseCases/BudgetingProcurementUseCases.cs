@@ -55,7 +55,9 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       order.Save();
 
-      var builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.AutorizarPagoGastoCorriente, order);
+      var bdgTxnType = BudgetTransactionType.GetFor(order.BudgetType, BudgetOperationType.ApprovePayment);
+
+      var builder = new OrderBudgetTransactionBuilder(bdgTxnType, order);
 
       BudgetTransaction transaction = builder.Build();
 
@@ -78,7 +80,9 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       order.Save();
 
-      var builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.ComprometerGastoCorriente, order);
+      var bdgTxnType = BudgetTransactionType.GetFor(order.BudgetType, BudgetOperationType.Commit);
+
+      var builder = new OrderBudgetTransactionBuilder(bdgTxnType, order);
 
       BudgetTransaction transaction = builder.Build();
 
@@ -99,7 +103,9 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       var order = Order.Parse(paymentOrder.PayableEntity.UID);
 
-      var builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.EjercerGastoCorriente, order);
+      var bdgTxnType = BudgetTransactionType.GetFor(order.BudgetType, BudgetOperationType.Exercise);
+
+      var builder = new OrderBudgetTransactionBuilder(bdgTxnType, order);
 
       BudgetTransaction transaction = builder.Build();
 
@@ -134,7 +140,9 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       order.Save();
 
-      var builder = new OrderBudgetTransactionBuilder(BudgetTransactionType.ApartarGastoCorriente, order);
+      var bdgTxnType = BudgetTransactionType.GetFor(order.BudgetType, BudgetOperationType.Request);
+
+      var builder = new OrderBudgetTransactionBuilder(bdgTxnType, order);
 
       BudgetTransaction transaction = builder.Build();
 

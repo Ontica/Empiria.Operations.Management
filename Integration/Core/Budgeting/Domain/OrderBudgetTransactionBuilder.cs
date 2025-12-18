@@ -75,16 +75,16 @@ namespace Empiria.Operations.Integration.Budgeting {
 
       foreach (var item in orderItems) {
 
-        if (_transaction.BudgetTransactionType.Equals(BudgetTransactionType.ApartarGastoCorriente)) {
+        if (_transaction.OperationType == BudgetOperationType.Request) {
           BuildDoubleEntries(item, BalanceColumn.Available, BalanceColumn.Requested);
 
-        } else if (_transaction.BudgetTransactionType.Equals(BudgetTransactionType.ComprometerGastoCorriente)) {
+        } else if (_transaction.OperationType == BudgetOperationType.Commit) {
           BuildDoubleEntries(item, BalanceColumn.Requested, BalanceColumn.Commited);
 
-        } else if (_transaction.BudgetTransactionType.Equals(BudgetTransactionType.AutorizarPagoGastoCorriente)) {
+        } else if (_transaction.OperationType == BudgetOperationType.ApprovePayment) {
           BuildDoubleEntries(item, BalanceColumn.Commited, BalanceColumn.ToPay);
 
-        } else if (_transaction.BudgetTransactionType.Equals(BudgetTransactionType.EjercerGastoCorriente)) {
+        } else if (_transaction.OperationType == BudgetOperationType.Exercise) {
           BuildDoubleEntries(item, BalanceColumn.ToPay, BalanceColumn.Exercised);
 
         } else {
@@ -100,7 +100,8 @@ namespace Empiria.Operations.Integration.Budgeting {
                                                bool isDeposit) {
 
       DateTime budgetingDate;
-      if (_transactionType.Equals(BudgetTransactionType.ApartarGastoCorriente)) {
+
+      if (_transactionType.OperationType == BudgetOperationType.Request) {
         budgetingDate = ExecutionServer.IsMinOrMaxDate(entry.StartDate) ?
                                             entry.Order.StartDate : entry.StartDate;
       } else {
@@ -150,8 +151,8 @@ namespace Empiria.Operations.Integration.Budgeting {
 
       OperationSource operationSource;
 
-      if (_transactionType.Equals(BudgetTransactionType.AutorizarPagoGastoCorriente) ||
-          _transactionType.Equals(BudgetTransactionType.EjercerGastoCorriente)) {
+      if (_transactionType.OperationType == BudgetOperationType.ApprovePayment ||
+          _transactionType.OperationType == BudgetOperationType.Exercise) {
         operationSource = OperationSource.ParseNamedKey("SISTEMA_DE_PAGOS");
       } else {
         operationSource = OperationSource.ParseNamedKey("SISTEMA_DE_ADQUISICIONES");
