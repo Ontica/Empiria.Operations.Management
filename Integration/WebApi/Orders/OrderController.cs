@@ -110,8 +110,8 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
       keywords = keywords ?? string.Empty;
 
-      FixedList<PayableOrderItemDto> availableItems =
-              OrderUseCaseSelector.GetAvailableOrderItems(orderUID, keywords);
+      FixedList<OrderItemDto> availableItems =
+                          OrderUseCaseSelector.GetAvailableOrderItems(orderUID, keywords);
 
       return new CollectionModel(base.Request, availableItems);
     }

@@ -96,6 +96,15 @@ namespace Empiria.Procurement.Contracts.UseCases {
     }
 
 
+    public FixedList<ContractItemDto> GetAvailableOrderItems(ContractOrder contractOrder) {
+      Assertion.Require(contractOrder, nameof(contractOrder));
+
+      var contractItems = contractOrder.Contract.GetItems<ContractItem>();
+
+      return ContractItemMapper.Map(contractItems);
+    }
+
+
     public ContractOrderHolderDto GetContractOrder(string contractOrderUID) {
       Assertion.Require(contractOrderUID, nameof(contractOrderUID));
 

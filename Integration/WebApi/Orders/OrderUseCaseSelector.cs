@@ -164,14 +164,43 @@ namespace Empiria.Operations.Integration.Orders {
     }
 
 
-    static internal FixedList<PayableOrderItemDto> GetAvailableOrderItems(string orderUID, string keywords) {
+    static internal FixedList<OrderItemDto> GetAvailableOrderItems(string orderUID,
+                                                                   string keywords) {
       Assertion.Require(orderUID, nameof(orderUID));
 
       keywords = keywords ?? string.Empty;
 
       var order = Order.Parse(orderUID);
 
-      return PayableOrderMapper.Map(order.Requisition.GetItems<PayableOrderItem>());
+      if (order is Requisition requisition) {
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.GetAvailableOrderItems(requisition)
+                         .Select(x => (OrderItemDto) x)
+                         .ToFixedList();
+        }
+      }
+
+      if (order is Contract contract) {
+        using (var usecases = ContractUseCases.UseCaseInteractor()) {
+          return usecases.GetAvailableOrderItems(contract)
+                         .Select(x => (OrderItemDto) x)
+                         .ToFixedList();
+        }
+      }
+
+      if (order is ContractOrder contractOrder) {
+        using (var usecases = ContractOrderUseCases.UseCaseInteractor()) {
+          return usecases.GetAvailableOrderItems(contractOrder)
+                         .Select(x => (OrderItemDto) x)
+                         .ToFixedList();
+        }
+      }
+
+      using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
+        return usecases.GetAvailableOrderItems((PayableOrder) order)
+                       .Select(x => (OrderItemDto) x)
+                       .ToFixedList();
+      }
     }
 
 
@@ -287,7 +316,10 @@ namespace Empiria.Operations.Integration.Orders {
     }
 
 
-    static internal OrderItemDto UpdateOrderItem(string orderUID, string orderItemUID, OrderItemFields fields) {
+    static internal OrderItemDto UpdateOrderItem(string orderUID,
+                                                 string orderItemUID,
+                                                 OrderItemFields fields) {
+
       Assertion.Require(orderUID, nameof(orderUID));
       Assertion.Require(orderItemUID, nameof(orderItemUID));
       Assertion.Require(fields, nameof(fields));
