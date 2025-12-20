@@ -11,6 +11,7 @@
 using System;
 
 using Empiria.Parties;
+using Empiria.StateEnums;
 
 namespace Empiria.Procurement.Suppliers {
 
@@ -68,7 +69,11 @@ namespace Empiria.Procurement.Suppliers {
 
     #region Methods
 
-    public void Update(SupplierFields fields) {
+    internal void Delete() {
+      SetStatus(EntityStatus.Deleted);
+    }
+
+    internal void Update(SupplierFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       TaxCode = Patcher.Patch(BuildAndValidateTaxCode(fields.TaxCode), TaxCode);

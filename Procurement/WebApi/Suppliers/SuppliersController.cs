@@ -95,10 +95,37 @@ namespace Empiria.Procurement.Suppliers.WebApi {
 
     [HttpPost]
     [Route("v8/procurement/suppliers")]
-    public SingleObjectModel CreateSupplier([FromBody] SupplierFields supplierDto) {
+    public SingleObjectModel CreateSupplier([FromBody] SupplierFields fields) {
 
       using (var usecases = SupplierUseCases.UseCaseInteractor()) {
-        SupplierHolderDto supplier = usecases.CreateSupplier(supplierDto);
+        SupplierHolderDto supplier = usecases.CreateSupplier(fields);
+
+        return new SingleObjectModel(base.Request, supplier);
+      }
+    }
+
+
+    [HttpDelete]
+    [Route("v8/procurement/suppliers/{supplierUID:guid}")]
+    public NoDataModel DeleteSupplier([FromUri] string supplierUID) {
+
+      using (var usecases = SupplierUseCases.UseCaseInteractor()) {
+        _ = usecases.DeleteSupplier(supplierUID);
+
+        return new NoDataModel(base.Request);
+      }
+    }
+
+
+    [HttpPut, HttpPatch]
+    [Route("v8/procurement/suppliers/{supplierUID:guid}")]
+    public SingleObjectModel UpdateSupplier([FromUri] string supplierUID,
+                                            [FromBody] SupplierFields fields) {
+
+      fields.UID = supplierUID;
+
+      using (var usecases = SupplierUseCases.UseCaseInteractor()) {
+        SupplierHolderDto supplier = usecases.UpdateSupplier(fields);
 
         return new SingleObjectModel(base.Request, supplier);
       }

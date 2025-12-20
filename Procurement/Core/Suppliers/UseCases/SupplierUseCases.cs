@@ -119,6 +119,32 @@ namespace Empiria.Procurement.Suppliers.UseCases {
       return SupplierMapper.Map(supplier);
     }
 
+
+    internal SupplierHolderDto DeleteSupplier(string supplierUID) {
+      Assertion.Require(supplierUID, nameof(supplierUID));
+
+      var supplier = Supplier.Parse(supplierUID);
+
+      supplier.Delete();
+
+      supplier.Save();
+
+      return SupplierMapper.Map(supplier);
+    }
+
+
+    internal SupplierHolderDto UpdateSupplier(SupplierFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      var supplier = Supplier.Parse(fields.UID);
+
+      supplier.Update(fields);
+
+      supplier.Save();
+
+      return SupplierMapper.Map(supplier);
+    }
+
     #endregion Command use cases
 
   }  // class SupplierUseCases
