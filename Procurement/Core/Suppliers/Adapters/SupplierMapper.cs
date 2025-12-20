@@ -10,8 +10,6 @@
 
 using Empiria.Documents;
 using Empiria.History;
-
-using Empiria.Parties;
 using Empiria.StateEnums;
 
 using Empiria.Financial.Services;
@@ -21,13 +19,13 @@ namespace Empiria.Procurement.Suppliers.Adapters {
   /// <summary>Maps suppliers to their DTOs.</summary>
   static internal class SupplierMapper {
 
-    static internal FixedList<SupplierDescriptor> Map(FixedList<Party> suppliers) {
+    static internal FixedList<SupplierDescriptor> Map(FixedList<Supplier> suppliers) {
       return suppliers.Select(x => MapToDescriptor(x))
                       .ToFixedList();
     }
 
 
-    static internal SupplierHolderDto Map(Party supplier) {
+    static internal SupplierHolderDto Map(Supplier supplier) {
       var bills = Billing.Bill.GetListFor(supplier);
 
       return new SupplierHolderDto {
@@ -46,29 +44,27 @@ namespace Empiria.Procurement.Suppliers.Adapters {
 
     #region Helpers
 
-    static private SupplierDescriptor MapToDescriptor(Party supplier) {
-      ITaxableParty taxable = supplier as ITaxableParty;
+    static private SupplierDescriptor MapToDescriptor(Supplier supplier) {
 
       return new SupplierDescriptor {
         UID = supplier.UID,
         Name = supplier.Name,
-        TypeName = taxable.TaxData.TaxEntityKind,
+        TypeName = "Proveedor",
         TaxCode = supplier.Code,
-        SubledgerAccount = taxable.TaxData.SubledgerAccount,
+        SubledgerAccount = supplier.SubledgerAccount,
         StatusName = supplier.Status.GetName()
       };
     }
 
 
-    static private SupplierDto MapToDto(Party supplier) {
-      ITaxableParty taxable = supplier as ITaxableParty;
+    static private SupplierDto MapToDto(Supplier supplier) {
 
       return new SupplierDto {
         UID = supplier.UID,
         Name = supplier.Name,
-        Type = new NamedEntityDto(taxable.TaxData.TaxEntityKind),
+        Type = new NamedEntityDto("Proveedor"),
         TaxCode = supplier.Code,
-        SubledgerAccount = taxable.TaxData.SubledgerAccount,
+        SubledgerAccount = supplier.SubledgerAccount,
         Status = supplier.Status.MapToDto(),
       };
     }

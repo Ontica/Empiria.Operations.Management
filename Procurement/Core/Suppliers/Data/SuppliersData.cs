@@ -10,14 +10,12 @@
 
 using Empiria.Data;
 
-using Empiria.Parties;
-
 namespace Empiria.Procurement.Suppliers.Data {
 
   /// <summary>Provides data read and write methods for Supplier instances.</summary>
   static internal class SuppliersData {
 
-    static internal FixedList<Party> GetSuppliers(string filter, string sortBy) {
+    static internal FixedList<Supplier> GetSuppliers(string filter, string sortBy) {
       var sql = "SELECT * FROM Parties";
 
       if (!string.IsNullOrWhiteSpace(filter)) {
@@ -30,7 +28,7 @@ namespace Empiria.Procurement.Suppliers.Data {
 
       var op = DataOperation.Parse(sql);
 
-      return DataReader.GetFixedList<Party>(op);
+      return DataReader.GetFixedList<Supplier>(op);
     }
 
   }  // class SuppliersData

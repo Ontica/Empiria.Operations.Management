@@ -9,8 +9,6 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System.Threading.Tasks;
-
-using Empiria.Parties;
 using Empiria.Services;
 
 using Empiria.Financial.Adapters;
@@ -40,12 +38,12 @@ namespace Empiria.Procurement.Suppliers.UseCases {
 
     #endregion Constructors and parsers
 
-    #region Use cases
+    #region Query use cases
 
     public SupplierHolderDto GetSupplier(string supplierUID) {
       Assertion.Require(supplierUID, nameof(supplierUID));
 
-      var supplier = Party.Parse(supplierUID);
+      var supplier = Supplier.Parse(supplierUID);
 
       return SupplierMapper.Map(supplier);
     }
@@ -54,7 +52,7 @@ namespace Empiria.Procurement.Suppliers.UseCases {
     public FixedList<PaymentAccountDto> GetSupplierPaymentAccounts(string supplierUID) {
       Assertion.Require(supplierUID, nameof(supplierUID));
 
-      var supplier = Party.Parse(supplierUID);
+      var supplier = Supplier.Parse(supplierUID);
 
       return PaymentAccountServices.GetPaymentAccounts(supplier.UID);
     }
@@ -100,12 +98,28 @@ namespace Empiria.Procurement.Suppliers.UseCases {
       string filter = query.MapToFilterString();
       string sortBy = query.MapToSortString();
 
-      FixedList<Party> suppliers = SuppliersData.GetSuppliers(filter, sortBy);
+      FixedList<Supplier> suppliers = SuppliersData.GetSuppliers(filter, sortBy);
 
       return SupplierMapper.Map(suppliers);
     }
 
-    #endregion Use cases
+    #endregion Query use cases
+
+    #region Command use cases
+
+    public SupplierHolderDto CreateSupplier(SupplierFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      var supplier = new Supplier(fields.TaxCode);
+
+      supplier.Update(fields);
+
+      supplier.Save();
+
+      return SupplierMapper.Map(supplier);
+    }
+
+    #endregion Command use cases
 
   }  // class SupplierUseCases
 

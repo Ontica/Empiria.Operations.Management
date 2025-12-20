@@ -4,7 +4,7 @@
 *  Assembly : Empiria.Procurement.WebApi.dll               Pattern   : Web api Controller                    *
 *  Type     : SuppliersController                          License   : Please read LICENSE.txt file          *
 *                                                                                                            *
-*  Summary  : Web API used to retrive and update suppliers.                                                  *
+*  Summary  : Web API used to retrieve and update suppliers.                                                 *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -22,7 +22,7 @@ using Empiria.Procurement.Suppliers.UseCases;
 
 namespace Empiria.Procurement.Suppliers.WebApi {
 
-  /// <summary>Web API used to retrive and update suppliers.</summary>
+  /// <summary>Web API used to retrieve and update suppliers.</summary>
   public class SuppliersController : WebApiController {
 
     #region Query web apis
@@ -92,6 +92,21 @@ namespace Empiria.Procurement.Suppliers.WebApi {
     }
 
     #endregion Query web apis
+
+    #region Command web apis
+
+    [HttpPost]
+    [Route("v8/procurement/suppliers")]
+    public SingleObjectModel CreateSupplier([FromBody] SupplierFields supplierDto) {
+
+      using (var usecases = SupplierUseCases.UseCaseInteractor()) {
+        SupplierHolderDto supplier = usecases.CreateSupplier(supplierDto);
+
+        return new SingleObjectModel(base.Request, supplier);
+      }
+    }
+
+    #endregion Command web apis
 
   }  // class SuppliersController
 
