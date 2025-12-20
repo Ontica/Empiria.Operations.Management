@@ -34,6 +34,11 @@ namespace Empiria.Procurement.Suppliers {
       get; set;
     } = string.Empty;
 
+
+    public string SubledgerAccountName {
+      get; set;
+    } = string.Empty;
+
   }  // class SupplierFields
 
 } // namespace Empiria.Procurement.Suppliers

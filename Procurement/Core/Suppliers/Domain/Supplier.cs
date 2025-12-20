@@ -47,6 +47,17 @@ namespace Empiria.Procurement.Suppliers {
       }
     }
 
+
+    public string SubledgerAccountName {
+      get {
+        return ExtendedData.Get("taxData/subledgerAccountName", string.Empty);
+      }
+      private set {
+        ExtendedData.SetIfValue("taxData/subledgerAccountName", value);
+      }
+    }
+
+
     public SupplierType SupplierType {
       get {
         return SupplierType.Parse(ExtendedData.Get("supplierType", SupplierType.Unknown.Name));
@@ -76,9 +87,11 @@ namespace Empiria.Procurement.Suppliers {
     internal void Update(SupplierFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      TaxCode = Patcher.Patch(BuildAndValidateTaxCode(fields.TaxCode), TaxCode);
-      SubledgerAccount = Patcher.Patch(fields.SubledgerAccount, SubledgerAccount);
       SupplierType = SupplierType.Parse(fields.TypeUID);
+      TaxCode = Patcher.Patch(BuildAndValidateTaxCode(fields.TaxCode), TaxCode);
+
+      SubledgerAccount = Patcher.Patch(fields.SubledgerAccount, SubledgerAccount);
+      SubledgerAccountName = Patcher.Patch(fields.SubledgerAccountName, SubledgerAccountName);
 
       if (fields.UID.Length == 0) {
         fields.StartDate = DateTime.Today;
