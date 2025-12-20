@@ -46,6 +46,14 @@ namespace Empiria.Procurement.Suppliers {
       }
     }
 
+    public SupplierType SupplierType {
+      get {
+        return SupplierType.Parse(ExtendedData.Get("supplierType", SupplierType.Unknown.Name));
+      }
+      private set {
+        ExtendedData.SetIfValue("supplierType", value.Name);
+      }
+    }
 
     public string TaxCode {
       get {
@@ -65,6 +73,7 @@ namespace Empiria.Procurement.Suppliers {
 
       TaxCode = Patcher.Patch(BuildAndValidateTaxCode(fields.TaxCode), TaxCode);
       SubledgerAccount = Patcher.Patch(fields.SubledgerAccount, SubledgerAccount);
+      SupplierType = SupplierType.Parse(fields.TypeUID);
 
       if (fields.UID.Length == 0) {
         fields.StartDate = DateTime.Today;

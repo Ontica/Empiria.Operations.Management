@@ -49,7 +49,7 @@ namespace Empiria.Procurement.Suppliers.Adapters {
       return new SupplierDescriptor {
         UID = supplier.UID,
         Name = supplier.Name,
-        TypeName = "Proveedor",
+        TypeName = supplier.SupplierType.Name,
         TaxCode = supplier.Code,
         SubledgerAccount = supplier.SubledgerAccount,
         StatusName = supplier.Status.GetName()
@@ -62,7 +62,7 @@ namespace Empiria.Procurement.Suppliers.Adapters {
       return new SupplierDto {
         UID = supplier.UID,
         Name = supplier.Name,
-        Type = new NamedEntityDto("Proveedor"),
+        Type = supplier.SupplierType.MapToNamedEntity(),
         TaxCode = supplier.Code,
         SubledgerAccount = supplier.SubledgerAccount,
         Status = supplier.Status.MapToDto(),

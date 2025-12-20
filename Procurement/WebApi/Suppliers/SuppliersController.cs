@@ -13,7 +13,6 @@ using System.Web.Http;
 using System.Threading.Tasks;
 
 using Empiria.WebApi;
-using Empiria.Parties;
 
 using Empiria.Financial.Adapters;
 
@@ -52,14 +51,13 @@ namespace Empiria.Procurement.Suppliers.WebApi {
 
 
     [HttpGet]
-    [Route("v8/procurement/suppliers/kinds")]
     [Route("v8/procurement/suppliers/types")]
-    public CollectionModel GetSupplierKinds() {
+    public CollectionModel GetSupplierTypes() {
 
-      FixedList<NamedEntityDto> kinds = TaxData.GetTaxEntityKinds()
-                                               .MapToNamedEntityList(false);
+      FixedList<NamedEntityDto> types = SupplierType.GetSupplierTypes()
+                                                    .MapToNamedEntityList(false);
 
-      return new CollectionModel(base.Request, kinds);
+      return new CollectionModel(base.Request, types);
     }
 
 
