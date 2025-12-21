@@ -94,7 +94,7 @@ namespace Empiria.Orders {
 
         return Parse(_requisitionItemId);
       }
-      private set {
+      protected set {
         _requisitionItemId = value.Id;
       }
     }
@@ -270,7 +270,7 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_ITEM_BUDGET_ACCOUNT_ID")]
     public BudgetAccount BudgetAccount {
-      get; private set;
+      get; protected set;
     }
 
 
@@ -318,8 +318,9 @@ namespace Empiria.Orders {
 
     public string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(ProductName, Description, Product.Keywords, ProductCode, Requisition.Keywords,
-                                           Order.Keywords, Contract.Keywords, Justification);
+        return EmpiriaString.BuildKeywords(ProductName, Description, Product.Keywords, ProductCode,
+                                           Requisition.Keywords, Order.Keywords, Contract.Keywords,
+                                           Justification);
       }
     }
 
@@ -441,7 +442,6 @@ namespace Empiria.Orders {
       Requisition = Patcher.Patch(fields.RequisitionUID, Order.Requisition);
       RequisitionItem = Patcher.Patch(fields.RequisitionItemUID, Empty);
 
-      ContractItem = Patcher.Patch(fields.ContractItemUID, Empty);
       RelatedItem = Patcher.Patch(fields.RelatedItemUID, Empty);
 
       Justification = EmpiriaString.Clean(fields.Justification);
