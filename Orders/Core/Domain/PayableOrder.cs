@@ -118,7 +118,12 @@ namespace Empiria.Orders {
                               "debido a que la orden tiene registradas una o más partidas.");
       }
 
-      fields.Budgets = new string[] { fields.BudgetUID };
+      if (fields.Budgets.Length == 0 && fields.BudgetUID.Length != 0) {
+        fields.Budgets = new string[] { fields.BudgetUID };
+
+      } else if (fields.Budgets.Length == 0 && fields.BudgetUID.Length == 0) {
+        fields.Budgets = new string[] { Requisition.BaseBudget.UID };
+      }
 
       base.Update(fields);
     }
