@@ -89,6 +89,19 @@ namespace Empiria.Procurement.Contracts {
       base.Items.Remove(contractOrderItem);
     }
 
+
+    internal protected void Update(ContractOrderFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      fields.ProviderUID = Contract.Provider.UID;
+
+      fields.Budgets = new string[] { fields.BudgetUID };
+
+      base.Update(fields);
+    }
+
     #endregion Methods
 
   }  // class ContractOrder
