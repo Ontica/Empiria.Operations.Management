@@ -29,7 +29,6 @@ namespace Empiria.Orders {
       get; set;
     } = string.Empty;
 
-
     public decimal Total {
       get; set;
     }

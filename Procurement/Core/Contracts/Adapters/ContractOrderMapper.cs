@@ -11,8 +11,14 @@
 using Empiria.Documents;
 using Empiria.History;
 
+using Empiria.Billing;
+using Empiria.Billing.Adapters;
+
 using Empiria.Budgeting.Transactions.Adapters;
 using Empiria.Budgeting.Transactions;
+
+using Empiria.Payments.Adapters;
+using Empiria.Payments;
 
 using Empiria.Orders.Adapters;
 
@@ -25,7 +31,10 @@ namespace Empiria.Procurement.Contracts.Adapters {
       return new ContractOrderHolderDto {
         Order = new ContractOrderDto(order),
         Items = Map(order.GetItems<ContractOrderItem>()),
+        Bills = BillMapper.MapToBillDto(Bill.GetListFor(order)),
+        PaymentOrders = PaymentOrderMapper.MapToDescriptor(PaymentOrder.GetListFor(order)),
         BudgetTransactions = MapBudgetTransactions(order),
+        Taxes = OrderTaxMapper.Map(order.Taxes.GetList()),
         Documents = DocumentServices.GetAllEntityDocuments(order),
         History = HistoryServices.GetEntityHistory(order),
         Actions = MapActions(order),

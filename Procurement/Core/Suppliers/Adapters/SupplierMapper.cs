@@ -12,6 +12,9 @@ using Empiria.Documents;
 using Empiria.History;
 using Empiria.StateEnums;
 
+using Empiria.Billing;
+using Empiria.Billing.Adapters;
+
 using Empiria.Financial.Services;
 
 namespace Empiria.Procurement.Suppliers.Adapters {
@@ -26,12 +29,12 @@ namespace Empiria.Procurement.Suppliers.Adapters {
 
 
     static internal SupplierHolderDto Map(Supplier supplier) {
-      var bills = Billing.Bill.GetListFor(supplier);
+      var bills = Bill.GetListFor(supplier);
 
       return new SupplierHolderDto {
         Supplier = MapToDto(supplier),
         PaymentAccounts = PaymentAccountServices.GetPaymentAccounts(supplier.UID),
-        Bills = Billing.Adapters.BillMapper.MapToBillDto(bills),
+        Bills = BillMapper.MapToBillDto(bills),
         Documents = DocumentServices.GetAllEntityDocuments(supplier),
         History = HistoryServices.GetEntityHistory(supplier),
         Actions = new BaseActions() {

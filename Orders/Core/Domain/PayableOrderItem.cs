@@ -33,17 +33,6 @@ namespace Empiria.Orders {
 
     #endregion Constructors and parsers
 
-    #region Properties
-
-    //public new Order Order {
-    //  get {
-    //    return (PayableOrder) base.Order;
-    //  }
-    //}
-
-
-    #endregion Properties
-
     #region IPayableEntityItem implementation
 
     INamedEntity IPayableEntityItem.BudgetAccount {
