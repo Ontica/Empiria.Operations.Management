@@ -44,7 +44,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
 
-    public FixedList<BillDto> Bills {
+    public BillsStructureDto Bills {
       get; internal set;
     }
 

@@ -43,7 +43,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         BudgetTransactions = MapBudgetTransactions(contract),
         Orders = PayableOrderMapper.MapToDescriptor(orders),
         Payables = ContractOrderMapper.MapToDescriptor(contractOrders),
-        Bills = BillMapper.MapToBillDto(bills),
+        Bills = BillMapper.MapToBillStructure(bills),
         Documents = DocumentServices.GetAllEntityDocuments(contract),
         History = HistoryServices.GetEntityHistory(contract),
         Actions = MapActions(contract)
