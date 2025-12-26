@@ -145,6 +145,7 @@ namespace Empiria.Orders {
 
     public virtual void EnsureValid() {
       ProductUID = Patcher.CleanUID(ProductUID);
+      ProductUnitUID = Patcher.CleanUID(ProductUnitUID);
       BudgetAccountUID = Patcher.CleanUID(BudgetAccountUID);
       Description = Patcher.PatchClean(Description, string.Empty);
 
