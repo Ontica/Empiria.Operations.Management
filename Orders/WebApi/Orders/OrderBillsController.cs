@@ -76,9 +76,11 @@ namespace Empiria.Orders.WebApi {
 
       var bill = Bill.TryParseWithBillNo(billNo);
 
-      Assertion.Require(bill == null, $"El comprobante con folio '{billNo}' ya existe en el sistema.");
+      Assertion.Require(bill == null, $"El comprobante con folio fiscal '{billNo}' ya existe en el sistema.");
 
-      bill = Bill.Parse(usecases.CreateBill(xmlAsString, (IPayableEntity) order).UID);
+      var billDto = usecases.Create(xmlAsString, (IPayableEntity) order, documentProduct);
+
+      bill = Bill.Parse(billDto.UID);
 
       var xmlDocument = DocumentServices.StoreDocument(xmlFile, bill, requestFields);
 
