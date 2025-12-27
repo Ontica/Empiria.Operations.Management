@@ -9,9 +9,8 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.Products;
-using Empiria.Products.Services.Adapters;
 
-using Empiria.Operations.Integration.Products.UseCases;
+using Empiria.Products.Services.Adapters;
 
 namespace Empiria.Operations.Integration.Products.Adapters {
 
@@ -21,7 +20,7 @@ namespace Empiria.Operations.Integration.Products.Adapters {
     static public ProductHolderDto Map(Product product) {
       return new ProductHolderDto {
         Product = ProductMapper.Map(product),
-        BudgetSegments = GetProductBudgetSegments(product),
+        BudgetSegments = new FixedList<ProductBudgetSegmentDto>(),
         Actions = MapActions()
       };
     }
@@ -34,18 +33,6 @@ namespace Empiria.Operations.Integration.Products.Adapters {
         CanUpdate = true
       };
     }
-
-
-    #region Helpers
-
-    static private FixedList<ProductBudgetSegmentDto> GetProductBudgetSegments(Product product) {
-
-      using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
-        return usecases.GetProductBudgetSegments(product.UID);
-      }
-    }
-
-    #endregion Helpers
 
   }  // class ProductHolderMapper
 

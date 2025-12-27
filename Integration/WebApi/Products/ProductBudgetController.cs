@@ -11,9 +11,8 @@
 using System.Web.Http;
 
 using Empiria.WebApi;
-using Empiria.Operations.Integration.Products.Adapters;
 
-using Empiria.Operations.Integration.Products.UseCases;
+using Empiria.Operations.Integration.Products.Adapters;
 
 namespace Empiria.Operations.Integration.Products.WebApi {
 
@@ -23,57 +22,37 @@ namespace Empiria.Operations.Integration.Products.WebApi {
 
     #region Web Apis
 
-    [HttpPost]
+    [HttpPost]  //   // ToDo: To be deprecated
     [Route("v8/product-management/products/{productUID:guid}/budget-segments")]
     public SingleObjectModel AddProductBudgetSegment([FromUri] string productUID,
                                                      [FromBody] ProductBudgetSegmentFields fields) {
 
-      base.RequireBody(fields);
-
-      using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
-        ProductBudgetSegmentDto segment = usecases.AddProductBudgetSegment(productUID, fields);
-
-        return new SingleObjectModel(Request, segment);
-      }
+      return new SingleObjectModel(base.Request, new ProductBudgetSegmentDto());
     }
 
 
-    [HttpGet]
+    [HttpGet]  // ToDo: To be deprecated
     [Route("v8/product-management/products/{productUID:guid}/budget-segments")]
     public CollectionModel GetProductBudgetSegments([FromUri] string productUID) {
 
-      using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
-        FixedList<ProductBudgetSegmentDto> segments = usecases.GetProductBudgetSegments(productUID);
-
-        return new CollectionModel(Request, segments);
-      }
+      return new CollectionModel(Request, new FixedList<ProductBudgetSegmentDto>());
     }
 
 
-    [HttpDelete]
+    [HttpDelete]  // ToDo: To be deprecated
     [Route("v8/product-management/products/{productUID:guid}/budget-segments/{budgetSegmentProductLinkUID:guid}")]
     public NoDataModel RemoveProductBudgetSegment([FromUri] string productUID,
                                                   [FromUri] string budgetSegmentProductLinkUID) {
 
-      using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
-        _ = usecases.RemoveProductBudgetSegment(productUID, budgetSegmentProductLinkUID);
-
-        return new NoDataModel(Request);
-      }
+      return new NoDataModel(Request);
     }
 
 
-    [HttpPost]
+    [HttpPost]  // ToDo: To be deprecated
     [Route("v8/product-management/budget-segments/available")]
     public CollectionModel SearchAvailableProductBudgetSegments([FromBody] ProductBudgetSegmentsQuery query) {
 
-      base.RequireBody(query);
-
-      using (var usecases = ProductBudgetUseCases.UseCaseInteractor()) {
-        FixedList<NamedEntityDto> segments = usecases.SearchAvailableProductBudgetSegments(query);
-
-        return new CollectionModel(Request, segments);
-      }
+      return new CollectionModel(base.Request, new FixedList<NamedEntityDto>());
     }
 
     #endregion Web Apis
