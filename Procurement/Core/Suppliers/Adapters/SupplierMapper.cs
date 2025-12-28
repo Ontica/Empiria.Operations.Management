@@ -33,7 +33,7 @@ namespace Empiria.Procurement.Suppliers.Adapters {
 
       return new SupplierHolderDto {
         Supplier = MapToDto(supplier),
-        PaymentAccounts = PaymentAccountServices.GetPaymentAccounts(supplier.UID),
+        PaymentAccounts = PaymentAccountServices.GetPaymentAccounts(supplier),
         Bills = BillMapper.MapToBillStructure(bills),
         Documents = DocumentServices.GetAllEntityDocuments(supplier),
         History = HistoryServices.GetEntityHistory(supplier),

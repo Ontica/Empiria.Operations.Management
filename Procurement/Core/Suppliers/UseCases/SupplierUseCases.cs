@@ -55,7 +55,7 @@ namespace Empiria.Procurement.Suppliers.UseCases {
 
       var supplier = Supplier.Parse(supplierUID);
 
-      return PaymentAccountServices.GetPaymentAccounts(supplier.UID);
+      return PaymentAccountServices.GetPaymentAccounts(supplier);
     }
 
 
