@@ -126,7 +126,7 @@ namespace Empiria.Orders.Data {
         o.RequisitionItem.Id, o.ContractItem.Id, o.RelatedItem.Id, o.SkuId, o.Product.Id,
         o.ProductCode, o.ProductName, o.Description, o.Justification, o.ProductUnit.Id,
         o.RequestedQuantity, o.MinQuantity, o.MaxQuantity, o.Quantity, o.StartDate, o.EndDate,
-        o.Currency.Id, o.UnitPrice, o.Discount, o.PriceId, o.Project.Id,
+        o.Currency.Id, o.UnitPrice, o.Discount, o.PenaltyDiscount, o.PriceId, o.Project.Id,
         o.Budget.Id, o.BudgetAccount.Id, o.BudgetEntry.Id, o.OriginCountry.Id, o.Location.Id,
         o.ConfigData.ToString(), o.ConditionsData.ToString(), o.SpecificationData.ToString(),
         o.ExtData.ToString(), o.Keywords, o.RequestedBy.Id, o.RequestedTime, o.RequiredTime,

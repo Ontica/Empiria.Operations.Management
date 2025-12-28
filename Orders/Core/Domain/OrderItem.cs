@@ -244,9 +244,23 @@ namespace Empiria.Orders {
       get; private set;
     }
 
+
+    [DataField("ORDER_ITEM_PENALTY_DISCOUNT")]
+    public decimal PenaltyDiscount {
+      get; private set;
+    }
+
+
+    public decimal DiscountsTotal {
+      get {
+        return Discount + PenaltyDiscount;
+      }
+    }
+
+
     public decimal Subtotal {
       get {
-        return Math.Round((Quantity * UnitPrice) - Discount, 2);
+        return Math.Round((Quantity * UnitPrice) - DiscountsTotal, 2);
       }
     }
 
@@ -474,7 +488,9 @@ namespace Empiria.Orders {
 
       Currency = Patcher.Patch(fields.CurrencyUID, Order.Currency);
       UnitPrice = fields.UnitPrice;
+
       Discount = fields.Discount;
+      PenaltyDiscount = fields.PenaltyDiscount;
 
       Project = Patcher.Patch(fields.ProjectUID, Order.Project);
 

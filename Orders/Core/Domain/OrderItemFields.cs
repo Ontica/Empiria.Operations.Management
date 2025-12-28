@@ -58,6 +58,10 @@ namespace Empiria.Orders {
       get; set;
     }
 
+    public decimal PenaltyDiscount {
+      get; set;
+    }
+
     public string CurrencyUID {
       get; set;
     } = string.Empty;
@@ -142,7 +146,6 @@ namespace Empiria.Orders {
       get; set;
     } = string.Empty;
 
-
     public virtual void EnsureValid() {
       ProductUID = Patcher.CleanUID(ProductUID);
       ProductUnitUID = Patcher.CleanUID(ProductUnitUID);
@@ -152,6 +155,10 @@ namespace Empiria.Orders {
       Assertion.Require(ProductUID.Length != 0 || BudgetAccountUID.Length != 0 || Description.Length != 0,
                         "Necesito se proporcione el producto, su cuenta presupuestal o su descripción.");
       Assertion.Require(Quantity > 0, "Necesito se proporcione la cantidad mínima.");
+
+      Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");
+      Assertion.Require(Discount >= 0, "El descuento no puede ser negativo.");
+      Assertion.Require(PenaltyDiscount >= 0, "El descuento por penalización no puede ser negativo.");
 
       if (!StartDate.HasValue) {
         StartDate = ExecutionServer.DateMaxValue;

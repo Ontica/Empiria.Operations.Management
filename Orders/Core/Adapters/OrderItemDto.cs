@@ -31,6 +31,7 @@ namespace Empiria.Orders.Adapters {
       Quantity = item.Quantity;
       UnitPrice = item.UnitPrice;
       Discount = item.Discount;
+      PenaltyDiscount = item.PenaltyDiscount;
       Subtotal = item.Subtotal;
       Budget = item.Budget.MapToNamedEntity();
       BudgetAccount = item.BudgetAccount.MapToNamedEntity();
@@ -97,6 +98,10 @@ namespace Empiria.Orders.Adapters {
     }
 
     public decimal Discount {
+      get;
+    }
+
+    public decimal PenaltyDiscount {
       get;
     }
 
