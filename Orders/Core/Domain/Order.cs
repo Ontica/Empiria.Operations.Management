@@ -56,6 +56,11 @@ namespace Empiria.Orders {
 
     static public Order Empty => ParseEmpty<Order>();
 
+    static public FixedList<T> GetList<T>() where T : Order {
+      return BaseObject.GetFullList<T>("ORDER_STATUS <> 'X'", "ORDER_NO")
+                       .ToFixedList();
+    }
+
     #endregion Constructors and parsers
 
     #region Properties

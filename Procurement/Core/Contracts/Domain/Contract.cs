@@ -32,6 +32,10 @@ namespace Empiria.Procurement.Contracts {
 
     static public new Contract Empty => ParseEmpty<Contract>();
 
+    static public FixedList<Contract> GetList() {
+      return Order.GetList<Contract>();
+    }
+
     #endregion Constructors and parsers
 
     #region Properties

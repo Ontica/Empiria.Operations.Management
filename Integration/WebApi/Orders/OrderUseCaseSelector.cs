@@ -8,6 +8,8 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Parties;
+
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
 using Empiria.Orders.UseCases;
@@ -43,12 +45,43 @@ namespace Empiria.Operations.Integration.Orders {
 
     }
 
+
+    static internal FixedList<OrderDescriptor> AvailableOrders(OrdersQuery query) {
+      Assertion.Require(query, nameof(query));
+
+      var orderType = OrderType.Parse(query.OrderTypeUID);
+      var requestedBy = Party.Parse(query.RequestedByUID);
+
+      if (orderType.Equals(OrderType.Contract)) {
+
+        using (var usecases = ContractUseCases.UseCaseInteractor()) {
+          return usecases.AvailableContracts(requestedBy)
+                         .Select(x => (OrderDescriptor) x)
+                         .ToFixedList();
+        }
+
+      } else if (orderType.Equals(OrderType.Requisition)) {
+        using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
+          return usecases.AvailableRequisitions(requestedBy)
+                         .Select(x => (OrderDescriptor) x)
+                         .ToFixedList();
+        }
+
+      } else {
+
+        using (var usecases = PayableOrderUseCases.UseCaseInteractor()) {
+          return usecases.AvailableOrders(requestedBy)
+                         .ToFixedList();
+        }
+      }
+    }
+
+
     static internal OrderHolderDto CreateOrder(OrderFields fields) {
       Assertion.Require(fields, nameof(fields));
       Assertion.Require(fields.OrderTypeUID, nameof(fields.OrderTypeUID));
 
       var orderType = OrderType.Parse(fields.OrderTypeUID);
-
 
       if (orderType.Equals(OrderType.Requisition)) {
         using (var usecases = RequisitionUseCases.UseCaseInteractor()) {
@@ -236,7 +269,7 @@ namespace Empiria.Operations.Integration.Orders {
     static public FixedList<OrderDescriptor> Search(OrdersQuery query) {
       Assertion.Require(query, nameof(query));
 
-      OrderType orderType = OrderType.Parse(query.OrderTypeUID);
+      var orderType = OrderType.Parse(query.OrderTypeUID);
 
       if (orderType.Equals(OrderType.Contract)) {
 

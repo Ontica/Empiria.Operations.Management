@@ -29,6 +29,10 @@ namespace Empiria.Orders {
 
     static public new Requisition Empty => ParseEmpty<Requisition>();
 
+    static public FixedList<Requisition> GetList() {
+      return Order.GetList<Requisition>();
+    }
+
     #endregion Constructors and parsers
 
     #region Methods

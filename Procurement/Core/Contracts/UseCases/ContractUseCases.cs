@@ -10,6 +10,7 @@
 
 using System;
 
+using Empiria.Parties;
 using Empiria.Services;
 
 using Empiria.Orders;
@@ -69,6 +70,17 @@ namespace Empiria.Procurement.Contracts.UseCases {
       contractItem.Save();
 
       return ContractItemMapper.Map(contractItem);
+    }
+
+
+    public FixedList<ContractDescriptor> AvailableContracts(Party requestedBy) {
+      Assertion.Require(requestedBy, nameof(requestedBy));
+
+      var contracts = Contract.GetList()
+                              .FindAll(x => x.RequestedBy.Equals(requestedBy) ||
+                                            x.IsForMultipleBeneficiaries);
+
+      return ContractMapper.MapToDescriptor(contracts);
     }
 
 

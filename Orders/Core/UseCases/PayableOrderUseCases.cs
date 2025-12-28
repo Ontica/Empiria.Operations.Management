@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Parties;
 using Empiria.Services;
 
 using Empiria.Orders.Adapters;
@@ -42,6 +43,17 @@ namespace Empiria.Orders.UseCases {
       order.Save();
 
       return PayableOrderMapper.Map(order);
+    }
+
+
+    public FixedList<OrderDescriptor> AvailableOrders(Party requestedBy) {
+      Assertion.Require(requestedBy, nameof(requestedBy));
+
+      var orders = PayableOrder.GetList()
+                               .FindAll(x => x.RequestedBy.Equals(requestedBy) ||
+                                             x.IsForMultipleBeneficiaries);
+
+      return PayableOrderMapper.Map(orders);
     }
 
 

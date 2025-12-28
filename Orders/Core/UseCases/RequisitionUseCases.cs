@@ -8,6 +8,7 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Parties;
 using Empiria.Services;
 
 using Empiria.Budgeting;
@@ -44,6 +45,17 @@ namespace Empiria.Orders.UseCases {
       requisition.Save();
 
       return RequisitionMapper.Map(requisition);
+    }
+
+
+    public FixedList<RequisitionDescriptor> AvailableRequisitions(Party requestedBy) {
+      Assertion.Require(requestedBy, nameof(requestedBy));
+
+      var requisitions = Requisition.GetList()
+                                    .FindAll(x => x.RequestedBy.Equals(requestedBy) ||
+                                                  x.IsForMultipleBeneficiaries);
+
+      return RequisitionMapper.Map(requisitions);
     }
 
 

@@ -41,7 +41,7 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
 
       var orderType = OrderType.Parse(query.OrderTypeUID);
 
-      FixedList<OrderDescriptor> orders = OrderUseCaseSelector.Search(query);
+      FixedList<OrderDescriptor> orders = OrderUseCaseSelector.AvailableOrders(query);
 
       return new CollectionModel(base.Request, orders);
     }

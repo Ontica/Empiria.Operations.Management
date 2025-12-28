@@ -33,6 +33,10 @@ namespace Empiria.Orders {
 
     static public new PayableOrder Empty => ParseEmpty<PayableOrder>();
 
+    static public FixedList<PayableOrder> GetList() {
+      return Order.GetList<PayableOrder>();
+    }
+
     #endregion Constructors and parsers
 
     #region IPayableEntity interface
