@@ -8,8 +8,10 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Budgeting;
 using Empiria.Financial;
+using Empiria.Parties;
+
+using Empiria.Budgeting;
 
 namespace Empiria.Orders {
 
@@ -41,22 +43,15 @@ namespace Empiria.Orders {
       }
     }
 
-    INamedEntity IPayableEntity.PayTo {
+    Party IPayableEntity.PayTo {
       get {
         return base.Provider;
       }
     }
 
-    INamedEntity IPayableEntity.OrganizationalUnit {
+    OrganizationalUnit IPayableEntity.OrganizationalUnit {
       get {
-        return this.RequestedBy;
-      }
-    }
-
-
-    INamedEntity IPayableEntity.Currency {
-      get {
-        return this.Currency;
+        return (OrganizationalUnit) this.RequestedBy;
       }
     }
 
