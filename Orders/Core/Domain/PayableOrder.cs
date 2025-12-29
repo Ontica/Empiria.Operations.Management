@@ -39,6 +39,19 @@ namespace Empiria.Orders {
 
     #endregion Constructors and parsers
 
+    #region Properties
+
+    public ExpensesType ExpenseType {
+      get {
+        return base.ExtData.Get("expenseTypeId", ExpensesType.Empty);
+      }
+      private set {
+        base.ExtData.SetIf("expenseTypeId", value.Id, !value.IsEmptyInstance);
+      }
+    }
+
+    #endregion Properties
+
     #region IPayableEntity interface
 
     string IPayableEntity.EntityNo {
@@ -122,6 +135,10 @@ namespace Empiria.Orders {
 
       } else if (fields.Budgets.Length == 0 && fields.BudgetUID.Length == 0) {
         fields.Budgets = new string[] { Requisition.BaseBudget.UID };
+      }
+
+      if (fields.ExpenseTypeUID.Length != 0) {
+        ExpenseType = ExpensesType.Parse(fields.ExpenseTypeUID);
       }
 
       base.Update(fields);

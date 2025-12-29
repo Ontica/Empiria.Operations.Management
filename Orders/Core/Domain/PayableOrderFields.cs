@@ -18,8 +18,16 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public string ExpenseTypeUID {
+      get; set;
+    } = string.Empty;
+
+
     public override void EnsureValid() {
       base.EnsureValid();
+
+      BudgetUID = Patcher.CleanUID(BudgetUID);
+      ExpenseTypeUID = Patcher.CleanUID(ExpenseTypeUID);
 
       Assertion.Require(BudgetUID, nameof(BudgetUID));
     }

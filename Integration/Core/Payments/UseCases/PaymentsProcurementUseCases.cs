@@ -11,7 +11,6 @@
 using System.Linq;
 
 using Empiria.Financial;
-using Empiria.Parties;
 using Empiria.Services;
 
 using Empiria.Billing;
@@ -47,27 +46,41 @@ namespace Empiria.Operations.Integration.Payments.UseCases {
 
       var order = (IPayableEntity) PayableOrder.Parse(orderUID);
 
-      var paymentOrder = new PaymentOrder(order);
+      Assertion.Require(order.Items.Count > 0, "No se han cargado los conceptos.");
 
-      var accounts = PaymentAccount.GetListFor((Party) order.PayTo);
+      var orderSubtotal = order.Items.Sum(x => x.Subtotal);
+
+      var paymentType = PaymentType.Parse(fields.PaymentTypeUID);
+
+      var paymentOrder = new PaymentOrder(paymentType, order);
+
+      var accounts = PaymentAccount.GetListFor(order.PayTo);
 
       Assertion.Require(accounts.Count > 0, "El proveedor no tiene cuentas asignadas.");
 
       var paymentAccount = accounts[0];
 
       // ToDo: Use bill type operation toknow if adds or substracts
-      var totalBilled = Bill.GetListFor(order)
-                            .Sum(x => x.BillType.Name.Contains("CreditNote") ? -1 * x.Total : x.Total);
+      var bills = Bill.GetListFor(order);
+
+      Assertion.Require(bills.Count > 0, "No se han agregado los comprobantes.");
+
+      var subTotalBilled = bills.Sum(x => x.BillType.Name.Contains("CreditNote") ? -1 * x.Subtotal : x.Subtotal);
+      var taxes = bills.Sum(x => x.BillType.Name.Contains("CreditNote") ? -1 * x.Taxes : x.Taxes);
+
+      Assertion.Require(subTotalBilled > 0, "El importe total de los comprobantes debe ser mayor a cero.");
+
+      var paymentMethod = paymentOrder.PaymentMethod;
+
+      fields.PayableEntityTypeUID = order.GetEmpiriaType().UID;
+      fields.PayableEntityUID = order.UID;
+      fields.RequestedByUID = order.OrganizationalUnit.UID;
+      fields.Description = order.Name;
+      fields.Observations = fields.Description;
 
       fields.PayToUID = order.PayTo.UID;
       fields.CurrencyUID = order.Currency.UID;
-      fields.Description = order.Name;
-      fields.Observations = fields.Description;
-      fields.RequestedByUID = order.OrganizationalUnit.UID;
-      fields.ReferenceNumber = order.EntityNo;
-      fields.Total = totalBilled;
-      fields.PayableEntityTypeUID = order.GetEmpiriaType().UID;
-      fields.PayableEntityUID = order.UID;
+      fields.Total = subTotalBilled + taxes;
 
       paymentOrder.Update(fields);
 
