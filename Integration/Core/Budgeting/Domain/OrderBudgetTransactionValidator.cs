@@ -64,8 +64,9 @@ namespace Empiria.Operations.Integration.Budgeting {
         decimal available = (budgetData != null) ? budgetData.Available : 0m;
 
         if (orderItemSubtotal > available) {
-          Assertion.RequireFail($"No hay presupuesto disponible suficiente " +
-                                $"en la partida {orderBudgetAccount.Key.Name}. " +
+          Assertion.RequireFail($"No hay presupuesto disponible " +
+                                $"en la partida {orderBudgetAccount.Key.Name} para " +
+                                $"el mes de {EmpiriaString.MonthName(_order.StartDate.Month)}. " +
                                 $"Solicitado: {orderItemSubtotal.ToString("C2")}, " +
                                 $"Disponible: {available.ToString("C2")}");
         }
@@ -78,6 +79,7 @@ namespace Empiria.Operations.Integration.Budgeting {
       var query = new AvailableBudgetQuery {
         Budget = _order.BaseBudget,
         Year = _order.BaseBudget.Year,
+        Month = _order.StartDate.Month,
         Accounts = budgetAccounts,
       };
 
