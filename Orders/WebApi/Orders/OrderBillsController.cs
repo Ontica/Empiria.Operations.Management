@@ -87,9 +87,7 @@ namespace Empiria.Orders.WebApi {
 
       Assertion.Require(bill == null, $"El comprobante con folio fiscal '{billNo}' ya existe en el sistema.");
 
-      var billDto = usecases.CreateCFDI(xmlAsString, (IPayableEntity) order, documentProduct);
-
-      bill = Bill.Parse(billDto.UID);
+      bill = usecases.CreateCFDI(xmlAsString, (IPayableEntity) order, documentProduct);
 
       var xmlDocument = DocumentServices.StoreDocument(xmlFile, bill, documentFields);
 
