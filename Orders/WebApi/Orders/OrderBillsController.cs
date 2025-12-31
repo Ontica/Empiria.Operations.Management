@@ -51,12 +51,23 @@ namespace Empiria.Orders.WebApi {
 
       var order = Order.Parse(orderUID);
 
-      DocumentFields requestFields = GetFormDataFromHttpRequest<DocumentFields>("document");
+      DocumentFields documentFields = GetFormDataFromHttpRequest<DocumentFields>("document");
 
-      var documentProduct = DocumentProduct.Parse(requestFields.DocumentProductUID);
+      var documentProduct = DocumentProduct.Parse(documentFields.DocumentProductUID);
+
+      var usecases = BillUseCases.UseCaseInteractor();
 
       if (!documentProduct.Attributes.Get("isCFDI", false)) {
-        Assertion.RequireFail($"La carga de {documentProduct.Name} estará disponible en breve ...");
+        Assertion.Require(documentFields.DocumentNumber, "Se requiere proporcionar el número del oficio o documento.");
+        Assertion.Require(documentFields.Total > 0, "Se requiere proporcionar el total del comprobante.");
+
+        InputFile voucherPdfFile = base.GetInputFileFromHttpRequest(documentProduct.Name);
+
+        var voucherBill = usecases.CreateVoucherBill((IPayableEntity) order, documentFields);
+
+        DocumentDto pdfDocument = DocumentServices.StoreDocument(voucherPdfFile, voucherBill, documentFields);
+
+        return new SingleObjectModel(Request, BillMapper.MapToBillDto(voucherBill));
       }
 
       InputFileCollection files = base.GetInputFilesFromHttpRequest(documentProduct.ApplicationContentType);
@@ -70,25 +81,23 @@ namespace Empiria.Orders.WebApi {
 
       var xmlAsString = xmlReader.ReadToEnd();
 
-      var usecases = BillUseCases.UseCaseInteractor();
-
-      string billNo = usecases.ExtractBillNo(xmlAsString);
+      string billNo = usecases.ExtractCFDINo(xmlAsString);
 
       var bill = Bill.TryParseWithBillNo(billNo);
 
       Assertion.Require(bill == null, $"El comprobante con folio fiscal '{billNo}' ya existe en el sistema.");
 
-      var billDto = usecases.Create(xmlAsString, (IPayableEntity) order, documentProduct);
+      var billDto = usecases.CreateCFDI(xmlAsString, (IPayableEntity) order, documentProduct);
 
       bill = Bill.Parse(billDto.UID);
 
-      var xmlDocument = DocumentServices.StoreDocument(xmlFile, bill, requestFields);
+      var xmlDocument = DocumentServices.StoreDocument(xmlFile, bill, documentFields);
 
       var fields = new DocumentFields {
         UID = xmlDocument.UID,
-        DocumentProductUID = requestFields.DocumentProductUID,
-        Name = requestFields.Name,
-        DocumentNo = bill.BillNo,
+        DocumentProductUID = documentFields.DocumentProductUID,
+        Name = documentFields.Name,
+        DocumentNumber = bill.BillNo,
         DocumentDate = bill.IssueDate,
         SourcePartyUID = bill.IssuedBy.UID,
         TargetPartyUID = bill.IssuedTo.UID,
