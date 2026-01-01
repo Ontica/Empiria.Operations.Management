@@ -25,12 +25,10 @@ namespace Empiria.Procurement.Suppliers.UseCases {
   /// <summary>Use cases for suppliers management.</summary>
   public class SupplierUseCases : UseCase {
 
-    private readonly AccountsServices _financialAccountingServices;
-
     #region Constructors and parsers
 
     protected SupplierUseCases() {
-      _financialAccountingServices = new AccountsServices();
+
     }
 
     static public SupplierUseCases UseCaseInteractor() {
@@ -67,9 +65,10 @@ namespace Empiria.Procurement.Suppliers.UseCases {
         Name = query.Name,
       };
 
+      var financialAccountingServices = new AccountsServices();
 
       FixedList<NamedEntityDto> subledgerAccounts = await
-                                  _financialAccountingServices.SearchSuppliersSubledgerAccounts(fields);
+                                    financialAccountingServices.SearchSuppliersSubledgerAccounts(fields);
 
       if (subledgerAccounts.Count == 1) {
         return subledgerAccounts[0];
