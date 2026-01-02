@@ -35,6 +35,16 @@ namespace Empiria.Orders {
 
     #endregion Constructors and parsers
 
+    #region Properties
+
+    internal RequisitionRules Rules {
+      get {
+        return new RequisitionRules(this);
+      }
+    }
+
+    #endregion Properties
+
     #region Methods
 
     internal FixedList<Order> GetOrders() {

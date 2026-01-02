@@ -45,7 +45,7 @@ namespace Empiria.Orders.Adapters {
         Bills = BillMapper.MapToBillStructure(bills),
         Documents = DocumentServices.GetAllEntityDocuments(requisition),
         History = HistoryServices.GetEntityHistory(requisition),
-        Actions = MapActions(requisition),
+        Actions = MapActions(requisition.Rules),
       };
     }
 
@@ -67,16 +67,16 @@ namespace Empiria.Orders.Adapters {
 
     #region Helpers
 
-    static private OrderActions MapActions(Requisition requisition) {
+    static private OrderActions MapActions(RequisitionRules rules) {
       return new OrderActions {
-        CanEditDocuments = true,
-        CanRequestBudget = true,
-        CanValidateBudget = true,
-        CanActivate = true,
-        CanDelete = true,
-        CanEditItems = true,
-        CanSuspend = true,
-        CanUpdate = true,
+        CanEditDocuments = rules.CanEditDocuments(),
+        CanRequestBudget = rules.CanRequestBudget(),
+        CanValidateBudget = rules.CanValidateBudget(),
+        CanActivate = rules.CanActivate(),
+        CanDelete = rules.CanDelete(),
+        CanEditItems = rules.CanEditItems(),
+        CanSuspend = rules.CanSuspend(),
+        CanUpdate = rules.CanUpdate(),
       };
     }
 
