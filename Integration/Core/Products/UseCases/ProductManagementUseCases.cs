@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using Empiria.Services;
 
 using Empiria.Products;
-using Empiria.Products.SATMexico;
 
 using Empiria.Products.Services;
 using Empiria.Products.Services.Adapters;
@@ -80,11 +79,13 @@ namespace Empiria.Operations.Integration.Products.UseCases {
 
       FixedList<Product> products = ProductServices.SearchProducts(keywords);
 
+      products = products.FindAll(x => !(x is Documents.DocumentProduct));
+
       var list = new List<ProductSearchDto>(ProductMapper.MapToSearchDescriptor(products));
 
-      FixedList<SATProductoCucop> cucopProducts = ProductServices.SearchCucopProducts(keywords);
+      //FixedList<SATProductoCucop> cucopProducts = ProductServices.SearchCucopProducts(keywords);
 
-      list.AddRange(ProductMapper.MapToSearchDescriptor(cucopProducts));
+      //list.AddRange(ProductMapper.MapToSearchDescriptor(cucopProducts));
 
       return list.ToFixedList();
     }
@@ -94,6 +95,8 @@ namespace Empiria.Operations.Integration.Products.UseCases {
       Assertion.Require(query, nameof(query));
 
       FixedList<Product> products = ProductServices.SearchProducts(query);
+
+      products = products.FindAll(x => !(x is Documents.DocumentProduct));
 
       return ProductMapper.MapToDescriptor(products);
     }
