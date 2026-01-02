@@ -19,7 +19,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
       Contract = item.Contract.MapToNamedEntity();
       MinQuantity = item.MinQuantity;
       MaxQuantity = item.MaxQuantity;
-      RequestedBy = item.RequestedBy.MapToNamedEntity();
       Provider = item.Provider.MapToNamedEntity();
     }
 
@@ -32,10 +31,6 @@ namespace Empiria.Procurement.Contracts.Adapters {
     }
 
     public decimal MaxQuantity {
-      get;
-    }
-
-    public NamedEntityDto RequestedBy {
       get;
     }
 

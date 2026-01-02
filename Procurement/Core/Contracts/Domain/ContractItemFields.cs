@@ -28,12 +28,6 @@ namespace Empiria.Procurement.Contracts {
       get; set;
     }
 
-
-    public string RequestedByUID {
-      get; set;
-    } = string.Empty;
-
-
     public string ProviderUID {
       get; set;
     } = string.Empty;

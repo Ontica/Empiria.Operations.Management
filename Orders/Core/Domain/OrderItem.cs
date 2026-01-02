@@ -340,7 +340,7 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_ITEM_REQUESTED_BY_ID")]
     public Party RequestedBy {
-      get; protected set;
+      get; private set;
     }
 
 
@@ -493,6 +493,8 @@ namespace Empiria.Orders {
       PenaltyDiscount = fields.PenaltyDiscount;
 
       Project = Patcher.Patch(fields.ProjectUID, Order.Project);
+
+      RequestedBy = Patcher.Patch(fields.RequestedByUID, Order.RequestedBy);
 
       Budget = Patcher.Patch(fields.BudgetUID, Order.BaseBudget);
       BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, RequisitionItem.BudgetAccount);

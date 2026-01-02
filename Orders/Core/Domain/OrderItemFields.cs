@@ -127,6 +127,11 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public string RequestedByUID {
+      get; set;
+    } = string.Empty;
+
+
     public string ResponsibleUID {
       get; set;
     } = string.Empty;
@@ -146,9 +151,11 @@ namespace Empiria.Orders {
       get; set;
     } = string.Empty;
 
+
     public virtual void EnsureValid() {
       ProductUID = Patcher.CleanUID(ProductUID);
       ProductUnitUID = Patcher.CleanUID(ProductUnitUID);
+      RequestedByUID = Patcher.CleanUID(RequestedByUID);
       BudgetAccountUID = Patcher.CleanUID(BudgetAccountUID);
       Description = Patcher.PatchClean(Description, string.Empty);
 

@@ -76,7 +76,6 @@ namespace Empiria.Procurement.Contracts {
 
       fields.EnsureValid();
 
-      RequestedBy = Patcher.Patch(fields.RequestedByUID, Order.RequestedBy);
       Provider = Patcher.Patch(fields.ProviderUID, Contract.Provider);
 
       MinQuantity = fields.MinQuantity == 0 ? fields.Quantity : fields.MinQuantity;
