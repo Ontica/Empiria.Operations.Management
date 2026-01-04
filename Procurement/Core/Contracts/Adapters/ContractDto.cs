@@ -21,11 +21,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
       get; internal set;
     }
 
-    public new FixedList<ContractItemDto> Items {
-      get; internal set;
-    }
-
-    public FixedList<OrderTaxEntryDto> Taxes {
+    public FixedList<ContractItemDto> Items {
       get; internal set;
     }
 

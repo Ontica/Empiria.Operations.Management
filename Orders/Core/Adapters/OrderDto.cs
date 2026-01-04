@@ -24,10 +24,6 @@ namespace Empiria.Orders.Adapters {
       get; set;
     }
 
-    public FixedList<OrderItemDto> Items {
-      get; set;
-    }
-
     public FixedList<DocumentDto> Documents {
       get; set;
     }

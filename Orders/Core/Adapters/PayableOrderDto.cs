@@ -17,11 +17,7 @@ namespace Empiria.Orders.Adapters {
   /// <summary>Data transfer object used to return complete payable orders information.</summary>
   public class PayableOrderHolderDto : OrderHolderDto {
 
-    public new FixedList<PayableOrderItemDto> Items {
-      get; internal set;
-    }
-
-    public FixedList<OrderTaxEntryDto> Taxes {
+    public FixedList<PayableOrderItemDto> Items {
       get; internal set;
     }
 

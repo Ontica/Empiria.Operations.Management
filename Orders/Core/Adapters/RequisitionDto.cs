@@ -21,7 +21,7 @@ namespace Empiria.Orders.Adapters {
       get; internal set;
     }
 
-    public new FixedList<PayableOrderItemDto> Items {
+    public FixedList<PayableOrderItemDto> Items {
       get; set;
     }
 
