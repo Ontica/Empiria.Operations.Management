@@ -2,9 +2,9 @@
 *                                                                                                            *
 *  Module   : Orders Management                          Component : Domain Layer                            *
 *  Assembly : Empiria.Orders.Core.dll                    Pattern   : Service provider                        *
-*  Type     : RequisitionRules                           License   : Please read LICENSE.txt file            *
+*  Type     : OrderRules                                 License   : Please read LICENSE.txt file            *
 *                                                                                                            *
-*  Summary  : Provides services to control requisition rules.                                                *
+*  Summary  : Provides services to control order's rules.                                                    *
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
@@ -17,23 +17,23 @@ using Empiria.Budgeting.Transactions;
 
 namespace Empiria.Orders {
 
-  /// <summary>Provides services to control requisition rules.</summary>
-  internal class RequisitionRules {
+  /// <summary>Provides services to control order's rules.</summary>
+  internal class OrderRules {
 
-    private Requisition _requisition;
+    private Order _order;
 
-    internal RequisitionRules(Requisition requisition) {
-      _requisition = requisition;
+    internal OrderRules(Order order) {
+      _order = order;
     }
 
 
     internal bool CanActivate() {
-      return _requisition.Status == EntityStatus.Suspended;
+      return _order.Status == EntityStatus.Suspended;
     }
 
 
     internal bool CanDelete() {
-      return _requisition.Status == EntityStatus.Pending;
+      return _order.Status == EntityStatus.Pending;
     }
 
 
@@ -43,15 +43,15 @@ namespace Empiria.Orders {
 
 
     internal bool CanEditItems() {
-      if (_requisition.Status == EntityStatus.Pending) {
+      if (_order.Status == EntityStatus.Pending) {
         return true;
       }
 
-      if (_requisition.Status == EntityStatus.Closed) {
+      if (_order.Status == EntityStatus.Closed) {
         return false;
       }
 
-      if (_requisition.Id < 0) {
+      if (_order.Id < 0) {
         return false;
       }
 
@@ -67,11 +67,11 @@ namespace Empiria.Orders {
 
     internal bool CanRequestBudget() {
 
-      if (_requisition.Status == EntityStatus.Closed) {
+      if (_order.Status == EntityStatus.Closed) {
         return false;
       }
 
-      if (_requisition.Items.Count == 0) {
+      if (_order.Items.Count == 0) {
         return false;
       }
 
@@ -85,7 +85,7 @@ namespace Empiria.Orders {
         return false;
       }
 
-      if (_requisition.Items.GetItems().Sum(x => x.Subtotal) != budgetTxns.Sum(x => x.GetTotal())) {
+      if (_order.Items.GetItems().Sum(x => x.Subtotal) != budgetTxns.Sum(x => x.GetTotal())) {
         return true;
       }
 
@@ -93,11 +93,11 @@ namespace Empiria.Orders {
     }
 
     internal bool CanSuspend() {
-      return _requisition.Status == EntityStatus.Pending;
+      return _order.Status == EntityStatus.Pending;
     }
 
     internal bool CanUpdate() {
-      return _requisition.Status == EntityStatus.Pending;
+      return _order.Status == EntityStatus.Pending;
     }
 
 
@@ -108,7 +108,7 @@ namespace Empiria.Orders {
     #region Helpers
 
     private FixedList<BudgetTransaction> GetRequestedBudgetTransactions() {
-      var budgetable = (IBudgetable) _requisition;
+      var budgetable = (IBudgetable) _order;
 
       var budgetTxns = BudgetTransaction.GetFor(budgetable)
                                         .FindAll(x => x.OperationType == BudgetOperationType.Request);
@@ -116,9 +116,8 @@ namespace Empiria.Orders {
       return budgetTxns.FindAll(x => x.InProcess || x.IsClosed);
     }
 
-
     #endregion Helpers
 
-  }  // class PaymentInstructionRules
+  }  // class OrderRules
 
 }  // namespace Empiria.Orders

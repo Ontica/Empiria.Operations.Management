@@ -467,6 +467,13 @@ namespace Empiria.Orders {
       }
     }
 
+
+    internal OrderRules Rules {
+      get {
+        return new OrderRules(this);
+      }
+    }
+
     #endregion Properties
 
     #region Methods

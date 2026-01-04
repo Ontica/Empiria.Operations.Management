@@ -67,16 +67,21 @@ namespace Empiria.Orders.Adapters {
 
     #region Helpers
 
-    static private OrderActions MapActions(RequisitionRules rules) {
+    static private OrderActions MapActions(OrderRules rules) {
+
       return new OrderActions {
-        CanEditDocuments = rules.CanEditDocuments(),
-        CanRequestBudget = rules.CanRequestBudget(),
-        CanValidateBudget = rules.CanValidateBudget(),
         CanActivate = rules.CanActivate(),
         CanDelete = rules.CanDelete(),
+        CanEditDocuments = rules.CanEditDocuments(),
         CanEditItems = rules.CanEditItems(),
         CanSuspend = rules.CanSuspend(),
         CanUpdate = rules.CanUpdate(),
+
+        CanCommitBudget = false,
+        CanEditBills = false,
+        CanRequestBudget = rules.CanRequestBudget(),
+        CanRequestPayment = false,
+        CanValidateBudget = rules.CanValidateBudget(),
       };
     }
 
