@@ -79,10 +79,10 @@ namespace Empiria.Orders.Adapters {
         CanSuspend = rules.CanSuspend(),
         CanUpdate = rules.CanUpdate(),
 
-        CanCommitBudget = true,
-        CanEditBills = true,
+        CanCommitBudget = rules.CanCommitBudget(),
+        CanEditBills = rules.CanEditBills(),
         CanRequestBudget = false,
-        CanRequestPayment = true,
+        CanRequestPayment = rules.CanRequestPayment(),
         CanValidateBudget = false
       };
     }
