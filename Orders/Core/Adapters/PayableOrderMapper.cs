@@ -37,13 +37,12 @@ namespace Empiria.Orders.Adapters {
       return new PayableOrderHolderDto {
         Order = new PayableOrderDto(order),
         Items = Map(order.GetItems<PayableOrderItem>()),
-        Taxes = OrderTaxMapper.Map(order.Taxes.GetList()),
         BudgetTransactions = MapBudgetTransactions(order),
         Bills = BillMapper.MapToBillStructure(bills),
         PaymentOrders = PaymentOrderMapper.MapToDescriptor(PaymentOrder.GetListFor(order)),
         Documents = DocumentServices.GetAllEntityDocuments(order),
         History = HistoryServices.GetEntityHistory(order),
-        Actions = MapActions(order),
+        Actions = MapActions(order.Rules),
       };
     }
 
@@ -70,17 +69,21 @@ namespace Empiria.Orders.Adapters {
 
     #region Helpers
 
-    static private OrderActions MapActions(PayableOrder order) {
+    static private OrderActions MapActions(OrderRules rules) {
+
       return new OrderActions {
-        CanEditBills = true,
-        CanRequestPayment = true,
-        CanEditDocuments = true,
+        CanActivate = rules.CanActivate(),
+        CanDelete = rules.CanDelete(),
+        CanEditDocuments = rules.CanEditDocuments(),
+        CanEditItems = rules.CanEditItems(),
+        CanSuspend = rules.CanSuspend(),
+        CanUpdate = rules.CanUpdate(),
+
         CanCommitBudget = true,
-        CanActivate = true,
-        CanDelete = true,
-        CanEditItems = true,
-        CanSuspend = true,
-        CanUpdate = true,
+        CanEditBills = true,
+        CanRequestBudget = false,
+        CanRequestPayment = true,
+        CanValidateBudget = false
       };
     }
 

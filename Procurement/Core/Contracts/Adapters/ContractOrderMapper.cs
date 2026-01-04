@@ -21,6 +21,7 @@ using Empiria.Payments.Adapters;
 using Empiria.Payments;
 
 using Empiria.Orders.Adapters;
+using Empiria.Orders;
 
 namespace Empiria.Procurement.Contracts.Adapters {
 
@@ -34,10 +35,9 @@ namespace Empiria.Procurement.Contracts.Adapters {
         Bills = BillMapper.MapToBillStructure(Bill.GetListFor(order)),
         PaymentOrders = PaymentOrderMapper.MapToDescriptor(PaymentOrder.GetListFor(order)),
         BudgetTransactions = MapBudgetTransactions(order),
-        Taxes = OrderTaxMapper.Map(order.Taxes.GetList()),
         Documents = DocumentServices.GetAllEntityDocuments(order),
         History = HistoryServices.GetEntityHistory(order),
-        Actions = MapActions(order),
+        Actions = MapActions(order.Rules),
       };
     }
 
@@ -64,16 +64,21 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     #region Helpers
 
-    static private OrderActions MapActions(ContractOrder order) {
+    static private OrderActions MapActions(OrderRules rules) {
+
       return new OrderActions {
-        CanEditDocuments = true,
+        CanActivate = rules.CanActivate(),
+        CanDelete = rules.CanDelete(),
+        CanEditDocuments = rules.CanEditDocuments(),
+        CanEditItems = rules.CanEditItems(),
+        CanSuspend = rules.CanSuspend(),
+        CanUpdate = rules.CanUpdate(),
+
+        CanCommitBudget = false,
         CanEditBills = true,
+        CanRequestBudget = false,
         CanRequestPayment = true,
-        CanActivate = true,
-        CanDelete = true,
-        CanEditItems = true,
-        CanSuspend = true,
-        CanUpdate = true,
+        CanValidateBudget = false,
       };
     }
 

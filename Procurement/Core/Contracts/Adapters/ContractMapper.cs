@@ -11,16 +11,14 @@
 using Empiria.Documents;
 using Empiria.History;
 
-using Empiria.StateEnums;
-
 using Empiria.Billing;
 using Empiria.Billing.Adapters;
 
-using Empiria.Orders;
-using Empiria.Orders.Adapters;
-
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
+
+using Empiria.Orders;
+using Empiria.Orders.Adapters;
 
 namespace Empiria.Procurement.Contracts.Adapters {
 
@@ -39,14 +37,13 @@ namespace Empiria.Procurement.Contracts.Adapters {
       return new ContractHolderDto {
         Order = MapContract(contract),
         Items = ContractItemMapper.Map(contract.GetItems()),
-        Taxes = OrderTaxMapper.Map(contract.Taxes.GetList()),
         BudgetTransactions = MapBudgetTransactions(contract),
         Orders = PayableOrderMapper.MapToDescriptor(orders),
         Payables = ContractOrderMapper.MapToDescriptor(contractOrders),
         Bills = BillMapper.MapToBillStructure(bills),
         Documents = DocumentServices.GetAllEntityDocuments(contract),
         History = HistoryServices.GetEntityHistory(contract),
-        Actions = MapActions(contract)
+        Actions = MapActions(contract.Rules)
       };
     }
 
@@ -74,15 +71,21 @@ namespace Empiria.Procurement.Contracts.Adapters {
 
     #region Helpers
 
-    static private OrderActions MapActions(Contract contract) {
+    static private OrderActions MapActions(OrderRules rules) {
+
       return new OrderActions {
-        CanActivate = contract.CanActivate(),
-        CanDelete = contract.CanDelete(),
-        CanEditItems = contract.CanUpdate(),
-        CanEditDocuments = contract.CanUpdate(),
-        CanSuspend = contract.CanSuspend(),
-        CanUpdate = contract.Status == EntityStatus.Pending,
-        CanCommitBudget = true
+        CanActivate = rules.CanActivate(),
+        CanDelete = rules.CanDelete(),
+        CanEditDocuments = rules.CanEditDocuments(),
+        CanEditItems = rules.CanEditItems(),
+        CanSuspend = rules.CanSuspend(),
+        CanUpdate = rules.CanUpdate(),
+
+        CanCommitBudget = true,
+        CanEditBills = false,
+        CanRequestBudget = false,
+        CanRequestPayment = false,
+        CanValidateBudget = false,
       };
     }
 
