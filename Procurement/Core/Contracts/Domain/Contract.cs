@@ -12,7 +12,6 @@ using System;
 using System.Linq;
 
 using Empiria.Financial;
-using Empiria.StateEnums;
 
 using Empiria.Orders;
 
@@ -101,44 +100,6 @@ namespace Empiria.Procurement.Contracts {
       Assertion.Require(contractItem, nameof(contractItem));
 
       base.Items.Add(contractItem);
-    }
-
-
-    internal bool CanActivate() {
-      if (Status == EntityStatus.Active) {
-        return false;
-      }
-      if (Status == EntityStatus.Suspended) {
-        return true;
-      }
-      if (ContractNo.Length != 0 && !Provider.IsEmptyInstance &&
-          StartDate != ExecutionServer.DateMaxValue &&
-          EndDate != ExecutionServer.DateMaxValue &&
-          SignDate != ExecutionServer.DateMaxValue) {
-        return true;
-      }
-      return false;
-    }
-
-
-    internal bool CanDelete() {
-      if (CanUpdate()) {
-        return true;
-      }
-      return false;
-    }
-
-
-    internal bool CanSuspend() {
-      if (Status == EntityStatus.Active) {
-        return true;
-      }
-      return false;
-    }
-
-
-    internal bool CanUpdate() {
-      return (Status == EntityStatus.Pending);
     }
 
 
