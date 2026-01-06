@@ -445,6 +445,18 @@ namespace Empiria.Orders {
     }
 
 
+    internal void SetBudgetEntry(BudgetEntry budgetEntry) {
+
+      Assertion.Require(budgetEntry, nameof(budgetEntry));
+      Assertion.Require(budgetEntry.Budget.Equals(this.Budget), "Budget mismatch");
+      Assertion.Require(budgetEntry.BudgetAccount.Equals(this.BudgetAccount), "BudgetAccount mismatch");
+
+      this.BudgetEntry = budgetEntry;
+
+      MarkAsDirty();
+    }
+
+
     internal protected virtual void Update(OrderItemFields fields) {
       Assertion.Require(fields, nameof(fields));
 

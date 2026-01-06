@@ -64,7 +64,9 @@ namespace Empiria.Operations.Integration.Budgeting {
 
       fields = BuildEntryFields(entry, depositColumn, true);
 
-      _transaction.AddEntry(fields);
+      BudgetEntry budgetEntry = _transaction.AddEntry(fields);
+
+      entry.SetBudgetEntry(budgetEntry);
     }
 
 
