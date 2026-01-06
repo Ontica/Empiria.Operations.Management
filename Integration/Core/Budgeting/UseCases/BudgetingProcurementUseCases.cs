@@ -55,17 +55,9 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       order.Save();
 
-      var bdgTxnType = BudgetTransactionType.GetFor(order.BudgetType, BudgetOperationType.ApprovePayment);
+      BudgetTransaction budgetTxn = CreateAnSendBudgetTransaction(order, BudgetOperationType.ApprovePayment);
 
-      var builder = new OrderBudgetTransactionBuilder(bdgTxnType, order);
-
-      BudgetTransaction transaction = builder.Build();
-
-      transaction.SendToAuthorization();
-
-      transaction.Save();
-
-      return BudgetTransactionMapper.MapToDescriptor(transaction);
+      return BudgetTransactionMapper.MapToDescriptor(budgetTxn);
     }
 
 
@@ -80,17 +72,9 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       order.Save();
 
-      var bdgTxnType = BudgetTransactionType.GetFor(order.BudgetType, BudgetOperationType.Commit);
+      BudgetTransaction budgetTxn = CreateAnSendBudgetTransaction(order, BudgetOperationType.Commit);
 
-      var builder = new OrderBudgetTransactionBuilder(bdgTxnType, order);
-
-      BudgetTransaction transaction = builder.Build();
-
-      transaction.SendToAuthorization();
-
-      transaction.Save();
-
-      return BudgetTransactionMapper.MapToDescriptor(transaction);
+      return BudgetTransactionMapper.MapToDescriptor(budgetTxn);
     }
 
 
@@ -103,25 +87,17 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       var order = Order.Parse(paymentOrder.PayableEntity.UID);
 
-      var bdgTxnType = BudgetTransactionType.GetFor(order.BudgetType, BudgetOperationType.Exercise);
+      BudgetTransaction budgetTxn = CreateAnSendBudgetTransaction(order, BudgetOperationType.Exercise);
 
-      var builder = new OrderBudgetTransactionBuilder(bdgTxnType, order);
+      budgetTxn.Authorize();
 
-      BudgetTransaction transaction = builder.Build();
+      budgetTxn.Save();
 
-      transaction.SendToAuthorization();
+      budgetTxn.Close();
 
-      transaction.Save();
+      budgetTxn.Save();
 
-      transaction.Authorize();
-
-      transaction.Save();
-
-      transaction.Close();
-
-      transaction.Save();
-
-      return BudgetTransactionMapper.MapToDescriptor(transaction);
+      return BudgetTransactionMapper.MapToDescriptor(budgetTxn);
     }
 
 
@@ -140,17 +116,9 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
 
       order.Save();
 
-      var bdgTxnType = BudgetTransactionType.GetFor(order.BudgetType, BudgetOperationType.Request);
+      BudgetTransaction budgetTxn = CreateAnSendBudgetTransaction(order, BudgetOperationType.Request);
 
-      var builder = new OrderBudgetTransactionBuilder(bdgTxnType, order);
-
-      BudgetTransaction transaction = builder.Build();
-
-      transaction.SendToAuthorization();
-
-      transaction.Save();
-
-      return BudgetTransactionMapper.MapToDescriptor(transaction);
+      return BudgetTransactionMapper.MapToDescriptor(budgetTxn);
     }
 
 
@@ -200,6 +168,26 @@ namespace Empiria.Operations.Integration.Budgeting.UseCases {
     #endregion Use cases
 
     #region Helpers
+
+    private BudgetTransaction CreateAnSendBudgetTransaction(Order order, BudgetOperationType operationType) {
+
+      var bdgTxnType = BudgetTransactionType.GetFor(order.BudgetType, operationType);
+
+      var builder = new OrderBudgetTransactionBuilder(bdgTxnType, order);
+
+      BudgetTransaction transaction = builder.Build();
+
+      transaction.SendToAuthorization();
+
+      transaction.Save();
+
+      foreach (var item in order.GetItems<OrderItem>().FindAll(x => x.IsDirty)) {
+        item.Save();
+      }
+
+      return transaction;
+    }
+
 
     static private PayableEntityDto MapToPayableEntity(Order order) {
       return new PayableEntityDto {
