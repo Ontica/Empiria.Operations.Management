@@ -33,7 +33,7 @@ namespace Empiria.Orders.Adapters {
       Discount = item.Discount;
       PenaltyDiscount = item.PenaltyDiscount;
       Subtotal = item.Subtotal;
-      RequestedBy = item.RequestedBy.MapToNamedEntity();
+      Beneficiary = item.Beneficiary.MapToNamedEntity();
       Budget = item.Budget.MapToNamedEntity();
       BudgetAccount = item.BudgetAccount.MapToNamedEntity();
       BudgetControlNo = item.BudgetEntry.ControlNo;
@@ -110,8 +110,8 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
-    public NamedEntityDto RequestedBy {
-      get;
+    public NamedEntityDto Beneficiary {
+      get; private set;
     }
 
     public NamedEntityDto Budget {

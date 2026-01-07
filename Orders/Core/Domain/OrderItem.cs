@@ -507,10 +507,6 @@ namespace Empiria.Orders {
       Project = Patcher.Patch(fields.ProjectUID, Order.Project);
 
       RequestedBy = Patcher.Patch(fields.RequestedByUID, Order.RequestedBy);
-
-      Budget = Patcher.Patch(fields.BudgetUID, Order.BaseBudget);
-      BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, RequisitionItem.BudgetAccount);
-
       RequiredTime = Patcher.Patch(fields.RequiredTime, ExecutionServer.DateMaxValue);
       Responsible = Patcher.Patch(fields.ResponsibleUID, Order.Responsible);
       Beneficiary = Patcher.Patch(fields.BeneficiaryUID, Order.Beneficiary);
@@ -519,7 +515,55 @@ namespace Empiria.Orders {
       OriginCountry = Patcher.Patch(fields.OriginCountryUID, Country.Default);
       Location = Patcher.Patch(fields.LocationUID, Location.Empty);
 
+      UpdateBudgetData(fields);
+
       MarkAsDirty();
+    }
+
+
+    private void UpdateBudgetData(OrderItemFields fields) {
+
+      Budget = Patcher.Patch(fields.BudgetUID, Order.BaseBudget);
+
+      if (!Order.IsForMultipleBeneficiaries) {
+        if (!ContractItem.IsEmptyInstance) {
+          BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, ContractItem.BudgetAccount);
+        } else if (!RequisitionItem.IsEmptyInstance) {
+          BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, RequisitionItem.BudgetAccount);
+        } else {
+          BudgetAccount = BudgetAccount.Parse(fields.BudgetAccountUID);
+        }
+        return;
+      }
+
+      if (!ContractItem.IsEmptyInstance) {
+
+        var budgetAccounts = BudgetAccount.GetList(ContractItem.Budget.BudgetType,
+                                                   (OrganizationalUnit) Beneficiary);
+        var account = budgetAccounts.Find(x => x.StandardAccount.Equals(ContractItem.BudgetAccount.StandardAccount));
+        Assertion.Require(account, $"No budget account found for organizational unit '{Beneficiary.Name}' " +
+                                   $"and standard account '{ContractItem.BudgetAccount.StandardAccount.Name}'.");
+        BudgetAccount = account;
+        return;
+      }
+
+      if (!RequisitionItem.IsEmptyInstance) {
+
+        var budgetAccounts = BudgetAccount.GetList(RequisitionItem.Budget.BudgetType,
+                                                   (OrganizationalUnit) Beneficiary);
+        var account = budgetAccounts.Find(x => x.StandardAccount.Equals(RequisitionItem.BudgetAccount.StandardAccount));
+        Assertion.Require(account, $"No budget account found for organizational unit '{Beneficiary.Name}' " +
+                                   $"and standard account '{RequisitionItem.BudgetAccount.StandardAccount.Name}'.");
+        BudgetAccount = account;
+        return;
+      }
+
+      if (fields.BudgetAccountUID.Length != 0) {
+        BudgetAccount = BudgetAccount.Parse(fields.BudgetAccountUID);
+        return;
+      }
+
+      Assertion.EnsureNoReachThisCode($"Unreachable code reached in {nameof(UpdateBudgetData)}");
     }
 
 

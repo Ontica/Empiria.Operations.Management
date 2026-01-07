@@ -28,10 +28,9 @@ namespace Empiria.Procurement.Contracts {
 
       _ = order.Contract.GetItem(contractItem.UID);
 
-      base.Contract = order.Contract;
-      base.ContractItem = contractItem;
-      base.RequisitionItem = ContractItem.RequisitionItem;
-      base.BudgetAccount = ContractItem.BudgetAccount;
+      Contract = order.Contract;
+      ContractItem = contractItem;
+      RequisitionItem = ContractItem.RequisitionItem;
     }
 
     static internal new ContractOrderItem Parse(int id) => ParseId<ContractOrderItem>(id);
@@ -59,7 +58,6 @@ namespace Empiria.Procurement.Contracts {
 
       fields.EnsureValid();
 
-      fields.BudgetAccountUID = ContractItem.BudgetAccount.UID;
       fields.ContractItemUID = ContractItem.UID;
       fields.RequisitionItemUID = RequisitionItem.UID;
 
