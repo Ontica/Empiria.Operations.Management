@@ -74,7 +74,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
         CanSuspend = rules.CanSuspend(),
         CanUpdate = rules.CanUpdate(),
 
-        CanCommitBudget = false,
+        CanCommitBudget = rules.CanCommitBudget(),
         CanEditBills = rules.CanEditBills(),
         CanRequestBudget = false,
         CanRequestPayment = rules.CanRequestPayment(),

@@ -38,11 +38,21 @@ namespace Empiria.Orders {
 
 
     internal bool CanCommitBudget() {
-      if (_order.Status == EntityStatus.Closed) {
+      if (_order.Status == EntityStatus.Closed ||
+          _order.Status == EntityStatus.Deleted ||
+          _order.Status == EntityStatus.Suspended) {
         return false;
       }
 
       if (_order.Items.Count == 0) {
+        return false;
+      }
+
+      if (_order.OrderType.Equals(OrderType.ContractOrder) && !_order.IsForMultipleBeneficiaries) {
+        return false;
+      } else if (_order.OrderType.Equals(OrderType.ContractOrder) &&
+                _order.Items.GetItems().All(x => x.Beneficiary.Equals(_order.Contract.Beneficiary)) &&
+                _order.Items.GetItems().All(x => x.Beneficiary.Equals(_order.Requisition.Beneficiary))) {
         return false;
       }
 
@@ -72,6 +82,13 @@ namespace Empiria.Orders {
 
 
     internal bool CanEditBills() {
+
+      if (_order.Status == EntityStatus.Closed ||
+          _order.Status == EntityStatus.Deleted ||
+          _order.Status == EntityStatus.Suspended) {
+        return false;
+      }
+
       if (!IsPayable()) {
         return false;
       }
@@ -95,12 +112,14 @@ namespace Empiria.Orders {
 
     internal bool CanEditItems() {
 
-      if (_order.Status == EntityStatus.Pending && GetBills().Count == 0) {
-        return true;
+      if (_order.Status == EntityStatus.Closed ||
+          _order.Status == EntityStatus.Deleted ||
+          _order.Status == EntityStatus.Suspended) {
+        return false;
       }
 
-      if (_order.Status == EntityStatus.Closed) {
-        return false;
+      if (_order.Status == EntityStatus.Pending && GetBills().Count == 0) {
+        return true;
       }
 
       if (_order.Id < 0) {
@@ -119,7 +138,9 @@ namespace Empiria.Orders {
 
     internal bool CanRequestBudget() {
 
-      if (_order.Status == EntityStatus.Closed) {
+      if (_order.Status == EntityStatus.Closed ||
+          _order.Status == EntityStatus.Deleted ||
+          _order.Status == EntityStatus.Suspended) {
         return false;
       }
 
@@ -146,6 +167,13 @@ namespace Empiria.Orders {
 
 
     internal bool CanRequestPayment() {
+
+      if (_order.Status == EntityStatus.Closed ||
+          _order.Status == EntityStatus.Deleted ||
+          _order.Status == EntityStatus.Suspended) {
+        return false;
+      }
+
       if (!IsPayable()) {
         return false;
       }
