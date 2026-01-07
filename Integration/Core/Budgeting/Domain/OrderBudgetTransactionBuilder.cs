@@ -110,6 +110,12 @@ namespace Empiria.Operations.Integration.Budgeting {
         budgetingDate = new DateTime(_transaction.BaseBudget.Year, 1, 1);
       }
 
+      string relatedEntryUID = string.Empty;
+
+      if (!entry.RequisitionItem.IsEmptyInstance) {
+        relatedEntryUID = entry.RequisitionItem.BudgetEntry.UID;
+      }
+
       return new BudgetEntryFields {
         BudgetUID = entry.Budget.UID,
         BudgetAccountUID = entry.BudgetAccount.UID,
@@ -128,6 +134,8 @@ namespace Empiria.Operations.Integration.Budgeting {
         Day = budgetingDate.Day,
         EntityTypeId = entry.GetEmpiriaType().Id,
         EntityId = entry.Id,
+        RelatedEntryUID = relatedEntryUID,
+        ExchangeRate = 1m,
         CurrencyUID = entry.Currency.UID,
         OriginalAmount = entry.Subtotal,
         Amount = isDeposit ? entry.Subtotal : -1 * entry.Subtotal
