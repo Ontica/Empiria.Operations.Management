@@ -52,8 +52,7 @@ namespace Empiria.Orders.UseCases {
       Assertion.Require(requestedBy, nameof(requestedBy));
 
       var requisitions = Requisition.GetList()
-                                    .FindAll(x => x.RequestedBy.Equals(requestedBy) ||
-                                                  x.IsForMultipleBeneficiaries);
+                                    .FindAll(x => x.RequestedBy.Equals(requestedBy));
 
       return RequisitionMapper.Map(requisitions);
     }

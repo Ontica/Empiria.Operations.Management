@@ -77,8 +77,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
       Assertion.Require(requestedBy, nameof(requestedBy));
 
       var contracts = Contract.GetList()
-                              .FindAll(x => x.RequestedBy.Equals(requestedBy) ||
-                                            x.IsForMultipleBeneficiaries);
+                              .FindAll(x => x.RequestedBy.Equals(requestedBy));
 
       return ContractMapper.MapToDescriptor(contracts);
     }

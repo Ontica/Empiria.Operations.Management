@@ -50,8 +50,7 @@ namespace Empiria.Orders.UseCases {
       Assertion.Require(requestedBy, nameof(requestedBy));
 
       var orders = PayableOrder.GetList()
-                               .FindAll(x => x.RequestedBy.Equals(requestedBy) ||
-                                             x.IsForMultipleBeneficiaries);
+                               .FindAll(x => x.RequestedBy.Equals(requestedBy));
 
       return PayableOrderMapper.Map(orders);
     }
