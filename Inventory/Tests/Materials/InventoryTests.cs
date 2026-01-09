@@ -74,12 +74,12 @@ namespace Empiria.Tests.Inventory {
       TestsCommonMethods.Authenticate();
 
       InventoryOrderFields fields = new InventoryOrderFields {
-        WarehouseUID = "DA6017D5-ED38-449B-9659-ACE06C4565DE",
-        InventoryTypeUID = "020B1EF9-F30F-41D5-9E95-29E3B52D23B9",
-        Description = "Prueba 11 del 11 antes de ir por una cold",
-        RequestedByUID = "0a384dc7-9c68-407c-afe1-d73b71d260cd",
-        ResponsibleUID = "68188d1b-2b69-461a-86cb-f1e7386c4cb1",
-        Priority = Empiria.StateEnums.Priority.Normal
+        WarehouseUID = "4D219B4A-3355-4BF3-8844-AA53211C8EFD",
+        InventoryTypeUID = "9D5F118E-1A12-4774-A2E0-7CB2E180F559",
+        Description = "Pruebas01",
+        RequestedByUID = "72b902de-8840-4985-81aa-46700d915ea7",
+        ResponsibleUID = "66c659c8-fee5-4487-baa5-84d056f123a1",
+        //Priority = Empiria.StateEnums.Priority.Normal
       };
 
       var orderType = Orders.OrderType.Parse(4011);

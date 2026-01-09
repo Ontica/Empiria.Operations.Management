@@ -9,14 +9,17 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
-using Empiria.Inventory.Adapters;
-using Empiria.Inventory.Data;
-using Empiria.Json;
-using Empiria.Locations;
+
 using Empiria.Orders;
 using Empiria.Orders.Adapters;
 using Empiria.Parties;
 using Empiria.Products;
+
+using Empiria.Inventory.Adapters;
+using Empiria.Inventory.Data;
+
+using Empiria.Json;
+using Empiria.Locations;
 using Empiria.Services;
 using Empiria.StateEnums;
 
@@ -67,6 +70,7 @@ namespace Empiria.Inventory.UseCases {
       Assertion.Require(fields, nameof(fields));
 
       var orderType = Orders.OrderType.Parse(INVENTORYORDERTYPEID);
+      fields.Priority = Priority.Normal;
 
       InventoryOrder order = new InventoryOrder(warehouseUID, orderType);
 
