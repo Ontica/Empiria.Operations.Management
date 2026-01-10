@@ -573,7 +573,7 @@ namespace Empiria.Orders {
       EndDate = Patcher.Patch(fields.EndDate, ExecutionServer.DateMaxValue);
 
       RequestedBy = Patcher.Patch(fields.RequestedByUID, RequestedBy);
-      RequiredTime = Patcher.Patch(fields.RequiredTime, DateTime.MaxValue);
+      RequiredTime = Patcher.Patch(fields.RequiredTime, ExecutionServer.DateMaxValue);
 
       Responsible = Patcher.Patch(fields.ResponsibleUID, RequestedBy);
       Beneficiary = Patcher.Patch(fields.BeneficiaryUID, RequestedBy);

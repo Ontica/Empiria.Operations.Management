@@ -530,7 +530,7 @@ namespace Empiria.Orders {
           BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, ContractItem.BudgetAccount);
         } else if (!RequisitionItem.IsEmptyInstance) {
           BudgetAccount = Patcher.Patch(fields.BudgetAccountUID, RequisitionItem.BudgetAccount);
-        } else {
+        } else if (fields.BudgetAccountUID.Length != 0) {
           BudgetAccount = BudgetAccount.Parse(fields.BudgetAccountUID);
         }
         return;
