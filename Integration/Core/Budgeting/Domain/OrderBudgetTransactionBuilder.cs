@@ -80,8 +80,12 @@ namespace Empiria.Operations.Integration.Budgeting {
         if (_transaction.OperationType == BudgetOperationType.Request) {
           BuildDoubleEntries(item, BalanceColumn.Available, BalanceColumn.Requested);
 
-        } else if (_transaction.OperationType == BudgetOperationType.Commit) {
+        } else if (_transaction.OperationType == BudgetOperationType.Commit && !_order.HasCrossedBeneficiaries()) {
           BuildDoubleEntries(item, BalanceColumn.Requested, BalanceColumn.Commited);
+
+        } else if (_transaction.OperationType == BudgetOperationType.Commit && _order.HasCrossedBeneficiaries()) {
+          throw new NotImplementedException("Las transacciones de compromiso presupuestal " +
+                                            "sobre requisiciones multiáreas no están disponibles.");
 
         } else if (_transaction.OperationType == BudgetOperationType.ApprovePayment) {
           BuildDoubleEntries(item, BalanceColumn.Commited, BalanceColumn.ToPay);

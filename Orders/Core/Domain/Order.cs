@@ -536,6 +536,20 @@ namespace Empiria.Orders {
     }
 
 
+    internal bool HasCrossedBeneficiaries() {
+      if (!IsForMultipleBeneficiaries) {
+        return false;
+      }
+      if (!Contract.IsEmptyInstance &&
+          Items.GetItems().All(x => x.Beneficiary.Equals(Contract.Beneficiary)) &&
+          Items.GetItems().All(x => x.Beneficiary.Equals(Requisition.Beneficiary))) {
+        return false;
+      }
+
+      return Items.GetItems().Any(x => x.Beneficiary.Distinct(Requisition.Beneficiary));
+    }
+
+
     protected override void OnSave() {
       if (base.IsNew) {
         PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);

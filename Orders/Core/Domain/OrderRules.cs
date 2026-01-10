@@ -48,11 +48,7 @@ namespace Empiria.Orders {
         return false;
       }
 
-      if (_order.OrderType.Equals(OrderType.ContractOrder) && !_order.IsForMultipleBeneficiaries) {
-        return false;
-      } else if (_order.OrderType.Equals(OrderType.ContractOrder) &&
-                _order.Items.GetItems().All(x => x.Beneficiary.Equals(_order.Contract.Beneficiary)) &&
-                _order.Items.GetItems().All(x => x.Beneficiary.Equals(_order.Requisition.Beneficiary))) {
+      if (_order.OrderType.Equals(OrderType.ContractOrder) && !_order.HasCrossedBeneficiaries()) {
         return false;
       }
 
