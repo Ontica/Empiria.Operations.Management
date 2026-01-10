@@ -31,7 +31,7 @@ namespace Empiria.Orders {
     internal protected OrderTaxEntry(Order order, TaxType taxType, decimal total) {
       Assertion.Require(order, nameof(order));
       Assertion.Require(taxType, nameof(taxType));
-      Assertion.Require(total > 0.00m, nameof(total));
+      Assertion.Require(total != 0.00m, nameof(total));
 
       Order = order;
       TaxType = taxType;
@@ -42,7 +42,7 @@ namespace Empiria.Orders {
     internal protected OrderTaxEntry(OrderItem orderItem, TaxType taxType, decimal total) {
       Assertion.Require(orderItem, nameof(orderItem));
       Assertion.Require(taxType, nameof(taxType));
-      Assertion.Require(total > 0.00m, nameof(total));
+      Assertion.Require(total != 0.00m, nameof(total));
 
       Order = orderItem.Order;
       OrderItem = orderItem;
@@ -139,7 +139,7 @@ namespace Empiria.Orders {
 
 
     internal void Update(decimal total) {
-      Assertion.Require(total > 0.00m, nameof(total));
+      Assertion.Require(total != 0.00m, nameof(total));
 
       Assertion.Require(Order.Status != EntityStatus.Closed,
                         "Can not update tax entry because the order is closed.");
@@ -149,8 +149,8 @@ namespace Empiria.Orders {
 
 
     internal void Update(decimal baseAmount, decimal total) {
-      Assertion.Require(baseAmount > 0.00m, nameof(baseAmount));
-      Assertion.Require(total > 0.00m, nameof(total));
+      Assertion.Require(baseAmount != 0.00m, nameof(baseAmount));
+      Assertion.Require(total != 0.00m, nameof(total));
 
       Assertion.Require(Order.Status != EntityStatus.Closed,
                         "Can not update tax entry because the order is closed.");

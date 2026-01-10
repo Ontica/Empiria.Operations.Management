@@ -41,7 +41,7 @@ namespace Empiria.Orders {
         Assertion.Require(TaxTypeUID, nameof(TaxTypeUID));
       }
 
-      Assertion.Require(Total > 0m, $"{nameof(Total)} must be non-negative.");
+      //Assertion.Require(Total != 0m, $"{nameof(Total)} must be non-zero.");
     }
 
 
