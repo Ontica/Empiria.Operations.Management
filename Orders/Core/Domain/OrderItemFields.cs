@@ -10,6 +10,8 @@
 
 using System;
 
+using Empiria.Products;
+
 namespace Empiria.Orders {
 
   /// <summary>Abstract DTO fields structure used for update order items information.</summary>
@@ -51,6 +53,11 @@ namespace Empiria.Orders {
 
 
     public decimal UnitPrice {
+      get; set;
+    }
+
+    [Newtonsoft.Json.JsonProperty(PropertyName = "Total")]
+    public decimal Subtotal {
       get; set;
     }
 
@@ -161,6 +168,22 @@ namespace Empiria.Orders {
 
       Assertion.Require(ProductUID.Length != 0 || BudgetAccountUID.Length != 0 || Description.Length != 0,
                         "Necesito se proporcione el producto, su cuenta presupuestal o su descripción.");
+
+      if (Subtotal > 0 && Quantity == 0 && UnitPrice == 0) {
+        Quantity = Subtotal;
+        UnitPrice = 1;
+      }
+
+      Assertion.Require(ProductUnitUID, "Se requiere proporcionar la unidad de medida.");
+
+      var productUnit = ProductUnit.Parse(ProductUnitUID);
+
+      if (productUnit.MoneyBased) {
+        Assertion.Require(UnitPrice == 1m, "El precio unitario debe ser igual a uno.");
+      } else {
+        Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");
+      }
+
       Assertion.Require(Quantity > 0, "Necesito se proporcione la cantidad mínima.");
 
       Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");
