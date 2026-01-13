@@ -169,7 +169,7 @@ namespace Empiria.Orders {
       Assertion.Require(ProductUID.Length != 0 || BudgetAccountUID.Length != 0 || Description.Length != 0,
                         "Necesito se proporcione el producto, su cuenta presupuestal o su descripción.");
 
-      if (Subtotal > 0 && Quantity == 0 && UnitPrice == 0) {
+      if (Subtotal > 0 && Quantity == 0) {
         Quantity = Subtotal;
         UnitPrice = 1;
       }
