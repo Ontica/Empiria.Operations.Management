@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System.Linq;
 using Empiria.Services;
 
 using Empiria.Billing;
@@ -48,20 +47,19 @@ namespace Empiria.Operations.Integration.Payments.UseCases {
 
       Assertion.Require(bills.Count > 0, "No se han agregado los comprobantes.");
 
-      var subTotalBilled = bills.Sum(x => x.BillType.Name.Contains("CreditNote") ? -1 * x.Subtotal : x.Subtotal);
-      var taxes = bills.Sum(x => x.BillType.Name.Contains("CreditNote") ? -1 * x.Taxes : x.Taxes);
+      var billsTotals = new BillsTotals(bills);
 
-      Assertion.Require(subTotalBilled > 0, "El importe total de los comprobantes debe ser mayor a cero.");
+      Assertion.Require(billsTotals.Total > 0, "El importe total de los comprobantes debe ser mayor a cero.");
 
       var paymentType = PaymentType.Parse(fields.PaymentTypeUID);
 
       if (paymentType.NeedsBudgetApproval) {
         Assertion.Require(order.Items.Count > 0, "No se han cargado los conceptos.");
-        Assertion.Require(order.Subtotal == subTotalBilled,
+        Assertion.Require(order.Subtotal == billsTotals.Subtotal - billsTotals.Discounts,
                           "El importe antes de impuestos de los comprobantes no coincide con el importe de los conceptos.");
       }
 
-      var paymentOrder = new PaymentOrder(paymentType, order.Provider, order, subTotalBilled + taxes);
+      var paymentOrder = new PaymentOrder(paymentType, order.Provider, order, billsTotals.Total);
 
       var paymentMethod = paymentOrder.PaymentMethod;
 
@@ -73,7 +71,7 @@ namespace Empiria.Operations.Integration.Payments.UseCases {
 
       fields.PayToUID = order.Provider.UID;
       fields.CurrencyUID = order.Currency.UID;
-      fields.Total = subTotalBilled + taxes;
+      fields.Total = billsTotals.Total;
 
       paymentOrder.Update(fields);
 
