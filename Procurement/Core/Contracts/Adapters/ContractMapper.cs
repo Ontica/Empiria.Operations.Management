@@ -37,6 +37,7 @@ namespace Empiria.Procurement.Contracts.Adapters {
       return new ContractHolderDto {
         Order = MapContract(contract),
         Items = ContractItemMapper.Map(contract.GetItems()),
+        Taxes = OrderTaxMapper.Map(contract.Taxes.GetList()),
         BudgetTransactions = MapBudgetTransactions(contract),
         Orders = PayableOrderMapper.MapToDescriptor(orders),
         Payables = ContractOrderMapper.MapToDescriptor(contractOrders),
