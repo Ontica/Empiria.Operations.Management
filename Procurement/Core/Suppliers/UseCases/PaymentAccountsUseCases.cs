@@ -10,9 +10,9 @@
 
 using Empiria.Services;
 
+using Empiria.Financial;
 using Empiria.Financial.Adapters;
 using Empiria.Financial.Services;
-using Empiria.Financial;
 
 namespace Empiria.Procurement.Suppliers.UseCases {
 
@@ -33,6 +33,18 @@ namespace Empiria.Procurement.Suppliers.UseCases {
 
     #region Use cases
 
+    public PaymentAccountDto AddPaymentAccount(Supplier supplier, PaymentAccountFields fields) {
+      Assertion.Require(supplier, nameof(supplier));
+      Assertion.Require(fields, nameof(fields));
+
+      var account = new PaymentAccount(supplier, fields);
+
+      account.Save();
+
+      return new PaymentAccountDto(account);
+    }
+
+
     public FixedList<PaymentAccountDto> GetPaymentAccounts(string supplierUID) {
       Assertion.Require(supplierUID, nameof(supplierUID));
 
@@ -42,10 +54,27 @@ namespace Empiria.Procurement.Suppliers.UseCases {
     }
 
 
-    public PaymentAccountDto UpdatePaymentAccount(PaymentAccountFields fields) {
+    internal PaymentAccountDto RemovePaymentAccount(Supplier supplier, PaymentAccount account) {
+      Assertion.Require(supplier, nameof(supplier));
+      Assertion.Require(account, nameof(account));
+
+      Assertion.Require(account.Party.Equals(supplier), "La cuenta no pertenece al proveedor especificado.");
+
+      account.Delete();
+
+      account.Save();
+
+      return new PaymentAccountDto(account);
+    }
+
+
+    public PaymentAccountDto UpdatePaymentAccount(Supplier supplier, PaymentAccountFields fields) {
+      Assertion.Require(supplier, nameof(supplier));
       Assertion.Require(fields, nameof(fields));
 
       var account = PaymentAccount.Parse(fields.UID);
+
+      Assertion.Require(account.Party.Equals(supplier), "La cuenta no pertenece al proveedor especificado.");
 
       account.Update(fields);
 

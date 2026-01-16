@@ -40,6 +40,43 @@ namespace Empiria.Procurement.Suppliers.WebApi {
 
     #region Command web apis
 
+    [HttpPost]
+    [Route("v8/procurement/suppliers/{supplierUID:guid}/payment-accounts")]
+    public SingleObjectModel AddPaymentAccount([FromUri] string supplierUID,
+                                               [FromBody] PaymentAccountFields fields) {
+
+      var supplier = Supplier.Parse(supplierUID);
+
+      using (var usecases = PaymentAccountsUseCases.UseCaseInteractor()) {
+
+        _ = usecases.AddPaymentAccount(supplier, fields);
+
+        var supplierDto = SupplierMapper.Map(supplier);
+
+        return new SingleObjectModel(base.Request, supplierDto);
+      }
+    }
+
+
+    [HttpDelete]
+    [Route("v8/procurement/suppliers/{supplierUID:guid}/payment-accounts/{accountUID:guid}")]
+    public SingleObjectModel RemovePaymentAccount([FromUri] string supplierUID,
+                                                  [FromUri] string accountUID) {
+
+      var supplier = Supplier.Parse(supplierUID);
+      var account = PaymentAccount.Parse(accountUID);
+
+      using (var usecases = PaymentAccountsUseCases.UseCaseInteractor()) {
+
+        _ = usecases.RemovePaymentAccount(supplier, account);
+
+        var supplierDto = SupplierMapper.Map(supplier);
+
+        return new SingleObjectModel(base.Request, supplierDto);
+      }
+    }
+
+
     [HttpPut, HttpPatch]
     [Route("v8/procurement/suppliers/{supplierUID:guid}/payment-accounts/{accountUID:guid}")]
     public SingleObjectModel UpdatePaymentAccount([FromUri] string supplierUID,
@@ -49,10 +86,10 @@ namespace Empiria.Procurement.Suppliers.WebApi {
       var supplier = Supplier.Parse(supplierUID);
 
       fields.UID = accountUID;
-      fields.PartyUID = supplier.UID;
 
       using (var usecases = PaymentAccountsUseCases.UseCaseInteractor()) {
-        _ = usecases.UpdatePaymentAccount(fields);
+
+        _ = usecases.UpdatePaymentAccount(supplier, fields);
 
         var supplierDto = SupplierMapper.Map(supplier);
 
