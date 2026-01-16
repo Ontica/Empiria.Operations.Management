@@ -128,6 +128,12 @@ namespace Empiria.Orders {
       get; protected set;
     }
 
+    string IBudgetable.EntityNo {
+      get {
+        return OrderNo;
+      }
+    }
+
 
     [DataField("ORDER_NAME")]
     public string Name {
@@ -281,8 +287,11 @@ namespace Empiria.Orders {
           return "No aplica";
         }
 
-        var periodName = Budgets.Count == 1 ? $"{Budgets.First().Year}" :
-                                              $"{Budgets.First().Year} - {Budgets.Last().Year}";
+        if (Budgets.Count == 1) {
+          return Budgets[0].Name;
+        }
+
+        var periodName = $"{Budgets.First().Year} - {Budgets.Last().Year}";
 
         return $"{BudgetType.DisplayName} {periodName}";
       }
