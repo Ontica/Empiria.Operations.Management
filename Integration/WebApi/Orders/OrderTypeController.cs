@@ -50,20 +50,6 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     }
 
 
-    [HttpGet]
-    [Route("v2/payments-management/payment-order-types")]
-    [Route("v8/order-management/order-types/payable")]
-    public CollectionModel GetPayableOrderTypes() {
-
-      using (var usecases = OrderTypeUseCases.UseCaseInteractor()) {
-
-        FixedList<NamedEntityDto> payableOrderTypes = usecases.GetPayableOrderTypes();
-
-        return new CollectionModel(Request, payableOrderTypes);
-      }
-    }
-
-
     /// <summary>Should be deprecated in future versions. Used in create payment orders editor.</summary>
     [HttpPost]
     [Route("v2/payments-management/payable-entities/search")]   // ToDo : Remove on next version

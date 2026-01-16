@@ -45,14 +45,6 @@ namespace Empiria.Orders.UseCases {
       return categories.MapToNamedEntityList();
     }
 
-
-    public FixedList<NamedEntityDto> GetPayableOrderTypes() {
-
-      return OrderType.GetList()
-                      .FindAll(x => x.Name.Contains("PayableOrder"))
-                      .MapToNamedEntityList();
-    }
-
     #endregion Use cases
 
   }  // class OrderTypeUseCases
