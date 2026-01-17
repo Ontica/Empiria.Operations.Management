@@ -55,7 +55,7 @@ namespace Empiria.Operations.Integration.Payments.UseCases {
 
       if (paymentType.NeedsBudgetApproval) {
         Assertion.Require(order.Items.Count > 0, "No se han cargado los conceptos.");
-        Assertion.Require(order.Subtotal == billsTotals.Subtotal - billsTotals.Discounts,
+        Assertion.Require(order.Subtotal == (billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal),
                           "El importe antes de impuestos de los comprobantes no coincide " +
                           "con el importe de los conceptos.");
       }
@@ -78,7 +78,7 @@ namespace Empiria.Operations.Integration.Payments.UseCases {
 
       paymentOrder.Save();
 
-      return PayableOrderMapper.Map((PayableOrder) order);
+      return PayableOrderMapper.Map(order);
     }
 
     #endregion Use cases
