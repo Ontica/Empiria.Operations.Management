@@ -72,8 +72,14 @@ namespace Empiria.Operations.Integration.Budgeting {
 
     private void BuildEntries() {
 
-      var orderItems = _order.GetItems<OrderItem>()
-                             .FindAll(x => x.BudgetEntry.IsEmptyInstance);
+      FixedList<OrderItem> orderItems;
+
+      if (_transaction.OperationType == BudgetOperationType.Request) {
+        orderItems = _order.GetItems<OrderItem>()
+                           .FindAll(x => x.BudgetEntry.IsEmptyInstance);
+      } else {
+        orderItems = _order.GetItems<OrderItem>();
+      }
 
       foreach (var item in orderItems) {
 
