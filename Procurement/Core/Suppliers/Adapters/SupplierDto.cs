@@ -66,7 +66,15 @@ namespace Empiria.Procurement.Suppliers.Adapters {
       get; internal set;
     }
 
+    public string EmployeeNo {
+      get; internal set;
+    }
+
     public string SubledgerAccount {
+      get; internal set;
+    }
+
+    public FixedList<string> Tags {
       get; internal set;
     }
 
@@ -93,6 +101,10 @@ namespace Empiria.Procurement.Suppliers.Adapters {
     }
 
     public string TaxCode {
+      get; internal set;
+    }
+
+    public string EmployeeNo {
       get; internal set;
     }
 

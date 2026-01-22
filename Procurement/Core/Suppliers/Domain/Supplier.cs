@@ -13,10 +13,12 @@ using System;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
+using Empiria.Procurement.Suppliers.Data;
+
 namespace Empiria.Procurement.Suppliers {
 
   /// <summary>Represents a supplier of goods or services.</summary>  
-  public class Supplier : Party {
+  public class Supplier : Party, INamedEntity {
 
     #region Constructors and parsers
 
@@ -24,8 +26,12 @@ namespace Empiria.Procurement.Suppliers {
       // Required by Empiria Framework.
     }
 
-    internal Supplier(string taxCode) {
-      taxCode = BuildAndValidateTaxCode(taxCode);
+    internal Supplier(SupplierFields fields) {
+      Assertion.Require(fields, nameof(fields));
+
+      fields.EnsureValid();
+
+      Update(fields);
     }
 
     static public new Supplier Parse(int id) => ParseId<Supplier>(id);
@@ -34,9 +40,28 @@ namespace Empiria.Procurement.Suppliers {
 
     static public new Supplier Empty => ParseEmpty<Supplier>();
 
+    static public FixedList<Supplier> TryGetWithTaxCode(string taxCode) {
+      Assertion.Require(taxCode, nameof(taxCode));
+
+      taxCode = EmpiriaString.Clean(taxCode).ToUpper();
+
+      return GetList<Supplier>($"PARTY_CODE = '{taxCode}' AND PARTY_STATUS <> 'X'")
+             .ToFixedList();
+    }
+
     #endregion Constructors and parsers
 
     #region Properties
+
+    public string EmployeeNo {
+      get {
+        return ExtendedData.Get("employeeNo", string.Empty);
+      }
+      private set {
+        ExtendedData.SetIfValue("employeeNo", value);
+      }
+    }
+
 
     public string SubledgerAccount {
       get {
@@ -67,12 +92,22 @@ namespace Empiria.Procurement.Suppliers {
       }
     }
 
+
     public string TaxCode {
       get {
         return Code;
       }
       private set {
         Code = value;
+      }
+    }
+
+    string INamedEntity.Name {
+      get {
+        if (EmployeeNo.Length != 0) {
+          return $"{base.Name} (No. expediente: {EmployeeNo})";
+        }
+        return $"{base.Name} ({TaxCode})";
       }
     }
 
@@ -84,14 +119,24 @@ namespace Empiria.Procurement.Suppliers {
       SetStatus(EntityStatus.Deleted);
     }
 
+
+    protected override void OnBeforeSave() {
+      if (IsNew) {
+        PatchObjectId(SuppliersData.GetNextId());
+      }
+    }
+
+
     internal void Update(SupplierFields fields) {
       Assertion.Require(fields, nameof(fields));
 
       SupplierType = SupplierType.Parse(fields.TypeUID);
-      TaxCode = Patcher.Patch(BuildAndValidateTaxCode(fields.TaxCode), TaxCode);
+      TaxCode = Patcher.Patch(fields.TaxCode, TaxCode);
 
       SubledgerAccount = Patcher.Patch(fields.SubledgerAccount, SubledgerAccount);
       SubledgerAccountName = Patcher.Patch(fields.SubledgerAccountName, SubledgerAccountName);
+
+      EmployeeNo = EmpiriaString.Clean(fields.EmployeeNo);
 
       if (fields.UID.Length == 0) {
         fields.StartDate = DateTime.Today;
@@ -108,23 +153,6 @@ namespace Empiria.Procurement.Suppliers {
     }
 
     #endregion Methods
-
-    #region Helpers
-
-    private string BuildAndValidateTaxCode(string taxCode) {
-      taxCode = EmpiriaString.Clean(taxCode);
-
-      Assertion.Require(taxCode, nameof(taxCode));
-
-      if (taxCode.Length < 12) {
-        Assertion.RequireFail($"El RFC proporcionado '{taxCode}' es inválido. " +
-                              $"Debe contener al menos 12 caracteres.");
-      }
-
-      return taxCode.ToUpper();
-    }
-
-    #endregion Helpers
 
   } // class Supplier
 

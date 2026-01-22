@@ -58,7 +58,7 @@ namespace Empiria.Procurement.Suppliers.UseCases {
       Assertion.Require(supplier, nameof(supplier));
       Assertion.Require(account, nameof(account));
 
-      Assertion.Require(account.Party.Equals(supplier), "La cuenta no pertenece al proveedor especificado.");
+      Assertion.Require(account.Party.Equals(supplier), "La cuenta no pertenece al beneficiario especificado.");
 
       account.Delete();
 
@@ -74,7 +74,7 @@ namespace Empiria.Procurement.Suppliers.UseCases {
 
       var account = PaymentAccount.Parse(fields.UID);
 
-      Assertion.Require(account.Party.Equals(supplier), "La cuenta no pertenece al proveedor especificado.");
+      Assertion.Require(account.Party.Equals(supplier), "La cuenta no pertenece al beneficiario especificado.");
 
       account.Update(fields);
 

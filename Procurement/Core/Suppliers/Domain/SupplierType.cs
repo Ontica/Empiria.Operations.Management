@@ -28,14 +28,20 @@ namespace Empiria.Procurement.Suppliers {
     }
 
     static public SupplierType Parse(string uid) {
-      return _supplierTypes.Find(x => x.UID == uid);
+      SupplierType supplierType = _supplierTypes.Find(x => x.UID == uid);
+
+      if (supplierType == null) {
+        return Unknown;
+      }
+
+      return supplierType;
     }
 
     static public FixedList<SupplierType> GetSupplierTypes() {
       return _supplierTypes;
     }
 
-    static public NamedEntity Unknown => Parse("Desconocido");
+    static public SupplierType Unknown => Parse("Desconocido");
 
     #endregion Constructors and parsers
 

@@ -54,6 +54,7 @@ namespace Empiria.Procurement.Suppliers.Adapters {
         Name = supplier.Name,
         TypeName = supplier.SupplierType.Name,
         TaxCode = supplier.Code,
+        EmployeeNo = supplier.EmployeeNo,
         SubledgerAccount = supplier.SubledgerAccount,
         StatusName = supplier.Status.GetName()
       };
@@ -67,6 +68,8 @@ namespace Empiria.Procurement.Suppliers.Adapters {
         Name = supplier.Name,
         Type = supplier.SupplierType.MapToNamedEntity(),
         TaxCode = supplier.Code,
+        EmployeeNo = supplier.EmployeeNo,
+        Tags = supplier.Tags,
         SubledgerAccount = supplier.SubledgerAccount,
         Status = supplier.Status.MapToDto(),
       };

@@ -15,6 +15,15 @@ namespace Empiria.Procurement.Suppliers.Data {
   /// <summary>Provides data read and write methods for Supplier instances.</summary>
   static internal class SuppliersData {
 
+    static internal int GetNextId() {
+      var sql = "SELECT MIN(Party_Id) MinPartyId FROM Parties";
+
+      var op = DataOperation.Parse(sql);
+
+      return (int) DataReader.GetScalar<decimal>(op) - 1;
+    }
+
+
     static internal FixedList<Supplier> GetSuppliers(string filter, string sortBy) {
       var sql = "SELECT * FROM Parties";
 
