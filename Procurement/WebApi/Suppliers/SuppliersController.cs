@@ -47,21 +47,21 @@ namespace Empiria.Procurement.Suppliers.WebApi {
     }
 
 
-    [HttpPost]
-    [Route("v8/procurement/suppliers/match-subledger-account")]
-    public async Task<SingleObjectModel> MatchSupplierSubledgerAccount([FromBody] SubledgerAccountQuery fields) {
+    //[HttpPost]
+    //[Route("v8/procurement/suppliers/match-subledger-account")]
+    //public async Task<SingleObjectModel> MatchSupplierSubledgerAccount([FromBody] SubledgerAccountQuery fields) {
 
-      using (var usecases = SupplierUseCases.UseCaseInteractor()) {
-        NamedEntityDto subledgerAccount = await usecases.MatchSupplierSubledgerAccount(fields);
+    //  using (var usecases = SupplierUseCases.UseCaseInteractor()) {
+    //    NamedEntityDto subledgerAccount = await usecases.MatchSupplierSubledgerAccount(fields);
 
-        var json = new {
-          number = subledgerAccount.UID,
-          name = subledgerAccount.Name
-        };
+    //    var json = new {
+    //      number = subledgerAccount.UID,
+    //      name = subledgerAccount.Name
+    //    };
 
-        return new SingleObjectModel(base.Request, json);
-      }
-    }
+    //    return new SingleObjectModel(base.Request, json);
+    //  }
+    //}
 
 
     [HttpPost]
@@ -81,10 +81,10 @@ namespace Empiria.Procurement.Suppliers.WebApi {
 
     [HttpPost]
     [Route("v8/procurement/suppliers")]
-    public SingleObjectModel CreateSupplier([FromBody] SupplierFields fields) {
+    public async Task<SingleObjectModel> CreateSupplier([FromBody] SupplierFields fields) {
 
       using (var usecases = SupplierUseCases.UseCaseInteractor()) {
-        SupplierHolderDto supplier = usecases.CreateSupplier(fields);
+        SupplierHolderDto supplier = await usecases.CreateSupplier(fields);
 
         return new SingleObjectModel(base.Request, supplier);
       }
@@ -105,13 +105,13 @@ namespace Empiria.Procurement.Suppliers.WebApi {
 
     [HttpPut, HttpPatch]
     [Route("v8/procurement/suppliers/{supplierUID:guid}")]
-    public SingleObjectModel UpdateSupplier([FromUri] string supplierUID,
-                                            [FromBody] SupplierFields fields) {
+    public async Task<SingleObjectModel> UpdateSupplier([FromUri] string supplierUID,
+                                                        [FromBody] SupplierFields fields) {
 
       fields.UID = supplierUID;
 
       using (var usecases = SupplierUseCases.UseCaseInteractor()) {
-        SupplierHolderDto supplier = usecases.UpdateSupplier(fields);
+        SupplierHolderDto supplier = await usecases.UpdateSupplier(fields);
 
         return new SingleObjectModel(base.Request, supplier);
       }

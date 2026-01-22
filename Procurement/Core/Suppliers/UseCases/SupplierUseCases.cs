@@ -12,8 +12,6 @@ using System.Threading.Tasks;
 
 using Empiria.Services;
 
-using Empiria.FinancialAccounting.ClientServices;
-
 using Empiria.Procurement.Suppliers.Adapters;
 using Empiria.Procurement.Suppliers.Data;
 
@@ -45,38 +43,29 @@ namespace Empiria.Procurement.Suppliers.UseCases {
     }
 
 
-    public async Task<NamedEntityDto> MatchSupplierSubledgerAccount(SubledgerAccountQuery query) {
+    public async Task MatchSupplierSubledgerAccount(SubledgerAccountQuery query) {
       Assertion.Require(query, nameof(query));
 
-      var fields = new NamedEntityFields {
-        UID = query.UID,
-        Name = query.Name,
-      };
+      await Task.CompletedTask;
 
-      var financialAccountingServices = new AccountsServices();
+      //var fields = new NamedEntityFields {
+      //  UID = query.UID,
+      //  Name = query.Name,
+      //};
 
-      FixedList<NamedEntityDto> subledgerAccounts = await
-                                    financialAccountingServices.SearchSuppliersSubledgerAccounts(fields);
+      //var financialAccountingServices = new AccountsServices();
 
-      if (subledgerAccounts.Count == 1) {
-        return subledgerAccounts[0];
-      }
+      //FixedList<NamedEntityDto> subledgerAccounts = await
+      //                              financialAccountingServices.SearchSuppliersSubledgerAccounts(fields);
 
-      if (subledgerAccounts.Count == 0) {
-        Assertion.RequireFail("No encontré ningún auxiliar de proveedores en SICOFIN " +
-                              "que coincida con datos similares a los de este proveedor. " +
-                              "Es necesario registrar o revisar el auxiliar asociado a este proveedor en SICOFIN, " +
-                              "y posteriormente volver a intentar ejecutar esta operación.");
-      }
+      //subledgerAccounts = subledgerAccounts.FindAll(x => x.UID == query.UID);
 
-      if (subledgerAccounts.Count > 1) {
-        Assertion.RequireFail($"Encontré {subledgerAccounts.Count} auxiliares de proveedores " +
-                              $"en el sistema de contabilidad que se asemejan a los datos de " +
-                              $"este proveedor. Es necesario limpiar los auxiliares de SICOFIN para " +
-                              $"que no existan proveedores activos con datos similares.");
-      }
-
-      throw Assertion.EnsureNoReachThisCode();
+      //if (subledgerAccounts.Count != 1) {
+      //  Assertion.RequireFail("No encontré ningún auxiliar de proveedores en SICOFIN " +
+      //                        "que coincida con datos similares a los de este proveedor. " +
+      //                        "Es necesario registrar o revisar el auxiliar asociado a este proveedor en SICOFIN, " +
+      //                        "y posteriormente volver a intentar ejecutar esta operación.");
+      //}
     }
 
 
@@ -95,12 +84,24 @@ namespace Empiria.Procurement.Suppliers.UseCases {
 
     #region Command use cases
 
-    public SupplierHolderDto CreateSupplier(SupplierFields fields) {
+    public async Task<SupplierHolderDto> CreateSupplier(SupplierFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      var supplier = new Supplier(fields.TaxCode);
+      fields.EnsureValid();
 
-      supplier.Update(fields);
+      await MatchSupplierSubledgerAccount(new SubledgerAccountQuery {
+        UID = fields.SubledgerAccount,
+        Name = fields.Name,
+        TaxCode = fields.TaxCode
+      });
+
+      FixedList<Supplier> sameTaxCode = Supplier.TryGetWithTaxCode(fields.TaxCode);
+
+      if (sameTaxCode.Exists(x => x.SubledgerAccount == fields.SubledgerAccount)) {
+        Assertion.RequireFail("Ya existe otro beneficiario con el mismo RFC y auxiliar contable.");
+      }
+
+      var supplier = new Supplier(fields);
 
       supplier.Save();
 
@@ -121,10 +122,25 @@ namespace Empiria.Procurement.Suppliers.UseCases {
     }
 
 
-    internal SupplierHolderDto UpdateSupplier(SupplierFields fields) {
+    internal async Task<SupplierHolderDto> UpdateSupplier(SupplierFields fields) {
       Assertion.Require(fields, nameof(fields));
 
+      fields.EnsureValid();
+
+      await MatchSupplierSubledgerAccount(new SubledgerAccountQuery {
+        UID = fields.SubledgerAccount,
+        Name = fields.Name,
+        TaxCode = fields.TaxCode
+      });
+
       var supplier = Supplier.Parse(fields.UID);
+
+      FixedList<Supplier> sameTaxCode = Supplier.TryGetWithTaxCode(fields.TaxCode);
+
+      if (sameTaxCode.Exists(x => x.UID != supplier.UID &&
+                                  x.SubledgerAccount == fields.SubledgerAccount)) {
+        Assertion.RequireFail("Ya existe otro beneficiario con el mismo RFC y auxiliar contable.");
+      }
 
       supplier.Update(fields);
 
