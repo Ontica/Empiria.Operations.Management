@@ -55,9 +55,13 @@ namespace Empiria.Operations.Integration.Payments.UseCases {
 
       if (paymentType.NeedsBudgetApproval) {
         Assertion.Require(order.Items.Count > 0, "No se han cargado los conceptos.");
-        Assertion.Require(order.Subtotal == (billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal),
-                          "El importe antes de impuestos de los comprobantes no coincide " +
-                          "con el importe de los conceptos.");
+
+        decimal orderTotals = order.Subtotal + order.Taxes.ControlConceptsTotal;
+        decimal billed = billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal;
+
+        Assertion.Require(orderTotals == billed,
+                          $"El importe antes de impuestos de los comprobantes ({billed}), no coincide " +
+                          $"con el importe de los conceptos ({orderTotals}).");
       }
 
       var paymentOrder = new PaymentOrder(paymentType, order.Provider, order, billsTotals.Total);

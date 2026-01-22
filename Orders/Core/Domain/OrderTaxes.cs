@@ -37,6 +37,13 @@ namespace Empiria.Orders {
 
     #region Properties
 
+    public decimal ControlConceptsTotal {
+      get {
+        return _taxEntries.Value.FindAll(x => x.TaxType.IsForControl).Sum(x => x.Total);
+      }
+    }
+
+
     public decimal Total {
       get {
         return _taxEntries.Value.Sum(x => x.Total);
