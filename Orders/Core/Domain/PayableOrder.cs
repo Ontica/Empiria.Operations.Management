@@ -79,7 +79,6 @@ namespace Empiria.Orders {
       }
     }
 
-
     INamedEntity IPayableEntity.Budget {
       get {
         return this.BaseBudget;

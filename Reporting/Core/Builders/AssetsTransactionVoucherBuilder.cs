@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Budgeting.Transactions;
 using Empiria.Inventory.Assets;
 using Empiria.Office;
 using Empiria.Storage;
@@ -19,145 +18,145 @@ using System.Text;
 
 namespace Empiria.Inventory.Reporting {
 
-    /// <summary>Builds a Pdf file with a voucher for a assets transaction.</summary>
-    internal class AssetsTransactionVoucherBuilder {
+  /// <summary>Builds a Pdf file with a voucher for a assets transaction.</summary>
+  internal class AssetsTransactionVoucherBuilder {
 
-        private readonly FileTemplateConfig _templateConfig;
-        private readonly string _htmlTemplate;
+    private readonly FileTemplateConfig _templateConfig;
+    private readonly string _htmlTemplate;
 
-        public AssetsTransactionVoucherBuilder(FileTemplateConfig templateConfig) {
-            Assertion.Require(templateConfig, nameof(templateConfig));
+    public AssetsTransactionVoucherBuilder(FileTemplateConfig templateConfig) {
+      Assertion.Require(templateConfig, nameof(templateConfig));
 
-            _templateConfig = templateConfig;
-            _htmlTemplate = File.ReadAllText(_templateConfig.TemplateFullPath);
-        }
-
-
-        internal FileDto CreateVoucher(AssetTransaction transaction) {
-            Assertion.Require(transaction, nameof(transaction));
-
-            string filename = GetVoucherPdfFileName(transaction);
-
-            string html = BuildVoucherHtml(transaction);
-
-            SaveHtmlAsPdf(html, filename);
-
-            return ToFileDto(filename);
-        }
-
-        #region Builders
-
-        private string BuildVoucherHtml(AssetTransaction transaction) {
-            StringBuilder html = new StringBuilder(_htmlTemplate);
-
-            html = BuildHeader(html, transaction);
-            html = BuildEntries(html, transaction);
-
-            return html.ToString();
-        }
+      _templateConfig = templateConfig;
+      _htmlTemplate = File.ReadAllText(_templateConfig.TemplateFullPath);
+    }
 
 
-        private StringBuilder BuildEntries(StringBuilder html, AssetTransaction transaction) {
-            string TEMPLATE = GetEntriesTemplate();
+    internal FileDto CreateVoucher(AssetTransaction transaction) {
+      Assertion.Require(transaction, nameof(transaction));
 
-            var entriesHtml = new StringBuilder();
+      string filename = GetVoucherPdfFileName(transaction);
 
-            foreach (var entry in transaction.Entries) {
-                var entryHtml = new StringBuilder(TEMPLATE.Replace("{{ASSET.ASSET_NO}}", entry.Asset.AssetNo));
+      string html = BuildVoucherHtml(transaction);
 
-                entryHtml.Replace("{{ASSET.NAME}}", entry.Asset.Name);
-                entryHtml.Replace("{{PREVIOUS_CONDITION}}", entry.PreviousCondition);
-                entryHtml.Replace("{{RELEASED_CONDITION}}", entry.ReleasedCondition);
-                entryHtml.Replace("{{DESCRIPTION}}", entry.Description);
+      SaveHtmlAsPdf(html, filename);
 
-                entriesHtml.Append(entryHtml);
-            }
+      return ToFileDto(filename);
+    }
 
-            return ReplaceEntriesTemplate(html, entriesHtml);
-        }
+    #region Builders
 
+    private string BuildVoucherHtml(AssetTransaction transaction) {
+      StringBuilder html = new StringBuilder(_htmlTemplate);
 
-        private StringBuilder BuildHeader(StringBuilder html, AssetTransaction txn) {
-            const string AUTHORIZATION_NO_VALID = "<span class='warning'> CÉDULA DE ACTIVOS FIJOS PENDIENTE DE AUTORIZAR </span>";
-            const string APPLICATION_NO_VALID = "<span class='warning'> CÉDULA DE ACTIVOS FIJOS PENDIENTE DE APLICAR </span>";
+      html = BuildHeader(html, transaction);
+      html = BuildEntries(html, transaction);
 
-            html.Replace("{{SYSTEM.DATETIME}}", $"Impresión: {DateTime.Now.ToString("dd/MMM/yyyy HH:mm")}");
-            html.Replace("{{REPORT.TITLE}}",
-                          txn.AuthorizedBy.IsEmptyInstance ? AUTHORIZATION_NO_VALID : _templateConfig.Title);
-            html.Replace("{{TRANSACTION_NUMBER}}", txn.TransactionNo);
-            html.Replace("{{TRANSACTION_TYPE.NAME}}", txn.AssetTransactionType.MapToNamedEntity().Name);
-            html.Replace("{{ASSIGNED_TO.NAME}}", txn.AssignedTo.MapToNamedEntity().Name);
-            html.Replace("{{ASSIGNED_TO_ORG_UNIT.NAME}}", txn.AssignedToOrgUnit.MapToNamedEntity().Name);
-            html.Replace("{{RELEASED_BY.NAME}}", txn.ReleasedBy.MapToNamedEntity().Name);
-            html.Replace("{{RELEASED_BY_ORG_UNIT.NAME}}", txn.ReleasedByOrgUnit.MapToNamedEntity().Name);
-            html.Replace("{{BASE_LOCATION.NAME}}", txn.BaseLocation.FullName);
-            html.Replace("{{DESCRIPTION}}", txn.Description);
-            html.Replace("{{RECORDED_BY.NAME}}", txn.RecordedBy.MapToNamedEntity().Name);
-            html.Replace("{{RECORDING_TIME}}", txn.RecordingDate.ToString("dd/MMM/yyyy"));
-            html.Replace("{{APPLIED_BY.NAME}}", txn.AppliedBy.MapToNamedEntity().Name);
-            html.Replace("{{APPLICATION_DATE}}",
-                          txn.AppliedBy.IsEmptyInstance ? APPLICATION_NO_VALID : txn.ApplicationDate.ToString("dd/MMM/yyyy"));
-            html.Replace("{{AUTHORIZED_BY.NAME}}", txn.AuthorizedBy.MapToNamedEntity().Name);
-            html.Replace("{{AUTHORIZATION_TIME}}",
-                          txn.AuthorizedBy.IsEmptyInstance ? AUTHORIZATION_NO_VALID : txn.AuthorizationTime.ToString("dd/MMM/yyyy"));
-
-            return html;
-        }
+      return html.ToString();
+    }
 
 
-        private string GetEntriesTemplate() {
-            int startIndex = _htmlTemplate.IndexOf("{{TRANSACTION_ENTRY.TEMPLATE.START}}");
-            int endIndex = _htmlTemplate.IndexOf("{{TRANSACTION_ENTRY.TEMPLATE.END}}");
+    private StringBuilder BuildEntries(StringBuilder html, AssetTransaction transaction) {
+      string TEMPLATE = GetEntriesTemplate();
 
-            var template = _htmlTemplate.Substring(startIndex, endIndex - startIndex);
+      var entriesHtml = new StringBuilder();
 
-            return template.Replace("{{TRANSACTION_ENTRY.TEMPLATE.START}}", string.Empty);
-        }
+      foreach (var entry in transaction.Entries) {
+        var entryHtml = new StringBuilder(TEMPLATE.Replace("{{ASSET.ASSET_NO}}", entry.Asset.AssetNo));
 
+        entryHtml.Replace("{{ASSET.NAME}}", entry.Asset.Name);
+        entryHtml.Replace("{{PREVIOUS_CONDITION}}", entry.PreviousCondition);
+        entryHtml.Replace("{{RELEASED_CONDITION}}", entry.ReleasedCondition);
+        entryHtml.Replace("{{DESCRIPTION}}", entry.Description);
 
-        private StringBuilder ReplaceEntriesTemplate(StringBuilder html,
-                                                     StringBuilder entriesHtml) {
-            int startIndex = html.ToString().IndexOf("{{TRANSACTION_ENTRY.TEMPLATE.START}}");
-            int endIndex = html.ToString().IndexOf("{{TRANSACTION_ENTRY.TEMPLATE.END}}");
+        entriesHtml.Append(entryHtml);
+      }
 
-            html.Remove(startIndex, endIndex - startIndex);
-
-            return html.Replace("{{TRANSACTION_ENTRY.TEMPLATE.END}}", entriesHtml.ToString());
-        }
-
-        #endregion
-
-        #region Helpers
-
-        private string GetFileName(string filename) {
-            return Path.Combine(FileTemplateConfig.GenerationStoragePath + "/assets.transactions/", filename);
-        }
+      return ReplaceEntriesTemplate(html, entriesHtml);
+    }
 
 
-        private string GetVoucherPdfFileName(AssetTransaction txn) {
-            return $"cedula.activo.fijo.{txn.TransactionNo}.{DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss")}.pdf";
-        }
+    private StringBuilder BuildHeader(StringBuilder html, AssetTransaction txn) {
+      const string AUTHORIZATION_NO_VALID = "<span class='warning'> CÉDULA DE ACTIVOS FIJOS PENDIENTE DE AUTORIZAR </span>";
+      const string APPLICATION_NO_VALID = "<span class='warning'> CÉDULA DE ACTIVOS FIJOS PENDIENTE DE APLICAR </span>";
+
+      html.Replace("{{SYSTEM.DATETIME}}", $"Impresión: {DateTime.Now.ToString("dd/MMM/yyyy HH:mm")}");
+      html.Replace("{{REPORT.TITLE}}",
+                    txn.AuthorizedBy.IsEmptyInstance ? AUTHORIZATION_NO_VALID : _templateConfig.Title);
+      html.Replace("{{TRANSACTION_NUMBER}}", txn.TransactionNo);
+      html.Replace("{{TRANSACTION_TYPE.NAME}}", txn.AssetTransactionType.MapToNamedEntity().Name);
+      html.Replace("{{ASSIGNED_TO.NAME}}", txn.AssignedTo.MapToNamedEntity().Name);
+      html.Replace("{{ASSIGNED_TO_ORG_UNIT.NAME}}", txn.AssignedToOrgUnit.MapToNamedEntity().Name);
+      html.Replace("{{RELEASED_BY.NAME}}", txn.ReleasedBy.MapToNamedEntity().Name);
+      html.Replace("{{RELEASED_BY_ORG_UNIT.NAME}}", txn.ReleasedByOrgUnit.MapToNamedEntity().Name);
+      html.Replace("{{BASE_LOCATION.NAME}}", txn.BaseLocation.FullName);
+      html.Replace("{{DESCRIPTION}}", txn.Description);
+      html.Replace("{{RECORDED_BY.NAME}}", txn.RecordedBy.MapToNamedEntity().Name);
+      html.Replace("{{RECORDING_TIME}}", txn.RecordingDate.ToString("dd/MMM/yyyy"));
+      html.Replace("{{APPLIED_BY.NAME}}", txn.AppliedBy.MapToNamedEntity().Name);
+      html.Replace("{{APPLICATION_DATE}}",
+                    txn.AppliedBy.IsEmptyInstance ? APPLICATION_NO_VALID : txn.ApplicationDate.ToString("dd/MMM/yyyy"));
+      html.Replace("{{AUTHORIZED_BY.NAME}}", txn.AuthorizedBy.MapToNamedEntity().Name);
+      html.Replace("{{AUTHORIZATION_TIME}}",
+                    txn.AuthorizedBy.IsEmptyInstance ? AUTHORIZATION_NO_VALID : txn.AuthorizationTime.ToString("dd/MMM/yyyy"));
+
+      return html;
+    }
 
 
-        private void SaveHtmlAsPdf(string html, string filename) {
-            string fullpath = GetFileName(filename);
+    private string GetEntriesTemplate() {
+      int startIndex = _htmlTemplate.IndexOf("{{TRANSACTION_ENTRY.TEMPLATE.START}}");
+      int endIndex = _htmlTemplate.IndexOf("{{TRANSACTION_ENTRY.TEMPLATE.END}}");
 
-            var pdfConverter = new HtmlToPdfConverter();
+      var template = _htmlTemplate.Substring(startIndex, endIndex - startIndex);
 
-            var options = new PdfConverterOptions {
-                BaseUri = FileTemplateConfig.TemplatesStoragePath
-            };
-
-            pdfConverter.Convert(html, fullpath, options);
-        }
+      return template.Replace("{{TRANSACTION_ENTRY.TEMPLATE.START}}", string.Empty);
+    }
 
 
-        private FileDto ToFileDto(string filename) {
-            return new FileDto(FileType.Pdf, FileTemplateConfig.GeneratedFilesBaseUrl + "/assets.transactions/" + filename);
-        }
+    private StringBuilder ReplaceEntriesTemplate(StringBuilder html,
+                                                 StringBuilder entriesHtml) {
+      int startIndex = html.ToString().IndexOf("{{TRANSACTION_ENTRY.TEMPLATE.START}}");
+      int endIndex = html.ToString().IndexOf("{{TRANSACTION_ENTRY.TEMPLATE.END}}");
 
-        #endregion
+      html.Remove(startIndex, endIndex - startIndex);
 
-    } // class AssetsTransactionVoucherBuilder
+      return html.Replace("{{TRANSACTION_ENTRY.TEMPLATE.END}}", entriesHtml.ToString());
+    }
+
+    #endregion
+
+    #region Helpers
+
+    private string GetFileName(string filename) {
+      return Path.Combine(FileTemplateConfig.GenerationStoragePath + "/assets.transactions/", filename);
+    }
+
+
+    private string GetVoucherPdfFileName(AssetTransaction txn) {
+      return $"cedula.activo.fijo.{txn.TransactionNo}.{DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss")}.pdf";
+    }
+
+
+    private void SaveHtmlAsPdf(string html, string filename) {
+      string fullpath = GetFileName(filename);
+
+      var pdfConverter = new HtmlToPdfConverter();
+
+      var options = new PdfConverterOptions {
+        BaseUri = FileTemplateConfig.TemplatesStoragePath
+      };
+
+      pdfConverter.Convert(html, fullpath, options);
+    }
+
+
+    private FileDto ToFileDto(string filename) {
+      return new FileDto(FileType.Pdf, FileTemplateConfig.GeneratedFilesBaseUrl + "/assets.transactions/" + filename);
+    }
+
+    #endregion Helpers
+
+  } // class AssetsTransactionVoucherBuilder
 
 } // namespace Empiria.Inventory.Reporting
