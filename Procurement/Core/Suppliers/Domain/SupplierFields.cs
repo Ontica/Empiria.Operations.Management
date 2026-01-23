@@ -56,8 +56,8 @@ namespace Empiria.Procurement.Suppliers {
       Assertion.Require(TypeUID, "Requiero el tipo de beneficiario.");
 
       Assertion.Require(SubledgerAccount, "Requiero el auxiliar contable asociado al beneficiario.");
-      Assertion.Require(SubledgerAccount.Length == 18 || SubledgerAccount.Length == 19,
-                        $"El auxiliar contable debe contener 18 o 19 dígitos.");
+      Assertion.Require(SubledgerAccount.Length == 17 || SubledgerAccount.Length == 18,
+                        $"El auxiliar contable debe contener 17 o 18 dígitos.");
       Assertion.Require(EmpiriaString.AllDigits(SubledgerAccount),
                         $"El auxiliar contable debe constar únicamente de dígitos.");
 
