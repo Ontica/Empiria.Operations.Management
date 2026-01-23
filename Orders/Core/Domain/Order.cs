@@ -260,6 +260,16 @@ namespace Empiria.Orders {
     }
 
 
+    public decimal ExchangeRate {
+      get {
+        return ExtData.Get("exchangeRate", 1m);
+      }
+      private set {
+        ExtData.SetIf("exchangeRate", value, value != 1m);
+      }
+    }
+
+
     [DataField("ORDER_BUDGET_TYPE_ID")]
     public BudgetType BudgetType {
       get; private set;
@@ -604,6 +614,7 @@ namespace Empiria.Orders {
       Provider = Patcher.Patch(fields.ProviderUID, Provider);
 
       Currency = Patcher.Patch(fields.CurrencyUID, Currency.Default);
+      ExchangeRate = Patcher.Patch(fields.ExchangeRate, 1m);
 
       Source = Patcher.Patch(fields.SourceUID, Source);
       DeliveryPlace = Patcher.Patch(fields.DeliveryPlaceUID, DeliveryPlace);

@@ -102,7 +102,10 @@ namespace Empiria.Orders.Adapters {
       StartDate = order.StartDate;
       EndDate = order.EndDate;
       EstimatedMonths = order.EstimatedMonths;
+
       Currency = order.Currency.MapToNamedEntity();
+      ExchangeRate = order.ExchangeRate;
+
       Subtotal = order.Subtotal;
       Taxes = order.Taxes.Total;
       Total = order.GetTotal();
@@ -192,6 +195,10 @@ namespace Empiria.Orders.Adapters {
     }
 
     public NamedEntityDto Currency {
+      get;
+    }
+
+    public decimal ExchangeRate {
       get;
     }
 

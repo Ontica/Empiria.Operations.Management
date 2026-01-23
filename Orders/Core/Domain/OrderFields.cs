@@ -9,7 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using System;
-
+using Empiria.Financial;
 using Empiria.StateEnums;
 using Empiria.Time;
 
@@ -156,6 +156,11 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public decimal ExchangeRate {
+      get; set;
+    } = decimal.One;
+
+
     public string SourceUID {
       get; set;
     } = string.Empty;
@@ -174,6 +179,17 @@ namespace Empiria.Orders {
       Assertion.Require(RequestedByUID, nameof(RequestedByUID));
 
       Priority = Priority.HasValue ? Priority.Value : StateEnums.Priority.Normal;
+
+      if (string.IsNullOrWhiteSpace(CurrencyUID)) {
+        CurrencyUID = Currency.Default.UID;
+      }
+
+      if (CurrencyUID == Currency.Default.UID) {
+        ExchangeRate = decimal.One;
+      } else {
+        Assertion.Require(ExchangeRate > decimal.Zero,
+                          "El tipo de cambio debe ser un valor mayor que cero.");
+      }
 
       if (!StartDate.HasValue) {
         StartDate = ExecutionServer.DateMaxValue;
