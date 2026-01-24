@@ -48,6 +48,27 @@ namespace Empiria.Orders {
       }
     }
 
+
+    public decimal Discount {
+      get {
+        return _items.Value.Sum(x => x.Discount);
+      }
+    }
+
+
+    public decimal Penalties {
+      get {
+        return _items.Value.Sum(x => x.PenaltyDiscount);
+      }
+    }
+
+
+    public decimal DiscountsTotal {
+      get {
+        return Discount + Penalties;
+      }
+    }
+
     #endregion Properties
 
     #region Methods
