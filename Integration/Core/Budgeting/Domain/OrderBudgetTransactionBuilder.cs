@@ -101,7 +101,7 @@ namespace Empiria.Operations.Integration.Budgeting {
 
         } else {
           throw Assertion.EnsureNoReachThisCode($"Budget transaction entries rule is undefined: " +
-                                                $"{_transaction.BudgetTransactionType.DisplayName}");
+                                                $"{_transaction.TransactionType.DisplayName}");
         }
       }
     }
