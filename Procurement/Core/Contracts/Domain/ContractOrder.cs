@@ -95,6 +95,7 @@ namespace Empiria.Procurement.Contracts {
 
       fields.EnsureValid();
 
+      fields.RequisitionUID = Contract.Requisition.UID;
       fields.ProviderUID = Contract.Provider.UID;
 
       fields.Budgets = new string[] { fields.BudgetUID };
