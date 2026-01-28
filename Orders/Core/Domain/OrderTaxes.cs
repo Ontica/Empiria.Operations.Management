@@ -44,6 +44,14 @@ namespace Empiria.Orders {
     }
 
 
+    public FixedList<OrderTaxEntry> ControlConcepts {
+      get {
+        return _taxEntries.Value.FindAll(x => x.TaxType.IsForControl)
+                                .ToFixedList();
+      }
+    }
+
+
     public decimal Total {
       get {
         return _taxEntries.Value.Sum(x => x.Total);

@@ -51,18 +51,18 @@ namespace Empiria.Operations.Integration.Payments.UseCases {
 
       Assertion.Require(billsTotals.Total > 0, "El importe total de los comprobantes debe ser mayor a cero.");
 
-      var paymentType = PaymentType.Parse(fields.PaymentTypeUID);
-
-      if (paymentType.NeedsBudgetApproval) {
-        Assertion.Require(order.Items.Count > 0, "No se han cargado los conceptos.");
-
-        decimal orderTotals = order.Subtotal + order.Taxes.ControlConceptsTotal;
-        decimal billed = billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal;
-
-        Assertion.Require(orderTotals == billed,
-                          $"El importe antes de impuestos de los comprobantes ({billed}), no coincide " +
-                          $"con el importe de los conceptos ({orderTotals}).");
+      if (order.Items.Count == 0 && order.Taxes.ControlConcepts.Count == 0) {
+        Assertion.RequireFail("No se han cargado los conceptos.");
       }
+
+      decimal orderTotals = order.Subtotal + order.Taxes.ControlConceptsTotal;
+      decimal billed = billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal;
+
+      Assertion.Require(orderTotals == billed,
+                        $"El importe antes de impuestos de los comprobantes ({billed:C2}), no coincide " +
+                        $"con el importe de los conceptos ({orderTotals:C2}).");
+
+      var paymentType = PaymentType.Parse(fields.PaymentTypeUID);
 
       var paymentOrder = new PaymentOrder(paymentType, order.Provider, order, billsTotals.Total);
 
