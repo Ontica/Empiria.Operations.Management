@@ -8,10 +8,13 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System.Collections.Generic;
+
 using Empiria.Parties;
 using Empiria.Services;
 
 using Empiria.Budgeting;
+using Empiria.Budgeting.Transactions;
 
 using Empiria.Orders.Adapters;
 using Empiria.Orders.Data;
@@ -52,7 +55,27 @@ namespace Empiria.Orders.UseCases {
       Assertion.Require(requestedBy, nameof(requestedBy));
 
       var requisitions = Requisition.GetList()
-                                    .FindAll(x => x.RequestedBy.Equals(requestedBy));
+                                    .FindAll(x => x.RequestedBy.Equals(requestedBy) &&
+                                                  x.Status == StateEnums.EntityStatus.Active);
+
+      var toRemove = new List<Requisition>();
+
+      foreach (var requisition in requisitions) {
+        if (requisition.BudgetType.Equals(BudgetType.None)) {
+          continue;
+        }
+
+        var budgetTxns = BudgetTransaction.GetFor(requisition);
+
+        if (!budgetTxns.Exists(x => x.OperationType == BudgetOperationType.Request && x.IsClosed)) {
+          toRemove.Add(requisition);
+          continue;
+        }
+      }
+
+      foreach (var x in toRemove) {
+        requisitions.Remove(x);
+      }
 
       return RequisitionMapper.Map(requisitions);
     }
