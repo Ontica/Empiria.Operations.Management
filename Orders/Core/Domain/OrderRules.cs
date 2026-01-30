@@ -108,27 +108,27 @@ namespace Empiria.Orders {
 
     internal bool CanEditItems() {
 
+      if (_order.Status == EntityStatus.Pending) {
+        return true;
+      }
+
       if (_order.Status == EntityStatus.Closed ||
           _order.Status == EntityStatus.Deleted ||
           _order.Status == EntityStatus.Suspended) {
         return false;
       }
 
-      if (_order.Status == EntityStatus.Pending && GetBills().Count == 0) {
-        return true;
-      }
+      var budgetTxns = GetBudgetTransactions();
 
-      if (_order.Id < 0) {
+      if (budgetTxns.Any(x => !x.IsClosed)) {
         return false;
       }
 
-      var budgetTxns = GetBudgetTransactions(BudgetOperationType.Request);
-
-      if (budgetTxns.All(x => x.IsClosed)) {
-        return true;
+      if (GetActivePaymentOrders().Count > 0) {
+        return false;
       }
 
-      return false;
+      return true;
     }
 
 
@@ -164,23 +164,32 @@ namespace Empiria.Orders {
 
     internal bool CanRequestPayment() {
 
+      if (!IsPayable()) {
+        return false;
+      }
+
       if (_order.Status == EntityStatus.Closed ||
           _order.Status == EntityStatus.Deleted ||
           _order.Status == EntityStatus.Suspended) {
         return false;
       }
 
-      if (!IsPayable()) {
+      FixedList<Bill> bills = GetBills();
+
+      if (bills.Count == 0) {
         return false;
+      }
+
+      if (!_order.HasCrossedBeneficiaries()) {
+
+        var budgetTxns = GetBudgetTransactions();
+
+        if (budgetTxns.Count == 0 || budgetTxns.Any(x => !x.IsClosed)) {
+          return false;
+        }
       }
 
       if (GetActivePaymentOrders().Count > 0) {
-        return false;
-      }
-
-      FixedList<Bill> bills = GetBills();
-
-      if (bills.Count == 0) {   // ToDo: || Check if there are any payable amount left or accepts advance payments
         return false;
       }
 
