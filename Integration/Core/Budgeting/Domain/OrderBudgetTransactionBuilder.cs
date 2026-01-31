@@ -112,14 +112,8 @@ namespace Empiria.Operations.Integration.Budgeting {
     private BudgetEntryFields BuildEntryFields(OrderItem entry,
                                                BalanceColumn balanceColumn,
                                                bool isDeposit) {
-      DateTime budgetingDate;
 
-      if (_transactionType.OperationType == BudgetOperationType.Request) {
-        budgetingDate = ExecutionServer.IsMinOrMaxDate(entry.StartDate) ?
-                                            entry.Order.StartDate : entry.StartDate;
-      } else {
-        budgetingDate = new DateTime(_transaction.BaseBudget.Year, 1, 1);
-      }
+      DateTime budgetingDate = DetermineEntryBudgetingDate(entry, balanceColumn, isDeposit);
 
       string relatedEntryUID = string.Empty;
 
@@ -193,6 +187,115 @@ namespace Empiria.Operations.Integration.Budgeting {
         ApplicationDate = DateTime.Today
       };
     }
+
+    private DateTime DetermineEntryBudgetingDate(OrderItem entry, BalanceColumn balanceColumn, bool isDeposit) {
+
+      switch (_transactionType.OperationType) {
+        case BudgetOperationType.Request:
+
+          return DetermineBudgetRequestDate(entry);
+
+        case BudgetOperationType.Commit:
+
+          return DetermineBudgetCommitRequestDate(entry, isDeposit);
+
+        case BudgetOperationType.ApprovePayment:
+
+          return DetermineApprovePaymentRequestDate(entry, isDeposit);
+
+        case BudgetOperationType.Exercise:
+
+          return DetermineExcerciseRequestDate(entry, isDeposit);
+
+        default:
+          throw Assertion.EnsureNoReachThisCode($"Budget entry budgeting date rule is undefined: " +
+                                                $"{_transaction.TransactionType.DisplayName}");
+      }
+    }
+
+
+    private DateTime DetermineApprovePaymentRequestDate(OrderItem entry, bool isDeposit) {
+      if (isDeposit) {
+        return DateTime.Today.Date;
+      }
+
+      BudgetEntry budgetEntry = entry.RequisitionItem.BudgetEntry;
+
+      if (!budgetEntry.IsEmptyInstance) {
+        return new DateTime(budgetEntry.Year, budgetEntry.Month, 1);
+      }
+
+      if (!entry.Order.Requisition.IsEmptyInstance) {
+        return new DateTime(entry.Order.Requisition.StartDate.Year,
+                            entry.Order.Requisition.StartDate.Month, 1);
+      }
+
+      return new DateTime(_transaction.BaseBudget.Year, entry.Order.PostingTime.Month, 1);
+    }
+
+
+    private DateTime DetermineBudgetCommitRequestDate(OrderItem entry, bool isDeposit) {
+      if (isDeposit) {
+        return new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+      }
+
+      BudgetEntry budgetEntry = entry.RequisitionItem.BudgetEntry;
+
+      if (!budgetEntry.IsEmptyInstance) {
+        return new DateTime(budgetEntry.Year, budgetEntry.Month, 1);
+      }
+
+      if (!entry.Order.Requisition.IsEmptyInstance) {
+        return new DateTime(entry.Order.Requisition.StartDate.Year,
+                            entry.Order.Requisition.StartDate.Month, 1);
+      }
+
+      return new DateTime(_transaction.BaseBudget.Year, entry.Order.PostingTime.Month, 1);
+    }
+
+
+    private DateTime DetermineBudgetRequestDate(OrderItem entry) {
+      DateTime budgetingDate = ExecutionServer.IsMinOrMaxDate(entry.StartDate) ?
+                                                        entry.Order.StartDate : entry.StartDate;
+
+      if (budgetingDate.Year < entry.Budget.Year) {
+        budgetingDate = new DateTime(entry.Budget.Year, 1, 1);
+
+      } else if (budgetingDate.Year == entry.Budget.Year) {
+        budgetingDate = new DateTime(budgetingDate.Year, budgetingDate.Month, 1);
+
+      } else if (budgetingDate.Year > entry.Budget.Year) {
+        budgetingDate = new DateTime(entry.Budget.Year, 1, 1);
+      }
+
+      return budgetingDate;
+    }
+
+
+    private DateTime DetermineExcerciseRequestDate(OrderItem entry, bool isDeposit) {
+      if (isDeposit) {
+        return DateTime.Today.Date;
+      }
+
+      BudgetEntry budgetEntry = entry.RequisitionItem.BudgetEntry;
+
+      if (!budgetEntry.IsEmptyInstance) {
+        return new DateTime(budgetEntry.Year, budgetEntry.Month, 1);
+      }
+
+      if (!budgetEntry.IsEmptyInstance) {
+        return new DateTime(budgetEntry.Year, budgetEntry.Month, 1);
+      }
+
+      if (!entry.Order.Requisition.IsEmptyInstance) {
+        return new DateTime(entry.Order.Requisition.StartDate.Year,
+                            entry.Order.Requisition.StartDate.Month, 1);
+      }
+
+      return new DateTime(_transaction.BaseBudget.Year, entry.Order.PostingTime.Month, 1);
+
+    }
+
 
     #endregion Helpers
 
