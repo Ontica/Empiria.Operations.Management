@@ -124,7 +124,10 @@ namespace Empiria.Orders.UseCases {
     public FixedList<PayableOrderItemDto> GetAvailableOrderItems(PayableOrder order) {
       Assertion.Require(order, nameof(order));
 
-      return PayableOrderMapper.Map(order.Requisition.GetItems<PayableOrderItem>());
+      var items = order.Requisition.GetItems<PayableOrderItem>()
+                                   .FindAll(x => x.BudgetEntry.NoRejected);
+
+      return PayableOrderMapper.Map(items);
     }
 
 
