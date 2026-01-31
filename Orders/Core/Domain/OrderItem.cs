@@ -422,7 +422,7 @@ namespace Empiria.Orders {
 
     internal protected virtual void Close() {
       Assertion.Require(this.Status == EntityStatus.Active,
-                  $"No se puede cerrar una orden item que está en estado {this.Status.GetName()}.");
+                  $"No se puede cerrar un elemento que está en estado {this.Status.GetName()}.");
 
       this.Status = EntityStatus.Closed;
     }
@@ -430,7 +430,7 @@ namespace Empiria.Orders {
 
     internal protected virtual void Delete() {
       Assertion.Require(this.Status != EntityStatus.Deleted,
-                  $"No se puede eliminar una orden que está en estado {this.Status.GetName()}.");
+                  $"No se puede eliminar un elemento que está en estado {this.Status.GetName()}.");
 
       this.Status = EntityStatus.Deleted;
     }
@@ -489,7 +489,7 @@ namespace Empiria.Orders {
 
       Quantity = fields.Quantity;
 
-      if (RequestedQuantity != 0) {
+      if (fields.RequestedQty != 0) {
         RequestedQuantity = fields.RequestedQty;
       } else {
         RequestedQuantity = Quantity;

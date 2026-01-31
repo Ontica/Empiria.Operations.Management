@@ -180,6 +180,8 @@ namespace Empiria.Orders {
 
       if (productUnit.MoneyBased) {
         Assertion.Require(UnitPrice == 1m, "El precio unitario debe ser igual a uno.");
+        Quantity = Subtotal;
+
       } else {
         Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");
       }
