@@ -10,6 +10,8 @@
 
 using System.Linq;
 
+using Empiria.StateEnums;
+
 using Empiria.Budgeting;
 using Empiria.Budgeting.Explorer;
 using Empiria.Budgeting.Explorer.Adapters;
@@ -37,8 +39,8 @@ namespace Empiria.Operations.Integration.Budgeting {
     internal void EnsureOrderHasAvailableBudget() {
 
       var orderItems = _order.GetItems<OrderItem>()
-                             .FindAll(x => x.Budget.Equals(_order.BaseBudget) &&
-                                           x.BudgetEntry.IsEmptyInstance);
+                             .FindAll(x => x.BudgetEntry.IsEmptyInstance ||
+                                           x.BudgetEntry.Status == TransactionStatus.Rejected);
 
       Assertion.Require(orderItems.Count != 0,
                         "Todos los conceptos de la requisición ya cuentan con suficiencia presupuestal autorizada.");

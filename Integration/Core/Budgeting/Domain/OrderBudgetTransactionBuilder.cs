@@ -11,6 +11,7 @@
 using System;
 
 using Empiria.Parties;
+using Empiria.StateEnums;
 
 using Empiria.Budgeting;
 using Empiria.Budgeting.Transactions;
@@ -76,7 +77,8 @@ namespace Empiria.Operations.Integration.Budgeting {
 
       if (_transaction.OperationType == BudgetOperationType.Request) {
         orderItems = _order.GetItems<OrderItem>()
-                           .FindAll(x => x.BudgetEntry.IsEmptyInstance);
+                           .FindAll(x => x.BudgetEntry.IsEmptyInstance ||
+                                         x.BudgetEntry.Status == TransactionStatus.Rejected);
       } else {
         orderItems = _order.GetItems<OrderItem>();
       }
@@ -110,7 +112,6 @@ namespace Empiria.Operations.Integration.Budgeting {
     private BudgetEntryFields BuildEntryFields(OrderItem entry,
                                                BalanceColumn balanceColumn,
                                                bool isDeposit) {
-
       DateTime budgetingDate;
 
       if (_transactionType.OperationType == BudgetOperationType.Request) {
