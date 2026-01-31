@@ -137,6 +137,7 @@ namespace Empiria.Operations.Integration.Budgeting {
         ProductCode = entry.ProductCode,
         ProductName = entry.ProductName,
         ProductUnitUID = entry.ProductUnit.UID,
+        OriginCountryUID = entry.OriginCountry.UID,
         ProductQty = entry.Quantity,
         ProjectUID = entry.Project.UID,
         PartyUID = entry.RequestedBy.UID,
