@@ -144,6 +144,9 @@ namespace Empiria.Procurement.Contracts {
     internal void Update(ContractFields fields) {
       Assertion.Require(fields, nameof(fields));
 
+      fields.CurrencyUID = Requisition.Currency.UID;
+      fields.ExchangeRate = Requisition.ExchangeRate;
+
       fields.EnsureValid();
 
       OrderNo = Patcher.Patch(fields.ContractNo, "Sin número asignado");

@@ -93,6 +93,9 @@ namespace Empiria.Procurement.Contracts {
     internal protected void Update(ContractOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
+      fields.CurrencyUID = Contract.Currency.UID;
+      fields.ExchangeRate = Contract.ExchangeRate;
+
       fields.EnsureValid();
 
       fields.ProviderUID = Contract.Provider.UID;

@@ -184,11 +184,13 @@ namespace Empiria.Orders {
         CurrencyUID = Currency.Default.UID;
       }
 
-      if (CurrencyUID == Currency.Default.UID) {
+      if (ExchangeRate == decimal.Zero) {
         ExchangeRate = decimal.One;
-      } else {
-        Assertion.Require(ExchangeRate > decimal.Zero,
-                          "El tipo de cambio debe ser un valor mayor que cero.");
+      }
+
+      if (CurrencyUID != Currency.Default.UID) {
+        Assertion.Require(ExchangeRate > 0 && ExchangeRate != decimal.One,
+                         "El tipo de cambio debe ser positivo y distinto a uno.");
       }
 
       if (!StartDate.HasValue) {

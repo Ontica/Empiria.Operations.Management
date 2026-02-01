@@ -127,6 +127,9 @@ namespace Empiria.Orders {
     internal protected void Update(PayableOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
+      fields.CurrencyUID = Requisition.Currency.UID;
+      fields.ExchangeRate = Requisition.ExchangeRate;
+
       fields.EnsureValid();
 
       if (this.GetItems<PayableOrderItem>().Count != 0 &&

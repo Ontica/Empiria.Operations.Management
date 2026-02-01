@@ -55,6 +55,8 @@ namespace Empiria.Orders {
       Assertion.Require(!requisition.IsEmptyInstance, nameof(requisition));
 
       Requisition = requisition;
+      Currency = requisition.Currency;
+      ExchangeRate = requisition.ExchangeRate;
     }
 
     static public Order Parse(int id) => ParseId<Order>(id);
@@ -627,7 +629,7 @@ namespace Empiria.Orders {
       Provider = Patcher.Patch(fields.ProviderUID, Provider);
 
       Currency = Patcher.Patch(fields.CurrencyUID, Currency.Default);
-      ExchangeRate = Patcher.Patch(fields.ExchangeRate, 1m);
+      ExchangeRate = Patcher.Patch(fields.ExchangeRate, Requisition.ExchangeRate);
 
       Source = Patcher.Patch(fields.SourceUID, Source);
       DeliveryPlace = Patcher.Patch(fields.DeliveryPlaceUID, DeliveryPlace);
