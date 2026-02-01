@@ -141,10 +141,10 @@ namespace Empiria.Operations.Integration.Budgeting {
         EntityTypeId = entry.GetEmpiriaType().Id,
         EntityId = entry.Id,
         RelatedEntryUID = relatedEntryUID,
-        ExchangeRate = 1m,
+        ExchangeRate = _order.ExchangeRate,
         CurrencyUID = entry.Currency.UID,
-        OriginalAmount = entry.Subtotal,
-        Amount = isDeposit ? entry.Subtotal : -1 * entry.Subtotal
+        CurrencyAmount = entry.Subtotal,
+        Amount = Math.Round((isDeposit ? entry.Subtotal : -1 * entry.Subtotal) * _order.ExchangeRate, 2)
       };
     }
 
@@ -181,8 +181,10 @@ namespace Empiria.Operations.Integration.Budgeting {
         Justification = _order.Justification,
         Description = _order.Description,
         BaseBudgetUID = _order.BaseBudget.UID,
-        OperationSourceUID = operationSource.UID,
         BasePartyUID = _order.RequestedBy.UID,
+        CurrencyUID = _order.Currency.UID,
+        ExchangeRate = _order.ExchangeRate,
+        OperationSourceUID = operationSource.UID,
         RequestedByUID = Party.ParseWithContact(ExecutionServer.CurrentContact).UID,
         ApplicationDate = DateTime.Today
       };
