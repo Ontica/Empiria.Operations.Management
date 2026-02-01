@@ -61,7 +61,7 @@ namespace Empiria.Procurement.Contracts.UseCases {
 
       var contract = Contract.Parse(contractUID);
 
-      var contractItem = new ContractItem(OrderItemType.ContractItemPayable, contract);
+      var contractItem = new ContractItem(contract);
 
       contractItem.Update(fields);
 
@@ -86,9 +86,9 @@ namespace Empiria.Procurement.Contracts.UseCases {
     public ContractHolderDto CreateContract(ContractFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      fields.EnsureValid();
+      var requisition = Requisition.Parse(fields.RequisitionUID);
 
-      var contract = new Contract(OrderType.Contract);
+      var contract = new Contract(requisition, OrderType.Contract);
 
       contract.Update(fields);
 

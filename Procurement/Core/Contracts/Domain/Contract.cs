@@ -25,6 +25,10 @@ namespace Empiria.Procurement.Contracts {
       // Required by Empiria Framework.
     }
 
+    public Contract(Requisition requisition, OrderType contractType) : base(requisition, contractType) {
+      // no-op
+    }
+
     static internal new Contract Parse(int contractId) => ParseId<Contract>(contractId);
 
     static public new Contract Parse(string contractUID) => ParseKey<Contract>(contractUID);

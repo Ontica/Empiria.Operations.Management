@@ -23,7 +23,7 @@ namespace Empiria.Procurement.Contracts {
     }
 
 
-    public ContractItem(OrderItemType powertype, Contract contract) : base(powertype, contract) {
+    public ContractItem(Contract contract) : base(OrderItemType.ContractItemPayable, contract) {
       // no-op
     }
 

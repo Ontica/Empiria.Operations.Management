@@ -28,7 +28,7 @@ namespace Empiria.Procurement.Contracts {
 
 
     public override void EnsureValid() {
-      Assertion.Require(RequisitionUID, "Necesito el número del requisición.");
+      Assertion.Require(RequisitionUID, "Necesito se seleccione la requisición.");
       Assertion.Require(Name, "Necesito el nombre del contrato.");
 
       Assertion.Require(CurrencyUID, "Necesito la moneda del contrato.");

@@ -23,7 +23,7 @@ namespace Empiria.Procurement.Contracts {
       // Required by Empiria Framework for all partitioned types.
     }
 
-    internal ContractOrder(Contract contract) : base(OrderType.ContractOrder) {
+    internal ContractOrder(Contract contract) : base(contract.Requisition, OrderType.ContractOrder) {
       Assertion.Require(contract, nameof(contract));
       Assertion.Require(!contract.IsEmptyInstance, nameof(contract));
 
@@ -95,7 +95,6 @@ namespace Empiria.Procurement.Contracts {
 
       fields.EnsureValid();
 
-      fields.RequisitionUID = Contract.Requisition.UID;
       fields.ProviderUID = Contract.Provider.UID;
 
       fields.Budgets = new string[] { fields.BudgetUID };

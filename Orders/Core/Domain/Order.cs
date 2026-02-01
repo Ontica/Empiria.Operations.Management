@@ -50,6 +50,13 @@ namespace Empiria.Orders {
       _taxes = new OrderTaxes(this);
     }
 
+    protected Order(Requisition requisition, OrderType orderType) : this(orderType) {
+      Assertion.Require(requisition, nameof(requisition));
+      Assertion.Require(!requisition.IsEmptyInstance, nameof(requisition));
+
+      Requisition = requisition;
+    }
+
     static public Order Parse(int id) => ParseId<Order>(id);
 
     static public Order Parse(string uid) => ParseKey<Order>(uid);
@@ -353,7 +360,7 @@ namespace Empiria.Orders {
 
     public virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(OrderNo, Description, Beneficiary.Keywords,
+        return EmpiriaString.BuildKeywords(OrderNo, Name, Description, Beneficiary.Keywords,
                                            Provider.Keywords, Project.Keywords,
                                            Responsible.Keywords);
       }
@@ -529,6 +536,7 @@ namespace Empiria.Orders {
                   $"No se puede eliminar una orden que está en estado {this.Status.GetName()}.");
 
       this.Status = EntityStatus.Deleted;
+
     }
 
 
@@ -589,10 +597,15 @@ namespace Empiria.Orders {
     internal protected virtual void Update(OrderFields fields) {
       Assertion.Require(fields, nameof(fields));
 
+      if (fields.RequisitionUID.Length != 0 && Requisition.UID != fields.RequisitionUID) {
+        Assertion.Require(this.Items.Count == 0,
+          $"No se puede cambiar la requisición ya que este elemento tiene {Items.Count} concepto(s).");
+      }
+
       fields.EnsureValid();
 
       Category = Patcher.Patch(fields.CategoryUID, Category);
-      Requisition = Patcher.Patch(fields.RequisitionUID, Requisition.Empty);
+      Requisition = Patcher.Patch(fields.RequisitionUID, Requisition);
       ParentOrder = Patcher.Patch(fields.ParentOrderUID, Empty);
       Contract = Patcher.Patch(fields.ContractUID, Empty);
       Name = Patcher.PatchClean(fields.Name, "Sin nombre asignado");

@@ -27,6 +27,12 @@ namespace Empiria.Orders {
                                   .ToUpperInvariant();
     }
 
+    public PayableOrder(Requisition requisition, OrderType orderType) : base(requisition, orderType) {
+
+      base.OrderNo = EmpiriaString.BuildRandomString(8)
+                                  .ToUpperInvariant();
+    }
+
     static public new PayableOrder Parse(int id) => ParseId<PayableOrder>(id);
 
     static public new PayableOrder Parse(string uid) => ParseKey<PayableOrder>(uid);
@@ -65,6 +71,7 @@ namespace Empiria.Orders {
         return base.Provider;
       }
     }
+
 
     OrganizationalUnit IPayableEntity.OrganizationalUnit {
       get {

@@ -8,8 +8,9 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Parties;
 using Empiria.Services;
+
+using Empiria.Parties;
 
 using Empiria.Orders.Adapters;
 using Empiria.Orders.Data;
@@ -58,13 +59,11 @@ namespace Empiria.Orders.UseCases {
 
     public PayableOrderHolderDto CreateOrder(PayableOrderFields fields) {
       Assertion.Require(fields, nameof(fields));
-      Assertion.Require(fields.OrderTypeUID, nameof(fields.OrderTypeUID));
 
-      fields.EnsureValid();
-
+      var requisition = Requisition.Parse(fields.RequisitionUID);
       var orderType = OrderType.Parse(fields.OrderTypeUID);
 
-      var order = new PayableOrder(orderType);
+      var order = new PayableOrder(requisition, orderType);
 
       order.Update(fields);
 
