@@ -24,12 +24,13 @@ namespace Empiria.Orders {
 
 
     public override void EnsureValid() {
-      base.EnsureValid();
 
       BudgetUID = Patcher.CleanUID(BudgetUID);
       ExpenseTypeUID = Patcher.CleanUID(ExpenseTypeUID);
 
       Assertion.Require(BudgetUID, nameof(BudgetUID));
+
+      base.EnsureValid();
     }
 
   }  // class PayableOrderFields

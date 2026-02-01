@@ -79,7 +79,6 @@ namespace Empiria.Orders.Adapters {
         CanEditItems = rules.CanEditItems(),
         CanSuspend = rules.CanSuspend(),
         CanUpdate = rules.CanUpdate(),
-
         CanCommitBudget = rules.CanCommitBudget(),
         CanEditBills = rules.CanEditBills(),
         CanRequestBudget = false,

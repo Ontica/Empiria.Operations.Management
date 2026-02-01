@@ -42,6 +42,8 @@ namespace Empiria.Procurement.Contracts {
 
       base.Quantity = MaxQuantity;
 
+      Subtotal = MaxQuantity * UnitPrice;
+
       var contract = Contract.Parse(ContractUID);
 
       if (RequestedByUID.Length == 0) {

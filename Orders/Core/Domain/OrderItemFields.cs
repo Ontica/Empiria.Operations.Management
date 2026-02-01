@@ -186,7 +186,7 @@ namespace Empiria.Orders {
         Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");
       }
 
-      Assertion.Require(Quantity > 0, "Necesito se proporcione la cantidad mínima.");
+      Assertion.Require(Quantity > 0, "Necesito se proporcione la cantidad.");
 
       Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");
       Assertion.Require(Discount >= 0, "El descuento no puede ser negativo.");

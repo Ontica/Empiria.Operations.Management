@@ -39,8 +39,6 @@ namespace Empiria.Operations.Integration.Orders.WebApi {
     [Route("v8/order-management/orders/available")]
     public CollectionModel AvailableOrders([FromBody] OrdersQuery query) {
 
-      var orderType = OrderType.Parse(query.OrderTypeUID);
-
       FixedList<OrderDescriptor> orders = OrderUseCaseSelector.AvailableOrders(query);
 
       return new CollectionModel(base.Request, orders);
