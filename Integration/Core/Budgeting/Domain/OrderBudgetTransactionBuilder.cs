@@ -59,15 +59,15 @@ namespace Empiria.Operations.Integration.Budgeting {
                                     BalanceColumn withdrawalColumn,
                                     BalanceColumn depositColumn) {
 
-      var fields = BuildEntryFields(entry, withdrawalColumn, false);
+      var fields = BuildEntryFields(entry, depositColumn, true);
+
+      BudgetEntry depositEntry = _transaction.AddEntry(fields);
+
+      entry.SetBudgetEntry(depositEntry);
+
+      fields = BuildEntryFields(entry, withdrawalColumn, false);
 
       _transaction.AddEntry(fields);
-
-      fields = BuildEntryFields(entry, depositColumn, true);
-
-      BudgetEntry budgetEntry = _transaction.AddEntry(fields);
-
-      entry.SetBudgetEntry(budgetEntry);
     }
 
 
@@ -221,83 +221,54 @@ namespace Empiria.Operations.Integration.Budgeting {
         return DateTime.Today.Date;
       }
 
-      BudgetEntry budgetEntry = entry.RequisitionItem.BudgetEntry;
+      DateTime budgetRequisitionDate = !entry.RequisitionItem.BudgetEntry.IsEmptyInstance ?
+                                             entry.RequisitionItem.BudgetEntry.Date : DateTime.Today;
 
-      if (!budgetEntry.IsEmptyInstance) {
-        return new DateTime(budgetEntry.Year, budgetEntry.Month, 1);
-      }
-
-      if (!entry.Order.Requisition.IsEmptyInstance) {
-        return new DateTime(entry.Order.Requisition.StartDate.Year,
-                            entry.Order.Requisition.StartDate.Month, 1);
-      }
-
-      return new DateTime(_transaction.BaseBudget.Year, entry.Order.PostingTime.Month, 1);
+      return new DateTime(budgetRequisitionDate.Year, budgetRequisitionDate.Month, 1);
     }
 
 
     private DateTime DetermineBudgetCommitRequestDate(OrderItem entry, bool isDeposit) {
-      if (isDeposit) {
-        return new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+
+      DateTime budgetRequisitionDate = !entry.RequisitionItem.BudgetEntry.IsEmptyInstance ?
+                                                          entry.RequisitionItem.BudgetEntry.Date : DateTime.Today;
+
+      if (isDeposit && budgetRequisitionDate.Year == DateTime.Today.Year) {
+        return new DateTime(entry.Budget.Year, Math.Max(DateTime.Today.Month, budgetRequisitionDate.Month), 1);
+
+      } else {
+        return new DateTime(budgetRequisitionDate.Year, budgetRequisitionDate.Month, 1);
       }
-
-      BudgetEntry budgetEntry = entry.RequisitionItem.BudgetEntry;
-
-      if (!budgetEntry.IsEmptyInstance) {
-        return new DateTime(budgetEntry.Year, budgetEntry.Month, 1);
-      }
-
-      if (!entry.Order.Requisition.IsEmptyInstance) {
-        return new DateTime(entry.Order.Requisition.StartDate.Year,
-                            entry.Order.Requisition.StartDate.Month, 1);
-      }
-
-      return new DateTime(_transaction.BaseBudget.Year, entry.Order.PostingTime.Month, 1);
     }
 
 
     private DateTime DetermineBudgetRequestDate(OrderItem entry) {
-      DateTime budgetingDate = ExecutionServer.IsMinOrMaxDate(entry.StartDate) ?
+      DateTime entryStartDate = ExecutionServer.IsMinOrMaxDate(entry.StartDate) ?
                                                         entry.Order.StartDate : entry.StartDate;
 
-      if (budgetingDate.Year < entry.Budget.Year) {
-        budgetingDate = new DateTime(entry.Budget.Year, 1, 1);
+      if (entryStartDate.Year == entry.Budget.Year) {
 
-      } else if (budgetingDate.Year == entry.Budget.Year) {
-        budgetingDate = new DateTime(budgetingDate.Year, budgetingDate.Month, 1);
+        return new DateTime(entry.Budget.Year, entryStartDate.Month, 1);
 
-      } else if (budgetingDate.Year > entry.Budget.Year) {
-        budgetingDate = new DateTime(entry.Budget.Year, 1, 1);
+      } else {
+
+        return new DateTime(entry.Budget.Year, 1, 1);
+
       }
-
-      return budgetingDate;
     }
 
 
     private DateTime DetermineExcerciseRequestDate(OrderItem entry, bool isDeposit) {
+
       if (isDeposit) {
         return DateTime.Today.Date;
       }
 
-      BudgetEntry budgetEntry = entry.RequisitionItem.BudgetEntry;
+      DateTime budgetRequisitionDate = !entry.RequisitionItem.BudgetEntry.IsEmptyInstance ?
+                                             entry.RequisitionItem.BudgetEntry.Date : DateTime.Today;
 
-      if (!budgetEntry.IsEmptyInstance) {
-        return new DateTime(budgetEntry.Year, budgetEntry.Month, 1);
-      }
-
-      if (!budgetEntry.IsEmptyInstance) {
-        return new DateTime(budgetEntry.Year, budgetEntry.Month, 1);
-      }
-
-      if (!entry.Order.Requisition.IsEmptyInstance) {
-        return new DateTime(entry.Order.Requisition.StartDate.Year,
-                            entry.Order.Requisition.StartDate.Month, 1);
-      }
-
-      return new DateTime(_transaction.BaseBudget.Year, entry.Order.PostingTime.Month, 1);
-
+      return new DateTime(budgetRequisitionDate.Year, budgetRequisitionDate.Month, 1);
     }
-
 
     #endregion Helpers
 
