@@ -89,9 +89,7 @@ namespace Empiria.Orders {
         return false;
       }
 
-      var paymentOrders = GetActivePaymentOrders();
-
-      if (paymentOrders.Count(x => x.InProgress) > 0) {
+      if (GetActivePaymentOrders().Count() > 0) {
         return false;
       }
 
