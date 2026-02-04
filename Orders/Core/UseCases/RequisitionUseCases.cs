@@ -56,7 +56,8 @@ namespace Empiria.Orders.UseCases {
 
       var requisitions = Requisition.GetList()
                                     .FindAll(x => x.RequestedBy.Equals(requestedBy) &&
-                                                  x.Status == StateEnums.EntityStatus.Active);
+                                                  (x.Status == StateEnums.EntityStatus.Active ||
+                                                  x.Status == StateEnums.EntityStatus.Closed));
 
       var toRemove = new List<Requisition>();
 
