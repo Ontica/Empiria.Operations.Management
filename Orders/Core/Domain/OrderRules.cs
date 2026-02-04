@@ -168,11 +168,13 @@ namespace Empiria.Orders {
         return false;
       }
 
+
       if (_order.Status == EntityStatus.Closed ||
           _order.Status == EntityStatus.Deleted ||
           _order.Status == EntityStatus.Suspended) {
         return false;
       }
+
 
       FixedList<Bill> bills = GetBills();
 
@@ -234,7 +236,7 @@ namespace Empiria.Orders {
 
 
     private FixedList<BudgetTransaction> GetBudgetTransactions() {
-      var budgetable = (IBudgetable) _order;
+      var budgetable = _order.OrderType.Equals(OrderType.ContractOrder) ? _order.Contract : _order;
 
       var budgetTxns = BudgetTransaction.GetFor(budgetable);
 
