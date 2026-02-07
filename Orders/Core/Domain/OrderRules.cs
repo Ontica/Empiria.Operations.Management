@@ -15,6 +15,7 @@ using Empiria.StateEnums;
 
 using Empiria.Billing;
 
+using Empiria.Budgeting;
 using Empiria.Budgeting.Transactions;
 
 using Empiria.Payments;
@@ -38,6 +39,11 @@ namespace Empiria.Orders {
 
 
     internal bool CanCommitBudget() {
+
+      if (!IsBudgetable()) {
+        return false;
+      }
+
       if (_order.Status == EntityStatus.Closed ||
           _order.Status == EntityStatus.Deleted ||
           _order.Status == EntityStatus.Suspended) {
@@ -132,6 +138,10 @@ namespace Empiria.Orders {
 
     internal bool CanRequestBudget() {
 
+      if (!IsBudgetable()) {
+        return false;
+      }
+
       if (_order.Status == EntityStatus.Closed ||
           _order.Status == EntityStatus.Deleted ||
           _order.Status == EntityStatus.Suspended) {
@@ -141,6 +151,7 @@ namespace Empiria.Orders {
       if (_order.Items.Count == 0) {
         return false;
       }
+
 
       FixedList<BudgetTransaction> budgetTxns = GetBudgetTransactions(BudgetOperationType.Request);
 
@@ -180,7 +191,7 @@ namespace Empiria.Orders {
         return false;
       }
 
-      if (!_order.HasCrossedBeneficiaries()) {
+      if (IsBudgetable() && !_order.HasCrossedBeneficiaries()) {
 
         var budgetTxns = GetBudgetTransactions();
 
@@ -234,6 +245,11 @@ namespace Empiria.Orders {
 
 
     private FixedList<BudgetTransaction> GetBudgetTransactions() {
+
+      if (!IsBudgetable()) {
+        return FixedList<BudgetTransaction>.Empty;
+      }
+
       var budgetable = _order.OrderType.Equals(OrderType.ContractOrder) ? _order.Contract : _order;
 
       var budgetTxns = BudgetTransaction.GetFor(budgetable);
@@ -245,6 +261,11 @@ namespace Empiria.Orders {
     private FixedList<BudgetTransaction> GetBudgetTransactions(BudgetOperationType operationType) {
       return GetBudgetTransactions()
             .FindAll(x => x.OperationType == operationType);
+    }
+
+
+    private bool IsBudgetable() {
+      return _order.BudgetType != BudgetType.None;
     }
 
 
