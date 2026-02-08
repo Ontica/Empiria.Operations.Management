@@ -19,4 +19,3 @@ using System.Runtime.CompilerServices;
 [assembly: CLSCompliant(true)]
 [assembly: InternalsVisibleTo("Empiria.Procurement.Tests")]
 [assembly: InternalsVisibleTo("Empiria.Procurement.WebApi")]
-[assembly: InternalsVisibleTo("Empiria.Operations.Integration.Core")]

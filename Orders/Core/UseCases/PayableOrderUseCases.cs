@@ -203,4 +203,4 @@ namespace Empiria.Orders.UseCases {
 
   }  // class PayableOrderUseCases
 
-}  // namespace Empiria.Operations.Integration.Orders.UseCases
+}  // namespace Empiria.Orders.UseCases
