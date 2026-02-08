@@ -445,7 +445,7 @@ namespace Empiria.Orders {
     }
 
 
-    internal void SetBudgetEntry(BudgetEntry budgetEntry) {
+    public void SetBudgetEntry(BudgetEntry budgetEntry) {
 
       Assertion.Require(budgetEntry, nameof(budgetEntry));
       Assertion.Require(budgetEntry.Budget.Equals(this.Budget), "Budget mismatch");

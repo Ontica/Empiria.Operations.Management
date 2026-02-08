@@ -15,7 +15,7 @@ using Empiria.Data;
 namespace Empiria.Orders.Data {
 
   /// <summary>Provides data read and write methods for order and order item instances.</summary>
-  static internal class OrdersData {
+  static public class OrdersData {
 
     #region Methods
 
@@ -88,7 +88,7 @@ namespace Empiria.Orders.Data {
 
 
 
-    static internal FixedList<T> Search<T>(string filter, string sort) where T : Order {
+    static public FixedList<T> Search<T>(string filter, string sort) where T : Order {
       var sql = "SELECT * FROM OMS_ORDERS";
 
       if (!string.IsNullOrWhiteSpace(filter)) {

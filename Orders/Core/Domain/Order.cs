@@ -506,7 +506,7 @@ namespace Empiria.Orders {
 
     #region Methods
 
-    internal protected virtual void Activate() {
+    public virtual void Activate() {
       if (Status == EntityStatus.Active) {
         return;
       }
@@ -565,7 +565,7 @@ namespace Empiria.Orders {
     }
 
 
-    internal bool HasCrossedBeneficiaries() {
+    public bool HasCrossedBeneficiaries() {
       if (!IsForMultipleBeneficiaries) {
         return false;
       }
