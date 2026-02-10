@@ -20,6 +20,11 @@ namespace Empiria.Orders.Adapters {
     } = string.Empty;
 
 
+    public string ForUseInOrderTypeUID {
+      get; set;
+    } = string.Empty;
+
+
     public string RequestedByUID {
       get; set;
     } = string.Empty;
