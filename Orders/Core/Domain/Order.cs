@@ -317,6 +317,13 @@ namespace Empiria.Orders {
     }
 
 
+    public bool HasBudgetableItems {
+      get {
+        return Items.GetItems().Any(x => x.IsBudgetable);
+      }
+    }
+
+
     public bool IsMultiYear {
       get {
         return Budgets.Count > 1;

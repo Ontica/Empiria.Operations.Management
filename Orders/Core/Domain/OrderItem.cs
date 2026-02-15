@@ -287,6 +287,12 @@ namespace Empiria.Orders {
       get; protected set;
     }
 
+    public bool IsBudgetable {
+      get {
+        return !BudgetAccount.IsEmptyInstance;
+      }
+    }
+
 
     [DataField("ORDER_ITEM_BUDGET_ENTRY_ID")]
     public BudgetEntry BudgetEntry {
