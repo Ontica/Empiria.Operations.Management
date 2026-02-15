@@ -518,8 +518,8 @@ namespace Empiria.Orders {
         return;
       }
 
-      Assertion.Require(Status == EntityStatus.Pending,
-                  $"No se puede activar una orden que no está pendiente.");
+      Assertion.Require(Status == EntityStatus.Pending || Status == EntityStatus.Suspended,
+                  $"No se puede activar una orden que no está pendiente o suspendida.");
 
       RequestedTime = DateTime.Now;
       Status = EntityStatus.Active;
@@ -596,7 +596,7 @@ namespace Empiria.Orders {
 
 
     internal protected virtual void Suspend() {
-      Assertion.Require(this.Status == EntityStatus.Active,
+      Assertion.Require(this.Status == EntityStatus.Pending || this.Status == EntityStatus.Active,
                   $"No se puede suspender una orden que no está activa.");
 
       this.Status = EntityStatus.Suspended;

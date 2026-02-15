@@ -33,8 +33,7 @@ namespace Empiria.Orders {
 
 
     public bool CanActivate() {
-      return _order.Status == EntityStatus.Pending ||
-             _order.Status == EntityStatus.Suspended;
+      return _order.Status == EntityStatus.Suspended;
     }
 
 
@@ -44,9 +43,12 @@ namespace Empiria.Orders {
         return false;
       }
 
-      if (_order.Status == EntityStatus.Closed ||
-          _order.Status == EntityStatus.Deleted ||
-          _order.Status == EntityStatus.Suspended) {
+
+      if (!CanEditItems()) {
+        return false;
+      }
+
+      if (_order is Requisition) {
         return false;
       }
 
@@ -58,44 +60,55 @@ namespace Empiria.Orders {
         return false;
       }
 
-      FixedList<BudgetTransaction> budgetTxns = GetBudgetTransactions(BudgetOperationType.Commit);
-
-      if (budgetTxns.Count == 0) {
-        return true;
-      }
+      FixedList<BudgetTransaction> budgetTxns = GetBudgetTransactions();
 
       if (budgetTxns.Any(x => x.InProcess)) {
         return false;
       }
 
-      if (_order.Items.GetItems().Sum(x => x.Subtotal) != budgetTxns.Sum(x => x.GetTotal())) {
+      if (budgetTxns.Any(x => x.OperationType == BudgetOperationType.Commit && x.IsClosed)) {
+        return false;
+      }
+
+      if (_order.OrderType.Equals(OrderType.Contract)) {
         return true;
       }
 
-      return false;
+
+      FixedList<Bill> bills = GetBills();
+
+      if (bills.Count == 0) {
+        return false;
+      }
+
+      var billsTotals = new BillsTotals(bills);
+
+      decimal orderTotals = _order.Subtotal + _order.Taxes.ControlConceptsTotal;
+      decimal billed = billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal;
+
+      if (orderTotals != billed) {
+        return false;
+      }
+
+      return true;
     }
 
 
     public bool CanDelete() {
       return _order.Status == EntityStatus.Pending &&
              GetBills().Count == 0 &&
-             GetBudgetTransactions().Count == 0;
+             GetBudgetTransactions().Count == 0 &&
+             GetActivePaymentOrders().Count() == 0;
     }
 
 
     public bool CanEditBills() {
 
-      if (_order.Status == EntityStatus.Closed ||
-          _order.Status == EntityStatus.Deleted ||
-          _order.Status == EntityStatus.Suspended) {
-        return false;
-      }
-
       if (!IsPayable()) {
         return false;
       }
 
-      if (GetActivePaymentOrders().Count() > 0) {
+      if (!CanEditItems()) {
         return false;
       }
 
@@ -106,14 +119,14 @@ namespace Empiria.Orders {
 
 
     public bool CanEditDocuments() {
-      return true;
+      return (CanEditItems() || CanRequestPayment()) && _order.Status != EntityStatus.Suspended;
     }
 
 
     public bool CanEditItems() {
 
-      if (_order.Status == EntityStatus.Pending) {
-        return true;
+      if (GetActivePaymentOrders().Count > 0) {
+        return false;
       }
 
       if (_order.Status == EntityStatus.Closed ||
@@ -128,9 +141,19 @@ namespace Empiria.Orders {
         return false;
       }
 
-      if (GetActivePaymentOrders().Count > 0) {
+      if (IsPayable() && budgetTxns.Contains(x => x.OperationType == BudgetOperationType.Commit &&
+                                                  x.IsClosed)) {
         return false;
       }
+
+      if (_order.OrderType.Equals(OrderType.Contract)) {
+        var contractOrders = _order.GetPayableEntities().Cast<PayableOrder>();
+
+        if (contractOrders.Any(x => x.Rules.GetBudgetTransactions().Count > 0)) {
+          return false;
+        }
+      }
+
 
       return true;
     }
@@ -177,13 +200,13 @@ namespace Empiria.Orders {
         return false;
       }
 
-
-      if (_order.Status == EntityStatus.Closed ||
-          _order.Status == EntityStatus.Deleted ||
-          _order.Status == EntityStatus.Suspended) {
+      if (GetActivePaymentOrders().Count > 0) {
         return false;
       }
 
+      if (!CanEditItems()) {
+        return false;
+      }
 
       FixedList<Bill> bills = GetBills();
 
@@ -200,21 +223,17 @@ namespace Empiria.Orders {
         }
       }
 
-      if (GetActivePaymentOrders().Count > 0) {
-        return false;
-      }
-
       return true;
     }
 
 
     public bool CanSuspend() {
-      return _order.Status == EntityStatus.Pending;
+      return CanEditItems() && _order.Status != EntityStatus.Suspended;
     }
 
 
     public bool CanUpdate() {
-      return _order.Status == EntityStatus.Pending;
+      return CanEditItems();
     }
 
 
@@ -265,7 +284,7 @@ namespace Empiria.Orders {
 
 
     private bool IsBudgetable() {
-      return _order.BudgetType != BudgetType.None;
+      return _order.HasBudgetableItems && _order.BudgetType != BudgetType.None;
     }
 
 
