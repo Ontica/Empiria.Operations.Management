@@ -23,7 +23,7 @@ using Empiria.Payments;
 namespace Empiria.Orders {
 
   /// <summary>Provides services to control order's rules.</summary>
-  internal class OrderRules {
+  public class OrderRules {
 
     private Order _order;
 
@@ -32,13 +32,13 @@ namespace Empiria.Orders {
     }
 
 
-    internal bool CanActivate() {
+    public bool CanActivate() {
       return _order.Status == EntityStatus.Pending ||
              _order.Status == EntityStatus.Suspended;
     }
 
 
-    internal bool CanCommitBudget() {
+    public bool CanCommitBudget() {
 
       if (!IsBudgetable()) {
         return false;
@@ -76,14 +76,14 @@ namespace Empiria.Orders {
     }
 
 
-    internal bool CanDelete() {
+    public bool CanDelete() {
       return _order.Status == EntityStatus.Pending &&
              GetBills().Count == 0 &&
              GetBudgetTransactions().Count == 0;
     }
 
 
-    internal bool CanEditBills() {
+    public bool CanEditBills() {
 
       if (_order.Status == EntityStatus.Closed ||
           _order.Status == EntityStatus.Deleted ||
@@ -105,12 +105,12 @@ namespace Empiria.Orders {
     }
 
 
-    internal bool CanEditDocuments() {
+    public bool CanEditDocuments() {
       return true;
     }
 
 
-    internal bool CanEditItems() {
+    public bool CanEditItems() {
 
       if (_order.Status == EntityStatus.Pending) {
         return true;
@@ -136,7 +136,7 @@ namespace Empiria.Orders {
     }
 
 
-    internal bool CanRequestBudget() {
+    public bool CanRequestBudget() {
 
       if (!IsBudgetable()) {
         return false;
@@ -171,7 +171,7 @@ namespace Empiria.Orders {
     }
 
 
-    internal bool CanRequestPayment() {
+    public bool CanRequestPayment() {
 
       if (!IsPayable()) {
         return false;
@@ -208,17 +208,17 @@ namespace Empiria.Orders {
     }
 
 
-    internal bool CanSuspend() {
+    public bool CanSuspend() {
       return _order.Status == EntityStatus.Pending;
     }
 
 
-    internal bool CanUpdate() {
+    public bool CanUpdate() {
       return _order.Status == EntityStatus.Pending;
     }
 
 
-    internal bool CanValidateBudget() {
+    public bool CanValidateBudget() {
       return CanRequestBudget();
     }
 

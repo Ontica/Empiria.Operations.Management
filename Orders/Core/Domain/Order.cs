@@ -496,7 +496,7 @@ namespace Empiria.Orders {
     }
 
 
-    internal OrderRules Rules {
+    public OrderRules Rules {
       get {
         return new OrderRules(this);
       }
