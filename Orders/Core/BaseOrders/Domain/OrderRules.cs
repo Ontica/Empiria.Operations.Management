@@ -20,15 +20,27 @@ using Empiria.Budgeting.Transactions;
 
 using Empiria.Payments;
 
+using Empiria.Orders.Contracts;
+
 namespace Empiria.Orders {
 
   /// <summary>Provides services to control order's rules.</summary>
   public class OrderRules {
 
-    private Order _order;
+    private readonly Order _order;
+    private readonly bool _isBudgetable;
+    private readonly bool _isPayable;
+    private readonly FixedList<BudgetTransaction> _budgetTransations;
+    private readonly FixedList<PaymentOrder> _activePaymentOrders;
+    private readonly FixedList<Bill> _bills;
 
     internal OrderRules(Order order) {
       _order = order;
+      _isPayable = order is IPayableEntity;
+      _isBudgetable = _order.HasBudgetableItems || _order.BudgetType != BudgetType.None;
+      _budgetTransations = GetBudgetTransactions();
+      _activePaymentOrders = GetActivePaymentOrders();
+      _bills = GetBills();
     }
 
 
@@ -39,7 +51,7 @@ namespace Empiria.Orders {
 
     public bool CanCommitBudget() {
 
-      if (!IsBudgetable()) {
+      if (!_isBudgetable) {
         return false;
       }
 
@@ -56,37 +68,27 @@ namespace Empiria.Orders {
         return false;
       }
 
-      if (_order.OrderType.Equals(OrderType.ContractOrder) && !_order.HasCrossedBeneficiaries()) {
+      if (_order is ContractOrder && !_order.HasCrossedBeneficiaries()) {
         return false;
       }
 
-      FixedList<BudgetTransaction> budgetTxns = GetBudgetTransactions();
-
-      if (budgetTxns.Any(x => x.InProcess)) {
+      if (_budgetTransations.Any(x => x.InProcess)) {
         return false;
       }
 
-      if (budgetTxns.Any(x => x.OperationType == BudgetOperationType.Commit && x.IsClosed)) {
+      if (GetBudgetTransactions(BudgetOperationType.Commit).Any(x => x.IsClosed)) {
         return false;
       }
 
-      if (_order.OrderType.Equals(OrderType.Contract)) {
+      if (_order is Contract) {
         return true;
       }
 
-
-      FixedList<Bill> bills = GetBills();
-
-      if (bills.Count == 0) {
+      if (_bills.Count == 0) {
         return false;
       }
 
-      var billsTotals = new BillsTotals(bills);
-
-      decimal orderTotals = _order.Subtotal + _order.Taxes.ControlConceptsTotal;
-      decimal billed = billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal;
-
-      if (orderTotals != billed) {
+      if (!BillsTotalsEqualsOrderTotals()) {
         return false;
       }
 
@@ -95,24 +97,22 @@ namespace Empiria.Orders {
 
 
     public bool CanDelete() {
-      return _order.Status == EntityStatus.Pending &&
-             GetBills().Count == 0 &&
-             GetBudgetTransactions().Count == 0 &&
-             GetActivePaymentOrders().Count() == 0;
+      return (_order.Status == EntityStatus.Pending || _order.Status == EntityStatus.Active) &&
+             _bills.Count == 0 &&
+             _budgetTransations.Count == 0 &&
+             _activePaymentOrders.Count == 0;
     }
 
 
     public bool CanEditBills() {
 
-      if (!IsPayable()) {
+      if (!_isPayable) {
         return false;
       }
 
       if (!CanEditItems()) {
         return false;
       }
-
-      // ToDo: Check if there are any unpaid concepts or if accepts advance payments
 
       return true;
     }
@@ -125,7 +125,7 @@ namespace Empiria.Orders {
 
     public bool CanEditItems() {
 
-      if (GetActivePaymentOrders().Count > 0) {
+      if (_activePaymentOrders.Count > 0) {
         return false;
       }
 
@@ -135,25 +135,21 @@ namespace Empiria.Orders {
         return false;
       }
 
-      var budgetTxns = GetBudgetTransactions();
-
-      if (budgetTxns.Any(x => !x.IsClosed)) {
+      if (_budgetTransations.Any(x => !x.IsClosed)) {
         return false;
       }
 
-      if (IsPayable() && budgetTxns.Contains(x => x.OperationType == BudgetOperationType.Commit &&
-                                                  x.IsClosed)) {
+      if (_isPayable && GetBudgetTransactions(BudgetOperationType.Commit).Any(x => x.IsClosed)) {
         return false;
       }
 
-      if (_order.OrderType.Equals(OrderType.Contract)) {
+      if (_order is Contract contract) {
         var contractOrders = _order.GetPayableEntities().Cast<PayableOrder>();
 
-        if (contractOrders.Any(x => x.Rules.GetBudgetTransactions().Count > 0)) {
+        if (contractOrders.Any(x => x.Rules._budgetTransations.Count > 0)) {
           return false;
         }
       }
-
 
       return true;
     }
@@ -161,7 +157,7 @@ namespace Empiria.Orders {
 
     public bool CanRequestBudget() {
 
-      if (!IsBudgetable()) {
+      if (!_isBudgetable) {
         return false;
       }
 
@@ -171,10 +167,13 @@ namespace Empiria.Orders {
         return false;
       }
 
-      if (_order.Items.Count == 0) {
+      if (!(_order is Requisition)) {
         return false;
       }
 
+      if (_order.Items.Count == 0) {
+        return false;
+      }
 
       FixedList<BudgetTransaction> budgetTxns = GetBudgetTransactions(BudgetOperationType.Request);
 
@@ -196,11 +195,11 @@ namespace Empiria.Orders {
 
     public bool CanRequestPayment() {
 
-      if (!IsPayable()) {
+      if (!_isPayable) {
         return false;
       }
 
-      if (GetActivePaymentOrders().Count > 0) {
+      if (_activePaymentOrders.Count > 0) {
         return false;
       }
 
@@ -208,19 +207,29 @@ namespace Empiria.Orders {
         return false;
       }
 
-      FixedList<Bill> bills = GetBills();
-
-      if (bills.Count == 0) {
+      if (_bills.Count == 0) {
         return false;
       }
 
-      if (IsBudgetable() && !_order.HasCrossedBeneficiaries()) {
+      if (!BillsTotalsEqualsOrderTotals()) {
+        return false;
+      }
 
-        var budgetTxns = GetBudgetTransactions();
 
-        if (budgetTxns.Count == 0 || budgetTxns.Any(x => !x.IsClosed)) {
-          return false;
-        }
+      if (!_isBudgetable || _order.HasCrossedBeneficiaries()) {
+        return true;
+      }
+
+      if (_budgetTransations.Count == 0) {
+        return false;
+      }
+
+      if (_budgetTransations.Any(x => x.InProcess)) {
+        return false;
+      }
+
+      if (!GetBudgetTransactions(BudgetOperationType.Commit).Any(x => x.IsClosed)) {
+        return false;
       }
 
       return true;
@@ -243,8 +252,19 @@ namespace Empiria.Orders {
 
     #region Helpers
 
+    private bool BillsTotalsEqualsOrderTotals() {
+      var billsTotals = new BillsTotals(_bills);
+
+      decimal orderTotals = _order.Subtotal + _order.Taxes.ControlConceptsTotal;
+      decimal billed = billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal;
+
+      return orderTotals == billed;
+    }
+
+
     private FixedList<PaymentOrder> GetActivePaymentOrders() {
-      if (!IsPayable()) {
+
+      if (!_isPayable) {
         return FixedList<PaymentOrder>.Empty;
       }
 
@@ -255,7 +275,7 @@ namespace Empiria.Orders {
 
 
     private FixedList<Bill> GetBills() {
-      if (!IsPayable()) {
+      if (!_isPayable) {
         return FixedList<Bill>.Empty;
       }
 
@@ -265,7 +285,7 @@ namespace Empiria.Orders {
 
     private FixedList<BudgetTransaction> GetBudgetTransactions() {
 
-      if (!IsBudgetable()) {
+      if (!_isBudgetable) {
         return FixedList<BudgetTransaction>.Empty;
       }
 
@@ -278,18 +298,7 @@ namespace Empiria.Orders {
 
 
     private FixedList<BudgetTransaction> GetBudgetTransactions(BudgetOperationType operationType) {
-      return GetBudgetTransactions()
-            .FindAll(x => x.OperationType == operationType);
-    }
-
-
-    private bool IsBudgetable() {
-      return _order.HasBudgetableItems && _order.BudgetType != BudgetType.None;
-    }
-
-
-    private bool IsPayable() {
-      return _order is IPayableEntity;
+      return _budgetTransations.FindAll(x => x.OperationType == operationType);
     }
 
     #endregion Helpers

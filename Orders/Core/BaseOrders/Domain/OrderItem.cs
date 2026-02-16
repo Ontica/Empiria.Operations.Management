@@ -550,6 +550,7 @@ namespace Empiria.Orders {
         Assertion.Require(account, $"No budget account found for organizational unit '{Beneficiary.Name}' " +
                                    $"and standard account '{ContractItem.BudgetAccount.StandardAccount.Name}'.");
         BudgetAccount = account;
+
         return;
       }
 
@@ -561,6 +562,7 @@ namespace Empiria.Orders {
         Assertion.Require(account, $"No budget account found for organizational unit '{Beneficiary.Name}' " +
                                    $"and standard account '{RequisitionItem.BudgetAccount.StandardAccount.Name}'.");
         BudgetAccount = account;
+
         return;
       }
 

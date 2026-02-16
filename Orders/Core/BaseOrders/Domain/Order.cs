@@ -531,21 +531,19 @@ namespace Empiria.Orders {
 
 
     public virtual void Close() {
-      Assertion.Require(this.Status == EntityStatus.Pending,
-                  $"No se puede cerrar una orden que está en estado {this.Status.GetName()}.");
+      Assertion.Require(Status == EntityStatus.Active,
+                  $"No se puede cerrar una orden que está en estado {Status.GetName()}.");
 
-      this.Status = EntityStatus.Closed;
-      this.ClosedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
-      this.ClosingTime = DateTime.Now;
+      Status = EntityStatus.Closed;
+      ClosedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+      ClosingTime = DateTime.Now;
     }
 
 
     public virtual void Delete() {
-      Assertion.Require(this.Status == EntityStatus.Pending,
-                  $"No se puede eliminar una orden que está en estado {this.Status.GetName()}.");
+      Assertion.Require(Rules.CanDelete(), $"No se puede eliminar esta orden.");
 
-      this.Status = EntityStatus.Deleted;
-
+      Status = EntityStatus.Deleted;
     }
 
 
@@ -596,10 +594,9 @@ namespace Empiria.Orders {
 
 
     internal protected virtual void Suspend() {
-      Assertion.Require(this.Status == EntityStatus.Pending || this.Status == EntityStatus.Active,
-                  $"No se puede suspender una orden que no está activa.");
+      Assertion.Require(Rules.CanSuspend(), $"No se puede suspender esta orden.");
 
-      this.Status = EntityStatus.Suspended;
+      Status = EntityStatus.Suspended;
     }
 
 
@@ -607,7 +604,7 @@ namespace Empiria.Orders {
       Assertion.Require(fields, nameof(fields));
 
       if (fields.RequisitionUID.Length != 0 && Requisition.UID != fields.RequisitionUID) {
-        Assertion.Require(this.Items.Count == 0,
+        Assertion.Require(Items.Count == 0,
           $"No se puede cambiar la requisición ya que este elemento tiene {Items.Count} concepto(s).");
       }
 
