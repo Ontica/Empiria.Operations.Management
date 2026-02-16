@@ -5,7 +5,7 @@
     <Description>
       Tests module for Orders and Requisitions Management
     </Description>
-    <Copyright>(c) 2002-2025. La Vía Óntica SC, Ontica LLC y de los autores. Todos los derechos reservados.</Copyright>
+    <Copyright>(c) 2002-2026. La Vía Óntica SC, Ontica LLC y de los autores. Todos los derechos reservados.</Copyright>
     <Version>8.0.0</Version>
     <AssemblyVersion>8.0.0</AssemblyVersion>
     <FileVersion>8.0.0.0</FileVersion>
@@ -76,14 +76,11 @@
   <ItemGroup Condition=" '$(Configuration)' != 'Multisolutions' ">
     <PackageReference Include="Empiria.Tests" Version="1.0.0" />
     <PackageReference Include="Empiria.Orders.Core" Version="8.0.0" />
-    <PackageReference Include="Empiria.Procurement.Core" Version="8.0.0" />
+    <PackageReference Include="Empiria.Financial.Core" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Multisolutions' ">
     <ProjectReference Include="..\..\..\extensions\Tests\Empiria.Tests.csproj" />
     <ProjectReference Include="..\Core\Empiria.Orders.Core.csproj" />
-    <ProjectReference Include="..\..\Procurement\Core\Empiria.Procurement.Core.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\financial.management\Core\Core\Empiria.Financial.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 ﻿Empiria Orders and Requisitions Management System - Core Module. License
 ========================================================================
 
-Copyright (c) 2002-2025. La Vía Óntica SC, Ontica LLC y autores.
+Copyright (c) 2002-2026. La Vía Óntica SC, Ontica LLC y autores.
                          Todos los derechos reservados.
 -----------------------------------------------------------------------
 

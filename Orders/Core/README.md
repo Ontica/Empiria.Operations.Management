@@ -24,5 +24,5 @@ e internacionales de derechos de autor.
 
 ## Copyright
 
-Copyright © 2002-2025. La Vía Óntica SC, Ontica LLC y autores.
+Copyright © 2002-2026. La Vía Óntica SC, Ontica LLC y autores.
 Todos los derechos reservados.
