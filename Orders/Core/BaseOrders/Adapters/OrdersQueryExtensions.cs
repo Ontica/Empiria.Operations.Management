@@ -95,7 +95,7 @@ namespace Empiria.Orders.Adapters {
 
       var budget = Budget.Parse(budgetUID);
 
-      return $"ORDER_BUDGET_ID = {budget.Id}";
+      return $"ORDER_BASE_BUDGET_ID = {budget.Id}";
     }
 
 
@@ -106,13 +106,7 @@ namespace Empiria.Orders.Adapters {
 
       var budgetType = BudgetType.Parse(budgetTypeUID);
 
-      FixedList<Budget> budgets = Budget.GetList(budgetType);
-
-      if (budgets.Count == 0) {
-        return string.Empty;
-      }
-
-      return SearchExpression.ParseInSet("ORDER_BUDGET_ID", budgets.Select(x => x.Id));
+      return $"ORDER_BUDGET_TYPE_ID = {budgetType.Id}";
     }
 
 
