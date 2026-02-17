@@ -123,7 +123,7 @@ namespace Empiria.Orders {
     }
 
 
-    public bool CanEditItems() {
+    public bool CanEditItems(bool skipCommits = false) {
 
       if (_activePaymentOrders.Count > 0) {
         return false;
@@ -139,7 +139,8 @@ namespace Empiria.Orders {
         return false;
       }
 
-      if (_isPayable && GetBudgetTransactions(BudgetOperationType.Commit).Any(x => x.IsClosed)) {
+      if (!skipCommits && _isPayable && !(_order is ContractOrder) &&
+          GetBudgetTransactions(BudgetOperationType.Commit).Any(x => x.IsClosed)) {
         return false;
       }
 
@@ -203,7 +204,7 @@ namespace Empiria.Orders {
         return false;
       }
 
-      if (!CanEditItems()) {
+      if (!CanEditItems(true)) {
         return false;
       }
 
@@ -214,7 +215,6 @@ namespace Empiria.Orders {
       if (!BillsTotalsEqualsOrderTotals()) {
         return false;
       }
-
 
       if (!_isBudgetable || _order.HasCrossedBeneficiaries()) {
         return true;
@@ -289,7 +289,7 @@ namespace Empiria.Orders {
         return FixedList<BudgetTransaction>.Empty;
       }
 
-      var budgetable = _order.OrderType.Equals(OrderType.ContractOrder) ? _order.Contract : _order;
+      var budgetable = _order is ContractOrder ? _order.Contract : _order;
 
       var budgetTxns = BudgetTransaction.GetFor(budgetable);
 
