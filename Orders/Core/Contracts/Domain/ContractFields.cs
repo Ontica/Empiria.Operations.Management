@@ -10,8 +10,6 @@
 
 using System;
 
-using Empiria.Orders;
-
 namespace Empiria.Orders.Contracts {
 
   /// <summary>Input fields DTO used for update contracts information.</summary>
@@ -29,6 +27,10 @@ namespace Empiria.Orders.Contracts {
 
     public override void EnsureValid() {
       Assertion.Require(RequisitionUID, "Necesito se seleccione la requisición.");
+
+      Assertion.Require(ContractNo.Length <= 36,
+        "El número de contrato es muy largo. Favor de colocar su descripción en el campo correspondiente.");
+
       Assertion.Require(Name, "Necesito el nombre del contrato.");
 
       Assertion.Require(CurrencyUID, "Necesito la moneda del contrato.");
