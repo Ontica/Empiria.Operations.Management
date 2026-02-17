@@ -79,6 +79,10 @@ namespace Empiria.Orders.Adapters {
       get; set;
     }
 
+    public bool CanRequestTravelExpenses {
+      get; set;
+    }
+
   } // class OrderActions
 
 

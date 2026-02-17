@@ -45,7 +45,7 @@ namespace Empiria.Orders.Adapters {
         Bills = BillMapper.MapToBillStructure(bills),
         Documents = DocumentServices.GetAllEntityDocuments(requisition),
         History = HistoryServices.GetEntityHistory(requisition),
-        Actions = MapActions(requisition.Rules),
+        Actions = MapActions(requisition.Rules, requisition.Category),
       };
     }
 
@@ -67,7 +67,8 @@ namespace Empiria.Orders.Adapters {
 
     #region Helpers
 
-    static private OrderActions MapActions(OrderRules rules) {
+    static private OrderActions MapActions(OrderRules rules, OrderCategory category) {
+      bool travelExpenses = category.PlaysRole("travel-expenses");
 
       return new OrderActions {
         CanActivate = rules.CanActivate(),
@@ -82,6 +83,8 @@ namespace Empiria.Orders.Adapters {
         CanRequestBudget = rules.CanRequestBudget(),
         CanRequestPayment = false,
         CanValidateBudget = rules.CanValidateBudget(),
+
+        CanRequestTravelExpenses = rules.CanRequestBudget() && travelExpenses
       };
     }
 
