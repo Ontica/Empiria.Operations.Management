@@ -58,6 +58,14 @@ namespace Empiria.Orders {
       }
     }
 
+
+    public decimal NoPayableTotal {
+      get {
+        return _taxEntries.Value.FindAll(x => x.TaxType.NoPayable)
+                                .Sum(x => Math.Abs(x.Total));
+      }
+    }
+
     #endregion Properties
 
     #region Methods

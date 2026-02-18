@@ -256,7 +256,7 @@ namespace Empiria.Orders {
       var billsTotals = new BillsTotals(_bills);
 
       decimal orderTotals = _order.Subtotal + _order.Taxes.ControlConceptsTotal;
-      decimal billed = billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal;
+      decimal billed = billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal - _order.Taxes.NoPayableTotal;
 
       return orderTotals == billed;
     }
