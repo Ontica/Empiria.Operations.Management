@@ -173,9 +173,6 @@ namespace Empiria.Orders {
         Quantity = Subtotal;
         UnitPrice = 1;
       }
-      if (Subtotal > 0 && Subtotal != Quantity && UnitPrice == 1) {
-        Quantity = Subtotal;
-      }
 
       Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");
       Assertion.Require(Discount >= 0, "El descuento no puede ser negativo.");
