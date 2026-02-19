@@ -256,7 +256,11 @@ namespace Empiria.Orders {
       var billsTotals = new BillsTotals(_bills);
 
       decimal orderTotals = _order.Subtotal + _order.Taxes.ControlConceptsTotal;
-      decimal billed = billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal - _order.Taxes.NoPayableTotal;
+      decimal billed = billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal;
+
+      if (_order.Category.PlaysRole("travel-expenses")) {
+        return billed >= orderTotals;
+      }
 
       return orderTotals == billed;
     }
