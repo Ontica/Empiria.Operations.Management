@@ -499,17 +499,9 @@ namespace Empiria.Orders {
 
     #region IBudgetable interface implementation
 
-    string IBudgetable.EntityNo {
+    BudgetableData IBudgetable.Data {
       get {
-        return OrderNo;
-      }
-    }
-
-
-    FixedList<ITaxEntry> IBudgetable.Taxes {
-      get {
-        return _taxes.GetList().Cast<ITaxEntry>()
-                               .ToFixedList();
+        return OrderBudgetMapper.Map(this);
       }
     }
 
@@ -519,6 +511,14 @@ namespace Empiria.Orders {
         return _items.GetItems().FindAll(x => x.IsBudgetable)
                                 .Select(x => OrderBudgetMapper.Map(x))
                                 .ToFixedList();
+      }
+    }
+
+
+    FixedList<ITaxEntry> IBudgetable.Taxes {
+      get {
+        return _taxes.GetList().Cast<ITaxEntry>()
+                               .ToFixedList();
       }
     }
 

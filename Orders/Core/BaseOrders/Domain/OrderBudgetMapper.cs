@@ -19,6 +19,21 @@ namespace Empiria.Orders {
   /// <summary>Provides mapping methods from order and order items to budgetable interfaces.</summary>
   static internal class OrderBudgetMapper {
 
+    static internal BudgetableData Map(Order order) {
+      return new BudgetableData {
+        BudgetableType = order.GetEmpiriaType(),
+        BudgetableNo = order.OrderNo,
+        BaseBudget = order.BaseBudget,
+        Currency = order.Currency,
+        ExchangeRate = order.ExchangeRate,
+        RequestedBy = order.RequestedBy,
+        Justification = order.Justification,
+        Description = order.Description,
+        Keywords = order.Keywords
+      };
+    }
+
+
     static internal BudgetableItemData Map(OrderItem orderItem) {
 
       return new BudgetableItemData {
@@ -42,7 +57,6 @@ namespace Empiria.Orders {
         ExchangeRate = orderItem.Order.ExchangeRate,
         CurrencyAmount = orderItem.Subtotal
       };
-
     }
 
     static private DateTime CalculateBudgetingDate(OrderItem orderItem) {
