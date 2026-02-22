@@ -137,12 +137,6 @@ namespace Empiria.Orders {
       get; protected set;
     }
 
-    string IBudgetable.EntityNo {
-      get {
-        return OrderNo;
-      }
-    }
-
 
     [DataField("ORDER_NAME")]
     public string Name {
@@ -495,14 +489,6 @@ namespace Empiria.Orders {
     }
 
 
-    FixedList<ITaxEntry> IBudgetable.Taxes {
-      get {
-        return _taxes.GetList().Select(x => (ITaxEntry) x)
-                               .ToFixedList();
-      }
-    }
-
-
     public OrderRules Rules {
       get {
         return new OrderRules(this);
@@ -510,6 +496,35 @@ namespace Empiria.Orders {
     }
 
     #endregion Properties
+
+    #region IBudgetable interface implementation
+
+    string IBudgetable.EntityNo {
+      get {
+        return OrderNo;
+      }
+    }
+
+
+    FixedList<ITaxEntry> IBudgetable.Taxes {
+      get {
+        return _taxes.GetList().Cast<ITaxEntry>()
+                               .ToFixedList();
+      }
+    }
+
+
+    FixedList<BudgetableItemData> IBudgetable.Items {
+      get {
+        return _items.GetItems().FindAll(x => x.IsBudgetable)
+                                .Select(x => OrderBudgetMapper.Map(x))
+                                .ToFixedList();
+      }
+    }
+
+    public abstract FixedList<IPayableEntity> GetPayableEntities();
+
+    #endregion IBudgetable interface implementation
 
     #region Methods
 
@@ -560,9 +575,6 @@ namespace Empiria.Orders {
       return _items.GetItems().Select(x => (T) x)
                               .ToFixedList();
     }
-
-
-    public abstract FixedList<IPayableEntity> GetPayableEntities();
 
 
     public decimal GetTotal() {
