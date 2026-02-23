@@ -38,6 +38,7 @@ namespace Empiria.Orders {
 
       return new BudgetableItemData {
         BudgetableItem = orderItem,
+        BudgetEntry = orderItem.BudgetEntry,
         Budget = orderItem.Budget,
         BudgetAccount = orderItem.BudgetAccount,
         RelatedBudgetEntry = orderItem.RequisitionItem.IsEmptyInstance ? null :
