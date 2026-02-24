@@ -12,6 +12,8 @@ using System;
 
 using Empiria.Financial;
 
+using Empiria.Budgeting.Transactions;
+
 using Empiria.Orders.Contracts;
 
 namespace Empiria.Orders {
@@ -41,8 +43,7 @@ namespace Empiria.Orders {
         BudgetEntry = orderItem.BudgetEntry,
         Budget = orderItem.Budget,
         BudgetAccount = orderItem.BudgetAccount,
-        RelatedBudgetEntry = orderItem.RequisitionItem.IsEmptyInstance ? null :
-                                                    orderItem.RequisitionItem.BudgetEntry,
+        RelatedBudgetEntry = GetRelatedBudgetEntry(orderItem),
         BudgetingDate = CalculateBudgetingDate(orderItem),
         Product = orderItem.Product,
         ProductCode = orderItem.ProductCode,
@@ -59,6 +60,7 @@ namespace Empiria.Orders {
         CurrencyAmount = orderItem.Subtotal
       };
     }
+
 
     static private DateTime CalculateBudgetingDate(OrderItem orderItem) {
 
@@ -105,6 +107,20 @@ namespace Empiria.Orders {
         return DateTime.Today;
       }
 
+    }
+
+
+    static private BudgetEntry GetRelatedBudgetEntry(OrderItem orderItem) {
+
+      if (!orderItem.BudgetEntry.IsEmptyInstance) {
+        return orderItem.BudgetEntry;
+      }
+
+      if (!orderItem.RequisitionItem.IsEmptyInstance) {
+        return orderItem.RequisitionItem.BudgetEntry;
+      }
+
+      return null;
     }
 
   }  // class OrderBudgetMapper
