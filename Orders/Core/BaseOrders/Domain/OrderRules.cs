@@ -255,14 +255,11 @@ namespace Empiria.Orders {
     private bool BillsTotalsEqualsOrderTotals() {
       var billsTotals = new BillsTotals(_bills);
 
-      decimal orderTotals = _order.Subtotal + _order.Taxes.ControlConceptsTotal;
-      decimal billed = billsTotals.Subtotal - billsTotals.Discounts + billsTotals.BudgetableTaxesTotal;
-
       if (_order.Category.PlaysRole("travel-expenses")) {
-        return billed >= orderTotals;
+        return billsTotals.Total >= _order.Total;
+      } else {
+        return _order.Total == billsTotals.Total;
       }
-
-      return orderTotals == billed;
     }
 
 
