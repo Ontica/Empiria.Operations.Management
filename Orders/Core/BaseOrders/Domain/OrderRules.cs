@@ -256,9 +256,9 @@ namespace Empiria.Orders {
       var billsTotals = new BillsTotals(_bills);
 
       if (_order.Category.PlaysRole("travel-expenses")) {
-        return billsTotals.Total >= _order.Total;
+        return billsTotals.GetTotal() >= _order.Total;
       } else {
-        return _order.Total == billsTotals.Total;
+        return _order.Total == billsTotals.GetTotal();
       }
     }
 
