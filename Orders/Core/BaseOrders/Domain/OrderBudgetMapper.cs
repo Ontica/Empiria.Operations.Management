@@ -12,8 +12,6 @@ using System;
 
 using Empiria.Financial;
 
-using Empiria.Budgeting.Transactions;
-
 using Empiria.Orders.Contracts;
 
 namespace Empiria.Orders {
@@ -43,8 +41,9 @@ namespace Empiria.Orders {
         BudgetEntry = orderItem.BudgetEntry,
         Budget = orderItem.Budget,
         BudgetAccount = orderItem.BudgetAccount,
-        RelatedBudgetEntry = GetRelatedBudgetEntry(orderItem),
+        RelatedBudgetableItem = GetRelatedBudgetableItem(orderItem),
         BudgetingDate = CalculateBudgetingDate(orderItem),
+        PreviousBudgetEntry = null,
         Product = orderItem.Product,
         ProductCode = orderItem.ProductCode,
         ProductName = orderItem.ProductName,
@@ -60,7 +59,6 @@ namespace Empiria.Orders {
         CurrencyAmount = orderItem.Subtotal
       };
     }
-
 
     static private DateTime CalculateBudgetingDate(OrderItem orderItem) {
 
@@ -110,14 +108,22 @@ namespace Empiria.Orders {
     }
 
 
-    static private BudgetEntry GetRelatedBudgetEntry(OrderItem orderItem) {
+    static private OrderItem GetRelatedBudgetableItem(OrderItem orderItem) {
 
-      if (!orderItem.BudgetEntry.IsEmptyInstance) {
-        return orderItem.BudgetEntry;
+      if (orderItem.Order is Requisition requisition) {
+        return null;
       }
 
-      if (!orderItem.RequisitionItem.IsEmptyInstance) {
-        return orderItem.RequisitionItem.BudgetEntry;
+      if (orderItem is ContractItem) {
+        return orderItem.RequisitionItem;
+      }
+
+      if (orderItem is ContractOrderItem) {
+        return orderItem.ContractItem;
+      }
+
+      if (orderItem is PayableOrderItem) {
+        return orderItem.RequisitionItem;
       }
 
       return null;
