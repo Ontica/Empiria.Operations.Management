@@ -8,8 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Orders;
-
 using Empiria.Orders.Contracts.Data;
 
 namespace Empiria.Orders.Contracts {

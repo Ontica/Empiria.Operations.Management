@@ -425,7 +425,6 @@ namespace Empiria.Orders {
 
     #region Methods
 
-
     internal protected virtual void Close() {
       Assertion.Require(this.Status == EntityStatus.Active,
                   $"No se puede cerrar un elemento que está en estado {this.Status.GetName()}.");

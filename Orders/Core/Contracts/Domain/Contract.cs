@@ -13,8 +13,6 @@ using System.Linq;
 
 using Empiria.Financial;
 
-using Empiria.Orders;
-
 namespace Empiria.Orders.Contracts {
 
   public class Contract : Order {

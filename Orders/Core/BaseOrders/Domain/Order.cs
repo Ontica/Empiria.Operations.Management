@@ -88,22 +88,28 @@ namespace Empiria.Orders {
 
 
     [DataField("ORDER_REQUISITION_ID")]
-    private int _requisitionId;
+    private int _requisitionId = -1;
+
     public Requisition Requisition {
       get {
-        if (this.IsEmptyInstance && this is Requisition) {
-          return (Requisition) this;
+        if (this.IsEmptyInstance || this is Requisition) {
+          return Requisition.Empty;
         }
+
         return Requisition.Parse(_requisitionId);
       }
       private set {
-        _requisitionId = value.Id;
+        if (this is Requisition) {
+          _requisitionId = -1;
+        } else {
+          _requisitionId = value.Id;
+        }
       }
     }
 
 
     [DataField("ORDER_CONTRACT_ID")]
-    private int _contractId;
+    private int _contractId = -1;
     public Order Contract {
       get {
         if (this.IsEmptyInstance) {
@@ -118,7 +124,8 @@ namespace Empiria.Orders {
 
 
     [DataField("ORDER_PARENT_ID")]
-    private int _parentId;
+    private int _parentId = -1;
+
     public Order ParentOrder {
       get {
         if (this.IsEmptyInstance) {
@@ -530,6 +537,7 @@ namespace Empiria.Orders {
 
     public virtual void Activate() {
       if (Status == EntityStatus.Active) {
+        RequestedTime = DateTime.Now;
         return;
       }
 
@@ -623,7 +631,11 @@ namespace Empiria.Orders {
       fields.EnsureValid();
 
       Category = Patcher.Patch(fields.CategoryUID, Category);
-      Requisition = Patcher.Patch(fields.RequisitionUID, Requisition);
+
+      if (!OrderType.Equals(OrderType.Requisition)) {
+        Requisition = Patcher.Patch(fields.RequisitionUID, Requisition);
+      }
+
       ParentOrder = Patcher.Patch(fields.ParentOrderUID, Empty);
       Contract = Patcher.Patch(fields.ContractUID, Empty);
       Name = Patcher.PatchClean(fields.Name, "Sin nombre asignado");
