@@ -62,6 +62,12 @@ namespace Empiria.Orders {
       }
     }
 
+    BaseObject IPayableEntityItem.BudgetEntry {
+      get {
+        return base.BudgetEntry;
+      }
+    }
+
     #endregion IPayableEntityItem implementation
 
     #region Methods

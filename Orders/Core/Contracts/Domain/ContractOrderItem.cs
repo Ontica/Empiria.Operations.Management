@@ -8,8 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Orders;
-
 namespace Empiria.Orders.Contracts {
 
   /// <summary>Represents a contract supply order item.</summary>
