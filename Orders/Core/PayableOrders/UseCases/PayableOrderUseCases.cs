@@ -51,7 +51,9 @@ namespace Empiria.Orders.UseCases {
       Assertion.Require(requestedBy, nameof(requestedBy));
 
       var orders = PayableOrder.GetList()
-                               .FindAll(x => x.RequestedBy.Equals(requestedBy));
+                               .FindAll(x => x.RequestedBy.Equals(requestedBy) &&
+                                             (x.Status == StateEnums.EntityStatus.Active ||
+                                             x.Status == StateEnums.EntityStatus.Pending));
 
       return PayableOrderMapper.Map(orders);
     }
