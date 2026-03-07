@@ -553,13 +553,19 @@ namespace Empiria.Orders {
     }
 
 
-    public virtual void Close() {
+    public virtual void Close(Party closedBy) {
+      Assertion.Require(closedBy, nameof(closedBy));
       Assertion.Require(Status == EntityStatus.Active,
-                  $"No se puede cerrar una orden que está en estado {Status.GetName()}.");
+                  $"No se puede cerrar una orden que está en estado {Status.GetName()}: {Id}.");
 
       Status = EntityStatus.Closed;
-      ClosedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+      ClosedBy = closedBy;
       ClosingTime = DateTime.Now;
+
+      foreach (var item in Items.GetItems()) {
+        item.Close();
+        item.Save();
+      }
     }
 
 

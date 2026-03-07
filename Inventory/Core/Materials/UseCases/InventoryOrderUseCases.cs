@@ -51,7 +51,7 @@ namespace Empiria.Inventory.UseCases {
 
       InventoryOrder order = InventoryOrder.Parse(orderUID);
 
-      order.Close();
+      order.Close(Party.ParseWithContact(ExecutionServer.CurrentContact));
       order.Save();
 
       order.CloseItems();
