@@ -426,18 +426,24 @@ namespace Empiria.Orders {
     #region Methods
 
     internal protected virtual void Close() {
-      Assertion.Require(this.Status == EntityStatus.Active,
-                  $"No se puede cerrar un elemento que está en estado {this.Status.GetName()}.");
+      Assertion.Require(Status == EntityStatus.Active ||
+                        Status == EntityStatus.Pending,
+                  $"No se puede cerrar un elemento que está en estado {Status.GetName()}.");
 
-      this.Status = EntityStatus.Closed;
+      Status = EntityStatus.Closed;
+      ClosingTime = DateTime.Now;
+
+      MarkAsDirty();
     }
 
 
     internal protected virtual void Delete() {
-      Assertion.Require(this.Status != EntityStatus.Deleted,
-                  $"No se puede eliminar un elemento que está en estado {this.Status.GetName()}.");
+      Assertion.Require(Status != EntityStatus.Deleted && Status != EntityStatus.Closed,
+                  $"No se puede eliminar un elemento que está en estado {Status.GetName()}.");
 
-      this.Status = EntityStatus.Deleted;
+      Status = EntityStatus.Deleted;
+
+      MarkAsDirty();
     }
 
 
@@ -446,11 +452,15 @@ namespace Empiria.Orders {
         this.PostedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
         this.PostingTime = DateTime.Now;
       }
+
       OrdersData.WriteOrderItem(this);
     }
 
 
     public void SetBudgetEntry(BudgetEntry budgetEntry) {
+
+      Assertion.Require(Status != EntityStatus.Closed && Status != EntityStatus.Deleted,
+                        $"No se puede modificar un elemento que está en estado {Status.GetName()}.");
 
       Assertion.Require(budgetEntry, nameof(budgetEntry));
       Assertion.Require(budgetEntry.Budget.Equals(this.Budget), "Budget mismatch");
@@ -464,6 +474,8 @@ namespace Empiria.Orders {
 
     internal protected virtual void Update(OrderItemFields fields) {
       Assertion.Require(fields, nameof(fields));
+      Assertion.Require(Status != EntityStatus.Closed && Status != EntityStatus.Deleted,
+                       $"No se puede modificar un elemento que está en estado {Status.GetName()}.");
 
       fields.EnsureValid();
 
@@ -528,6 +540,9 @@ namespace Empiria.Orders {
 
     private void UpdateBudgetData(OrderItemFields fields) {
 
+      Assertion.Require(Status != EntityStatus.Closed && Status != EntityStatus.Deleted,
+                        $"No se puede modificar un elemento que está en estado {Status.GetName()}.");
+
       Budget = Patcher.Patch(fields.BudgetUID, Order.BaseBudget);
 
       if (!Order.IsForMultipleBeneficiaries) {
@@ -577,7 +592,12 @@ namespace Empiria.Orders {
     internal protected virtual void UpdateQuantity(decimal quantity) {
       Assertion.Require(quantity > 0, $"La cantidad debe de ser mayor que 0.");
 
+      Assertion.Require(Status != EntityStatus.Closed && Status != EntityStatus.Deleted,
+                        $"No se puede modificar un elemento que está en estado {Status.GetName()}.");
+
       this.Quantity = quantity;
+
+      MarkAsDirty();
     }
 
     #endregion Methods
