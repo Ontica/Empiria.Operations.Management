@@ -12,6 +12,7 @@ using Empiria.Locations;
 using Empiria.Orders;
 
 using Empiria.Inventory.Data;
+using System;
 
 namespace Empiria.Inventory {
 
@@ -56,16 +57,22 @@ namespace Empiria.Inventory {
 
     #region Methods
 
+    private void GetProductByCode(string productCode) {
+      this.Product = Empiria.Products.Product.TryParseWithCode(productCode);
+    }
+
+
     internal void Update(InventoryOrderItemFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      fields.EnsureValid();
+      GetProductByCode(fields.Product);
 
       fields.UnitPrice = GetProductPrice();
 
       base.Update(fields);
     }
 
+    
 
     internal new void UpdateQuantity(decimal quantity) {
 
