@@ -145,7 +145,7 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_ITEM_PRODUCT_ID")]
     public Product Product {
-      get; private set;
+      get; set;
     }
 
 
