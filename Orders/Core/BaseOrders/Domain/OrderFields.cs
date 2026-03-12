@@ -118,7 +118,7 @@ namespace Empiria.Orders {
 
     public Priority? Priority {
       get; set;
-    }
+    } = Empiria.StateEnums.Priority.Normal;
 
 
     public string Observations {

@@ -102,6 +102,7 @@ namespace Empiria.Inventory.UseCases {
       fields.ProductUID = product.UID;
       fields.Description = product.Description;
       fields.ProductUnitUID = product.BaseUnit.UID;
+      fields.LocationUID = fields.LocationUID == string.Empty ? location.UID : fields.LocationUID;
 
       var orderItemType = Orders.OrderItemType.Parse(4059);
       InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, order, location);
