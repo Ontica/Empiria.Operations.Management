@@ -174,6 +174,8 @@ namespace Empiria.Orders {
     public virtual void EnsureValid() {
       Assertion.Require(OrderTypeUID, nameof(OrderTypeUID));
 
+      var orderType = OrderType.Parse(OrderTypeUID);
+
       Assertion.Require(Name, "Necesito se proporcione el nombre");
 
       Assertion.Require(RequestedByUID, nameof(RequestedByUID));
@@ -188,7 +190,10 @@ namespace Empiria.Orders {
         ExchangeRate = decimal.One;
       }
 
-      if (CurrencyUID != Currency.Default.UID) {
+      Assertion.Require(ExchangeRate > 0, "El tipo de cambio debe ser positivo.");
+
+
+      if (CurrencyUID != Currency.Default.UID && orderType.Equals(OrderType.Requisition)) {
         Assertion.Require(ExchangeRate > 0 && ExchangeRate != decimal.One,
                          "El tipo de cambio debe ser positivo y distinto a uno.");
       }
