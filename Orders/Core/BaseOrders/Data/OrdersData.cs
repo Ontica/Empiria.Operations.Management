@@ -19,6 +19,20 @@ namespace Empiria.Orders.Data {
 
     #region Methods
 
+    static public void CleanOrder(Order order) {
+      if (order.IsEmptyInstance) {
+        return;
+      }
+      var sql = "UPDATE OMS_ORDERS " +
+                $"SET ORDER_KEYWORDS = '{order.Keywords}' " +
+                $"WHERE ORDER_ID = {order.Id}";
+
+      var op = DataOperation.Parse(sql);
+
+      DataWriter.Execute(op);
+    }
+
+
     static internal string GenerateOrderNo(Order order) {
       Assertion.Require(order, nameof(order));
 

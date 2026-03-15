@@ -370,8 +370,13 @@ namespace Empiria.Orders {
 
     public virtual string Keywords {
       get {
-        return EmpiriaString.BuildKeywords(OrderNo, Name, Description, Beneficiary.Keywords,
+        return OrderNo + " " +
+              (Requisition.IsEmptyInstance ? string.Empty : Requisition.OrderNo) +
+              (Contract.IsEmptyInstance ? string.Empty : Contract.OrderNo) + " " +
+               EmpiriaString.BuildKeywords(Name, Description, Beneficiary.Keywords,
                                            Provider.Keywords, Project.Keywords,
+                                           Requisition.IsEmptyInstance ? string.Empty : Requisition.Keywords,
+                                           Contract.IsEmptyInstance ? string.Empty : Contract.Keywords,
                                            Responsible.Keywords);
       }
     }
@@ -555,6 +560,7 @@ namespace Empiria.Orders {
 
     public virtual void Close(Party closedBy) {
       Assertion.Require(closedBy, nameof(closedBy));
+
       Assertion.Require(Status == EntityStatus.Active,
                   $"No se puede cerrar una orden que está en estado {Status.GetName()}: {Id}.");
 

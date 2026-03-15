@@ -29,7 +29,7 @@ namespace Empiria.Orders {
         RequestedBy = order.RequestedBy,
         Provider = order.Provider,
         Justification = order.Justification,
-        Description = order.Description,
+        Description = order.Name,
         Keywords = order.Keywords
       };
     }
