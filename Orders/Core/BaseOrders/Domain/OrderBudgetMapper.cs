@@ -27,6 +27,7 @@ namespace Empiria.Orders {
         Currency = order.Currency,
         ExchangeRate = order.ExchangeRate,
         RequestedBy = order.RequestedBy,
+        Provider = order.Provider,
         Justification = order.Justification,
         Description = order.Description,
         Keywords = order.Keywords
