@@ -11,6 +11,7 @@
 using System.Linq;
 
 using Empiria.Financial;
+using Empiria.Parties;
 using Empiria.StateEnums;
 
 using Empiria.Billing;
@@ -248,6 +249,25 @@ namespace Empiria.Orders {
 
     public bool CanValidateBudget() {
       return CanRequestBudget();
+    }
+
+
+    internal bool IsBudgetManager() {
+
+      string BUDGET_AUTHORIZER = "budget-authorizer";
+      string BUDGET_MANAGER = "budget-manager";
+
+      var currentUser = Party.ParseWithContact(ExecutionServer.CurrentContact);
+
+      var securityRoles = currentUser.GetSecurityRoles()
+                                      .SelectDistinct(x => x.NamedKey);
+
+      if (securityRoles.Contains(BUDGET_AUTHORIZER) ||
+          securityRoles.Contains(BUDGET_MANAGER)) {
+        return true;
+      }
+
+      return false;
     }
 
     #region Helpers

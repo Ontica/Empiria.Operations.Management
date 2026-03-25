@@ -12,8 +12,6 @@ using System;
 
 using Empiria.Parties;
 using Empiria.Services;
-
-using Empiria.Orders;
 using Empiria.Orders.Adapters;
 using Empiria.Orders.Data;
 
@@ -135,6 +133,8 @@ namespace Empiria.Orders.Contracts.UseCases {
 
       ContractItem contractItem = contract.RemoveItem(contractItemUID);
 
+      EnsureCanEditItem(contractItem, true);
+
       contract.Save();
       contractItem.Save();
 
@@ -192,11 +192,28 @@ namespace Empiria.Orders.Contracts.UseCases {
 
       ContractItem contractItem = contract.GetItem(contractItemUID);
 
+      EnsureCanEditItem(contractItem, false);
+
       contract.UpdateItem(contractItem, fields);
 
       contract.Save();
 
       return ContractItemMapper.Map(contractItem);
+    }
+
+
+    private void EnsureCanEditItem(ContractItem item, bool toDelete) {
+
+      var budgetTxn = item.BudgetEntry.Transaction;
+
+      if (!toDelete && budgetTxn.WasReopened && item.Order.Rules.IsBudgetManager()) {
+        return;
+      }
+
+      if (budgetTxn.InProcess || budgetTxn.IsClosed) {
+        Assertion.RequireFail("No se puede modificar o eliminar un elemento de un contrato que " +
+                              "tenga una transacción de compromiso presupuestal en proceso o cerrada.");
+      }
     }
 
     #endregion Use cases

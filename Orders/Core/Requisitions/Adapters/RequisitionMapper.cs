@@ -70,11 +70,17 @@ namespace Empiria.Orders.Adapters {
     static private OrderActions MapActions(OrderRules rules, OrderCategory category) {
       bool travelExpenses = category.PlaysRole("travel-expenses");
 
+      var canEditItems = rules.CanEditItems();
+
+      if (rules.IsBudgetManager()) {
+        canEditItems = true;
+      }
+
       return new OrderActions {
         CanActivate = rules.CanActivate(),
         CanDelete = rules.CanDelete(),
         CanEditDocuments = rules.CanEditDocuments(),
-        CanEditItems = rules.CanEditItems(),
+        CanEditItems = canEditItems,
         CanSuspend = rules.CanSuspend(),
         CanUpdate = rules.CanUpdate(),
 

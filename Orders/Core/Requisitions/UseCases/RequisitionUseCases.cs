@@ -142,13 +142,14 @@ namespace Empiria.Orders.UseCases {
 
       var item = requisition.GetItem<PayableOrderItem>(itemUID);
 
+      EnsureCanEditItem(item, true);
+
       requisition.Items.Remove(item);
 
       item.Save();
 
       return PayableOrderMapper.Map(item);
     }
-
 
     public RequisitionHolderDto Get(string requisitionUID) {
       Assertion.Require(requisitionUID, nameof(requisitionUID));
@@ -219,6 +220,8 @@ namespace Empiria.Orders.UseCases {
 
       var item = requisition.GetItem<PayableOrderItem>(itemUID);
 
+      EnsureCanEditItem(item, false);
+
       EnsureCanUpdateItem(requisition, item, BudgetAccount.Parse(fields.BudgetAccountUID));
 
       item.Update(fields);
@@ -269,6 +272,22 @@ namespace Empiria.Orders.UseCases {
                         "debe ser la misma, debido a que las suficiencias presupuestales plurianuales " +
                         "deben cumplir con dicho requisito.");
 
+    }
+
+
+    private void EnsureCanEditItem(PayableOrderItem item, bool toDelete) {
+
+      var budgetTxn = item.BudgetEntry.Transaction;
+
+      if (!toDelete && budgetTxn.WasReopened && item.Order.Rules.IsBudgetManager()) {
+        return;
+      }
+
+      if (budgetTxn.InProcess || budgetTxn.IsClosed) {
+        Assertion.RequireFail("No se puede modificar o eliminar un elemento de una requisición que " +
+                              "tenga una suficiencia presupuestal " +
+                              "con transacción en proceso o cerrada.");
+      }
     }
 
     #endregion Business rules

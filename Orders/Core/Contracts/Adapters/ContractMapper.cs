@@ -16,8 +16,6 @@ using Empiria.Billing.Adapters;
 
 using Empiria.Budgeting.Transactions;
 using Empiria.Budgeting.Transactions.Adapters;
-
-using Empiria.Orders;
 using Empiria.Orders.Adapters;
 
 namespace Empiria.Orders.Contracts.Adapters {
@@ -44,7 +42,7 @@ namespace Empiria.Orders.Contracts.Adapters {
         Bills = BillMapper.MapToBillStructure(bills),
         Documents = DocumentServices.GetAllEntityDocuments(contract),
         History = HistoryServices.GetEntityHistory(contract),
-        Actions = MapActions(contract.Rules)
+        Actions = MapActions(contract, contract.Rules)
       };
     }
 
@@ -72,16 +70,21 @@ namespace Empiria.Orders.Contracts.Adapters {
 
     #region Helpers
 
-    static private OrderActions MapActions(OrderRules rules) {
+    static private OrderActions MapActions(Contract contract, OrderRules rules) {
+
+      var canEditItems = rules.CanEditItems();
+
+      if (rules.IsBudgetManager()) {
+        canEditItems = true;
+      }
 
       return new OrderActions {
         CanActivate = rules.CanActivate(),
         CanDelete = rules.CanDelete(),
         CanEditDocuments = rules.CanEditDocuments(),
-        CanEditItems = rules.CanEditItems(),
+        CanEditItems = canEditItems,
         CanSuspend = rules.CanSuspend(),
         CanUpdate = rules.CanUpdate(),
-
         CanCommitBudget = rules.CanCommitBudget(),
         CanEditBills = false,
         CanRequestBudget = false,
