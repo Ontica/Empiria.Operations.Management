@@ -370,9 +370,9 @@ namespace Empiria.Orders {
 
     public virtual string Keywords {
       get {
-        return OrderNo + " " +
-              (Requisition.IsEmptyInstance ? string.Empty : Requisition.OrderNo) +
-              (Contract.IsEmptyInstance ? string.Empty : Contract.OrderNo) + " " +
+        return OrderNo.ToLower() + " " +
+              (Requisition.IsEmptyInstance ? string.Empty : Requisition.OrderNo.ToLower()) +
+              (Contract.IsEmptyInstance ? string.Empty : Contract.OrderNo.ToLower()) + " " +
                EmpiriaString.BuildKeywords(Name, Description, Beneficiary.Keywords,
                                            Provider.Keywords, Project.Keywords,
                                            Requisition.IsEmptyInstance ? string.Empty : Requisition.Keywords,
