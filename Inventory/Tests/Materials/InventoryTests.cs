@@ -134,7 +134,7 @@ namespace Empiria.Tests.Inventory {
       fields.Description = product.Description;
       fields.ProductUnitUID = product.BaseUnit.UID;
 
-      var orderItemType = Orders.OrderItemType.Parse(4059);
+      var orderItemType = Orders.OrderItemType.Parse("ObjectTypeInfo.OrderItem.InventoryOrderItem");
 
       InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, order, location);
 
@@ -427,7 +427,7 @@ namespace Empiria.Tests.Inventory {
     private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
       var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
 
-      inventoryEntry.InitialEntry(orderItem.UnitPrice, orderItem.Location);
+      inventoryEntry.InitialEntry(orderItem.UnitPrice, 0, orderItem.Location);
 
       inventoryEntry.Save();
     }
@@ -475,7 +475,7 @@ namespace Empiria.Tests.Inventory {
 
       var items = order.GetItems<OrderItem>();
 
-      var orderItemType = OrderItemType.Parse(4059);
+      var orderItemType = OrderItemType.Parse("ObjectTypeInfo.OrderItem.InventoryOrderItem");
 
       foreach (var item in items) {
         InventoryOrderItemFields fields = new InventoryOrderItemFields();
