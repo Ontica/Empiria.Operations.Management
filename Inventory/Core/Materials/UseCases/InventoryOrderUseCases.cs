@@ -88,7 +88,9 @@ namespace Empiria.Inventory.UseCases {
       Assertion.Require(fields, nameof(fields));
 
       var order = InventoryOrder.Parse(orderUID);
-      var orderItemType = Orders.OrderItemType.Parse(4059);
+
+      var orderItemType = Orders.OrderItemType.Parse("ObjectTypeInfo.OrderItem.InventoryOrderItem");
+
       var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
       var product = Product.TryParseWithCode(fields.Product);
       var ifNotExistProductinLocation = VerifyProductAndLocationInOrder(order.Id, product.Id, location.Id);
@@ -318,7 +320,7 @@ namespace Empiria.Inventory.UseCases {
 
       var items = order.GetItems<OrderItem>();
 
-      var orderItemType = OrderItemType.Parse(4059);
+      var orderItemType = OrderItemType.Parse("ObjectTypeInfo.OrderItem.InventoryOrderItem");
 
       foreach (var item in items) {
         InventoryOrderItemFields fields = new InventoryOrderItemFields();
