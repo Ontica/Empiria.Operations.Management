@@ -109,6 +109,11 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public int Position {
+      get; set;
+    }
+
+
     public DateTime? StartDate {
       get; set;
     } = ExecutionServer.DateMaxValue;

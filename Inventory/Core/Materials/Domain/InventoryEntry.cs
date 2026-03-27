@@ -266,8 +266,9 @@ namespace Empiria.Inventory {
     }
 
 
-    internal void InitialEntry(decimal countingCost, Location location) {
+    internal void InitialEntry(decimal countingCost, decimal inputQuantity, Location location) {
 
+      this.InputQuantity = inputQuantity;
       this.CountingQuantity = this.OrderItem.Quantity;
       this.Product = this.OrderItem.Product;
       this.Location = location;

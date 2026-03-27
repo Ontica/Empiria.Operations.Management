@@ -43,6 +43,30 @@ namespace Empiria.Inventory.Data {
     }
 
 
+    internal static FixedList<InventoryOrderItem> SearchMaxOrderItemPosition(InventoryOrder order) {
+
+      var sql = $"SELECT TOP 1 * FROM OMS_Order_Items WHERE " +
+                $"Order_Item_Status <> 'X' AND Order_Item_Order_Id = {order.Id} " +
+                $"ORDER BY Order_Item_Position DESC";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<InventoryOrderItem>(op);
+    }
+
+
+    internal static FixedList<InventoryEntry> SearchMaxInventoryEntryPosition(InventoryOrder order) {
+
+      var sql = $"SELECT TOP 1 * FROM OMS_Inventory_Entries " +
+                $"WHERE Inv_Entry_Status <> 'X' AND Inv_Entry_Order_Id = {order.Id} " +
+                $"ORDER BY Inv_Entry_Position DESC";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<InventoryEntry>(op);
+    }
+
+
     internal static FixedList<InventoryEntry> SearchInventoryEntries(string filter, string sort) {
 
       var sql = "SELECT * FROM VW_Inventory_Entries";
@@ -222,7 +246,8 @@ namespace Empiria.Inventory.Data {
           entry.Sku.Id,
           entry.Location.Id,
           entry.Observations,
-          entry.Unit.Id, entry.InputQuantity,
+          entry.Unit.Id,
+          entry.InputQuantity,
           entry.InputCost, entry.OutputQuantity,
           entry.OutputCost, entry.CountingQuantity, entry.CountingCost,
           entry.EntryTime, entry.Tags, entry.ExtData,

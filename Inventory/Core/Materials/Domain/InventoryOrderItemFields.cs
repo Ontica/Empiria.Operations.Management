@@ -15,7 +15,7 @@ namespace Empiria.Inventory {
 
   /// <summary>Represents an inventory order item.</summary>
   public class InventoryOrderItemFields : OrderItemFields {
-    
+
     public string Location { 
       get; set; 
     }

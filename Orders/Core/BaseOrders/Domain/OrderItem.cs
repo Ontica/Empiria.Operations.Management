@@ -528,9 +528,10 @@ namespace Empiria.Orders {
       Responsible = Patcher.Patch(fields.ResponsibleUID, Order.Responsible);
       Beneficiary = Patcher.Patch(fields.BeneficiaryUID, Order.Beneficiary);
       ReceivedBy = Patcher.Patch(fields.ReceivedByUID, Party.Empty);
-
+      
       OriginCountry = Patcher.Patch(fields.OriginCountryUID, Country.Default);
       Location = Patcher.Patch(fields.LocationUID, Location.Empty);
+      Position = fields.Position;
 
       UpdateBudgetData(fields);
 

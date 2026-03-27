@@ -22,6 +22,7 @@ using Empiria.Json;
 using Empiria.Locations;
 using Empiria.Services;
 using Empiria.StateEnums;
+using System.Linq;
 
 
 namespace Empiria.Inventory.UseCases {
@@ -87,29 +88,32 @@ namespace Empiria.Inventory.UseCases {
       Assertion.Require(fields, nameof(fields));
 
       var order = InventoryOrder.Parse(orderUID);
-
+      var orderItemType = Orders.OrderItemType.Parse(4059);
       var location = CommonStorage.TryParseNamedKey<Location>(fields.Location);
+      var product = Product.TryParseWithCode(fields.Product);
+      var ifNotExistProductinLocation = VerifyProductAndLocationInOrder(order.Id, product.Id, location.Id);
+
       Assertion.Require(location, $"La ubicacion {fields.Location} no existe.");
       Assertion.Require(order.Warehouse == GetRootLocation(location),
                  $"La localización {fields.Location} no existe en el almacen {order.Warehouse.Name}");
 
-      var product = Product.TryParseWithCode(fields.Product);
       Assertion.Require(product, $"El producto con clave {fields.Product} no existe.");
 
-      var isnotexistProductinLocation = VerifyProductAndLocationInOrder(order.Id, product.Id, location.Id);
-      Assertion.Require(isnotexistProductinLocation, $"Ya existe ese producto en esa localización {fields.Location}.");
+      Assertion.Require(ifNotExistProductinLocation, $"Ya existe ese producto en esa localización {fields.Location}.");
 
+      var maxOrderItem = InventoryOrderData.SearchMaxOrderItemPosition(order);
+
+      fields.Position = maxOrderItem.Count > 0 ? maxOrderItem.First().Position + 1 : 1;
       fields.ProductUID = product.UID;
       fields.Description = product.Description;
       fields.ProductUnitUID = product.BaseUnit.UID;
       fields.LocationUID = fields.LocationUID == string.Empty ? location.UID : fields.LocationUID;
 
-      var orderItemType = Orders.OrderItemType.Parse(4059);
       InventoryOrderItem orderItem = new InventoryOrderItem(orderItemType, order, location);
 
       orderItem.Update(fields);
-      order.AddItem(orderItem);
       orderItem.Save();
+      order.AddItem(orderItem);
 
       AddInventoryEntry(order, orderItem);
 
@@ -260,7 +264,7 @@ namespace Empiria.Inventory.UseCases {
     private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
       var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
 
-      inventoryEntry.InitialEntry(orderItem.UnitPrice, orderItem.Location);
+      inventoryEntry.InitialEntry(orderItem.UnitPrice, orderItem.Quantity, orderItem.Location);
 
       inventoryEntry.Save();
     }
@@ -298,7 +302,7 @@ namespace Empiria.Inventory.UseCases {
         ParentOrderUID = order.UID,
       };
 
-      var orderType = Orders.OrderType.Parse(4010);
+      var orderType = Orders.OrderType.Parse(5010);
 
       InventoryOrder inventoryOrder = new InventoryOrder(fields.WarehouseUID, orderType);
 
@@ -332,6 +336,7 @@ namespace Empiria.Inventory.UseCases {
         orderItem.Save();
       }
     }
+
 
     public void GenerateDifFicalInventory(string orderUID) {
       var order = InventoryOrder.Parse(orderUID);
