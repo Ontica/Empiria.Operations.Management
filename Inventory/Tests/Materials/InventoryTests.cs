@@ -427,7 +427,7 @@ namespace Empiria.Tests.Inventory {
     private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
       var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
 
-      inventoryEntry.InitialEntry(orderItem.UnitPrice, 0, orderItem.Location);
+      inventoryEntry.InitialEntry(orderItem.UnitPrice, orderItem.Location);
 
       inventoryEntry.Save();
     }

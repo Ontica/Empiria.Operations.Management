@@ -31,7 +31,7 @@ namespace Empiria.Inventory.UseCases {
   public class InventoryOrderUseCases : UseCase {
 
     private const int INVENTORYORDERTYPEID = 4011;
-
+    private const string INVENTORYORDERTYPE = "ObjectTypeInfo.Order.InventoryOrder";
 
     #region Constructors and parsers
 
@@ -266,7 +266,7 @@ namespace Empiria.Inventory.UseCases {
     private void AddInventoryEntry(InventoryOrder order, InventoryOrderItem orderItem) {
       var inventoryEntry = new InventoryEntry(order.UID, orderItem.UID);
 
-      inventoryEntry.InitialEntry(orderItem.UnitPrice, orderItem.Quantity, orderItem.Location);
+      inventoryEntry.InitialEntry(orderItem.UnitPrice, orderItem.Location);
 
       inventoryEntry.Save();
     }
