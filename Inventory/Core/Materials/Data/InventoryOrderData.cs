@@ -157,7 +157,7 @@ namespace Empiria.Inventory.Data {
 
     internal static FixedList<InventoryEntriesReport> GetProductEntryInventoryReport(int orderId) {
 
-      var sql = $"SELECT * FROM vw_Inventory_Report WHERE Inv_Entry_Order_Id = {orderId} ORDER BY Product_Name";
+      var sql = $"SELECT * FROM VW_Inventory_Report WHERE Inv_Entry_Order_Id = {orderId} ORDER BY Inv_entry_position";
 
       var op = DataOperation.Parse(sql);
 
@@ -167,7 +167,7 @@ namespace Empiria.Inventory.Data {
 
     internal static FixedList<InventoryEntriesReport> GetProductEntryInventoryReportByLocation(string locationName) {
 
-      var sql = $"SELECT * FROM vw_Inventory_Report " +
+      var sql = $"SELECT * FROM VW_Inventory_Report " +
                  $" inner join Common_Storage on Inv_Entry_Location_Id = Object_Id " +
                  $" WHERE Object_Type_Id = 275 and Object_Name = {locationName} ORDER BY Product_Name ";
 
