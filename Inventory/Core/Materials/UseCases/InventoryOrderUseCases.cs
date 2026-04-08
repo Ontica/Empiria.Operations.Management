@@ -30,7 +30,6 @@ namespace Empiria.Inventory.UseCases {
   /// <summary>Use cases to manage inventory order.</summary>
   public class InventoryOrderUseCases : UseCase {
 
-    private const int INVENTORYORDERTYPEID = 4011;
     private const string INVENTORYORDERTYPE = "ObjectTypeInfo.Order.InventoryOrder";
 
     #region Constructors and parsers
@@ -70,7 +69,7 @@ namespace Empiria.Inventory.UseCases {
       Assertion.Require(warehouseUID, nameof(warehouseUID));
       Assertion.Require(fields, nameof(fields));
 
-      var orderType = Orders.OrderType.Parse(INVENTORYORDERTYPEID);
+      var orderType = Orders.OrderType.Parse(INVENTORYORDERTYPE);
       fields.Priority = Priority.Normal;
 
       InventoryOrder order = new InventoryOrder(warehouseUID, orderType);
@@ -198,7 +197,7 @@ namespace Empiria.Inventory.UseCases {
 
 
     public void LoadInputOrdersFromNK(DateTime fromDate) {
-      var sut = Order.GetFullList<Order>().FindAll(x => x.ClosingTime == fromDate && x.OrderType.Id == 4005);
+      var sut = Order.GetFullList<Order>().FindAll(x => x.ClosingTime == fromDate && x.OrderType.UID == "ObjectTypeInfo.Order.PayableOrder.ContractOrder");
 
       string inventoryTypeUID = "a40c65bd-9a56-48eb-a8bf-f9245ecd3004";
 
@@ -212,7 +211,7 @@ namespace Empiria.Inventory.UseCases {
 
 
     public void LoadOutputOrdersFromNK(DateTime fromDate) {
-      var sut = Order.GetFullList<Order>().FindAll(x => x.ClosingTime == fromDate && x.OrderType.Id == 4011);
+      var sut = Order.GetFullList<Order>().FindAll(x => x.ClosingTime == fromDate && x.OrderType.UID == "ObjectTypeInfo.Order.InventoryOrder");
 
       string inventoryTypeUID = "0eb5a072-b857-4071-8b06-57a34822ec64";
 

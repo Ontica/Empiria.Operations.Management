@@ -41,7 +41,7 @@ namespace Empiria.Inventory {
 
       this.Order = Order.Parse(orderUID);
       this.OrderItem = OrderItem.Parse(orderItemUID);
-      this.InventoryEntryTypeId = 4311; // TODO PREGUNTAR A JM COMO JALAR EL TIPO
+      this.InventoryEntryTypeId = 5311; // TODO CAMBIAR METODO DE ASIGNACION
       this.Unit = ProductUnit.Parse(OrderItem.ProductUnit.Id);
       this.Position = OrderItem.Position;
       this.Sku = ProductSku.Empty;
@@ -54,7 +54,7 @@ namespace Empiria.Inventory {
 
       this.Order = order;
       this.OrderItem = orderItem;
-      this.InventoryEntryTypeId = 4311; // TODO PREGUNTAR A JM COMO JALAR EL TIPO
+      this.InventoryEntryTypeId = 5311; // TODO CAMBIAR METODO DE ASIGNACION
       this.Unit = orderItem.ProductUnit;
       this.Position = orderItem.Position;
       this.Sku = ProductSku.Empty;
