@@ -125,7 +125,7 @@ namespace Empiria.Inventory.Data {
       try {
 
         var sql = $"SELECT * FROM Common_Storage " +
-                $"WHERE Object_Type_Id = 275 AND Object_Name = '{locationName}'";
+                $"WHERE Object_Type_Id = 5275 AND Object_Name = '{locationName}'";
 
         var op = DataOperation.Parse(sql);
 
@@ -169,7 +169,7 @@ namespace Empiria.Inventory.Data {
 
       var sql = $"SELECT * FROM VW_Inventory_Report " +
                  $" inner join Common_Storage on Inv_Entry_Location_Id = Object_Id " +
-                 $" WHERE Object_Type_Id = 275 and Object_Name = {locationName} ORDER BY Product_Name ";
+                 $" WHERE Object_Type_Id = 5275 and Object_Name = {locationName} ORDER BY Product_Name ";
 
       var op = DataOperation.Parse(sql);
 
