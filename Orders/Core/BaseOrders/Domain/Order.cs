@@ -41,6 +41,11 @@ namespace Empiria.Orders {
 
     #region Constructors and parsers
 
+    public Order() {
+      //no-op
+    }
+
+
     protected Order(OrderType orderType) : base(orderType) {
       // Required by Empiria Framework for all partitioned types.
 
