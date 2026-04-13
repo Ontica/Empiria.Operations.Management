@@ -448,6 +448,17 @@ namespace Empiria.Orders {
       }
     }
 
+
+    public string PaymentConditions {
+      get {
+        return ConditionsData.Get("paymentConditions", string.Empty);
+      }
+      private set {
+        ConditionsData.SetIfValue("paymentConditions", value);
+      }
+    }
+
+
     public string DeliveryNotes {
       get {
         return DeliveryData.Get("notes", string.Empty);
@@ -685,6 +696,7 @@ namespace Empiria.Orders {
       Observations = Patcher.PatchClean(fields.Observations, "N/A");
       GuaranteeNotes = Patcher.PatchClean(fields.GuaranteeNotes, "N/A");
       PenaltyNotes = Patcher.PatchClean(fields.PenaltyNotes, "N/A");
+      PaymentConditions = Patcher.PatchClean(fields.PaymentConditions, "N/A");
       DeliveryNotes = Patcher.PatchClean(fields.DeliveryNotes, "N/A");
 
       EstimatedMonths = Patcher.Patch(fields.EstimatedMonths, GetMonthsDuration());

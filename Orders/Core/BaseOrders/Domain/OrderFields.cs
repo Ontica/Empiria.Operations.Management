@@ -141,6 +141,11 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public string PaymentConditions {
+      get; set;
+    } = string.Empty;
+
+
     public int? EstimatedMonths {
       get; set;
     }
