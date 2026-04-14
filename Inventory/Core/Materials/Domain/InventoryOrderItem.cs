@@ -72,7 +72,7 @@ namespace Empiria.Inventory {
       base.Update(fields);
     }
 
-    
+
 
     internal new void UpdateQuantity(decimal quantity) {
 

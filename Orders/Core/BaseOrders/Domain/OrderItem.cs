@@ -32,6 +32,11 @@ namespace Empiria.Orders {
 
     #region Constructors and parsers
 
+    public OrderItem() {
+      //no-op
+    }
+
+
     protected OrderItem(OrderItemType powertype) : base(powertype) {
       // Required by Empiria Framework for all partitioned types.
     }
