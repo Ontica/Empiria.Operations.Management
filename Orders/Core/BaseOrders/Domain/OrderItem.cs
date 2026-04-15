@@ -481,11 +481,11 @@ namespace Empiria.Orders {
       Assertion.Require(fields, nameof(fields));
       Assertion.Require(Status != EntityStatus.Closed && Status != EntityStatus.Deleted,
                        $"No se puede modificar un elemento que está en estado {Status.GetName()}.");
-
-      fields.EnsureValid();
-
+      
       Product = Patcher.Patch(fields.ProductUID, Product.Empty);
       ProductCode = Patcher.PatchClean(fields.ProductCode, Product.InternalCode);
+
+      fields.EnsureValid();
 
       Requisition = Patcher.Patch(fields.RequisitionUID, Order.Requisition);
       RequisitionItem = Patcher.Patch(fields.RequisitionItemUID, Empty);

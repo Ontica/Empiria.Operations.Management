@@ -172,7 +172,7 @@ namespace Empiria.Tests.Inventory {
 
       InventoryOrderItemFields fields = new InventoryOrderItemFields() {
         Product = "ASF24",
-        Location = "A-029-01-08",
+        Location = "A-001-01-02",
         Quantity = 1,
         RequestedByUID = "72b902de-8840-4985-81aa-46700d915ea7",
       };

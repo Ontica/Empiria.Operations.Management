@@ -182,7 +182,7 @@ namespace Empiria.Orders {
       Assertion.Require(UnitPrice > 0, "El precio unitario debe ser mayor a cero.");
       Assertion.Require(Discount >= 0, "El descuento no puede ser negativo.");
       Assertion.Require(PenaltyDiscount >= 0, "El descuento por penalización no puede ser negativo.");
-      Assertion.Require(Quantity > 0, "Necesito se proporcione la cantidad.");
+      Assertion.Require(Quantity > 0, "Especifique una cantidad mayor a 0.");
 
       Assertion.Require(ProductUnitUID, "Se requiere proporcionar la unidad de medida.");
 
