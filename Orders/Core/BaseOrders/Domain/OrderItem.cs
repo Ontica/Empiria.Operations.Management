@@ -442,7 +442,7 @@ namespace Empiria.Orders {
     }
 
 
-    internal protected virtual void Delete() {
+    public virtual void Delete() {
       Assertion.Require(Status != EntityStatus.Deleted && Status != EntityStatus.Closed,
                   $"No se puede eliminar un elemento que está en estado {Status.GetName()}.");
 
