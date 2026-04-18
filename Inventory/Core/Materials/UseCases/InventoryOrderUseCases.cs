@@ -100,7 +100,8 @@ namespace Empiria.Inventory.UseCases {
 
       Assertion.Require(product, $"El producto con clave {fields.Product} no existe.");
 
-      Assertion.Require(ifNotExistProductinLocation, $"Ya existe ese producto en esa localización {fields.Location}.");
+      Assertion.Require(ifNotExistProductinLocation, $"El producto {product.Name} ya está registrado " +
+                                                     $"en la localización {fields.Location}.");
 
       var maxOrderItem = InventoryOrderData.SearchMaxOrderItemPosition(order);
 
