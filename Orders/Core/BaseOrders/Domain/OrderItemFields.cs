@@ -17,12 +17,22 @@ namespace Empiria.Orders {
   /// <summary>Abstract DTO fields structure used for update order items information.</summary>
   abstract public class OrderItemFields {
 
+    public string UID {
+      get; set;
+    } = string.Empty;
+
+
     public string ProductUID {
       get; set;
     } = string.Empty;
 
 
     public string ProductCode {
+      get; set;
+    } = string.Empty;
+
+
+    public string Notes {
       get; set;
     } = string.Empty;
 

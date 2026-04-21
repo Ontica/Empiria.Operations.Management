@@ -341,6 +341,16 @@ namespace Empiria.Orders {
     }
 
 
+    public string ItemNotes {
+      get {
+        return ExtData.Get("itemNotes", string.Empty);
+      }
+      private set {
+        ExtData.SetIfValue("itemNotes", value);
+      }
+    }
+
+
     public string Keywords {
       get {
         return EmpiriaString.BuildKeywords(ProductName, Description, Product.Keywords, ProductCode,
@@ -481,7 +491,7 @@ namespace Empiria.Orders {
       Assertion.Require(fields, nameof(fields));
       Assertion.Require(Status != EntityStatus.Closed && Status != EntityStatus.Deleted,
                        $"No se puede modificar un elemento que está en estado {Status.GetName()}.");
-      
+
       Product = Patcher.Patch(fields.ProductUID, Product.Empty);
       ProductCode = Patcher.PatchClean(fields.ProductCode, Product.InternalCode);
 
@@ -533,7 +543,7 @@ namespace Empiria.Orders {
       Responsible = Patcher.Patch(fields.ResponsibleUID, Order.Responsible);
       Beneficiary = Patcher.Patch(fields.BeneficiaryUID, Order.Beneficiary);
       ReceivedBy = Patcher.Patch(fields.ReceivedByUID, Party.Empty);
-      
+      ItemNotes = Patcher.PatchClean(fields.Notes, string.Empty);
       OriginCountry = Patcher.Patch(fields.OriginCountryUID, Country.Default);
       Location = Patcher.Patch(fields.LocationUID, Location.Empty);
       Position = fields.Position;
