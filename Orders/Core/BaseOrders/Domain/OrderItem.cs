@@ -341,16 +341,6 @@ namespace Empiria.Orders {
     }
 
 
-    public string ItemNotes {
-      get {
-        return ExtData.Get("itemNotes", string.Empty);
-      }
-      private set {
-        ExtData.SetIfValue("itemNotes", value);
-      }
-    }
-
-
     public string Keywords {
       get {
         return EmpiriaString.BuildKeywords(ProductName, Description, Product.Keywords, ProductCode,
@@ -442,7 +432,8 @@ namespace Empiria.Orders {
 
     internal protected virtual void Close() {
       Assertion.Require(Status == EntityStatus.Active ||
-                        Status == EntityStatus.Pending,
+                        Status == EntityStatus.Pending ||
+                        Status == EntityStatus.Closed,
                   $"No se puede cerrar un elemento que está en estado {Status.GetName()}.");
 
       Status = EntityStatus.Closed;
@@ -543,7 +534,7 @@ namespace Empiria.Orders {
       Responsible = Patcher.Patch(fields.ResponsibleUID, Order.Responsible);
       Beneficiary = Patcher.Patch(fields.BeneficiaryUID, Order.Beneficiary);
       ReceivedBy = Patcher.Patch(fields.ReceivedByUID, Party.Empty);
-      ItemNotes = Patcher.PatchClean(fields.Notes, string.Empty);
+
       OriginCountry = Patcher.Patch(fields.OriginCountryUID, Country.Default);
       Location = Patcher.Patch(fields.LocationUID, Location.Empty);
       Position = fields.Position;
