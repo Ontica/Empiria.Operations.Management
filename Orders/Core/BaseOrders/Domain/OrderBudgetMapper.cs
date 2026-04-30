@@ -69,6 +69,11 @@ namespace Empiria.Orders {
 
         if (requisition.StartDate.Year == budgetYear) {
 
+          if (!ExecutionServer.IsMinOrMaxDate(orderItem.StartDate) &&
+              orderItem.StartDate >= requisition.StartDate) {
+            return orderItem.StartDate;
+          }
+
           return new DateTime(budgetYear, requisition.StartDate.Month, 1);
 
         } else {
