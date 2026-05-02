@@ -27,6 +27,10 @@ namespace Empiria.Orders {
 
     static public new Requisition Parse(string uid) => ParseKey<Requisition>(uid);
 
+    static public Requisition TryParse(string requisitionNo) {
+      return TryParse<Requisition>($"ORDER_NO = '{requisitionNo}'");
+    }
+
     static public new Requisition Empty => ParseEmpty<Requisition>();
 
     static public FixedList<Requisition> GetList() {
