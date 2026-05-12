@@ -41,9 +41,9 @@ namespace Empiria.Tests.Orders.Contracts {
     [Fact]
     public void Should_Add_A_Contract() {
       var fields = new ContractFields {
-        ContractNo = "DAGA/146/2023",
-        Name = "BANOBRAS-2023-O-00ABCD",
-        Description = "Fábrica de Software 2023-2025",
+        ContractNo = "D/146/2023",
+        Name = "2023-O-00ABCD",
+        Description = "Fábrica de Software 2023-2026",
         CurrencyUID = TestingConstants.CONTRACT_CURRENCY_UID,
         RequestedByUID = TestingConstants.MANAGED_BY_ORG_UNIT_UID,
         Budgets = new string[] { TestingConstants.CONTRACT_BUDGET_UID },
@@ -62,9 +62,9 @@ namespace Empiria.Tests.Orders.Contracts {
     [Fact]
     public void Should_Update_A_Contract() {
       var fields = new ContractFields {
-        ContractNo = "DAGA/031/2022",
-        Name = "BANOBRAS-2024-O-XXXXXX",
-        Description = "Servicios de soporte técnico y mantenimiento al Sistema Fiduciario que opera en Banobras YATLA",
+        ContractNo = "D/031/2022",
+        Name = "2024-O-XXXXXX",
+        Description = "Servicios de soporte técnico y mantenimiento al Sistema Fiduciario",
         CurrencyUID = TestingConstants.CONTRACT_CURRENCY_UID,
         StartDate = new DateTime(2022, 09, 01),
         EndDate = new DateTime(2024, 08, 31),

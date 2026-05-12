@@ -5,7 +5,7 @@
     <Description>
       HTTP/JSON web api used to interact with the Empiria Orders and Requisitions Management System's backend.
     </Description>
-    <Copyright>(c) 2002-2025. La Vía Óntica SC, Ontica LLC y de los autores. Todos los derechos reservados.</Copyright>
+    <Copyright>(c) 2002-2026. La Vía Óntica SC, Ontica LLC y de los autores. Todos los derechos reservados.</Copyright>
     <Version>8.0.0</Version>
     <AssemblyVersion>8.0.0</AssemblyVersion>
     <FileVersion>8.0.0.0</FileVersion>
@@ -17,7 +17,7 @@
     <PackageTags>
       requisiciones, órdenes de compra, órdenes de abastecimiento, órdenes de control de inventarios, almacenes,
       licitaciones, proveeduría, proveedores, suministro, productos, bienes, servicios, servicios web, web api, 
-      administración publica, gobierno electrónico, Banca de desarrollo, BANOBRAS, México
+      administración publica, gobierno electrónico, Banca de desarrollo, México
     </PackageTags>
     <RepositoryUrl>https://github.com/Ontica/Empiria.Operations.Management</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
