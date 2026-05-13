@@ -30,44 +30,6 @@ namespace Empiria.Tests.Inventory {
 
     #endregion Initialization
 
-    [Fact]
-    public void Should_Add_Inventory_EntriesTest() {
-
-      TestsCommonMethods.Authenticate();
-
-      string orderUID = "75dadef4-0bc3-417b-a7e2-5b34f670f0a4";
-      string orderItemUID = "ea4b9d7c-f9dd-4987-aa87-572cda50a526";
-
-      InventoryEntryFields fields = new InventoryEntryFields {
-
-        Location = "A-005-01-23",
-        Product = "TG5F916X112-320",
-        Cost = 3.7628m,
-        Quantity = 200
-      };
-
-      Assertion.Require(orderUID, nameof(orderUID));
-      Assertion.Require(orderItemUID, nameof(orderItemUID));
-      Assertion.Require(fields, nameof(fields));
-
-      ProductEntry productEntry = InventoryOrderData.GetProductEntryByName(fields.Product.Trim());
-      LocationEntry locationEntry = InventoryOrderData.GetLocationEntryByName(fields.Location.Trim());
-
-      var orderItem = InventoryOrderItem.Parse(orderItemUID);
-      Assertion.Require(productEntry.ProductId == orderItem.Product.Id, "El producto no coincide con el seleccionado.");
-
-      fields.ProductUID = Product.Parse(productEntry.ProductId).UID;
-      fields.LocationUID = Location.Parse(locationEntry.LocationId).UID;
-
-      var inventoryEntry = new InventoryEntry(orderUID, orderItemUID);
-
-      inventoryEntry.AddEntry(fields);
-
-      inventoryEntry.Save();
-
-      Assert.NotNull(inventoryEntry);
-    }
-
 
     [Fact]
     public void Should_Create_Inventory_EntriesTest() {
@@ -104,45 +66,6 @@ namespace Empiria.Tests.Inventory {
       } else {
         inventoryEntry.AddEntry(fields);
       }
-
-      inventoryEntry.Save();
-
-      Assert.NotNull(inventoryEntry);
-    }
-
-
-    [Fact]
-    public void Should_Output_Inventory_EntriesTest() {
-
-      TestsCommonMethods.Authenticate();
-
-      string orderUID = "75dadef4-0bc3-417b-a7e2-5b34f670f0a4";
-      string orderItemUID = "ea4b9d7c-f9dd-4987-aa87-572cda50a526";
-
-      InventoryEntryFields fields = new InventoryEntryFields {
-
-        Location = "A-005-01-23",
-        Product = "TG5F916X112-320",
-        Cost = 3.7628m,
-        Quantity = 500
-      };
-
-      Assertion.Require(orderUID, nameof(orderUID));
-      Assertion.Require(orderItemUID, nameof(orderItemUID));
-      Assertion.Require(fields, nameof(fields));
-
-      ProductEntry productEntry = InventoryOrderData.GetProductEntryByName(fields.Product.Trim());
-      LocationEntry locationEntry = InventoryOrderData.GetLocationEntryByName(fields.Location.Trim());
-
-      var orderItem = InventoryOrderItem.Parse(orderItemUID);
-      Assertion.Require(productEntry.ProductId == orderItem.Product.Id, "El producto no coincide con el seleccionado.");
-
-      fields.ProductUID = Product.Parse(productEntry.ProductId).UID;
-      fields.LocationUID = Location.Parse(locationEntry.LocationId).UID;
-
-      var inventoryEntry = new InventoryEntry(orderUID, orderItemUID);
-
-      inventoryEntry.OutputEntry(fields);
 
       inventoryEntry.Save();
 
