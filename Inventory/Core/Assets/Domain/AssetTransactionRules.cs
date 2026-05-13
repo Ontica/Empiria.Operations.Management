@@ -49,7 +49,7 @@ namespace Empiria.Inventory.Assets {
 
       var currentUser = Party.ParseWithContact(ExecutionServer.CurrentContact);
 
-      return Accountability.GetCommissionersFor<OrganizationalUnit>(currentUser, "fixed-assets", ACQUISITION_MANAGER);
+      return Accountability.GetCommissionersFor<OrganizationalUnit>(currentUser, "fixed-assets");
     }
 
     #endregion Constructors and parsers
