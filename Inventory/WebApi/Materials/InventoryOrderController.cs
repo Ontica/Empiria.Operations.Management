@@ -19,7 +19,7 @@ namespace Empiria.Inventory.WebApi {
     #region Web Apis
 
     [HttpPost]
-    [Route("v8/order-management/inventory-orders/search")]
+    [Route("v8/order-management/inventory-orders/search")] 
     public SingleObjectModel SearchInventoryOrderList([FromBody] InventoryOrderQuery query) {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
@@ -46,7 +46,7 @@ namespace Empiria.Inventory.WebApi {
 
     [HttpGet]
     [Route("v8/order-management/inventory-types")]
-    public CollectionModel GetInventoryOrder() {
+    public CollectionModel GetInventoryOrderTypes() {
 
       using (var usecases = InventoryOrderUseCases.UseCaseInteractor()) {
 
