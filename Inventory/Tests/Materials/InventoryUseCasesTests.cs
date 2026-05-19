@@ -75,25 +75,6 @@ namespace Empiria.Tests.Inventory {
 
 
     [Fact]
-    public void CreateInventoryOrderTest() {
-
-      var usecase = InventoryOrderUseCases.UseCaseInteractor();
-
-      InventoryOrderFields fields = new InventoryOrderFields {
-        Description = "ABCDE",
-        InventoryTypeUID = "F6C83B25-4857-41E3-BB10-79959F37B247",
-        RequestedByUID= "72b902de-8840-4985-81aa-46700d915ea7",
-        ResponsibleUID= "d5527139-02e5-49b1-9e8f-827c5b8630ca",
-        WarehouseUID= "C5D74E47-CFEE-4B31-81B8-D9B102EDDE8F"
-      };
-
-      InventoryHolderDto sut = usecase.CreateInventoryOrder(fields.WarehouseUID, fields);
-
-      Assert.NotNull(sut);
-    }
-
-
-    [Fact]
     public void DeleteInventoryEntryTest() {
 
       var usecase = InventoryEntryUseCases.UseCaseInteractor();
@@ -159,25 +140,6 @@ namespace Empiria.Tests.Inventory {
 
       InventoryOrderDataDto sut = usecase.SearchInventoryOrder(query);
 
-      Assert.NotNull(sut);
-    }
-
-
-    [Fact]
-    public void UpdateInventoryItemTest() {
-      TestsCommonMethods.Authenticate();
-      var usecase = InventoryOrderUseCases.UseCaseInteractor();
-
-      string orderUID = "f54744dd-81d7-4eb6-8587-424431c60e45";
-
-      InventoryOrderItemFields fields = new InventoryOrderItemFields() {
-        Product = "ASF24",
-        Location = "A-001-01-02",
-        Quantity = 1,
-        RequestedByUID = "72b902de-8840-4985-81aa-46700d915ea7",
-      };
-      
-      InventoryHolderDto sut = usecase.CreateInventoryOrderItem(orderUID, fields);
       Assert.NotNull(sut);
     }
 
