@@ -25,6 +25,9 @@ namespace Empiria.Inventory {
     }
 
     public override void EnsureValid() {
+
+
+
       base.EnsureValid(); 
 
       Assertion.Require(Location, "Necesito la localizacion del producto.");

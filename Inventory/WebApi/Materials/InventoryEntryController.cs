@@ -25,6 +25,8 @@ namespace Empiria.Inventory.WebApi {
     public SingleObjectModel CreateInventoryEntry([FromUri] string orderUID,
                                                   [FromUri] string itemUID,
                                                   [FromBody] InventoryEntryFields fields) {
+      
+      Assertion.RequireFail("Funcionalidad en proceso de desarrollo.");
 
       using (var usecases = InventoryEntryUseCases.UseCaseInteractor()) {
 
