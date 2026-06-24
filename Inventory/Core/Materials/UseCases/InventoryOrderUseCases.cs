@@ -46,25 +46,6 @@ namespace Empiria.Inventory.UseCases {
 
     #region Use cases
 
-    public InventoryHolderDto CloseInventoryOrder(string orderUID) {
-      Assertion.Require(orderUID, nameof(orderUID));
-
-      InventoryOrder order = InventoryOrder.Parse(orderUID);
-
-      order.Close(Party.ParseWithContact(ExecutionServer.CurrentContact));
-      order.Save();
-
-      order.CloseItems();
-
-      OutputInventoryEntriesVW(order);
-
-      var inventoryEntryUseCase = InventoryEntryUseCases.UseCaseInteractor();
-      inventoryEntryUseCase.CloseInventoryEntries(order.UID);
-
-      return GetInventoryOrder(order.UID);
-    }
-
-
     public InventoryHolderDto CreateInventoryOrder(string warehouseUID, InventoryOrderFields fields) {
       Assertion.Require(warehouseUID, nameof(warehouseUID));
       Assertion.Require(fields, nameof(fields));

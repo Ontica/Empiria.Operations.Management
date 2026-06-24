@@ -71,4 +71,7 @@
     <ProjectReference Include="..\Core\Empiria.Inventory.Core.csproj" />
     <ProjectReference Include="..\..\Reporting\Core\Empiria.Operations.Reporting.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Materials\" />
+  </ItemGroup>
 </Project>
