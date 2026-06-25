@@ -71,4 +71,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\extensions\DynamicData\Empiria.DynamicData.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Reporting\Adapters\" />
+    <Folder Include="Reporting\UseCases\" />
+  </ItemGroup>
 </Project>
