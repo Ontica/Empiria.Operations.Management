@@ -74,7 +74,9 @@ namespace Empiria.Orders.UseCases {
     }
 
 
-    public PayableOrderItemDto CreateExpensesReportItem(string expensesReportUID, PayableOrderItemFields fields) {
+    public PayableOrderItemDto CreateExpensesReportItem(string expensesReportUID,
+                                                        PayableOrderItemFields fields) {
+
       Assertion.Require(expensesReportUID, nameof(expensesReportUID));
       Assertion.Require(fields, nameof(fields));
 
@@ -124,19 +126,19 @@ namespace Empiria.Orders.UseCases {
     public FixedList<PayableOrderItemDto> GetAvailableExpensesReportItems(ExpensesReport expensesReport) {
       Assertion.Require(expensesReport, nameof(expensesReport));
 
-      var items = expensesReport.ParentOrder.GetItems<PayableOrderItem>()
-                                            .FindAll(x => x.BudgetEntry.NoRejected);
+      var items = expensesReport.GetItems<PayableOrderItem>()
+                                .FindAll(x => x.BudgetEntry.NoRejected);
 
       return PayableOrderMapper.Map(items);
     }
 
 
-    public PayableOrderHolderDto GetExpensesReport(string expensesReportUID) {
+    public ExpensesReportHolderDto GetExpensesReport(string expensesReportUID) {
       Assertion.Require(expensesReportUID, nameof(expensesReportUID));
 
       var expensesReport = ExpensesReport.Parse(expensesReportUID);
 
-      return PayableOrderMapper.Map(expensesReport);
+      return ExpensesReportMapper.Map(expensesReport);
     }
 
 
