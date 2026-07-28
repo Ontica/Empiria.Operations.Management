@@ -16,7 +16,6 @@ using Empiria.Json;
 using Empiria.Locations;
 using Empiria.Ontology;
 using Empiria.Parties;
-using Empiria.Projects;
 using Empiria.StateEnums;
 using Empiria.Time;
 
@@ -88,7 +87,7 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_CATEGORY_ID")]
     public OrderCategory Category {
-      get; private set;
+      get; protected set;
     }
 
 
@@ -258,7 +257,7 @@ namespace Empiria.Orders {
     }
 
     [DataField("ORDER_PROJECT_ID")]
-    public Project Project {
+    public FinancialCostObject CostObject {
       get; private set;
     }
 
@@ -379,7 +378,7 @@ namespace Empiria.Orders {
               (Requisition.IsEmptyInstance ? string.Empty : Requisition.OrderNo.ToLower()) +
               (Contract.IsEmptyInstance ? string.Empty : Contract.OrderNo.ToLower()) + " " +
                EmpiriaString.BuildKeywords(Name, Description, Beneficiary.Keywords,
-                                           Provider.Keywords, Project.Keywords,
+                                           Provider.Keywords, CostObject.Keywords,
                                            Requisition.IsEmptyInstance ? string.Empty : Requisition.Keywords,
                                            Contract.IsEmptyInstance ? string.Empty : Contract.Keywords,
                                            Responsible.Keywords);
@@ -558,7 +557,6 @@ namespace Empiria.Orders {
 
     public virtual void Activate() {
       if (Status == EntityStatus.Active) {
-        RequestedTime = DateTime.Now;
         return;
       }
 
@@ -689,7 +687,7 @@ namespace Empiria.Orders {
 
       Source = Patcher.Patch(fields.SourceUID, Source);
       DeliveryPlace = Patcher.Patch(fields.DeliveryPlaceUID, DeliveryPlace);
-      Project = Patcher.Patch(fields.ProjectUID, Project);
+      CostObject = Patcher.Patch(fields.CostObjectUID, CostObject);
 
       Priority = fields.Priority.Value;
 

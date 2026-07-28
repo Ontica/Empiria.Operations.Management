@@ -93,9 +93,9 @@ namespace Empiria.Orders {
     }
 
 
-    INamedEntity IPayableEntity.Project {
+    INamedEntity IPayableEntity.CostObject {
       get {
-        return this.Project;
+        return this.CostObject;
       }
     }
 

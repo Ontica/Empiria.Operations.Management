@@ -125,7 +125,7 @@ namespace Empiria.Orders.Adapters {
       } else {
         ProvidersGroup = new FixedList<NamedEntityDto>();
       }
-      Project = order.Project.MapToNamedEntity();
+      CostObject = order.CostObject.MapToNamedEntity();
       Priority = order.Priority.MapToDto();
       AuthorizationTime = order.AuthorizationTime;
       AuthorizedBy = order.AuthorizedBy.MapToNamedEntity();
@@ -260,7 +260,8 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
-    public NamedEntityDto Project {
+    [Newtonsoft.Json.JsonProperty("Project")]
+    public NamedEntityDto CostObject {
       get;
     }
 
@@ -322,7 +323,7 @@ namespace Empiria.Orders.Adapters {
       Budgets = order.Budgets.MapToNamedEntityList();
       BudgetPeriodName = order.BudgetPeriodName;
       ProviderName = order.Provider.Name;
-      ProjectName = order.Project.Name;
+      CostObjectName = order.CostObject.Name;
       CurrencyName = order.Currency.ISOCode;
       Subtotal = order.Subtotal;
       Taxes = order.Taxes.Total;
@@ -379,7 +380,8 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
-    public string ProjectName {
+    [Newtonsoft.Json.JsonProperty("ProjectName")]
+    public string CostObjectName {
       get;
     }
 

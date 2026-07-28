@@ -35,7 +35,7 @@ namespace Empiria.Tests.Orders {
         Assert.True(sut.IsEmptyInstance || sut.UnitPrice > 0);
         Assert.True(sut.IsEmptyInstance || sut.Quantity > 0);
         Assert.NotNull(sut.RequestedBy);
-        Assert.NotNull(sut.Project);
+        Assert.NotNull(sut.CostObject);
         Assert.NotNull(sut.Provider);
       }
     }
@@ -54,7 +54,7 @@ namespace Empiria.Tests.Orders {
       Assert.NotNull(sut.Currency);
       Assert.NotNull(sut.BudgetAccount);
       Assert.NotNull(sut.RequestedBy);
-      Assert.NotNull(sut.Project);
+      Assert.NotNull(sut.CostObject);
       Assert.NotNull(sut.Provider);
     }
 

@@ -27,7 +27,7 @@ namespace Empiria.Tests.Orders {
 
     static internal string MANAGED_BY_ORG_UNIT_UID = "e387c433-8704-4d27-a8eb-fa1e002b5024";
 
-    static internal string CONTRACT_ITEM_PROJECT_UID = "05f66542-a59e-4d59-9f67-05145efad6aa";
+    static internal string CONTRACT_ITEM_COST_OBJECT_UID = "05f66542-a59e-4d59-9f67-05145efad6aa";
 
     static internal string CONTRACT_ITEM_PYM_PER_UID = "7504ebc6-dd2e-440c-8d94-008007a8c711";
 

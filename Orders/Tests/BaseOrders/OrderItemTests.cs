@@ -31,7 +31,7 @@ namespace Empiria.Tests.Orders {
       Assert.NotNull(sut.Description);
       Assert.NotNull(sut.ProductUnit);
       Assert.NotNull(sut.RequestedBy);
-      Assert.NotNull(sut.Project);
+      Assert.NotNull(sut.CostObject);
       Assert.NotNull(sut.Provider);
     }
 

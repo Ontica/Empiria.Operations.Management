@@ -89,7 +89,8 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
-    public string ProjectUID {
+    [Newtonsoft.Json.JsonProperty(PropertyName = "ProjectUID")]
+    public string CostObjectUID {
       get; set;
     } = string.Empty;
 

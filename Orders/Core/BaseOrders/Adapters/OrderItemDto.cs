@@ -37,9 +37,9 @@ namespace Empiria.Orders.Adapters {
       Budget = item.Budget.MapToNamedEntity();
       BudgetAccount = item.BudgetAccount.MapToNamedEntity();
       BudgetControlNo = item.BudgetEntry.ControlNo;
-      Project = item.Project.MapToNamedEntity();
+      CostObject = item.CostObject.MapToNamedEntity();
       Requisition = item.Requisition.MapToNamedEntity();
-      if (!item.RequisitionItem.IsEmptyInstance && item.RequisitionItem is PayableOrderItem rqp) {
+      if (!item.RequisitionItem.IsEmptyInstance && item.RequisitionItem is PayableOrderItem rqp && !(item.Order is ExpensesReport)) {
         RequisitionItem = PayableOrderMapper.Map(rqp);
       }
       RelatedItem = item.RelatedItem.MapToNamedEntity();
@@ -126,9 +126,12 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
-    public NamedEntityDto Project {
+
+    [Newtonsoft.Json.JsonProperty("Project")]
+    public NamedEntityDto CostObject {
       get;
     }
+
 
     public NamedEntityDto Requisition {
       get;

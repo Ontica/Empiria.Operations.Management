@@ -48,7 +48,7 @@ namespace Empiria.Tests.Orders.Contracts {
         MinQuantity = 2,
         UnitPrice = 20,
         BudgetAccountUID = TestingConstants.CONTRACT_BUDGET_ACCOUNT_UID,
-        ProjectUID = TestingConstants.CONTRACT_ITEM_PROJECT_UID
+        CostObjectUID = TestingConstants.CONTRACT_ITEM_COST_OBJECT_UID
       };
 
       ContractItemDto sut = _itemusecases.AddContractItem(TestingConstants.CONTRACT_UID, fields);
@@ -77,7 +77,7 @@ namespace Empiria.Tests.Orders.Contracts {
         MinQuantity = 5,
         UnitPrice = 20,
         BudgetAccountUID = TestingConstants.CONTRACT_BUDGET_ACCOUNT_UID,
-        ProjectUID = TestingConstants.CONTRACT_ITEM_PROJECT_UID
+        CostObjectUID = TestingConstants.CONTRACT_ITEM_COST_OBJECT_UID
       };
 
       ContractItemDto sut = _itemusecases.UpdateContractItem(TestingConstants.CONTRACT_UID,

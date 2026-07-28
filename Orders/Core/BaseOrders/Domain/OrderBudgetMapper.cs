@@ -53,7 +53,7 @@ namespace Empiria.Orders {
         ProductUnit = orderItem.ProductUnit,
         OriginCountry = orderItem.OriginCountry,
         ProductQty = orderItem.Quantity,
-        Project = orderItem.Project,
+        CostObject = orderItem.CostObject,
         Party = orderItem.RequestedBy,
         Currency = orderItem.Currency,
         ExchangeRate = orderItem.Order.ExchangeRate,

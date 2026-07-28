@@ -16,7 +16,6 @@ using Empiria.Locations;
 using Empiria.Ontology;
 using Empiria.Parties;
 using Empiria.Products;
-using Empiria.Projects;
 using Empiria.StateEnums;
 
 using Empiria.Budgeting;
@@ -276,7 +275,7 @@ namespace Empiria.Orders {
 
 
     [DataField("ORDER_ITEM_PROJECT_ID")]
-    public Project Project {
+    public FinancialCostObject CostObject {
       get; private set;
     }
 
@@ -527,7 +526,7 @@ namespace Empiria.Orders {
       Discount = fields.Discount;
       PenaltyDiscount = fields.PenaltyDiscount;
 
-      Project = Patcher.Patch(fields.ProjectUID, Order.Project);
+      CostObject = Patcher.Patch(fields.CostObjectUID, Order.CostObject);
 
       RequestedBy = Patcher.Patch(fields.RequestedByUID, Order.RequestedBy);
       RequiredTime = Patcher.Patch(fields.RequiredTime, ExecutionServer.DateMaxValue);
