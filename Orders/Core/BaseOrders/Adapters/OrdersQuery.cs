@@ -75,6 +75,11 @@ namespace Empiria.Orders.Adapters {
     } = EntityStatus.All;
 
 
+    public string QueryType {
+      get; set;
+    } = string.Empty;
+
+
     public string OrderBy {
       get; set;
     } = string.Empty;

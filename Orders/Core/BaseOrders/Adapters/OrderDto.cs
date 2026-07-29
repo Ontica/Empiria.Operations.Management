@@ -51,6 +51,10 @@ namespace Empiria.Orders.Adapters {
       get; set;
     }
 
+    public bool CanAuthorize {
+      get; set;
+    }
+
     public bool CanEditItems {
       get; set;
     }
@@ -64,6 +68,10 @@ namespace Empiria.Orders.Adapters {
     }
 
     public bool CanRequestBudget {
+      get; set;
+    }
+
+    public bool CanRequestBudgetAdjustment {
       get; set;
     }
 
