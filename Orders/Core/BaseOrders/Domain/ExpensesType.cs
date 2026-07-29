@@ -31,6 +31,13 @@ namespace Empiria.Orders {
 
     #endregion Constructors and parsers
 
+
+    public bool IsExpenseToCheck {
+      get {
+        return base.ExtData.Get("isExpenseToCheck", false);
+      }
+    }
+
   } // class ExpensesType
 
 } // namespace Empiria.Orders
