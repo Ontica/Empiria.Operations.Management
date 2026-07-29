@@ -572,6 +572,38 @@ namespace Empiria.Orders {
     }
 
 
+    protected void ClonePropertiesFrom(Order order) {
+      BaseBudget = order.BaseBudget;
+      Beneficiary = order.Beneficiary;
+      Budgets = order.Budgets;
+      BudgetType = order.BudgetType;
+      Category = order.Category;
+      Contract = order.Contract;
+      CostObject = order.CostObject;
+      Currency = order.Currency;
+      Description = order.Description;
+      Name = order.Name;
+      DeliveryPlace = order.DeliveryPlace;
+      EstimatedMonths = order.EstimatedMonths;
+      ExchangeRate = order.ExchangeRate;
+      _identificators = order._identificators;
+      IsForMultipleBeneficiaries = order.IsForMultipleBeneficiaries;
+      Justification = order.Justification;
+      Observations = order.Observations;
+      Origin = order.Origin;
+      Priority = order.Priority;
+      Provider = order.Provider;
+      RequestedBy = order.RequestedBy;
+      Requisition = order.Requisition;
+      Responsible = order.Responsible;
+      Source = order.Source;
+      StartDate = order.StartDate;
+      EndDate = order.EndDate;
+      _tags = order._tags;
+      Warehouse = order.Warehouse;
+    }
+
+
     public virtual void Close(Party closedBy) {
       Assertion.Require(closedBy, nameof(closedBy));
 
@@ -662,8 +694,8 @@ namespace Empiria.Orders {
         Requisition = Patcher.Patch(fields.RequisitionUID, Requisition);
       }
 
-      ParentOrder = Patcher.Patch(fields.ParentOrderUID, Empty);
-      Contract = Patcher.Patch(fields.ContractUID, Empty);
+      ParentOrder = Patcher.Patch(fields.ParentOrderUID, ParentOrder);
+      Contract = Patcher.Patch(fields.ContractUID, Contract);
       Name = Patcher.PatchClean(fields.Name, "Sin nombre asignado");
       Description = EmpiriaString.Clean(fields.Description);
       Justification = EmpiriaString.Clean(fields.Justification);
@@ -689,7 +721,7 @@ namespace Empiria.Orders {
       DeliveryPlace = Patcher.Patch(fields.DeliveryPlaceUID, DeliveryPlace);
       CostObject = Patcher.Patch(fields.CostObjectUID, CostObject);
 
-      Priority = fields.Priority.Value;
+      Priority = fields.Priority.HasValue ? fields.Priority.Value : Priority;
 
       Observations = Patcher.PatchClean(fields.Observations, "N/A");
       GuaranteeNotes = Patcher.PatchClean(fields.GuaranteeNotes, "N/A");
