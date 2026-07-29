@@ -25,7 +25,7 @@ namespace Empiria.Orders.Adapters {
   /// <summary>Maps expenses reports and their items to their corresponding DTOs.</summary>
   static public class ExpensesReportMapper {
 
-    static public ExpensesReportHolderDto Map(ExpensesReport expensesReport) {
+    static public ExpensesReportHolderDto Map(ExpensesReport expensesReport, string queryType = "") {
       FixedList<Bill> bills = Bill.GetListFor(expensesReport);
 
       return new ExpensesReportHolderDto {
@@ -34,13 +34,12 @@ namespace Empiria.Orders.Adapters {
         Taxes = OrderTaxMapper.Map(expensesReport.Taxes.GetList()),
         BudgetTransactions = MapBudgetTransactions(expensesReport),
         Bills = BillMapper.MapToBillStructure(bills),
-        PaymentOrders = PaymentOrderMapper.MapToDescriptor(PaymentOrder.GetListFor(expensesReport)),
+        PaymentOrders = MapPaymentOrders(expensesReport),
         Documents = DocumentServices.GetAllEntityDocuments(expensesReport),
         History = HistoryServices.GetEntityHistory(expensesReport),
-        Actions = MapActions(expensesReport.Rules),
+        Actions = MapActions(expensesReport, queryType, bills.Count != 0),
       };
     }
-
 
     static public FixedList<ExpensesReportItemDto> Map(FixedList<PayableOrderItem> orderItems) {
       return orderItems.Select(x => Map(x))
@@ -54,18 +53,37 @@ namespace Empiria.Orders.Adapters {
 
     #region Helpers
 
-    static private OrderActions MapActions(OrderRules rules) {
+    static private OrderActions MapActions(ExpensesReport expensesReport,
+                                           string queryType, bool hasBills) {
+
+      OrderRules rules = expensesReport.Rules;
+
+      bool updatable = queryType == "Procurement" && expensesReport.Status == StateEnums.EntityStatus.Pending;
+
+      bool canAuthorize = false;
+
+      if (hasBills && queryType == "Procurement" && !expensesReport.EjecutorGastoAuthorized) {
+        canAuthorize = true;
+      } else if (queryType == "Payments" && !expensesReport.PaymentControlAuthorized) {
+        canAuthorize = true;
+      } else if (queryType == "Budget" && !expensesReport.BudgetControlAuthorized) {
+        canAuthorize = true;
+      }
+
+      updatable = true;
 
       return new OrderActions {
-        CanActivate = rules.CanActivate(),
-        CanDelete = rules.CanDelete(),
-        CanEditDocuments = rules.CanEditDocuments(),
-        CanEditItems = rules.CanEditItems(),
-        CanSuspend = rules.CanSuspend(),
-        CanUpdate = rules.CanUpdate(),
-        CanCommitBudget = rules.CanCommitBudget(),
-        CanEditBills = rules.CanEditBills(),
+        CanActivate = false,
+        CanDelete = updatable && !expensesReport.EjecutorGastoAuthorized,
+        CanEditDocuments = updatable && !expensesReport.EjecutorGastoAuthorized,
+        CanEditItems = updatable && !expensesReport.EjecutorGastoAuthorized,
+        CanSuspend = updatable && !expensesReport.EjecutorGastoAuthorized,
+        CanUpdate = updatable && !expensesReport.EjecutorGastoAuthorized,
+        CanAuthorize = canAuthorize,
+        CanCommitBudget = false,
+        CanEditBills = updatable && !expensesReport.EjecutorGastoAuthorized,
         CanRequestBudget = false,
+        CanRequestBudgetAdjustment = false,
         CanRequestPayment = rules.CanRequestPayment(),
         CanValidateBudget = false
       };
@@ -73,9 +91,23 @@ namespace Empiria.Orders.Adapters {
 
 
     static private FixedList<BudgetTransactionDescriptorDto> MapBudgetTransactions(ExpensesReport expensesReport) {
-      FixedList<BudgetTransaction> transactions = BudgetTransaction.GetFor(expensesReport);
+
+      FixedList<BudgetTransaction> transactions = BudgetTransaction.GetFor(expensesReport.PayableOrder);
+
+      transactions = FixedList<BudgetTransaction>.MergeDistinct(transactions,
+                                                                BudgetTransaction.GetFor(expensesReport));
 
       return BudgetTransactionMapper.MapToDescriptor(transactions);
+    }
+
+
+    static private FixedList<PaymentOrderDescriptor> MapPaymentOrders(ExpensesReport expensesReport) {
+      var paymentOrders = PaymentOrder.GetListFor(expensesReport.PayableOrder);
+
+      paymentOrders = FixedList<PaymentOrder>.MergeDistinct(paymentOrders,
+                                                            PaymentOrder.GetListFor(expensesReport));
+
+      return PaymentOrderMapper.MapToDescriptor(paymentOrders);
     }
 
     #endregion Helpers
