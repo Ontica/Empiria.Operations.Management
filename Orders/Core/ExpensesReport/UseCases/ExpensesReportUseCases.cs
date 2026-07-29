@@ -8,12 +8,11 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Services;
-
-using Empiria.Parties;
-
+using Empiria.History;
 using Empiria.Orders.Adapters;
 using Empiria.Orders.Data;
+using Empiria.Parties;
+using Empiria.Services;
 
 namespace Empiria.Orders.UseCases {
 
@@ -34,7 +33,7 @@ namespace Empiria.Orders.UseCases {
 
     #region Use cases
 
-    public PayableOrderHolderDto ActivateExpensesReport(string expensesReportUID) {
+    public ExpensesReportHolderDto ActivateExpensesReport(string expensesReportUID) {
       Assertion.Require(expensesReportUID, nameof(expensesReportUID));
 
       var expensesReport = ExpensesReport.Parse(expensesReportUID);
@@ -43,26 +42,39 @@ namespace Empiria.Orders.UseCases {
 
       expensesReport.Save();
 
-      return PayableOrderMapper.Map(expensesReport);
+      return ExpensesReportMapper.Map(expensesReport);
     }
 
 
-    public FixedList<OrderDescriptor> AvailableExpensesReports(Party requestedBy) {
+    public ExpensesReportHolderDto Authorize(ExpensesReport expensesReport) {
+      Assertion.Require(expensesReport, nameof(expensesReport));
+
+      expensesReport.Authorize();
+
+      expensesReport.Save();
+
+      HistoryServices.CreateHistoryEntry(expensesReport, new HistoryFields("Autorizada"));
+
+      return ExpensesReportMapper.Map(expensesReport);
+    }
+
+    public FixedList<OrderDescriptor> AvailableExpensesToReport(Party requestedBy) {
       Assertion.Require(requestedBy, nameof(requestedBy));
 
       var orders = PayableOrder.GetList()
-                               .FindAll(x => x.RequestedBy.Equals(requestedBy) &&
-                                             (x.Status == StateEnums.EntityStatus.Active ||
-                                             x.Status == StateEnums.EntityStatus.Pending));
+                               .FindAll(x => x.RequestedBy.Equals(requestedBy) && x.OrderType.Equals(OrderType.Expenses) &&
+                                             x.ExpenseType.IsExpenseToCheck && !x.ExpenseChecked && x.Status == StateEnums.EntityStatus.Closed);
 
       return PayableOrderMapper.Map(orders);
     }
 
 
-    public PayableOrderHolderDto CreateExpensesReport(OrderFields fields) {
+    public ExpensesReportHolderDto CreateExpensesReport(ExpensesReportFields fields) {
       Assertion.Require(fields, nameof(fields));
 
-      var payableOrder = PayableOrder.Parse(fields.ParentOrderUID);
+      fields.EnsureValid();
+
+      var payableOrder = PayableOrder.Parse(fields.PayableOrderUID);
 
       var expensesReport = new ExpensesReport(payableOrder);
 
@@ -70,7 +82,7 @@ namespace Empiria.Orders.UseCases {
 
       expensesReport.Save();
 
-      return PayableOrderMapper.Map(expensesReport);
+      return ExpensesReportMapper.Map(expensesReport);
     }
 
 
@@ -126,19 +138,19 @@ namespace Empiria.Orders.UseCases {
     public FixedList<PayableOrderItemDto> GetAvailableExpensesReportItems(ExpensesReport expensesReport) {
       Assertion.Require(expensesReport, nameof(expensesReport));
 
-      var items = expensesReport.GetItems<PayableOrderItem>()
+      var items = expensesReport.PayableOrder.GetItems<PayableOrderItem>()
                                 .FindAll(x => x.BudgetEntry.NoRejected);
 
       return PayableOrderMapper.Map(items);
     }
 
 
-    public ExpensesReportHolderDto GetExpensesReport(string expensesReportUID) {
+    public ExpensesReportHolderDto GetExpensesReport(string expensesReportUID, string queryType) {
       Assertion.Require(expensesReportUID, nameof(expensesReportUID));
 
       var expensesReport = ExpensesReport.Parse(expensesReportUID);
 
-      return ExpensesReportMapper.Map(expensesReport);
+      return ExpensesReportMapper.Map(expensesReport, queryType);
     }
 
 
@@ -150,9 +162,16 @@ namespace Empiria.Orders.UseCases {
       var filter = query.MapToFilterString();
       var sort = query.MapToSortString();
 
-      FixedList<PayableOrder> expensesReports = OrdersData.Search<PayableOrder>(filter, sort);
+      FixedList<ExpensesReport> expensesReports = OrdersData.Search<ExpensesReport>(filter, sort);
 
-      return PayableOrderMapper.Map(expensesReports);
+      if (query.QueryType == "Payments") {
+        expensesReports = expensesReports.FindAll(x => x.EjecutorGastoAuthorized);
+
+      } else if (query.QueryType == "Budget") {
+        expensesReports = expensesReports.FindAll(x => x.PaymentControlAuthorized);
+      }
+
+      return PayableOrderMapper.Map(expensesReports.Select(x => (PayableOrder) x).ToFixedList());
     }
 
 
