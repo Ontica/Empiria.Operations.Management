@@ -42,7 +42,7 @@ namespace Empiria.Orders {
 
     static public OrderType Expenses => Parse("ObjectTypeInfo.Order.PayableOrder.Expenses");
 
-    static public OrderType ExpensesReport => Parse("ObjectTypeInfo.Order.PayableOrder.ExpensesSettlement");
+    static public OrderType ExpensesReport => Parse("ObjectTypeInfo.Order.PayableOrder.ExpensesReport");
 
     static public OrderType PurchaseOrder => Parse("ObjectTypeInfo.Order.PayableOrder.PurchaseOrder");
 

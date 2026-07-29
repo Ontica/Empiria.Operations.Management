@@ -24,12 +24,20 @@ namespace Empiria.Orders.Adapters {
   /// <summary>Data transfer object used to return payable orders information.</summary>
   public class ExpensesReportDto : PayableOrderDto {
 
-    protected internal ExpensesReportDto(PayableOrder order) : base(order) {
-      PayableOrder = PayableOrderMapper.MapToDescriptor(order);
+    protected internal ExpensesReportDto(ExpensesReport expensesReport) : base(expensesReport) {
+      PayableOrder = PayableOrderMapper.MapToDescriptor(expensesReport.PayableOrder);
+
+      // Todo: remove this hardcoded value and get it from the expensesReport instance.
+      ExpensesReportType = new NamedEntityDto("Settlement", "Gasto por comprobar");
+    }
+
+
+    public NamedEntityDto ExpensesReportType {
+      get;
     }
 
     public OrderDescriptor PayableOrder {
-      get; internal set;
+      get;
     }
 
   }  // class ExpensesReportDto
