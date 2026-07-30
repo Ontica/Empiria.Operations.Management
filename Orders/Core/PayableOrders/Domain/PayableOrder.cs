@@ -56,6 +56,17 @@ namespace Empiria.Orders {
       }
     }
 
+
+    public bool ExpenseChecked {
+      get {
+        return base.ExtData.Get("expenseChecked", false);
+      }
+      private set {
+        base.ExtData.SetIf("expenseChecked", value, value);
+      }
+    }
+
+
     #endregion Properties
 
     #region IPayableEntity interface
