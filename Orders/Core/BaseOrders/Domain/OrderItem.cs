@@ -462,6 +462,17 @@ namespace Empiria.Orders {
     }
 
 
+    internal protected virtual void Open() {
+      Assertion.Require(Status == EntityStatus.Active ||
+                        Status == EntityStatus.Closed,
+                  $"No se puede abrir un elemento que está en estado {Status.GetName()}.");
+
+      Status = EntityStatus.Active;
+      ClosingTime = ExecutionServer.DateMaxValue;
+
+      MarkAsDirty();
+    }
+
     public void SetBudgetEntry(BudgetEntry budgetEntry) {
 
       Assertion.Require(Status != EntityStatus.Closed && Status != EntityStatus.Deleted,

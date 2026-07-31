@@ -671,6 +671,21 @@ namespace Empiria.Orders {
     }
 
 
+    public virtual void Open() {
+      Assertion.Require(Status == EntityStatus.Active || Status == EntityStatus.Closed,
+                  $"No se puede abrir una orden que está en estado {Status.GetName()}: {Id}.");
+
+      Status = EntityStatus.Pending;
+      ClosedBy = Party.Empty;
+      ClosingTime = ExecutionServer.DateMinValue;
+
+      foreach (var item in Items.GetItems()) {
+        item.Open();
+        item.Save();
+      }
+    }
+
+
     internal protected virtual void Suspend() {
       Assertion.Require(Rules.CanSuspend(), $"No se puede suspender esta orden.");
 
