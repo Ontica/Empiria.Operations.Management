@@ -51,12 +51,13 @@ namespace Empiria.Orders {
       }
     }
 
+
     public bool BudgetControlAuthorized {
       get {
         return base.ExtData.Get("budgetControlAuthorized", false);
       }
       private set {
-        base.ExtData.SetIf("budgetControlAuthorized", value, value != false);
+        base.ExtData.SetIf("budgetControlAuthorized", value, value);
       }
     }
 
@@ -66,7 +67,7 @@ namespace Empiria.Orders {
         return base.ExtData.Get("ejecutorGastoAuthorized", false);
       }
       private set {
-        base.ExtData.SetIf("ejecutorGastoAuthorized", value, value != false);
+        base.ExtData.SetIf("ejecutorGastoAuthorized", value, value);
       }
     }
 
@@ -76,7 +77,7 @@ namespace Empiria.Orders {
         return base.ExtData.Get("paymentControlAuthorized", false);
       }
       private set {
-        base.ExtData.SetIf("paymentControlAuthorized", value, value != false);
+        base.ExtData.SetIf("paymentControlAuthorized", value, value);
       }
     }
 
@@ -101,6 +102,19 @@ namespace Empiria.Orders {
         base.Close(Party.ParseWithContact(ExecutionServer.CurrentContact));
         return;
       }
+    }
+
+
+    internal void Reject() {
+      if (Status == EntityStatus.Pending) {
+        return;
+      }
+
+      BudgetControlAuthorized = false;
+      PaymentControlAuthorized = false;
+      EjecutorGastoAuthorized = false;
+
+      base.Open();
     }
 
     #endregion Methods

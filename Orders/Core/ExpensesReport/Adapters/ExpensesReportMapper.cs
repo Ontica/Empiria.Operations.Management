@@ -58,11 +58,13 @@ namespace Empiria.Orders.Adapters {
 
       OrderRules rules = expensesReport.Rules;
 
-      bool updatable = queryType == "Procurement" && expensesReport.Status == StateEnums.EntityStatus.Pending;
+      bool updatable = !expensesReport.EjecutorGastoAuthorized;
 
       bool canAuthorize = false;
 
-      if (hasBills && queryType == "Procurement" && !expensesReport.EjecutorGastoAuthorized) {
+      if (!hasBills) {
+        canAuthorize = false;
+      } else if (queryType == "Procurement" && !expensesReport.EjecutorGastoAuthorized) {
         canAuthorize = true;
       } else if (queryType == "Payments" && !expensesReport.PaymentControlAuthorized) {
         canAuthorize = true;
@@ -70,22 +72,27 @@ namespace Empiria.Orders.Adapters {
         canAuthorize = true;
       }
 
-      updatable = true;
+      bool canReject = false;
+
+      if (queryType == "Payments" && !expensesReport.PaymentControlAuthorized) {
+        canReject = true;
+      } else if (queryType == "Budget" &&
+                !expensesReport.BudgetControlAuthorized &&
+                 expensesReport.PaymentControlAuthorized) {
+        canReject = true;
+      }
+
+      updatable = queryType == "Procurement" && !expensesReport.EjecutorGastoAuthorized;
 
       return new OrderActions {
-        CanActivate = false,
-        CanDelete = updatable && !expensesReport.EjecutorGastoAuthorized,
-        CanEditDocuments = updatable && !expensesReport.EjecutorGastoAuthorized,
-        CanEditItems = updatable && !expensesReport.EjecutorGastoAuthorized,
-        CanSuspend = updatable && !expensesReport.EjecutorGastoAuthorized,
-        CanUpdate = updatable && !expensesReport.EjecutorGastoAuthorized,
+        CanDelete = updatable,
+        CanEditDocuments = updatable,
+        CanEditItems = updatable,
+        CanSuspend = updatable,
+        CanUpdate = updatable,
         CanAuthorize = canAuthorize,
-        CanCommitBudget = false,
-        CanEditBills = updatable && !expensesReport.EjecutorGastoAuthorized,
-        CanRequestBudget = false,
-        CanRequestBudgetAdjustment = false,
-        CanRequestPayment = rules.CanRequestPayment(),
-        CanValidateBudget = false
+        CanReject = canReject,
+        CanEditBills = updatable,
       };
     }
 

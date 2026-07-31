@@ -67,6 +67,10 @@ namespace Empiria.Orders.Adapters {
       get; set;
     }
 
+    public bool CanReject {
+      get; set;
+    }
+
     public bool CanRequestBudget {
       get; set;
     }

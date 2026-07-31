@@ -58,6 +58,21 @@ namespace Empiria.Orders.UseCases {
       return ExpensesReportMapper.Map(expensesReport);
     }
 
+
+    public ExpensesReportHolderDto Reject(ExpensesReport expensesReport, string reason) {
+      Assertion.Require(expensesReport, nameof(expensesReport));
+      Assertion.Require(reason, nameof(reason));
+
+      expensesReport.Reject();
+
+      expensesReport.Save();
+
+      HistoryServices.CreateHistoryEntry(expensesReport, new HistoryFields("Rechazada", reason));
+
+      return ExpensesReportMapper.Map(expensesReport);
+    }
+
+
     public FixedList<OrderDescriptor> AvailableExpensesToReport(Party requestedBy) {
       Assertion.Require(requestedBy, nameof(requestedBy));
 
