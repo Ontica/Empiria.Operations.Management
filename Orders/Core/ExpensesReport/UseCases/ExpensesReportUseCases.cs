@@ -8,11 +8,21 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using System.Linq;
+
 using Empiria.History;
-using Empiria.Orders.Adapters;
-using Empiria.Orders.Data;
 using Empiria.Parties;
 using Empiria.Services;
+using Empiria.StateEnums;
+
+using Empiria.Billing;
+
+using Empiria.Budgeting.Transactions;
+
+using Empiria.Orders.Adapters;
+using Empiria.Orders.Data;
+
+using Empiria.Payments;
 
 namespace Empiria.Orders.UseCases {
 
@@ -49,11 +59,40 @@ namespace Empiria.Orders.UseCases {
     public ExpensesReportHolderDto Authorize(ExpensesReport expensesReport) {
       Assertion.Require(expensesReport, nameof(expensesReport));
 
+      var bills = Bill.GetListFor(expensesReport);
+      var paymentOrders = PaymentOrder.GetListFor(expensesReport.PayableOrder);
+
+
+      if (bills.Sum(x => x.Total) != paymentOrders.Sum(x => x.Total)) {
+        Assertion.RequireFail("La suma de los comprobantes " +
+                              "no coincide con la suma de los pagos efectuados. " +
+                              "De ser el caso, los recibos de devolución de anticipos " +
+                              "también deben anexarse como parte de la comprobación.");
+      }
+
       expensesReport.Authorize();
 
       expensesReport.Save();
 
       HistoryServices.CreateHistoryEntry(expensesReport, new HistoryFields("Autorizada"));
+
+
+
+      if (expensesReport.Status == EntityStatus.Closed) {
+
+        expensesReport.PayableOrder.ExpenseChecked = true;
+        expensesReport.PayableOrder.Save();
+
+        decimal adjustment = bills.FindAll(x => x.BillCategory.InternalCode.Contains("RETURN"))
+                                  .Sum(x => x.Total);
+
+        if (adjustment != 0) {
+
+          HistoryServices.CreateHistoryEntry(expensesReport, new HistoryFields("Se ajustó el presupuesto",
+                                             $"Se generó automáticamente la transacción " +
+                                             $"presupuestal de ajuste 2026-GC-AJU-00000 por {adjustment:C2}"));
+        }
+      }
 
       return ExpensesReportMapper.Map(expensesReport);
     }
@@ -91,7 +130,10 @@ namespace Empiria.Orders.UseCases {
 
       var payableOrder = PayableOrder.Parse(fields.PayableOrderUID);
 
+
       var expensesReport = new ExpensesReport(payableOrder);
+
+      fields.Name = $"{payableOrder.OrderNo}: {payableOrder.Name}";
 
       expensesReport.Update(fields);
 

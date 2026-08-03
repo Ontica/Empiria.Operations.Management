@@ -61,11 +61,10 @@ namespace Empiria.Orders {
       get {
         return base.ExtData.Get("expenseChecked", false);
       }
-      private set {
+      internal set {
         base.ExtData.SetIf("expenseChecked", value, value);
       }
     }
-
 
     #endregion Properties
 
