@@ -13,7 +13,6 @@ using System.Linq;
 using Empiria.History;
 using Empiria.Parties;
 using Empiria.Services;
-using Empiria.StateEnums;
 
 using Empiria.Billing;
 
@@ -62,7 +61,6 @@ namespace Empiria.Orders.UseCases {
       var bills = Bill.GetListFor(expensesReport);
       var paymentOrders = PaymentOrder.GetListFor(expensesReport.PayableOrder);
 
-
       if (bills.Sum(x => x.Total) != paymentOrders.Sum(x => x.Total)) {
         Assertion.RequireFail("La suma de los comprobantes " +
                               "no coincide con la suma de los pagos efectuados. " +
@@ -70,29 +68,59 @@ namespace Empiria.Orders.UseCases {
                               "también deben anexarse como parte de la comprobación.");
       }
 
+
+      if (!expensesReport.PaymentControlAuthorized) {
+        expensesReport.Authorize();
+
+        expensesReport.Save();
+
+        HistoryServices.CreateHistoryEntry(expensesReport, new HistoryFields("Autorizada"));
+
+        return ExpensesReportMapper.Map(expensesReport);
+      }
+
+      decimal adjustment = bills.FindAll(x => x.BillCategory.InternalCode.Contains("RETURN"))
+                                .Sum(x => x.Total);
+
+      if (adjustment == 0) {
+        expensesReport.Authorize();
+
+        expensesReport.Save();
+
+        HistoryServices.CreateHistoryEntry(expensesReport, new HistoryFields("Autorizada"));
+
+        return ExpensesReportMapper.Map(expensesReport);
+      }
+
+      var builder = new BudgetTransactionBuilder(expensesReport,
+                                                 OperationSource.ParseNamedKey("SISTEMA_DE_CONTROL_PRESUPUESTAL"),
+                                                 System.DateTime.Today);
+
+      var exercise = BudgetTransaction.GetFor(expensesReport.PayableOrder)
+                                      .Find(x => x.OperationType == BudgetOperationType.Exercise);
+
+      var txn = builder.BuildForAdjustment(exercise);
+
+      txn.SendToAuthorization();
+
+      txn.Authorize();
+
+      txn.Close();
+
+      txn.Save();
+
+      HistoryServices.CreateHistoryEntry(expensesReport, new HistoryFields("Se ajustó el presupuesto",
+                                          $"Se generó automáticamente la transacción " +
+                                          $"presupuestal de ajuste {txn.TransactionNo} por {adjustment:C2}"));
+
+      expensesReport.PayableOrder.ExpenseChecked = true;
+      expensesReport.PayableOrder.Save();
+
       expensesReport.Authorize();
 
       expensesReport.Save();
 
       HistoryServices.CreateHistoryEntry(expensesReport, new HistoryFields("Autorizada"));
-
-
-
-      if (expensesReport.Status == EntityStatus.Closed) {
-
-        expensesReport.PayableOrder.ExpenseChecked = true;
-        expensesReport.PayableOrder.Save();
-
-        decimal adjustment = bills.FindAll(x => x.BillCategory.InternalCode.Contains("RETURN"))
-                                  .Sum(x => x.Total);
-
-        if (adjustment != 0) {
-
-          HistoryServices.CreateHistoryEntry(expensesReport, new HistoryFields("Se ajustó el presupuesto",
-                                             $"Se generó automáticamente la transacción " +
-                                             $"presupuestal de ajuste 2026-GC-AJU-00000 por {adjustment:C2}"));
-        }
-      }
 
       return ExpensesReportMapper.Map(expensesReport);
     }
