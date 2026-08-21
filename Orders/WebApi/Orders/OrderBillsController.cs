@@ -35,7 +35,7 @@ namespace Empiria.Orders.WebApi {
       var billTypes = DocumentProduct.GetList<DocumentProduct>()
                      .FindAll(x => x.InternalCode.StartsWith("BILL-"))
                      .ToFixedList()
-                     .Select(x => MapToBillTypeDto(x))
+                     .Select(x => BillTypeDto.MapToBillTypeDto(x))
                      .ToFixedList();
 
       return new CollectionModel(base.Request, billTypes);
@@ -148,52 +148,6 @@ namespace Empiria.Orders.WebApi {
 
     #endregion Command web apis
 
-    #region Helpers
-
-    private BillTypeDto MapToBillTypeDto(DocumentProduct document) {
-      return new BillTypeDto {
-        UID = document.UID,
-        Name = document.Name,
-        FileType = document.FileType.ToString(),
-        ApplicationContentType = document.ApplicationContentType,
-        IsCFDI = document.Attributes.Get("isCFDI", false),
-        Description = document.Description
-      };
-    }
-
-    #endregion Helpers
-
   }  // class OrderBillsController
-
-
-
-  /// <summary>Data transfer object used to return bill type information.</summary>
-  internal class BillTypeDto {
-
-    public string UID {
-      get; internal set;
-    }
-
-    public string Name {
-      get; internal set;
-    }
-
-    public string FileType {
-      get; internal set;
-    }
-
-    public string ApplicationContentType {
-      get; internal set;
-    }
-
-    public bool IsCFDI {
-      get; internal set;
-    }
-
-    public string Description {
-      get; internal set;
-    }
-
-  }  // class BillTypeDto
 
 }  // namespace Empiria.Orders.WebApi
