@@ -128,10 +128,8 @@ namespace Empiria.Orders.Contracts {
     }
 
 
-    internal ContractItem RemoveItem(string contractItemUID) {
-      Assertion.Require(contractItemUID, nameof(contractItemUID));
-
-      ContractItem contractItem = GetItem(contractItemUID);
+    internal ContractItem RemoveItem(ContractItem contractItem) {
+      Assertion.Require(contractItem, nameof(contractItem));
 
       base.Items.Remove(contractItem);
 

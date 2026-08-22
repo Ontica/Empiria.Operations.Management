@@ -131,12 +131,15 @@ namespace Empiria.Orders.Contracts.UseCases {
 
       var contract = Contract.Parse(contractUID);
 
-      ContractItem contractItem = contract.RemoveItem(contractItemUID);
+      ContractItem contractItem = contract.GetItem(contractItemUID);
 
       EnsureCanEditItem(contractItem, true);
 
-      contract.Save();
+      contract.RemoveItem(contractItem);
+
       contractItem.Save();
+
+      contract.Save();
 
       return ContractItemMapper.Map(contractItem);
     }
