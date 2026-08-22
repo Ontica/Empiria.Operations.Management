@@ -89,6 +89,26 @@ namespace Empiria.Orders.Data {
     }
 
 
+    static internal FixedList<OrderItem> GetRelatedRequisitionItems(Requisition requisition,
+                                                                    FixedList<OrderItem> requisitionItems) {
+
+      if (requisitionItems.Count == 0) {
+        return FixedList<OrderItem>.Empty;
+      }
+
+      var sql = "SELECT * FROM OMS_ORDER_ITEMS " +
+                $"WHERE ORDER_ITEM_REQUISITION_ID = {requisition.Id} AND " +
+                $"ORDER_ITEM_REQUISITION_ITEM_ID IN " +
+                  $"({string.Join(",", requisitionItems.SelectDistinct(x => x.Id))}) AND " +
+                "ORDER_ITEM_REQUISITION_ITEM_ID <> -1 AND " +
+                "ORDER_ITEM_STATUS <> 'X'";
+
+      var op = DataOperation.Parse(sql);
+
+      return DataReader.GetFixedList<OrderItem>(op);
+    }
+
+
     static internal FixedList<Order> GetRequisitionOrders(Requisition requisition) {
       var sql = "SELECT * FROM OMS_ORDERS " +
                 $"WHERE ORDER_REQUISITION_ID = {requisition.Id} AND " +
