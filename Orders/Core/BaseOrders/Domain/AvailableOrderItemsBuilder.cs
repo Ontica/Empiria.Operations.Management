@@ -46,7 +46,7 @@ namespace Empiria.Orders {
 
 
   /// <summary>Builds a list of available order items for a given order.</summary>
-  internal class AvailableOrderItemsBuilder {
+  public class AvailableOrderItemsBuilder {
 
     private readonly Order _order;
 
@@ -57,7 +57,7 @@ namespace Empiria.Orders {
     }
 
 
-    internal FixedList<AvailableOrderItem> BuildForAvailableBudget() {
+    public FixedList<AvailableOrderItem> BuildForAvailableBudget() {
 
       FixedList<OrderItem> requisitionItems = GetRequisitionItems();
 

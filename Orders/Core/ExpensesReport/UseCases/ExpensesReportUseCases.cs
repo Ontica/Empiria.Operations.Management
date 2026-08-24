@@ -18,10 +18,10 @@ using Empiria.Billing;
 
 using Empiria.Budgeting.Transactions;
 
+using Empiria.Payments;
+
 using Empiria.Orders.Adapters;
 using Empiria.Orders.Data;
-
-using Empiria.Payments;
 
 namespace Empiria.Orders.UseCases {
 
@@ -144,8 +144,10 @@ namespace Empiria.Orders.UseCases {
       Assertion.Require(requestedBy, nameof(requestedBy));
 
       var orders = PayableOrder.GetList()
-                               .FindAll(x => x.RequestedBy.Equals(requestedBy) && x.OrderType.Equals(OrderType.Expenses) &&
-                                             x.ExpenseType.IsExpenseToCheck && !x.ExpenseChecked && x.Status == StateEnums.EntityStatus.Closed);
+                               .FindAll(x => x.RequestedBy.Equals(requestedBy) &&
+                                             x.OrderType.Equals(OrderType.Expenses) &&
+                                             x.ExpenseType.IsExpenseToCheck &&
+                                             !x.ExpenseChecked && x.Status == StateEnums.EntityStatus.Closed);
 
       return PayableOrderMapper.Map(orders);
     }
@@ -217,16 +219,6 @@ namespace Empiria.Orders.UseCases {
       item.Save();
 
       return PayableOrderMapper.Map(item);
-    }
-
-
-    public FixedList<PayableOrderItemDto> GetAvailableExpensesReportItems(ExpensesReport expensesReport) {
-      Assertion.Require(expensesReport, nameof(expensesReport));
-
-      var items = expensesReport.PayableOrder.GetItems<PayableOrderItem>()
-                                .FindAll(x => x.BudgetEntry.NoRejected);
-
-      return PayableOrderMapper.Map(items);
     }
 
 

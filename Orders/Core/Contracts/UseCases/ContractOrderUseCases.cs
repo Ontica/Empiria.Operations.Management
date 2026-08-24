@@ -9,7 +9,6 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.Services;
-
 using Empiria.Orders.Contracts.Adapters;
 
 namespace Empiria.Orders.Contracts.UseCases {
@@ -93,15 +92,6 @@ namespace Empiria.Orders.Contracts.UseCases {
       item.Save();
 
       return ContractOrderMapper.Map(item);
-    }
-
-
-    public FixedList<ContractItemDto> GetAvailableOrderItems(ContractOrder contractOrder) {
-      Assertion.Require(contractOrder, nameof(contractOrder));
-
-      var contractItems = contractOrder.Contract.GetItems<ContractItem>();
-
-      return ContractItemMapper.Map(contractItems);
     }
 
 
