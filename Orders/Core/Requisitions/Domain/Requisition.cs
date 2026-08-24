@@ -11,6 +11,7 @@
 using Empiria.Financial;
 
 using Empiria.Orders.Data;
+using Empiria.Parties;
 
 namespace Empiria.Orders {
 
@@ -33,8 +34,10 @@ namespace Empiria.Orders {
 
     static public new Requisition Empty => ParseEmpty<Requisition>();
 
-    static public FixedList<Requisition> GetList() {
-      return Order.GetList<Requisition>();
+    static public FixedList<Requisition> GetFor(Party requestedBy) {
+      return BaseObject.GetList<Requisition>($"ORDER_REQUESTED_BY_ID = {requestedBy.Id} AND " +
+                                             $"ORDER_STATUS <> 'X'")
+                       .ToFixedList();
     }
 
     #endregion Constructors and parsers

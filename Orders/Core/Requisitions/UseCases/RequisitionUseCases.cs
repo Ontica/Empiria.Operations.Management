@@ -54,22 +54,31 @@ namespace Empiria.Orders.UseCases {
     public FixedList<RequisitionDescriptor> AvailableRequisitions(Party requestedBy) {
       Assertion.Require(requestedBy, nameof(requestedBy));
 
-      var requisitions = Requisition.GetList()
-                                    .FindAll(x => x.RequestedBy.Equals(requestedBy) &&
-                                                  x.Status == StateEnums.EntityStatus.Active);
+      var requisitions = Requisition.GetFor(requestedBy)
+                                    .FindAll(x => x.Status == StateEnums.EntityStatus.Active);
 
       var toRemove = new List<Requisition>();
 
       foreach (var requisition in requisitions) {
+
         if (requisition.BudgetType.Equals(BudgetType.None)) {
           continue;
         }
 
         var budgetTxns = BudgetTransaction.GetFor(requisition);
 
-        if (!budgetTxns.Exists(x => x.OperationType == BudgetOperationType.Request && x.IsClosed)) {
+        var requestTxn = budgetTxns.Find(x => x.OperationType == BudgetOperationType.Request &&
+                                              x.IsClosed);
+
+        if (requestTxn == null) {
           toRemove.Add(requisition);
           continue;
+        }
+
+        var validator = new BudgetTransactionValidator(requestTxn);
+
+        if (validator.AvailableAmount(BalanceColumn.Requested) <= 0) {
+          toRemove.Add(requisition);
         }
       }
 
