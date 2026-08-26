@@ -67,7 +67,7 @@ namespace Empiria.Orders {
 
     [DataField("ORDER_ITEM_ORDER_ID")]
     public Order Order {
-      get; private set;
+      get; set;
     }
 
 

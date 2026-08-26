@@ -572,6 +572,16 @@ namespace Empiria.Orders {
     }
 
 
+    internal protected virtual void Authorization() {
+      Assertion.Require(Status == EntityStatus.Pending,
+                  $"No se puede autorizar una orden que está en estado {Status.GetName()}: {Id}.");
+
+      Status = EntityStatus.Active;
+      AuthorizationTime = DateTime.Now;
+      AuthorizedBy = Party.ParseWithContact(ExecutionServer.CurrentContact);
+    }
+
+
     protected void ClonePropertiesFrom(Order order) {
       BaseBudget = order.BaseBudget;
       Beneficiary = order.Beneficiary;
