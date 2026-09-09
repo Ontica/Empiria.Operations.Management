@@ -114,6 +114,12 @@ namespace Empiria.Orders {
 
     private FixedList<OrderItem> GetBaseOrderItemsWithBudgetEntry() {
 
+      if (_order is Contract contract) {
+        return contract.Requisition.GetItems<OrderItem>()
+                                   .FindAll(x => x.BudgetEntry.NoRejected);
+      }
+
+
       if (_order is ContractOrder contractOrder) {
         return contractOrder.Contract.GetItems<OrderItem>()
                                      .FindAll(x => x.BudgetEntry.NoRejected &&
@@ -149,6 +155,13 @@ namespace Empiria.Orders {
                      .FindAll(x => x.BudgetEntry.NoRejected);
       }
 
+
+      if (_order is Contract contract) {
+        return contract.Requisition.GetItems<OrderItem>()
+                                   .FindAll(x => x.BudgetEntry.NoRejected);
+      }
+
+
       if (_order is ContractOrder contractOrder) {
         return _order.Contract.GetItems<OrderItem>()
                               .FindAll(x => x.BudgetEntry.NoRejected &&
@@ -158,9 +171,8 @@ namespace Empiria.Orders {
       }
 
       return _order.Requisition.GetItems<OrderItem>()
-                  .ToFixedList()
-                  .FindAll(x => x.BudgetEntry.NoRejected &&
-                                x.Budget.Equals(_order.BaseBudget));
+                               .FindAll(x => x.BudgetEntry.NoRejected &&
+                                             x.Budget.Equals(_order.BaseBudget));
     }
 
     #endregion Helpers
