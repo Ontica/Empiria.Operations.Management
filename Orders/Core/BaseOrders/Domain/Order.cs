@@ -452,7 +452,7 @@ namespace Empiria.Orders {
       get {
         return ConditionsData.Get("paymentConditions", string.Empty);
       }
-      private set {
+      set {
         ConditionsData.SetIfValue("paymentConditions", value);
       }
     }
@@ -705,7 +705,7 @@ namespace Empiria.Orders {
 
     internal protected virtual void Update(OrderFields fields) {
       Assertion.Require(fields, nameof(fields));
-
+      
       if (fields.RequisitionUID.Length != 0 && Requisition.UID != fields.RequisitionUID) {
         Assertion.Require(Items.Count == 0,
           $"No se puede cambiar la requisición ya que este elemento tiene {Items.Count} concepto(s).");
