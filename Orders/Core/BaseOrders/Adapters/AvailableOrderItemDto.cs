@@ -8,15 +8,22 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.FinancialAccounting.Transactions.Adapters;
+
 namespace Empiria.Orders.Adapters {
 
   /// <summary>Data transfer object used to return available order items.</summary>
   public class AvailableOrderItemDto : OrderItemDto {
 
-    protected internal AvailableOrderItemDto(AvailableOrderItem availableOrderItem) :
+    protected internal AvailableOrderItemDto(AvailableOrderItem availableOrderItem,
+                                             FixedList<AccountingClassificationDto> classifications) :
                                                                       base(availableOrderItem.OrderItem) {
       RequestedTotal = availableOrderItem.RequestedTotal;
       AvailableTotal = availableOrderItem.AvailableTotal;
+
+      AccountingClassifications =
+          classifications.FindAll(x => x.SelectorValue == availableOrderItem.OrderItem.BudgetAccount.AccountNo)
+                         .SelectFlat(x => x.Classifications);
     }
 
     public decimal RequestedTotal {
@@ -27,6 +34,10 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
+    public FixedList<NamedEntityDto> AccountingClassifications {
+      get;
+    }
+
   }  // class AvailableOrderItemDto
 
 
@@ -34,8 +45,9 @@ namespace Empiria.Orders.Adapters {
   /// <summary>Maps available order items to their corresponding DTOs.</summary>
   static public class AvailableOrderItemMapper {
 
-    static public FixedList<AvailableOrderItemDto> Map(FixedList<AvailableOrderItem> availableItems) {
-      return availableItems.Select(x => new AvailableOrderItemDto(x))
+    static public FixedList<AvailableOrderItemDto> Map(FixedList<AvailableOrderItem> availableItems,
+                                                       FixedList<AccountingClassificationDto> classifications) {
+      return availableItems.Select(x => new AvailableOrderItemDto(x, classifications))
                            .ToFixedList();
     }
 
