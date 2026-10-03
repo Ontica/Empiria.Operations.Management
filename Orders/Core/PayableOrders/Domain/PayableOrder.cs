@@ -37,6 +37,10 @@ namespace Empiria.Orders {
 
     static public new PayableOrder Parse(string uid) => ParseKey<PayableOrder>(uid);
 
+    static public PayableOrder TryParse(string orderNo) {
+      return TryParse<PayableOrder>($"ORDER_NO = '{orderNo}'");
+    }
+
     static public new PayableOrder Empty => ParseEmpty<PayableOrder>();
 
     static public FixedList<PayableOrder> GetList() {
