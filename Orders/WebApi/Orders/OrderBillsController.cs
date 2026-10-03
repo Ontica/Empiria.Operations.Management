@@ -8,18 +8,16 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using System.IO;
 using System.Web.Http;
 
+using Empiria.Documents;
+using Empiria.Storage;
 using Empiria.WebApi;
 
-using Empiria.Documents;
-using Empiria.Financial;
-using Empiria.Storage;
+using Empiria.Orders.UseCases;
 
 using Empiria.Billing;
 using Empiria.Billing.Adapters;
-using Empiria.Billing.UseCases;
 
 namespace Empiria.Orders.WebApi {
 
@@ -32,13 +30,15 @@ namespace Empiria.Orders.WebApi {
     [Route("v8/order-management/orders/bill-types")]
     public CollectionModel GetBillTypes() {
 
-      var billTypes = DocumentProduct.GetList<DocumentProduct>()
-                     .FindAll(x => x.InternalCode.StartsWith("BILL-"))
-                     .ToFixedList()
-                     .Select(x => BillTypeDto.MapToBillTypeDto(x))
-                     .ToFixedList();
+      using (var usecases = OrderBillsUseCases.UseCaseInteractor()) {
 
-      return new CollectionModel(base.Request, billTypes);
+        FixedList<DocumentProduct> billTypes = usecases.GetBillTypes();
+
+        var mapped = billTypes.Select(x => BillTypeDto.MapToBillTypeDto(x))
+                              .ToFixedList();
+
+        return new CollectionModel(base.Request, mapped);
+      }
     }
 
     #endregion Query web apis
@@ -55,63 +55,14 @@ namespace Empiria.Orders.WebApi {
 
       var documentProduct = DocumentProduct.Parse(documentFields.DocumentProductUID);
 
-      var usecases = BillUseCases.UseCaseInteractor();
+      InputFileCollection inputFiles = GetAllInputFilesFromHttpRequest();
 
-      if (!documentProduct.Attributes.Get("isCFDI", false)) {
-        Assertion.Require(documentFields.DocumentNumber, "Se requiere proporcionar el número del oficio o documento.");
-        Assertion.Require(documentFields.Total > 0, "Se requiere proporcionar el total del comprobante.");
+      using (var usecases = OrderBillsUseCases.UseCaseInteractor()) {
 
-        InputFile voucherPdfFile = base.GetInputFileFromHttpRequest(documentProduct.Name);
+        Bill bill = usecases.AddBillToOrder(order, documentProduct, documentFields, inputFiles);
 
-        var voucherBill = usecases.CreateVoucherBill((IPayableEntity) order, documentFields);
-
-        DocumentDto pdfDocument = DocumentServices.StoreDocument(voucherPdfFile, voucherBill, documentFields);
-
-        return new SingleObjectModel(Request, BillMapper.MapToBillDto(voucherBill));
+        return new SingleObjectModel(Request, BillMapper.MapToBillDto(bill));
       }
-
-      InputFileCollection files = base.GetInputFilesFromHttpRequest(documentProduct.ApplicationContentType);
-
-      Assertion.Require(files.ContainsKey("xml"), "Se requiere proprocionar el archivo XML del comprobante fiscal");
-
-      InputFile xmlFile = files["xml"];
-      InputFile pdfFile = files.ContainsKey("pdf") ? files["pdf"] : null;
-
-      var xmlReader = new StreamReader(xmlFile.Stream);
-
-      var xmlAsString = xmlReader.ReadToEnd();
-
-      string billNo = usecases.ExtractCFDINo(xmlAsString);
-
-      var bill = Bill.TryParseWithBillNo(billNo);
-
-      Assertion.Require(bill == null, $"El comprobante con folio fiscal '{billNo}' ya existe en el sistema.");
-
-      bill = usecases.CreateCFDI(xmlAsString, (IPayableEntity) order, documentProduct);
-
-      var xmlDocument = DocumentServices.StoreDocument(xmlFile, bill, documentFields);
-
-      var fields = new DocumentFields {
-        UID = xmlDocument.UID,
-        DocumentProductUID = documentFields.DocumentProductUID,
-        Name = documentFields.Name,
-        DocumentNumber = bill.BillNo,
-        DocumentDate = bill.IssueDate,
-        SourcePartyUID = bill.IssuedBy.UID,
-        TargetPartyUID = bill.IssuedTo.UID,
-        Description = order.Description
-      };
-
-      DocumentServices.UpdateDocument(bill, xmlDocument, fields);
-
-      if (pdfFile != null) {
-        DocumentDto pdfDocument = DocumentServices.StoreDocument(pdfFile, bill, fields);
-
-        fields.UID = pdfDocument.UID;
-        DocumentServices.UpdateDocument(bill, pdfDocument, fields);
-      }
-
-      return new SingleObjectModel(Request, BillMapper.MapToBillDto(bill));
     }
 
 
@@ -121,11 +72,13 @@ namespace Empiria.Orders.WebApi {
 
       var order = Order.Parse(orderUID);
 
-      FixedList<Bill> bills = Bill.GetListFor((IPayableEntity) order);
+      using (var usecases = OrderBillsUseCases.UseCaseInteractor()) {
 
-      return new CollectionModel(this.Request, BillMapper.MapToBillDto(bills));
+        FixedList<Bill> bills = usecases.GetBillsFor(order);
+
+        return new CollectionModel(this.Request, BillMapper.MapToBillDto(bills));
+      }
     }
-
 
 
     [HttpDelete]
@@ -137,13 +90,12 @@ namespace Empiria.Orders.WebApi {
 
       Bill bill = Bill.Parse(billUID);
 
-      bill.Delete();
+      using (var usecases = OrderBillsUseCases.UseCaseInteractor()) {
 
-      bill.Save();
+        usecases.RemoveBillFromOrder(order, bill);
 
-      DocumentServices.RemoveAllDocuments(bill);
-
-      return new NoDataModel(this.Request);
+        return new NoDataModel(this.Request);
+      }
     }
 
     #endregion Command web apis
