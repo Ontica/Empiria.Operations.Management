@@ -53,13 +53,11 @@ namespace Empiria.Orders.WebApi {
 
       DocumentFields documentFields = GetFormDataFromHttpRequest<DocumentFields>("document");
 
-      var documentProduct = DocumentProduct.Parse(documentFields.DocumentProductUID);
-
       InputFileCollection inputFiles = GetAllInputFilesFromHttpRequest();
 
       using (var usecases = OrderBillsUseCases.UseCaseInteractor()) {
 
-        Bill bill = usecases.AddBillToOrder(order, documentProduct, documentFields, inputFiles);
+        Bill bill = usecases.AddBillToOrder(order, documentFields, inputFiles);
 
         return new SingleObjectModel(Request, BillMapper.MapToBillDto(bill));
       }

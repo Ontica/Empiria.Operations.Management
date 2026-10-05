@@ -37,12 +37,12 @@ namespace Empiria.Orders.UseCases {
 
     #region Use cases
 
-    public Bill AddBillToOrder(Order order, DocumentProduct documentProduct,
-                                DocumentFields documentFields, InputFileCollection inputFiles) {
+    public Bill AddBillToOrder(Order order, DocumentFields documentFields, InputFileCollection inputFiles) {
       Assertion.Require(order, nameof(order));
-      Assertion.Require(documentProduct, nameof(documentProduct));
       Assertion.Require(documentFields, nameof(documentFields));
       Assertion.Require(inputFiles, nameof(inputFiles));
+
+      var documentProduct = DocumentProduct.Parse(documentFields.DocumentProductUID);
 
       if (!documentProduct.Attributes.Get("isCFDI", false)) {
         return AddVoucherBillToOrder(order, documentProduct, documentFields, inputFiles);
