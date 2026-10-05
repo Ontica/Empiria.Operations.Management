@@ -88,7 +88,7 @@ namespace Empiria.Orders.UseCases {
 
       var usecases = BillUseCases.UseCaseInteractor();
 
-      InputFile voucherPdfFile = inputFiles[documentProduct.Name];
+      InputFile voucherPdfFile = inputFiles["pdf"];
 
       var voucherBill = usecases.CreateVoucherBill((IPayableEntity) order, documentFields);
 
