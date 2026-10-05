@@ -9,6 +9,7 @@
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
 using Empiria.Financial;
+using Empiria.Json;
 using Empiria.Parties;
 
 using Empiria.Budgeting;
@@ -130,6 +131,20 @@ namespace Empiria.Orders {
       Assertion.Require(orderItem, nameof(orderItem));
 
       base.Items.Add(orderItem);
+    }
+
+
+    public JsonObject GetExtendedData(string fieldName) {
+      Assertion.Require(fieldName, nameof(fieldName));
+
+      return base.ExtData.Slice(fieldName);
+    }
+
+
+    public void SetExtendedData(string fieldName, JsonObject data) {
+      Assertion.Require(fieldName, nameof(fieldName));
+
+      base.ExtData.SetIfValue(fieldName, data);
     }
 
 

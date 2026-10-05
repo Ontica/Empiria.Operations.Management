@@ -8,7 +8,6 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
-using Empiria.Json;
 using Empiria.Parties;
 using Empiria.StateEnums;
 
@@ -110,13 +109,6 @@ namespace Empiria.Orders {
     }
 
 
-    public JsonObject GetExtendedData(string fieldName) {
-      Assertion.Require(fieldName, nameof(fieldName));
-
-      return base.ExtData.Slice(fieldName);
-    }
-
-
     internal void Reject() {
       if (Status == EntityStatus.Pending) {
         return;
@@ -127,13 +119,6 @@ namespace Empiria.Orders {
       EjecutorGastoAuthorized = false;
 
       base.Open();
-    }
-
-
-    public void SetExtendedData(string fieldName, JsonObject data) {
-      Assertion.Require(fieldName, nameof(fieldName));
-
-      base.ExtData.SetIfValue(fieldName, data);
     }
 
     #endregion Methods
