@@ -46,6 +46,17 @@ namespace Empiria.Orders.UseCases {
     }
 
 
+    public void RemoveTaxEntries(Order order) {
+      Assertion.Require(order, nameof(order));
+
+      foreach (var taxEntry in order.Taxes.GetList()) {
+        order.Taxes.RemoveTax(taxEntry.UID);
+
+        taxEntry.Save();
+      }
+    }
+
+
     public OrderTaxEntryDto RemoveTaxEntry(string orderUID, string taxEntryUID) {
       Assertion.Require(orderUID, nameof(orderUID));
       Assertion.Require(taxEntryUID, nameof(taxEntryUID));
