@@ -8,6 +8,10 @@
 *                                                                                                            *
 ************************* Copyright(c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved. **/
 
+using Empiria.Budgeting.Transactions;
+
+using Empiria.Payments;
+
 namespace Empiria.Orders.Adapters {
 
   /// <summary>Data transfer object used to return complete expenses reports information.</summary>
@@ -28,7 +32,21 @@ namespace Empiria.Orders.Adapters {
       PayableOrder = PayableOrderMapper.MapToDescriptor(expensesReport.PayableOrder);
 
       // Todo: remove this hardcoded value and get it from the expensesReport instance.
-      ExpensesReportType = new NamedEntityDto("Settlement", "Gasto por comprobar");
+      ExpensesReportType = new NamedEntityDto("Settlement", "Gastos por comprobar");
+
+      var paymentOrder = PaymentOrder.GetListFor(expensesReport.PayableOrder)
+                                     .FindLast(x => !x.Debtor.IsEmptyInstance);
+
+      if (paymentOrder != null) {
+        Debtor = $"{paymentOrder.Debtor.Name} ({paymentOrder.Debtor.Code})";
+      } else {
+        Debtor = $"{expensesReport.PayableOrder.Beneficiary.Name} ({expensesReport.PayableOrder.Beneficiary.Code})";
+      }
+
+      var budgetTransactions = BudgetTransaction.GetFor(expensesReport.PayableOrder);
+
+      BudgetTransactions = string.Join(", ", budgetTransactions.Select(x => x.TransactionNo));
+
     }
 
 
@@ -37,6 +55,15 @@ namespace Empiria.Orders.Adapters {
     }
 
     public OrderDescriptor PayableOrder {
+      get;
+    }
+
+    public string Debtor {
+      get;
+    }
+
+
+    public string BudgetTransactions {
       get;
     }
 
