@@ -59,13 +59,18 @@ namespace Empiria.Orders.UseCases {
       Assertion.Require(expensesReport, nameof(expensesReport));
 
       var bills = Bill.GetListFor(expensesReport);
+
+
       var paymentOrders = PaymentOrder.GetListFor(expensesReport.PayableOrder);
 
-      if (bills.Sum(x => x.Total) != paymentOrders.Sum(x => x.Total)) {
-        Assertion.RequireFail("La suma de los comprobantes " +
-                              "no coincide con la suma de los pagos efectuados. " +
+      BillsTotals billTotals = new BillsTotals(bills);
+
+      if (billTotals.Total != paymentOrders.Sum(x => x.Total)) {
+        Assertion.RequireFail($"La suma de los comprobantes ({billTotals.Total:C2}) " +
+                              $"no coincide con la suma de los pagos efectuados ({paymentOrders.Sum(x => x.Total):C2}). " +
                               "De ser el caso, los recibos de devolución de anticipos " +
-                              "también deben anexarse como parte de la comprobación.");
+                              "también deben anexarse como parte de la comprobación. " +
+                              $"Diferencia: {paymentOrders.Sum(x => x.Total) - billTotals.Total:C2}");
       }
 
 
@@ -79,10 +84,17 @@ namespace Empiria.Orders.UseCases {
         return ExpensesReportMapper.Map(expensesReport);
       }
 
-      decimal adjustment = bills.FindAll(x => x.BillCategory.InternalCode.Contains("RETURN"))
-                                .Sum(x => x.Total);
 
-      if (adjustment == 0) {
+      var builder = new BudgetTransactionBuilder(expensesReport,
+                                                 OperationSource.ParseNamedKey("SISTEMA_DE_CONTROL_PRESUPUESTAL"),
+                                                 System.DateTime.Today);
+
+      var exerciseTxn = BudgetTransaction.GetFor(expensesReport.PayableOrder)
+                                         .Find(x => x.OperationType == BudgetOperationType.Exercise);
+
+      var adjustmentTxn = builder.BuildForAdjustment(exerciseTxn);
+
+      if (adjustmentTxn.Entries.Count == 0) {
         expensesReport.Authorize();
 
         expensesReport.Save();
@@ -92,26 +104,17 @@ namespace Empiria.Orders.UseCases {
         return ExpensesReportMapper.Map(expensesReport);
       }
 
-      var builder = new BudgetTransactionBuilder(expensesReport,
-                                                 OperationSource.ParseNamedKey("SISTEMA_DE_CONTROL_PRESUPUESTAL"),
-                                                 System.DateTime.Today);
+      adjustmentTxn.SendToAuthorization();
 
-      var exercise = BudgetTransaction.GetFor(expensesReport.PayableOrder)
-                                      .Find(x => x.OperationType == BudgetOperationType.Exercise);
+      adjustmentTxn.Authorize();
 
-      var txn = builder.BuildForAdjustment(exercise);
+      adjustmentTxn.Close();
 
-      txn.SendToAuthorization();
-
-      txn.Authorize();
-
-      txn.Close();
-
-      txn.Save();
+      adjustmentTxn.Save();
 
       HistoryServices.CreateHistoryEntry(expensesReport, new HistoryFields("Se ajustó el presupuesto",
                                           $"Se generó automáticamente la transacción " +
-                                          $"presupuestal de ajuste {txn.TransactionNo} por {adjustment:C2}"));
+                                          $"presupuestal de ajuste {adjustmentTxn.TransactionNo}."));
 
       expensesReport.PayableOrder.ExpenseChecked = true;
       expensesReport.PayableOrder.Save();
@@ -159,7 +162,6 @@ namespace Empiria.Orders.UseCases {
       fields.EnsureValid();
 
       var payableOrder = PayableOrder.Parse(fields.PayableOrderUID);
-
 
       var expensesReport = new ExpensesReport(payableOrder);
 
