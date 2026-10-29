@@ -35,12 +35,14 @@ namespace Empiria.Orders.Adapters {
       ExpensesReportType = new NamedEntityDto("Settlement", "Gastos por comprobar");
 
       var paymentOrder = PaymentOrder.GetListFor(expensesReport.PayableOrder)
-                                     .FindLast(x => !x.Debtor.IsEmptyInstance);
+                                     .FindLast(x => x.Payed);
 
-      if (paymentOrder != null) {
-        Debtor = $"{paymentOrder.Debtor.Name} ({paymentOrder.Debtor.Code})";
+      if (!paymentOrder.Debtor.IsEmptyInstance) {
+        Debtor = $"{paymentOrder.Debtor.Name} " +
+                 $"({paymentOrder.Debtor.Code} - Expediente: {paymentOrder.Debtor.ExtendedData.Get("employeeNo", "S/N")})";
       } else {
-        Debtor = $"{expensesReport.PayableOrder.Beneficiary.Name} ({expensesReport.PayableOrder.Beneficiary.Code})";
+        Debtor = $"{paymentOrder.PayTo.Name} " +
+                 $"({paymentOrder.PayTo.Code} - Expediente: {paymentOrder.PayTo.ExtendedData.Get("employeeNo", "S/N")})";
       }
 
       var budgetTransactions = BudgetTransaction.GetFor(expensesReport.PayableOrder);
