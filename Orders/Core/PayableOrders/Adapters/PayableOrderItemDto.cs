@@ -17,8 +17,25 @@ namespace Empiria.Orders.Adapters {
       Total = item.Subtotal;
     }
 
+
+    protected internal PayableOrderItemDto(PayableOrderItem item,
+                                           decimal requestedTotal,
+                                           decimal availableTotal) : this(item) {
+      Total = item.Subtotal;
+      RequestedTotal = requestedTotal;
+      AvailableTotal = availableTotal;
+    }
+
     public decimal Total {
-      get; private set;
+      get;
+    }
+
+    public decimal RequestedTotal {
+      get;
+    }
+
+    public decimal AvailableTotal {
+      get;
     }
 
   }  // class PayableOrderItemDto
