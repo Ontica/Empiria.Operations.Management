@@ -425,6 +425,16 @@ namespace Empiria.Orders {
       get; private set;
     }
 
+
+    public string AccountingClassificationUID {
+      get {
+        return ExtData.Get("accountingClassificationUID", string.Empty);
+      }
+      private set {
+        ExtData.SetIfValue("accountingClassificationUID", value);
+      }
+    }
+
     #endregion Properties
 
     #region Methods
@@ -547,6 +557,9 @@ namespace Empiria.Orders {
 
       OriginCountry = Patcher.Patch(fields.OriginCountryUID, Country.Default);
       Location = Patcher.Patch(fields.LocationUID, Location.Empty);
+
+      AccountingClassificationUID = Patcher.Patch(fields.AccountingClassificationUID, AccountingClassificationUID);
+
       Position = fields.Position;
 
       UpdateBudgetData(fields);

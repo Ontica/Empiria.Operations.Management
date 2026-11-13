@@ -170,6 +170,11 @@ namespace Empiria.Orders {
     } = string.Empty;
 
 
+    public string AccountingClassificationUID {
+      get; set;
+    } = string.Empty;
+
+
     public virtual void EnsureValid() {
       ProductUID = Patcher.CleanUID(ProductUID);
       ProductUnitUID = Patcher.CleanUID(ProductUnitUID);
