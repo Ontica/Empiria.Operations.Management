@@ -35,12 +35,21 @@ namespace Empiria.Orders.Adapters {
       Subtotal = item.Subtotal;
       Beneficiary = item.Beneficiary.MapToNamedEntity();
       Budget = item.Budget.MapToNamedEntity();
-      BudgetAccount = item.BudgetAccount.MapToNamedEntity();
+      BudgetAccount = new NamedCodedEntityDto {
+        UID = item.BudgetAccount.UID,
+        Code = item.BudgetAccount.Code,
+        Name = item.BudgetAccount.Name
+      };
       BudgetControlNo = item.BudgetEntry.ControlNo;
       CostObject = item.CostObject.MapToNamedEntity();
       Requisition = item.Requisition.MapToNamedEntity();
-      if (!item.RequisitionItem.IsEmptyInstance && item.RequisitionItem is PayableOrderItem rqp && !(item.Order is ExpensesReport)) {
+      if (!item.RequisitionItem.IsEmptyInstance &&
+          item.RequisitionItem is PayableOrderItem rqp &&
+          !(item.Order is ExpensesReport)) {
         RequisitionItem = PayableOrderMapper.Map(rqp);
+      }
+      if (item.AccountingClassificationUID.Length != 0) {
+        AccountingClassification = new NamedEntityDto(item.AccountingClassificationUID);
       }
       RelatedItem = item.RelatedItem.MapToNamedEntity();
       OriginCountry = item.OriginCountry.MapToNamedEntity();
@@ -118,11 +127,15 @@ namespace Empiria.Orders.Adapters {
       get;
     }
 
-    public NamedEntityDto BudgetAccount {
+    public NamedCodedEntityDto BudgetAccount {
       get;
     }
 
     public string BudgetControlNo {
+      get;
+    }
+
+    public NamedEntityDto AccountingClassification {
       get;
     }
 
@@ -166,5 +179,22 @@ namespace Empiria.Orders.Adapters {
     }
 
   }  // class OrderItemDto
+
+
+  public class NamedCodedEntityDto {
+
+    public string UID {
+      get; internal set;
+    }
+
+    public string Code {
+      get; internal set;
+    }
+
+    public string Name {
+      get; internal set;
+    }
+
+  }  // NamedCodedEntityDto
 
 }  // namespace Empiria.Orders.Adapters
