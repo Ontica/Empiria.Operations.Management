@@ -74,7 +74,8 @@ namespace Empiria.Orders.UseCases {
     public FixedList<DocumentProduct> GetBillTypes() {
       return DocumentProduct.GetList<DocumentProduct>()
                             .FindAll(x => x.InternalCode.StartsWith("BILL-"))
-                            .ToFixedList();
+                            .ToFixedList()
+                            .Sort((x, y) => x.Name.CompareTo(y.Name));
     }
 
     #endregion Use cases
