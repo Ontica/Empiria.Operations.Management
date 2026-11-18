@@ -141,10 +141,28 @@ namespace Empiria.Orders {
     }
 
 
+    public ProvisionAttributes GetProvisionData() {
+      JsonObject data = base.ExtData.Slice("provisionData");
+
+      if (data.IsEmptyInstance) {
+        return new ProvisionAttributes();
+      }
+
+      return ProvisionAttributes.Parse(data);
+    }
+
+
     public void SetExtendedData(string fieldName, JsonObject data) {
       Assertion.Require(fieldName, nameof(fieldName));
 
       base.ExtData.SetIfValue(fieldName, data);
+    }
+
+
+    public void SetProvisionData(ProvisionAttributes provisionData) {
+      Assertion.Require(provisionData, nameof(provisionData));
+
+      base.ExtData.SetIfValue("provisionData", provisionData);
     }
 
 
