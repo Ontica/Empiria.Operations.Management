@@ -252,6 +252,46 @@ namespace Empiria.Orders {
     }
 
 
+    internal bool CanCancelProvision() {
+      if (!_isPayable) {
+        return false;
+      }
+
+      return ((PayableOrder) _order).GetProvisionData().CanCancel;
+    }
+
+
+    internal bool CanProvision() {
+      if (!_isPayable) {
+        return false;
+      }
+
+      if (_activePaymentOrders.Count > 0) {
+        return false;
+      }
+
+      if (!_isBudgetable) {
+        return false;
+      }
+
+      if (_budgetTransations.Any(x => x.InProcess)) {
+        return false;
+      }
+
+      if (_order.Status == EntityStatus.Closed ||
+          _order.Status == EntityStatus.Deleted ||
+          _order.Status == EntityStatus.Suspended) {
+        return false;
+      }
+
+      if (_order.Items.Count == 0) {
+        return false;
+      }
+
+      return ((PayableOrder) _order).GetProvisionData().CanRequest;
+    }
+
+
     internal bool IsBudgetManager() {
 
       string BUDGET_AUTHORIZER = "budget-authorizer";

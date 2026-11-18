@@ -95,6 +95,14 @@ namespace Empiria.Orders.Adapters {
       get; set;
     }
 
+    public bool CanProvision {
+      get; set;
+    }
+
+    public bool CanCancelProvision {
+      get; set;
+    }
+
   } // class OrderActions
 
 

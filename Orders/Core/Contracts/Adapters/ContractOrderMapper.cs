@@ -21,7 +21,6 @@ using Empiria.Payments.Adapters;
 using Empiria.Payments;
 
 using Empiria.Orders.Adapters;
-using Empiria.Orders;
 
 namespace Empiria.Orders.Contracts.Adapters {
 
@@ -80,6 +79,8 @@ namespace Empiria.Orders.Contracts.Adapters {
         CanRequestBudget = false,
         CanRequestPayment = rules.CanRequestPayment(),
         CanValidateBudget = false,
+        CanProvision = rules.CanProvision(),
+        CanCancelProvision = rules.CanCancelProvision()
       };
     }
 
